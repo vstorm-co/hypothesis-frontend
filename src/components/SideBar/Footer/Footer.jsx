@@ -19,7 +19,7 @@ export function Footer() {
         <div className="text-sm leading-6">
           Jared Pendergraft
         </div>
-        <div class="ml-auto relative">
+        <div className="ml-auto relative">
           <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
             <img src={dots} alt="options" />
           </div>

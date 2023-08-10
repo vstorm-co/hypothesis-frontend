@@ -25,21 +25,21 @@ export function Edit(props) {
         </div>
       </div>
       <div className={"absolute border rounded -right-[15.5rem] -top-2 bg-white " + (props.show ? '' : 'hidden')}>
-        <div class="border-b p-2">
-          <div class="text-xs font-bold text-[#747474] mb-1">
+        <div className="border-b p-2">
+          <div className="text-xs font-bold text-[#747474] mb-1">
             Title
           </div>
           <input value={selectedChat().title} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
         </div>
-        <div class="p-2">
-          <div class="text-xs font-bold text-[#747474] mb-1">
+        <div className="p-2">
+          <div className="text-xs font-bold text-[#747474] mb-1">
             Visibility
           </div>
-          <div class="flex py-1 border-b">
-            <img src={check} alt="checkmark" class="w-4" /> <div class="text-sm leading-6">Just me</div>
+          <div className="flex py-1 border-b">
+            <img src={check} alt="checkmark" className="w-4" /> <div className="text-sm leading-6">Just me</div>
           </div>
-          <div class="flex py-1">
-            <img src={check} alt="checkmark" class="w-4" /> <div class="text-sm leading-6">Organization</div>
+          <div className="flex py-1">
+            <img src={check} alt="checkmark" className="w-4" /> <div className="text-sm leading-6">Organization</div>
           </div>
         </div>
       </div>
