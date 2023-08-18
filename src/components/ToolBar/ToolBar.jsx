@@ -1,8 +1,9 @@
+import { useStore } from '../../state/store';
+import { signal } from '@preact/signals';
+
 import { Edit } from './Edit';
 import { Share } from './Share';
 import { Delete } from './Delete';
-
-import { signal } from '@preact/signals';
 
 
 const showEdit = signal(false);

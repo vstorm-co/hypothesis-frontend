@@ -30,7 +30,7 @@ export const configureStore = () => {
       {
         id: 0,
         title: 'Hamlet explanation',
-        selected: true,
+        selected: false,
       },
       {
         id: 1,

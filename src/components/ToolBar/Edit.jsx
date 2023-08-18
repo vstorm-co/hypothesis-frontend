@@ -1,5 +1,4 @@
 import { useStore } from '../../state/store';
-import { useLocation } from 'preact-iso';
 
 import pen from '../../assets/pen.svg';
 import check from '../../assets/check.svg';
