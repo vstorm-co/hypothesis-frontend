@@ -7,6 +7,8 @@ import { useStore } from '../../../state/store';
 export function Options(props) {
   const dispatch = useStore()[1];
 
+
+
   function toggleAdminBar() {
     dispatch('TOGGLE_ADMIN_BAR')
   }
