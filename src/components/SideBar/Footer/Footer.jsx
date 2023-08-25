@@ -3,7 +3,8 @@ import { signal } from '@preact/signals';
 import { useStore } from '../../../state/store';
 import { Options } from './Options';
 import { useGoogleLogin } from '@react-oauth/google';
-import { GoogleLogin } from '@react-oauth/google';
+
+import { Loading } from '../../Loading';
 
 import dots from '../../../assets/dots.svg';
 
@@ -14,11 +15,16 @@ function toggleOptions() {
 }
 
 export function Footer() {
-  const state = useStore()[0];
+  const [state, dispatch] = useStore();
 
   const signIn = useGoogleLogin({
     onSuccess: response => console.log(response),
+    onError: err => console.log(err),
   })
+
+  function toggleLoading() {
+    dispatch('TOGGLE_LOGIN_LOADING', !state.LoginLoading)
+  }
 
   if (state.user) {
     return (
@@ -39,9 +45,12 @@ export function Footer() {
     )
   } else {
     return (
-      <div className="border-t border-[#747474] px-2 py-4 mt-auto">
-        <div onClick={signIn} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
-          <div className="ml-2">Google Login</div>
+      <div onClick={toggleLoading} className="border-t border-[#747474] px-2 py-4 mt-auto">
+        <div className={"flex justify-center " + (state.LoginLoading ? 'hidden' : '')} >
+          <div className="px-2 py-1 rounded hover:bg-[#595959] cursor-pointer">Google Login</div>
+        </div>
+        <div className={'flex py-1.5 justify-center ' + (state.LoginLoading ? '' : 'hidden')}>
+          <Loading />
         </div>
       </div>
 

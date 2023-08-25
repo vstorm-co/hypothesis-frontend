@@ -2,11 +2,15 @@ import { useState, useEffect } from 'preact/hooks';
 
 let globalState = {
   showAdminBar: false,
+  LoginLoading: false,
 };
 let listeners = [];
 let actions = {
   TOGGLE_ADMIN_BAR: (curState) => {
     return { showAdminBar: !curState.showAdminBar };
+  },
+  TOGGLE_LOGIN_LOADING: (curState) => {
+    return { LoginLoading: !curState.LoginLoading };
   }
 };
 
