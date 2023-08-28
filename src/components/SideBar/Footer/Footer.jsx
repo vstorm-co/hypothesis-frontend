@@ -18,12 +18,25 @@ export function Footer() {
   const [state, dispatch] = useStore();
 
   const signIn = useGoogleLogin({
-    onSuccess: response => console.log(response),
-    onError: err => console.log(err),
+    onSuccess: async (response) => {
+      console.log(response);
+      let userData = await fetch(`https://api.projectannotation.testapp.ovh/verify?token=${response.access_token}`);
+      console.log(userData);
+      toggleLoading();
+    },
+    onError: err => {
+      console.log(err);
+      toggleLoading();
+    }
   })
 
   function toggleLoading() {
     dispatch('TOGGLE_LOGIN_LOADING', !state.LoginLoading)
+  }
+
+  function runLogin() {
+    toggleLoading();
+    signIn();
   }
 
   if (state.user) {
@@ -45,7 +58,7 @@ export function Footer() {
     )
   } else {
     return (
-      <div onClick={toggleLoading} className="border-t border-[#747474] px-2 py-4 mt-auto">
+      <div onClick={runLogin} className="border-t border-[#747474] px-2 py-4 mt-auto">
         <div className={"flex justify-center " + (state.LoginLoading ? 'hidden' : '')} >
           <div className="px-2 py-1 rounded hover:bg-[#595959] cursor-pointer">Google Login</div>
         </div>

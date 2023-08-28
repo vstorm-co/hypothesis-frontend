@@ -29,25 +29,32 @@ export const configureStore = () => {
     chats: [
       {
         id: 0,
-        title: 'Hamlet explanation',
-        selected: false,
-      },
-      {
-        id: 1,
-        title: 'Business ideas',
-        selected: false,
-      },
-      {
-        id: 2,
-        title: 'Brown v. Board significance',
-        selected: false,
-      },
-      {
-        id: 3,
-        title: 'Data science journey',
+        title: 'How to Log In?',
         selected: false,
       },
     ]
+    // chats: [
+    //   {
+    //     id: 0,
+    //     title: 'Hamlet explanation',
+    //     selected: false,
+    //   },
+    //   {
+    //     id: 1,
+    //     title: 'Business ideas',
+    //     selected: false,
+    //   },
+    //   {
+    //     id: 2,
+    //     title: 'Brown v. Board significance',
+    //     selected: false,
+    //   },
+    //   {
+    //     id: 3,
+    //     title: 'Data science journey',
+    //     selected: false,
+    //   },
+    // ]
   });
 };
 
