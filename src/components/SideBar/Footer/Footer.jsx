@@ -19,11 +19,12 @@ export function Footer() {
 
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
-      console.log(response);
-      let userData = await fetch(`https://api.projectannotation.testapp.ovh/verify?token=${response.access_token}`);
-      console.log(userData);
+      let tokenData = await fetch(`https://api.projectannotation.testapp.ovh/auth/verify?code=${response.code}`).then(res => res.json());
+      console.log(tokenData);
+      console.log(tokenData.access_token);
       toggleLoading();
     },
+    flow: 'auth-code',
     onError: err => {
       console.log(err);
       toggleLoading();
