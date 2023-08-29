@@ -23,6 +23,16 @@ export const configureStore = () => {
       }
 
       return { chats: updatedChats };
+    },
+    CREATE_CHAT: async (curState, chatName) => {
+      let chat = await fetch(`https://api.projectannotation.testapp.ovh/chat/room/`, {
+        headers: {
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjk0NTU3OTIxLCJpc19hZG1pbiI6ZmFsc2V9.SOp36tGArSAg7WCyLGweI5CK7B6HaaaU-0FtpoXnHb0'
+        },
+        method: 'POST',
+        body: JSON.stringify({ "name": chatName })
+      }).then(res => res.json()).catch(err => console.log(err));
+      console.log(chat);
     }
   };
   initStore(actions, {
