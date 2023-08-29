@@ -1,4 +1,3 @@
-import { useStore } from '../../state/store';
 import { signal } from '@preact/signals';
 
 import { Edit } from './Edit';

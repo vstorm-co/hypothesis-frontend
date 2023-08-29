@@ -1,29 +1,38 @@
 // @ts-nocheck
 import { signal } from '@preact/signals';
-import { useStore } from '../../../state/store';
 import { Options } from './Options';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useSelector, useDispatch } from 'react-redux';
+import { userActions } from '../../../store/user-slice';
+
 
 import { Loading } from '../../Loading';
 
 import dots from '../../../assets/dots.svg';
 
 const showOptions = signal(false);
+const loading = signal(false);
 
 function toggleOptions() {
   showOptions.value = !showOptions.value
 }
 
+function toggleLoading() {
+  loading.value = !loading.value
+}
+
 export function Footer() {
-  const [state, dispatch] = useStore();
+  const dispatch = useDispatch();
+  let user = useSelector(state => state.user);
 
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
-      let data = await fetch(`https://api.projectannotation.testapp.ovh/auth/verify?code=${response.code}/`).then(res => res.json()).catch(err => {
+      console.log(response);
+      let data = await fetch(`https://api.projectannotation.testapp.ovh/auth/verify?code=${response.code}`).then(res => res.json()).catch(err => {
         console.log(err);
         toggleLoading();
       });
-      console.log(data);
+      dispatch(userActions.setUser(data));
       toggleLoading();
     },
     flow: 'auth-code',
@@ -33,22 +42,20 @@ export function Footer() {
     }
   })
 
-  function toggleLoading() {
-    dispatch('TOGGLE_LOGIN_LOADING', !state.LoginLoading)
-  }
-
   function runLogin() {
     toggleLoading();
     signIn();
   }
 
-  if (state.user) {
+  console.log(user);
+
+  if (user.access_token) {
     return (
       <div className="border-t border-[#747474] px-2 py-4 mt-auto">
         <div className="flex items-center px-2 py-1">
-          <div className="w-8 h-8 bg-white rounded-full mr-2"></div>
+          <img src={user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
           <div className="text-sm leading-6">
-            {state.user.name}
+            {user.name}
           </div>
           <div className="ml-auto relative">
             <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
@@ -62,10 +69,10 @@ export function Footer() {
   } else {
     return (
       <div onClick={runLogin} className="border-t border-[#747474] px-2 py-4 mt-auto">
-        <div className={"flex justify-center " + (state.LoginLoading ? 'hidden' : '')} >
+        <div className={"flex justify-center " + (loading.value ? 'hidden' : '')} >
           <div className="px-2 py-1 rounded hover:bg-[#595959] cursor-pointer">Google Login</div>
         </div>
-        <div className={'flex py-1.5 justify-center ' + (state.LoginLoading ? '' : 'hidden')}>
+        <div className={'flex py-1.5 justify-center ' + (loading.value ? '' : 'hidden')}>
           <Loading />
         </div>
       </div>

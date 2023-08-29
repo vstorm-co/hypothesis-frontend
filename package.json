@@ -10,9 +10,11 @@
 	"dependencies": {
 		"@preact/signals": "^1.2.0",
 		"@react-oauth/google": "^0.11.1",
+		"@reduxjs/toolkit": "^1.9.5",
 		"preact": "^10.13.1",
 		"preact-iso": "^2.3.1",
-		"preact-render-to-string": "^6.2.0"
+		"preact-render-to-string": "^6.2.0",
+		"react-redux": "^8.1.2"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.5.0",

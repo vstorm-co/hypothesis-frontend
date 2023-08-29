@@ -1,20 +1,18 @@
 import send from '../assets/send.svg';
 import bot from '../assets/bot.svg';
 import { useEffect } from 'preact/compat';
-import { useStore } from '../state/store';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 
 
 
 export function Chat(props) {
-	const [state, dispatch] = useStore();
 
 	function isChatSelected() {
-		return state.chats.some(chat => chat.selected === true);
+		// return state.chats.some(chat => chat.selected === true);
 	}
 
 	useEffect(() => {
-		dispatch('SELECT_CHAT', +props.params.id);
+		// dispatch('SELECT_CHAT', +props.params.id);
 	}, [props.params.id]);
 
 	return (

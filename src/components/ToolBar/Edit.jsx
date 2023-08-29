@@ -1,19 +1,17 @@
-import { useStore } from '../../state/store';
 
 import pen from '../../assets/pen.svg';
 import check from '../../assets/check.svg';
 
 
 export function Edit(props) {
-  const [state, dispatch] = useStore();
 
   function selectedChat() {
-    return state.chats.find(chat => chat.selected);
+    // return state.chats.find(chat => chat.selected);
   }
 
   function editChatTitle(event) {
     // @ts-ignore
-    dispatch('EDIT_TITLE', { chatId: selectedChat().id, newTitle: event.target.value })
+    // dispatch('EDIT_TITLE', { chatId: selectedChat().id, newTitle: event.target.value })
   }
 
   return (

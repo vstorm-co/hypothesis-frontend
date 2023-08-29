@@ -2,6 +2,21 @@ import { initStore } from './store';
 
 export const configureStore = () => {
   const actions = {
+    SET_CHATS: (curState, payload) => {
+      return new Promise((resolve, reject) => {
+        fetch('https://api.projectannotation.testapp.ovh/chat/room/', {
+          headers: {
+            Authorization: `Bearer ${curState.user.token}`,
+            'Content-Type': 'application/json'
+          },
+        }).then(res => res.json()).then(data => {
+          let updatedChats = data.map(c => {
+            return { ...c, selected: false };
+          })
+          resolve({ chats: updatedChats })
+        });
+      })
+    },
     SELECT_CHAT: (curState, chatId) => {
       const chatIndex = curState.chats.findIndex(c => c.id === chatId);
       const updatedChats = curState.chats.map(c => {
@@ -25,14 +40,18 @@ export const configureStore = () => {
       return { chats: updatedChats };
     },
     CREATE_CHAT: async (curState, chatName) => {
+      let data = {
+        "name": chatName
+      }
+
       let chat = await fetch(`https://api.projectannotation.testapp.ovh/chat/room/`, {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjk0NTU3OTIxLCJpc19hZG1pbiI6ZmFsc2V9.SOp36tGArSAg7WCyLGweI5CK7B6HaaaU-0FtpoXnHb0'
+          Authorization: `Bearer ${curState.user.token}`,
+          'Content-Type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({ "name": chatName })
+        body: JSON.stringify(data)
       }).then(res => res.json()).catch(err => console.log(err));
-      console.log(chat);
     }
   };
   initStore(actions, {
