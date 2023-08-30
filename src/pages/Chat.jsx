@@ -2,7 +2,7 @@ import { ToolBar } from '../components/ToolBar/ToolBar';
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { chatsActions, getChatsData } from '../store/chats-slice';
+import { chatsActions, getChatsData, selectChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
 
 import send from '../assets/send.svg';
@@ -15,8 +15,14 @@ export function Chat(props) {
 
 	const chatRef = useRef(null);
 
+	console.log(props);
+
 	useEffect(() => {
 		dispatch(getChatsData());
+
+		setTimeout(() => {
+			dispatch(selectChat(props.params.id))
+		}, 600)
 	}, [])
 
 	function isChatSelected() {
