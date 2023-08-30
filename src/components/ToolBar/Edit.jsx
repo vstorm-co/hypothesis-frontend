@@ -4,8 +4,6 @@ import check from '../../assets/check.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { chatsActions, updateChat } from '../../store/chats-slice';
 
-
-
 export function Edit(props) {
   const chats = useSelector(state => state.chats.chats);
   const dispatch = useDispatch();

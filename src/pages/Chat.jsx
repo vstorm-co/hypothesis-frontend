@@ -1,25 +1,41 @@
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
-import { useState } from 'preact/hooks';
-import { sendMessage } from '../store/chats-slice';
+import { useState, useEffect, useRef } from 'preact/hooks';
+import { chatsActions, getChatsData } from '../store/chats-slice';
+import { Message } from '../components/Message';
 
 import send from '../assets/send.svg';
-
-
 
 export function Chat(props) {
 	const chats = useSelector(state => state.chats.chats);
 	const messages = useSelector(state => state.chats.messages);
-
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
+
+	const chatRef = useRef(null);
+
+	useEffect(() => {
+		dispatch(getChatsData());
+	}, [])
+
+	function isChatSelected() {
+		return chats.some(chat => chat.selected === true);
+	}
+
+	function SelectedChat() {
+		if (chats.find(c => c.selected)) {
+			return chats.find(c => c.selected)
+		} else {
+			return { name: '' }
+		};
+	}
 
 	function handleInputChange(event) {
 		setInput(event.target.value);
 	}
 
-	useWebSocket(`ws://api.projectannotation.testapp.ovh/chat/ws/${props.params.id}`, {
+	const { sendMessage } = useWebSocket(`wss://api.projectannotation.testapp.ovh/chat/ws/${props.params.id}`, {
 		onOpen: () => {
 			console.log("CONNECTED")
 		},
@@ -28,41 +44,45 @@ export function Chat(props) {
 		},
 		onError: (err) => {
 			console.log(err);
+		},
+		onMessage: (e) => {
+			if (messages.length > 0) {
+				if (messages[messages.length - 1].created_by === 'user') {
+					dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
+				} else {
+					dispatch(chatsActions.concatDataToMsg({ data: e.data }))
+				}
+				chatRef.current?.lastElementChild.scrollIntoView({ behavior: 'smooth' })
+			}
 		}
 	})
 
-	// const ws = new WebSocket(`ws://api.projectannotation.testapp.ovh/chat/ws/${props.params.id}`);
-	// ws.onopen = function (e) {
-	// 	console.log("AAAA");
-	// 	console.log(e);
-	// }
-	// ws.onmessage = function (event) {
-	// 	console.log(event.data);
-	// };
-
-	function isChatSelected() {
-		return chats.some(chat => chat.selected === true);
+	function sendMsg(e) {
+		e.preventDefault();
+		dispatch(chatsActions.addMessage({ created_by: "user", content: input }))
+		sendMessage(input)
+		setInput('');
 	}
 
 	return (
 		<div className={'flex w-full'}>
 			<div>
-				{isChatSelected() && <ToolBar />}
 			</div>
-
 			<div className="mx-auto">
 				<div className="h-[100vh] flex flex-col pt-4 pb-2">
-					<div className="max-w-[720px] max-h-[460px] overflow-auto">
+					<div className="max-w-[720px] max-h-[460px] overflow-auto" ref={chatRef}>
 
-
+						{messages.map(chat => (
+							<Message Message={chat} />
+						))}
 
 					</div>
-					<div className="mt-auto">
-						<textarea value={input} className="w-[720px] h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
-					</div>
+					<form onSubmit={sendMsg} className="mt-auto">
+						<textarea onChange={handleInputChange} value={input} className="w-[720px] h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
+					</form>
 					<div className="flex justify-end items-center mt-2 gap-x-4">
 						{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-						<button className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 					</div>
 				</div>
 			</div>

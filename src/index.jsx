@@ -4,6 +4,9 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route, useLocation } from 'preact-iso';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider, useDispatch } from "react-redux";
+import { useEffect } from 'preact/hooks';
+
+import { getChatsData } from "./store/chats-slice";
 
 import store from './store/index';
 
@@ -15,8 +18,6 @@ import { AdminBar } from './components/AdminBar/AdminBar';
 import './style.css';
 
 export function App() {
-
-
 	return (
 		<GoogleOAuthProvider clientId="670841656210-ln6g7cgt7ffqv4dpu0qesm2fk8rv7ckb.apps.googleusercontent.com">
 			<LocationProvider>

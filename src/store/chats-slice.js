@@ -6,7 +6,7 @@ const chatsSlice = createSlice({
   initialState: {
     chats: [
       {
-        id: 0,
+        uuid: 0,
         name: 'How to Log In?',
         selected: false,
       },
@@ -31,6 +31,13 @@ const chatsSlice = createSlice({
     },
     setMessages(state, action) {
       state.messages = action.payload;
+    },
+    addMessage(state, action) {
+      state.messages.push(action.payload);
+    },
+    concatDataToMsg(state, action) {
+      console.log(action);
+      state.messages[state.messages.length - 1].content += action.payload.data;
     }
   }
 });
@@ -39,7 +46,7 @@ export const chatsActions = chatsSlice.actions;
 
 export default chatsSlice;
 
-export const getChatsData = () => {
+export const getChatsData = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
       const data = await fetch('https://api.projectannotation.testapp.ovh/chat/room/', {
@@ -55,6 +62,9 @@ export const getChatsData = () => {
     const chats = await sendRequest();
 
     dispatch(chatsActions.setChats(chats))
+    // setTimeout(() => {
+    //   dispatch(chatsActions.setChatSelected({ chatId: payload }));
+    // })
   }
 }
 
@@ -116,17 +126,5 @@ export const updateChat = (payload) => {
 
     const chat = await sendRequest();
     dispatch(chatsActions.editChat({ chatId: payload.chatId, name: payload.name }));
-  }
-}
-
-export const sendMessage = (payload) => {
-  return async (dispatch) => {
-    const ws = new WebSocket(`ws://api.projectannotation.testapp.ovh/chat/ws/${payload.chatId}`);
-
-    ws.onmessage = function (event) {
-      console.log(event.data);
-    };
-
-    ws.onopen = (e) => { console.log(e) };
   }
 }

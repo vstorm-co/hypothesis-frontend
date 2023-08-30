@@ -13,7 +13,7 @@ export function Chats() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getChatsData());
+
   }, [])
 
   function callCreateChat() {
