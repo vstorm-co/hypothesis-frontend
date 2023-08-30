@@ -47,8 +47,6 @@ export function Footer() {
     signIn();
   }
 
-  console.log(user);
-
   if (user.access_token) {
     return (
       <div className="border-t border-[#747474] px-2 py-4 mt-auto">

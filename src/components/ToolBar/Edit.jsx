@@ -1,17 +1,22 @@
 
 import pen from '../../assets/pen.svg';
 import check from '../../assets/check.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { chatsActions, updateChat } from '../../store/chats-slice';
+
 
 
 export function Edit(props) {
+  const chats = useSelector(state => state.chats.chats);
+  const dispatch = useDispatch();
 
   function selectedChat() {
-    // return state.chats.find(chat => chat.selected);
+    return chats.find(chat => chat.selected);
   }
 
   function editChatTitle(event) {
     // @ts-ignore
-    // dispatch('EDIT_TITLE', { chatId: selectedChat().id, newTitle: event.target.value })
+    dispatch(updateChat({ chatId: selectedChat().uuid, name: event.target.value }))
   }
 
   return (
@@ -26,7 +31,7 @@ export function Edit(props) {
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title
           </div>
-          <input value={selectedChat().title} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
+          <input value={selectedChat().name} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
         </div>
         <div className="p-2">
           <div className="text-xs font-bold text-[#747474] mb-1">

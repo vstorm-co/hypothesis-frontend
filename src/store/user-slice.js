@@ -1,11 +1,11 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 
+let user = JSON.parse(localStorage.getItem('ANT_user'));
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    access_token: null,
-  },
+  initialState: user ? user : { access_token: null },
   reducers: {
     setUser(state, action) {
       console.log(action);
@@ -13,6 +13,8 @@ const userSlice = createSlice({
       state.email = action.payload.email;
       state.name = action.payload.name;
       state.picture = action.payload.picture;
+
+      localStorage.setItem('ANT_user', JSON.stringify({ ...state }));
     },
   }
 });
