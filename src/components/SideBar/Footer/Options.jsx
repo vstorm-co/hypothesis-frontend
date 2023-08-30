@@ -1,14 +1,20 @@
 import darkmode from '../../../assets/darkmode.svg';
-import logout from '../../../assets/logout.svg';
-import { useStore } from '../../../state_old/store';
+import logoutIcon from '../../../assets/logout.svg';
+import { useDispatch } from 'react-redux';
 
+import { chatsActions } from '../../../store/chats-slice';
+import { userActions } from '../../../store/user-slice';
 
 
 export function Options(props) {
-  const dispatch = useStore()[1];
+  const dispatch = useDispatch();
 
   function toggleAdminBar() {
-    dispatch('TOGGLE_ADMIN_BAR')
+  }
+
+  function callLogout() {
+    dispatch(userActions.logoutUser());
+    dispatch(chatsActions.setChats([]));
   }
 
   return (
@@ -20,8 +26,8 @@ export function Options(props) {
         <div onClick={toggleAdminBar} className={"cursor-pointer flex hover:bg-[#595959] p-2 border-y border-[#595959]"}>
           <img className="w-4" src={darkmode} alt="" /> <div className="ml-2">Admin Panel</div>
         </div>
-        <div className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
-          <img className="w-4" src={logout} alt="" /> <div className="ml-2">Logout</div>
+        <div onClick={callLogout} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
+          <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
         </div>
       </div>
     </div>

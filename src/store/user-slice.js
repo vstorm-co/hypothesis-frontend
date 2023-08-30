@@ -16,6 +16,14 @@ const userSlice = createSlice({
 
       localStorage.setItem('ANT_user', JSON.stringify({ ...state }));
     },
+    logoutUser(state, action) {
+      state.access_token = '';
+      state.email = '';
+      state.name = '';
+      state.picture = '';
+
+      localStorage.removeItem('ANT_user');
+    }
   }
 });
 

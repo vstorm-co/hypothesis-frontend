@@ -66,9 +66,9 @@ export function Footer() {
     )
   } else {
     return (
-      <div onClick={runLogin} className="border-t border-[#747474] px-2 py-4 mt-auto">
+      <div className="border-t border-[#747474] px-2 py-4 mt-auto">
         <div className={"flex justify-center " + (loading.value ? 'hidden' : '')} >
-          <div className="px-2 py-1 rounded hover:bg-[#595959] cursor-pointer">Google Login</div>
+          <div onClick={runLogin} className="px-2 py-1 rounded hover:bg-[#595959] cursor-pointer">Google Login</div>
         </div>
         <div className={'flex py-1.5 justify-center ' + (loading.value ? '' : 'hidden')}>
           <Loading />

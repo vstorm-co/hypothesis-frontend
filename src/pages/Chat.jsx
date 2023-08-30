@@ -10,6 +10,8 @@ import send from '../assets/send.svg';
 export function Chat(props) {
 	const chats = useSelector(state => state.chats.chats);
 	const messages = useSelector(state => state.chats.messages);
+	const user = useSelector(state => state.user);
+
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
 
@@ -23,7 +25,7 @@ export function Chat(props) {
 		setTimeout(() => {
 			dispatch(selectChat(props.params.id))
 		}, 600)
-	}, [])
+	}, [user])
 
 	function isChatSelected() {
 		return chats.some(chat => chat.selected === true);
@@ -58,7 +60,7 @@ export function Chat(props) {
 				} else {
 					dispatch(chatsActions.concatDataToMsg({ data: e.data }))
 				}
-				chatRef.current?.lastElementChild.scrollIntoView({ behavior: 'smooth' })
+				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}
 		}
 	})
