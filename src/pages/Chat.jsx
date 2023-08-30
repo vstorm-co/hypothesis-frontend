@@ -17,8 +17,6 @@ export function Chat(props) {
 
 	const chatRef = useRef(null);
 
-	console.log(props);
-
 	useEffect(() => {
 		dispatch(getChatsData());
 
@@ -45,13 +43,10 @@ export function Chat(props) {
 
 	const { sendMessage } = useWebSocket(`wss://api.projectannotation.testapp.ovh/chat/ws/${props.params.id}`, {
 		onOpen: () => {
-			console.log("CONNECTED")
 		},
 		onClose: () => {
-			console.log("CLOSED")
 		},
 		onError: (err) => {
-			console.log(err);
 		},
 		onMessage: (e) => {
 			if (messages.length > 0) {

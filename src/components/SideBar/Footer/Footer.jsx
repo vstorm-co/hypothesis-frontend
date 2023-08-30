@@ -27,9 +27,7 @@ export function Footer() {
 
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
-      console.log(response);
       let data = await fetch(`https://api.projectannotation.testapp.ovh/auth/verify?code=${response.code}`).then(res => res.json()).catch(err => {
-        console.log(err);
         toggleLoading();
       });
       dispatch(userActions.setUser(data));
@@ -37,7 +35,6 @@ export function Footer() {
     },
     flow: 'auth-code',
     onError: err => {
-      console.log(err);
       toggleLoading();
     }
   })

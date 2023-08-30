@@ -25,7 +25,6 @@ const chatsSlice = createSlice({
       state.chats = action.payload;
     },
     setChatSelected(state, action) {
-      console.log(action);
       state.chats.map(c => c.selected = false);
       const chatIndex = state.chats.findIndex(c => c.uuid === action.payload.chatId);
       state.chats[chatIndex].selected = true;
@@ -37,7 +36,6 @@ const chatsSlice = createSlice({
       state.messages.push(action.payload);
     },
     concatDataToMsg(state, action) {
-      console.log(action);
       state.messages[state.messages.length - 1].content += action.payload.data;
     }
   }
