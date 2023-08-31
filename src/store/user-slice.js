@@ -29,22 +29,3 @@ const userSlice = createSlice({
 export const userActions = userSlice.actions;
 
 export default userSlice;
-
-// export const getChatsData = () => {
-//   return async (dispatch) => {
-//     const sendRequest = async () => {
-//       const data = await fetch('https://api.projectannotation.testapp.ovh/chat/room/', {
-//         headers: {
-//           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjk0NTU3OTIxLCJpc19hZG1pbiI6ZmFsc2V9.SOp36tGArSAg7WCyLGweI5CK7B6HaaaU-0FtpoXnHb0`,
-//           'Content-Type': 'application/json'
-//         },
-//       }).then(res => res.json());
-
-//       return data;
-//     };
-
-//     const chats = await sendRequest();
-
-//     dispatch(chatsActions.setChats(chats))
-//   }
-// }

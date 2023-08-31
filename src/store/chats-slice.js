@@ -48,7 +48,7 @@ export default chatsSlice;
 export const getChatsData = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch('https://api.projectannotation.testapp.ovh/chat/room/', {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ export const getChatsData = (payload) => {
 export const createChat = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch('https://api.projectannotation.testapp.ovh/chat/room/', {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
@@ -93,7 +93,7 @@ export const selectChat = (payload) => {
   return async (dispatch) => {
     dispatch(chatsActions.setChatSelected({ chatId: payload }))
     const sendRequest = async () => {
-      const data = await fetch(`https://api.projectannotation.testapp.ovh/chat/messages/?room_id=${payload}`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/messages/?room_id=${payload}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ export const selectChat = (payload) => {
 export const updateChat = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`https://api.projectannotation.testapp.ovh/chat/room/${payload.chatId}`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,

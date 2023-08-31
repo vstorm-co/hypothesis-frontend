@@ -38,7 +38,7 @@ export function Chat(props) {
 		setInput(event.target.value);
 	}
 
-	const { sendMessage } = useWebSocket(`wss://api.projectannotation.testapp.ovh/chat/ws/${props.params.id}`, {
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`, {
 		onOpen: () => {
 		},
 		onClose: () => {
