@@ -18,7 +18,7 @@ export function Message(props) {
       <div className="flex my-4">
         <div className="rounded flex p-2">
           <div className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2 flex items-center justify-center shrink-0"><img src={bot} className="w-4" alt="" /></div>
-          <div className="ml-4 mt-1">{props.Message.content}</div>
+          <pre className="ml-4 mt-1">{props.Message.content}</pre>
         </div>
       </div>
     )

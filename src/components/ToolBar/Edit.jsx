@@ -1,5 +1,5 @@
 
-import pen from '../../assets/pen.svg';
+import dots from '../../assets/dots.svg';
 import check from '../../assets/check.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { chatsActions, updateChat } from '../../store/chats-slice';
@@ -9,7 +9,11 @@ export function Edit(props) {
   const dispatch = useDispatch();
 
   function selectedChat() {
-    return chats.find(chat => chat.selected);
+    if (chats.find(c => c.selected)) {
+      return chats.find(c => c.selected)
+    } else {
+      return { name: '' }
+    };
   }
 
   function editChatTitle(event) {
@@ -20,27 +24,16 @@ export function Edit(props) {
   return (
     <div className="relative">
       <div onClick={props.onToggle} className={"p-1 border border-[#DBDBDB] rounded-t cursor-pointer"}>
-        <div className={"p-2 " + (props.show ? 'bg-[#F2F2F2]' : '')}>
-          <img className="w-4" src={pen} alt="edit" />
+        <div className={"p-1 " + (props.show ? 'bg-[#F2F2F2]' : '')}>
+          <img className="w-4 rotate-90" src={dots} alt="edit" />
         </div>
       </div>
-      <div className={"absolute border rounded -right-[15.5rem] -top-2 bg-white " + (props.show ? '' : 'hidden')}>
+      <div className={"absolute border rounded -right-[13rem] top-10 bg-white " + (props.show ? '' : 'hidden')}>
         <div className="border-b p-2">
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title
           </div>
           <input value={selectedChat().name} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
-        </div>
-        <div className="p-2">
-          <div className="text-xs font-bold text-[#747474] mb-1">
-            Visibility
-          </div>
-          <div className="flex py-1 border-b">
-            <img src={check} alt="checkmark" className="w-4" /> <div className="text-sm leading-6">Just me</div>
-          </div>
-          <div className="flex py-1">
-            <img src={check} alt="checkmark" className="w-4" /> <div className="text-sm leading-6">Organization</div>
-          </div>
         </div>
       </div>
     </div>

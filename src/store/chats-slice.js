@@ -61,9 +61,10 @@ export const getChatsData = (payload) => {
     const chats = await sendRequest();
 
     dispatch(chatsActions.setChats(chats))
-    // setTimeout(() => {
-    //   dispatch(chatsActions.setChatSelected({ chatId: payload }));
-    // })
+
+    if (payload) {
+      dispatch(selectChat(payload));
+    }
   }
 }
 

@@ -11,13 +11,10 @@ function toggleEdit() {
   showEdit.value = !showEdit.value;
 }
 
-
 export function ToolBar() {
   return (
-    <div className="pl-4 pt-4">
+    <div className="">
       <Edit show={showEdit.value} onToggle={toggleEdit} />
-      <Share />
-      <Delete />
     </div>
   )
 }
