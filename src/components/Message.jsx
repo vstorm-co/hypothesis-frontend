@@ -1,4 +1,7 @@
 import { useDispatch } from 'react-redux';
+import ReactMarkdown from 'react-markdown';
+import rehypePrism from '@mapbox/rehype-prism';
+
 
 import bot from '../assets/bot.svg';
 
@@ -18,7 +21,9 @@ export function Message(props) {
       <div className="flex my-4">
         <div className="rounded flex p-2">
           <div className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2 flex items-center justify-center shrink-0"><img src={bot} className="w-4" alt="" /></div>
-          <pre className="ml-4 mt-1">{props.Message.content}</pre>
+          <div className="ml-2 mt-1">
+            <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
+          </div>
         </div>
       </div>
     )

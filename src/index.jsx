@@ -12,9 +12,8 @@ import { NotFound } from './pages/_404.jsx';
 import { SideBar } from './components/SideBar/SideBar';
 import { AdminBar } from './components/AdminBar/AdminBar';
 
-console.log(import.meta.env);
-
 import './style.css';
+import 'prismjs/themes/prism.css'
 
 export function App() {
 	return (

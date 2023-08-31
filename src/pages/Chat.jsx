@@ -69,7 +69,7 @@ export function Chat(props) {
 			<div className={'flex w-full'}>
 				<div>
 				</div>
-				<div className="mx-auto">
+				<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 					<div className="h-[100vh] flex flex-col pt-4 pb-2">
 						<div className={'flex justify-between items-center border-b border-[#DBDBDB]'}>
 							<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
@@ -79,7 +79,7 @@ export function Chat(props) {
 								<ToolBar />
 							</div>
 						</div>
-						<div className="max-w-[720px] max-h-[460px] overflow-auto" ref={chatRef}>
+						<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
 
 							{messages.map(chat => (
 								<Message Message={chat} />
@@ -87,7 +87,7 @@ export function Chat(props) {
 
 						</div>
 						<form onSubmit={sendMsg} className="mt-auto">
-							<textarea onChange={handleInputChange} value={input} className="w-[720px] h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
+							<textarea onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
 						</form>
 						<div className="flex justify-end items-center mt-2 gap-x-4">
 							{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
