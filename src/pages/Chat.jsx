@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { chatsActions, getChatsData, selectChat } from '../store/chats-slice';
-import { Message } from '../components/Message';
 
+import { chatsActions, getChatsData } from '../store/chats-slice';
+import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
+import { Toast } from '../components/Toast';
+
 
 import send from '../assets/send.svg';
 
@@ -71,10 +73,15 @@ export function Chat(props) {
 				</div>
 				<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 					<div className="h-[100vh] flex flex-col pt-4 pb-2">
-						<div className={'flex justify-between items-center border-b border-[#DBDBDB]'}>
+						<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
 							<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
 								{SelectedChat().name}
 							</div>
+
+							<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
+								<Toast />
+							</div>
+
 							<div>
 								<ToolBar />
 							</div>

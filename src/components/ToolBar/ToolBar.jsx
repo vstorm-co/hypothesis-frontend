@@ -13,7 +13,8 @@ function toggleEdit() {
 
 export function ToolBar() {
   return (
-    <div className="">
+    <div className="flex">
+      <Share />
       <Edit show={showEdit.value} onToggle={toggleEdit} />
     </div>
   )
