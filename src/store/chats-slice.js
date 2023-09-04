@@ -127,3 +127,22 @@ export const updateChat = (payload) => {
     dispatch(chatsActions.editChat({ chatId: payload.chatId, name: payload.name }));
   }
 }
+
+export const deleteChat = (payload) => {
+  return async (dispatch) => {
+    const sendRequest = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
+          'Content-Type': 'application/json'
+        },
+      }).then(res => res.json());
+
+      return data;
+    };
+
+    const response = await sendRequest();
+    dispatch(getChatsData());
+  }
+}
