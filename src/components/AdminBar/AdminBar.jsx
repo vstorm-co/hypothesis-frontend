@@ -1,13 +1,16 @@
 import { User } from './User';
 import { Team } from './Team';
+import { useSelector } from 'react-redux';
 
 import plus from '../../assets/plus.svg'
 
 export function AdminBar() {
+  const ui = useSelector(state => state.ui)
+
   return (
-    <div className="bg-[#202020] text-[#FFFFFF] ml-8">
-      <div className={"h-[100vh] flex flex-col duration-300 overflow-hidden " + (false ? 'w-80' : 'w-0')}>
-        <div className={(false ? 'p-4' : 'hidden')}>
+    <div className="bg-[#202020] text-[#FFFFFF]">
+      <div className={"h-[100vh] flex flex-col duration-300 overflow-hidden " + (ui.adminBar.active ? 'w-80' : 'w-0')}>
+        <div className={(ui.adminBar.active ? 'p-4' : 'hidden')}>
           <div>
             <div className="text-xs font-bold mb-2">
               Users

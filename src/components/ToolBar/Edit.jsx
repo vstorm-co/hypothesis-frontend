@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateChat } from '../../store/chats-slice';
 import { signal } from '@preact/signals';
 import { useLocation } from 'preact-iso';
+import { useRef, useEffect } from 'preact/hooks';
 
 import { deleteChat } from '../../store/chats-slice';
 
@@ -10,13 +11,37 @@ import bin from '../../assets/bin.svg';
 
 const confirmDelete = signal(false);
 
+const showEdit = signal(false);
+
+function toggleEdit() {
+  showEdit.value = !showEdit.value;
+}
+
 function toggleConfirmDelete() {
   confirmDelete.value = !confirmDelete.value;
+}
+
+function outsideClickHanlder(ref) {
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        showEdit.value = false;
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+    }
+  }, [ref])
 }
 
 export function Edit(props) {
   const chats = useSelector(state => state.chats.chats);
   const dispatch = useDispatch();
+
+  const editRef = useRef(null);
+  outsideClickHanlder(editRef);
 
   const location = useLocation();
 
@@ -41,13 +66,13 @@ export function Edit(props) {
   }
 
   return (
-    <div className="relative">
-      <div onClick={props.onToggle} className={"p-1 border border-[#DBDBDB] rounded-r cursor-pointer"}>
-        <div className={"p-1 hover:bg-[#F2F2F2] " + (props.show ? 'bg-[#F2F2F2]' : '')}>
+    <div ref={editRef} className="relative">
+      <div onClick={toggleEdit} className={"p-1 border border-[#DBDBDB] rounded-r cursor-pointer"}>
+        <div className={"p-1 hover:bg-[#F2F2F2] " + (showEdit.value ? 'bg-[#F2F2F2]' : '')}>
           <img className="w-4 rotate-90" src={dots} alt="edit" />
         </div>
       </div>
-      <div className={"absolute border rounded right-0 top-10 bg-white " + (props.show ? '' : 'hidden')}>
+      <div className={"absolute border rounded right-0 top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
         <div className="border-b p-2">
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title

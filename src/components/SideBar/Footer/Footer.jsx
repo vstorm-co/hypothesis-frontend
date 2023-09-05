@@ -5,17 +5,9 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector, useDispatch } from 'react-redux';
 import { userActions } from '../../../store/user-slice';
 
-
 import { Loading } from '../../Loading';
 
-import dots from '../../../assets/dots.svg';
-
-const showOptions = signal(false);
 const loading = signal(false);
-
-function toggleOptions() {
-  showOptions.value = !showOptions.value
-}
 
 function toggleLoading() {
   loading.value = !loading.value
@@ -55,12 +47,7 @@ export function Footer() {
           <div className="text-sm leading-6">
             {user.name}
           </div>
-          <div className="ml-auto relative">
-            <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
-              <img src={dots} alt="options" />
-            </div>
-            <Options show={showOptions.value} />
-          </div>
+          <Options />
         </div>
       </div>
     )

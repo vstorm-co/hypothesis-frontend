@@ -7,6 +7,9 @@ const uiSlice = createSlice({
     toast: {
       active: false,
       content: '',
+    },
+    adminBar: {
+      active: false,
     }
   },
   reducers: {
@@ -15,6 +18,9 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    toggleAdminBar(state, action) {
+      state.adminBar.active = action.payload.tgl;
     }
   }
 });
