@@ -84,7 +84,7 @@ export const createChat = (payload) => {
     };
 
     const chat = await sendRequest();
-    dispatch(getChatsData(chat.room.uuid));
+    dispatch(getChatsData(chat.uuid));
   }
 }
 
