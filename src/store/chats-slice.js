@@ -11,10 +11,15 @@ const chatsSlice = createSlice({
         selected: false,
       },
     ],
-    messages: [],
+    currentChat: {
+      name: null,
+      uuid: null,
+      messages: [],
+    }
   },
   reducers: {
     editChat(state, action) {
+      state.currentChat = { ...state.currentChat, ...action.payload };
       const chatIndex = state.chats.findIndex(c => c.uuid === action.payload.chatId);
       state.chats[chatIndex] = {
         ...state.chats[chatIndex],
@@ -29,14 +34,14 @@ const chatsSlice = createSlice({
       const chatIndex = state.chats.findIndex(c => c.uuid === action.payload.chatId);
       state.chats[chatIndex].selected = true;
     },
-    setMessages(state, action) {
-      state.messages = action.payload;
+    setCurrentChat(state, action) {
+      state.currentChat = action.payload;
     },
     addMessage(state, action) {
-      state.messages.push(action.payload);
+      state.currentChat.messages.push(action.payload);
     },
     concatDataToMsg(state, action) {
-      state.messages[state.messages.length - 1].content += action.payload.data;
+      state.currentChat.messages[state.currentChat.messages.length - 1].content += action.payload.data;
     }
   }
 });
@@ -48,7 +53,7 @@ export default chatsSlice;
 export const getChatsData = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/rooms`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
@@ -90,9 +95,8 @@ export const createChat = (payload) => {
 
 export const selectChat = (payload) => {
   return async (dispatch) => {
-    dispatch(chatsActions.setChatSelected({ chatId: payload }))
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/messages/?room_id=${payload}`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
@@ -102,9 +106,9 @@ export const selectChat = (payload) => {
       return data;
     };
 
-    const messages = await sendRequest();
+    const chat = await sendRequest();
 
-    dispatch(chatsActions.setMessages(messages));
+    dispatch(chatsActions.setCurrentChat(chat));
   }
 }
 

@@ -38,6 +38,7 @@ function outsideClickHanlder(ref) {
 
 export function Edit(props) {
   const chats = useSelector(state => state.chats.chats);
+  const currentChat = useSelector(state => state.chats.currentChat)
   const dispatch = useDispatch();
 
   const editRef = useRef(null);
@@ -45,16 +46,8 @@ export function Edit(props) {
 
   const location = useLocation();
 
-  function selectedChat() {
-    if (chats.find(c => c.selected)) {
-      return chats.find(c => c.selected)
-    } else {
-      return { name: '' }
-    };
-  }
-
   function callDeleteChat() {
-    dispatch(deleteChat({ chatId: selectedChat().uuid }));
+    dispatch(deleteChat({ chatId: currentChat.uuid }));
     location.route('/');
     toggleConfirmDelete();
     props.onToggle();
@@ -62,7 +55,7 @@ export function Edit(props) {
 
   function editChatTitle(event) {
     // @ts-ignore
-    dispatch(updateChat({ chatId: selectedChat().uuid, name: event.target.value }))
+    dispatch(updateChat({ chatId: currentChat.uuid, name: event.target.value }))
   }
 
   return (
@@ -77,7 +70,16 @@ export function Edit(props) {
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title
           </div>
-          <input value={selectedChat().name} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
+          <input value={currentChat.name} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
+        </div>
+        <div className="border-b p-2">
+          <div className="text-xs font-bold text-[#747474] mb-1">
+            Visibility
+          </div>
+          <div className={'text-sm leading-6 flex'}>
+            <div className={'cursor-pointer px-2 py-1 rounded bg-[#747474] text-white'}>Just Me</div>
+            <div className={'cursor-pointer px-2 py-1 rounded'}>Organization</div>
+          </div>
         </div>
         <div className={'p-1.5'}>
           <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
