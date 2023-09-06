@@ -116,7 +116,7 @@ export const updateChat = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
