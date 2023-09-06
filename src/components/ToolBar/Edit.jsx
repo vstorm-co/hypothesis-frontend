@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector, useDispatch } from 'react-redux';
 import { updateChat } from '../../store/chats-slice';
 import { signal } from '@preact/signals';
@@ -10,7 +11,6 @@ import dots from '../../assets/dots.svg';
 import bin from '../../assets/bin.svg';
 
 const confirmDelete = signal(false);
-
 const showEdit = signal(false);
 
 function toggleEdit() {
@@ -32,6 +32,7 @@ function outsideClickHanlder(ref) {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
+      console.log("A");
     }
   }, [ref])
 }
@@ -53,9 +54,12 @@ export function Edit(props) {
     props.onToggle();
   }
 
+  const editChatShare = (tgl) => {
+    dispatch(updateChat({ uuid: currentChat.uuid, share: tgl }));
+  }
+
   function editChatTitle(event) {
-    // @ts-ignore
-    dispatch(updateChat({ chatId: currentChat.uuid, name: event.target.value }))
+    dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value }))
   }
 
   return (
@@ -77,12 +81,12 @@ export function Edit(props) {
             Visibility
           </div>
           <div className={'text-sm leading-6 flex'}>
-            <div className={'cursor-pointer px-2 py-1 rounded bg-[#747474] text-white'}>Just Me</div>
-            <div className={'cursor-pointer px-2 py-1 rounded'}>Organization</div>
+            <div onClick={() => { editChatShare(false) }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.share ? '' : 'bg-[#747474] text-white')}>Just Me</div>
+            <div onClick={() => { editChatShare(true) }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.share ? 'bg-[#747474] text-white' : '')}> Organization</div>
           </div>
         </div>
         <div className={'p-1.5'}>
-          <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+          <div onClick={() => { toggleConfirmDelete }} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={bin} alt="" />
             <div className={'ml-2'}>
               Delete chat
@@ -93,12 +97,12 @@ export function Edit(props) {
               Are you sure you want to delete this chat?
             </div>
             <div className='flex justify-center items-center gap-4 border-t border-[#747474] py-2'>
-              <div onClick={toggleConfirmDelete} className={'px-2 py-1 cursor-pointer'}>Cancel</div>
-              <div onClick={callDeleteChat} className={'bg-[#EF4444] px-2 py-1 rounded cursor-pointer'}>Delete</div>
+              <div onClick={() => { toggleConfirmDelete }} className={'px-2 py-1 cursor-pointer'}>Cancel</div>
+              <div onClick={() => { callDeleteChat }} className={'bg-[#EF4444] px-2 py-1 rounded cursor-pointer'}>Delete</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }

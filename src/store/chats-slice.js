@@ -20,10 +20,10 @@ const chatsSlice = createSlice({
   reducers: {
     editChat(state, action) {
       state.currentChat = { ...state.currentChat, ...action.payload };
-      const chatIndex = state.chats.findIndex(c => c.uuid === action.payload.chatId);
+      const chatIndex = state.chats.findIndex(c => c.uuid === action.payload.uuid);
       state.chats[chatIndex] = {
         ...state.chats[chatIndex],
-        name: action.payload.name,
+        ...action.payload
       }
     },
     setChats(state, action) {
@@ -53,7 +53,7 @@ export default chatsSlice;
 export const getChatsData = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/rooms`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/rooms/`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
@@ -115,20 +115,20 @@ export const selectChat = (payload) => {
 export const updateChat = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.uuid}`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_user')).access_token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: payload.name })
+        body: JSON.stringify(payload)
       }).then(res => res.json());
 
       return data;
     };
 
     const chat = await sendRequest();
-    dispatch(chatsActions.editChat({ chatId: payload.chatId, name: payload.name }));
+    dispatch(chatsActions.editChat(payload));
   }
 }
 

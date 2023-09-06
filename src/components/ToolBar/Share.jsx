@@ -1,12 +1,15 @@
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/ui-slice';
+import { useLocation } from 'preact-iso';
 
 import share from '../../assets/share.svg';
 
 export function Share() {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   function callShowToast() {
+    navigator.clipboard.writeText(window.location.href);
     dispatch(showToast({ content: 'Succesfully copied link' }))
   }
 
