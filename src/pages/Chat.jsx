@@ -21,10 +21,24 @@ export function Chat(props) {
 
 	useEffect(() => {
 		dispatch(getChatsData(props.params.id));
+		setTimeout(() => {
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
+		}, 100)
 	}, [user])
 
 	function handleInputChange(event) {
 		setInput(event.target.value);
+	}
+
+	function handleKeyDown(event) {
+		if (event.key === 'Enter') {
+			if (event.shiftKey) {
+
+			} else {
+				event.preventDefault();
+				console.log('SEND');
+			}
+		}
 	}
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`, {
@@ -79,7 +93,7 @@ export function Chat(props) {
 
 						</div>
 						<form onSubmit={sendMsg} className="mt-auto">
-							<textarea onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
+							<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
 						</form>
 						<div className="flex justify-end items-center mt-2 gap-x-4">
 							{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}

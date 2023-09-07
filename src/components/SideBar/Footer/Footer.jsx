@@ -5,12 +5,21 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector, useDispatch } from 'react-redux';
 import { userActions } from '../../../store/user-slice';
 
+import arrows from '../../../assets/arrows-up-down.svg'
+import plus from '../../../assets/plus.svg';
+
 import { Loading } from '../../Loading';
 
 const loading = signal(false);
+const switchUserActive = signal(false);
+
 
 function toggleLoading() {
   loading.value = !loading.value
+}
+
+function toggleSwitchUser() {
+  switchUserActive.value = !switchUserActive.value;
 }
 
 export function Footer() {
@@ -34,6 +43,7 @@ export function Footer() {
     }
   })
 
+
   function runLogin() {
     toggleLoading();
     signIn();
@@ -41,13 +51,51 @@ export function Footer() {
 
   if (user.access_token) {
     return (
-      <div className="border-t border-[#747474] px-2 py-4 mt-auto">
-        <div className="flex items-center px-2 py-1">
-          <img src={user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
-          <div className="text-sm leading-6">
-            {user.name}
+      <div className={"border-t border-[#747474] px-2 py-4 mt-auto"}>
+        <div className="flex flex-col px-2 py-1">
+          <div class={'flex items-center'}>
+            <img src={user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
+            <div>
+              <div className="text-sm leading-6">
+                {user.name}
+              </div>
+              <div className={'text-xs text-[#747474]'}>
+                {user.email}
+              </div>
+            </div>
+            <div onClick={() => toggleSwitchUser()} className={'ml-auto'}>
+              <img src={arrows} alt="" />
+            </div>
+            <Options />
           </div>
-          <Options />
+          <div className={'flex flex-col overflow-hidden transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[200px]' : 'max-h-[0]')}>
+            <div class={'flex items-center mt-4'}>
+              <img src={user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
+              <div>
+                <div className="text-sm leading-6">
+                  {user.name}
+                </div>
+                <div className={'text-xs text-[#747474]'}>
+                  {user.email}
+                </div>
+              </div>
+            </div>
+            <div class={'flex items-center mt-4'}>
+              <img src={user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
+              <div>
+                <div className="text-sm leading-6">
+                  {user.name}
+                </div>
+                <div className={'text-xs text-[#747474]'}>
+                  {user.email}
+                </div>
+              </div>
+            </div>
+            <div className={'flex px-3 py-2 border border-dashed rounded border-[#595959] mt-3'}>
+              <img src={plus} alt="" />
+              <div className={'ml-4 text-sm leading-6'}>Add New Account</div>
+            </div>
+          </div>
         </div>
       </div>
     )

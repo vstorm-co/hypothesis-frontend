@@ -49,7 +49,7 @@ export function Options(props) {
   }
 
   return (
-    <div ref={optionsRef} className="ml-auto relative">
+    <div ref={optionsRef} className="ml-2 relative">
       <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
         <img src={dots} alt="options" />
       </div>
