@@ -55,8 +55,7 @@ export function Edit(props) {
   }
 
   const editChatShare = (tgl) => {
-    console.log(tgl);
-    dispatch(updateChat({ uuid: currentChat.uuid, share: tgl }));
+    dispatch(updateChat({ uuid: currentChat.uuid, visibility: tgl }));
   }
 
   function editChatTitle(event) {
@@ -87,8 +86,8 @@ export function Edit(props) {
             Visibility
           </div>
           <div className={'text-sm leading-6 flex'}>
-            <div onClick={() => { editChatShare(false) }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.share ? '' : 'bg-[#747474] text-white')}>Just Me</div>
-            <div onClick={() => { editChatShare(true) }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.share ? 'bg-[#747474] text-white' : '')}> Organization</div>
+            <div onClick={() => { editChatShare("just_me") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? '' : 'bg-[#747474] text-white')}>Just Me</div>
+            <div onClick={() => { editChatShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>
           </div>
         </div>
         <div className={'p-1.5'}>
