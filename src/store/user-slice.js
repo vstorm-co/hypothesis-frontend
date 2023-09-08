@@ -1,19 +1,42 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 
-let user = JSON.parse(localStorage.getItem('ANT_user'));
+let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
+let users = JSON.parse(localStorage.getItem('ANT_users'));
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: user ? user : { access_token: null },
+  initialState: {
+    currentUser: user ? user : { access_token: null },
+    users: users ? users : [],
+  },
   reducers: {
     setUser(state, action) {
-      state.access_token = action.payload.access_token;
-      state.email = action.payload.email;
-      state.name = action.payload.name;
-      state.picture = action.payload.picture;
+      if (action.payload.access_token) {
+        state.currentUser.access_token = action.payload.access_token;
+        state.currentUser.email = action.payload.email;
+        state.currentUser.name = action.payload.name;
+        state.currentUser.picture = action.payload.picture;
 
-      localStorage.setItem('ANT_user', JSON.stringify({ ...state }));
+        localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
+      }
+    },
+    setUsers(state, action) {
+      let users = JSON.parse(localStorage.getItem('ANT_users'));
+      let usersTable = users ? users : [];
+
+      if (action.payload.access_token) {
+        usersTable.push({
+          access_token: action.payload.access_token,
+          email: action.payload.email,
+          name: action.payload.name,
+          picture: action.payload.picture,
+        });
+
+        state.users = usersTable;
+        localStorage.setItem('ANT_users', JSON.stringify(usersTable));
+      }
+
     },
     logoutUser(state, action) {
       state.access_token = '';
@@ -21,7 +44,7 @@ const userSlice = createSlice({
       state.name = '';
       state.picture = '';
 
-      localStorage.removeItem('ANT_user');
+      localStorage.removeItem('ANT_currentUser');
     }
   }
 });

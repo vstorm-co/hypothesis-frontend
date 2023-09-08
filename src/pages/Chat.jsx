@@ -12,7 +12,7 @@ import send from '../assets/send.svg';
 
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
-	const user = useSelector(state => state.user);
+	const user = useSelector(state => state.user.currentUser);
 
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
