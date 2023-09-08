@@ -148,5 +148,6 @@ export const deleteChat = (payload) => {
 
     const response = await sendRequest();
     dispatch(getChatsData());
+    dispatch(chatsActions.setCurrentChat({}))
   }
 }
