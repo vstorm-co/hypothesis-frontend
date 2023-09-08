@@ -35,6 +35,8 @@ function outsideClickHanlder(ref) {
 export function Options(props) {
   const dispatch = useDispatch();
   const ui = useSelector(state => state.ui);
+  const currentUser = useSelector(state => state.user.currentUser);
+  const users = useSelector(state => state.user.users);
 
   const optionsRef = useRef(null);
   outsideClickHanlder(optionsRef);
@@ -44,7 +46,8 @@ export function Options(props) {
   }
 
   function callLogout() {
-    dispatch(userActions.logoutUser());
+    dispatch(userActions.logoutUser(currentUser));
+    dispatch(userActions.setUser(users[0]));
     dispatch(chatsActions.setChats([]));
   }
 

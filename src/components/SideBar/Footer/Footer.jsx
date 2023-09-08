@@ -5,6 +5,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector, useDispatch } from 'react-redux';
 import { userActions } from '../../../store/user-slice';
 import { AccountOptions } from './AccountOptions';
+import { useLocation } from 'preact-iso';
 
 import arrows from '../../../assets/arrows-up-down.svg'
 import plus from '../../../assets/plus.svg';
@@ -25,6 +26,7 @@ function toggleSwitchUser() {
 
 export function Footer() {
   const dispatch = useDispatch();
+  const location = useLocation();
   let currentUser = useSelector(state => state.user.currentUser);
   let users = useSelector(state => state.user.users);
 
@@ -36,6 +38,7 @@ export function Footer() {
 
       dispatch(userActions.setUser(data));
       dispatch(userActions.setUsers(data));
+
       toggleLoading();
     },
     flow: 'auth-code',
@@ -52,10 +55,6 @@ export function Footer() {
     signIn();
   };
 
-  function runSelectAccount(user) {
-    dispatch(userActions.setUser(user));
-  }
-
   if (currentUser.access_token) {
     return (
       <div className={"border-t border-[#747474] px-2 py-4 mt-auto"}>
@@ -70,10 +69,10 @@ export function Footer() {
                 {currentUser.email}
               </div>
             </div>
-            <div onClick={() => toggleSwitchUser()} className={'ml-auto'}>
+            <div onClick={() => toggleSwitchUser()} className={'ml-auto cursor-pointer'}>
               <img src={arrows} alt="" />
             </div>
-            <Options currentUser={true} />
+            <Options />
           </div>
           <div className={'flex flex-col transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[200px]' : 'max-h-[0] overflow-hidden')}>
             {users.map(user => {

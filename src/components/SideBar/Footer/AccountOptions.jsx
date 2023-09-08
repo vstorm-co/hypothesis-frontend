@@ -2,9 +2,10 @@ import logoutIcon from '../../../assets/logout.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/compat';
+import { useLocation } from 'preact-iso';
 
-import { chatsActions } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
+import { chatsActions } from '../../../store/chats-slice';
 
 import dots from '../../../assets/dots.svg';
 import check from '../../../assets/check.svg';
@@ -12,7 +13,6 @@ import check from '../../../assets/check.svg';
 const showAccountOptions = signal(false);
 
 function toggleAccountOptions() {
-  console.log("AAA");
   showAccountOptions.value = !showAccountOptions.value
 }
 
@@ -33,18 +33,20 @@ function outsideClickHanlder(ref) {
 
 export function AccountOptions(props) {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const AccountOptionsRef = useRef(null);
   outsideClickHanlder(AccountOptionsRef);
 
   function callLogout() {
-    dispatch(userActions.logoutUser());
-    dispatch(chatsActions.setChats([]));
+    dispatch(userActions.logoutUser(props.user));
   }
 
   function runSelectAccount() {
     toggleAccountOptions();
     dispatch(userActions.setUser(props.user));
+    dispatch(chatsActions.setCurrentChat({}))
+    location.route('/');
   }
 
   return (
@@ -57,7 +59,7 @@ export function AccountOptions(props) {
           <div onClick={runSelectAccount} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
             <img className="w-4" src={check} alt="" /> <div className="ml-2">Select Account</div>
           </div>
-          <div onClick={callLogout} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
+          <div onClick={callLogout} className={"cursor-pointer border-t border-[#595959] flex p-2 hover:bg-[#595959]"}>
             <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
           </div>
         </div>

@@ -39,12 +39,24 @@ const userSlice = createSlice({
 
     },
     logoutUser(state, action) {
-      state.access_token = '';
-      state.email = '';
-      state.name = '';
-      state.picture = '';
+      if (state.currentUser.email === action.payload.email) {
+        state.access_token = '';
+        state.email = '';
+        state.name = '';
+        state.picture = '';
 
-      localStorage.removeItem('ANT_currentUser');
+        localStorage.removeItem('ANT_currentUser');
+      }
+
+      let users = state.users;
+
+      let targetUser = users.find(user => user.email === action.payload.email);
+      const index = users.indexOf(targetUser);
+
+      users.splice(index, 1);
+
+      state.users = users;
+      localStorage.setItem('ANT_users', JSON.stringify(users));
     }
   }
 });

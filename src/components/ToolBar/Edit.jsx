@@ -55,11 +55,14 @@ export function Edit(props) {
   }
 
   const editChatShare = (tgl) => {
+    console.log(tgl);
     dispatch(updateChat({ uuid: currentChat.uuid, share: tgl }));
   }
 
   function editChatTitle(event) {
-    dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value }))
+    if (event.target.value != '') {
+      dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value }))
+    }
   }
 
   return (
@@ -74,7 +77,10 @@ export function Edit(props) {
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title
           </div>
-          <input value={currentChat.name} onChange={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
+          <input value={currentChat.name} onChangeCapture={(event) => { editChatTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
+          <div className={'text-[10px] mt-0.5 text-right text-[#747474]'}>
+            press 'Enter' to confirm
+          </div>
         </div>
         <div className="border-b p-2">
           <div className="text-xs font-bold text-[#747474] mb-1">
