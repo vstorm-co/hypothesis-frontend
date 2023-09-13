@@ -44,6 +44,7 @@ export function AccountOptions(props) {
 
   function runSelectAccount() {
     toggleAccountOptions();
+    props.tglSwitch();
     dispatch(userActions.setUser(props.user));
     dispatch(chatsActions.setCurrentChat({}))
     location.route('/');

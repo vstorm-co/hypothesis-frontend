@@ -3,6 +3,7 @@ import logoutIcon from '../../../assets/logout.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/compat';
+import { useLocation } from 'preact-iso';
 
 import { chatsActions } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
@@ -37,6 +38,7 @@ export function Options(props) {
   const ui = useSelector(state => state.ui);
   const currentUser = useSelector(state => state.user.currentUser);
   const users = useSelector(state => state.user.users);
+  const location = useLocation();
 
   const optionsRef = useRef(null);
   outsideClickHanlder(optionsRef);
@@ -46,9 +48,14 @@ export function Options(props) {
   }
 
   function callLogout() {
+    toggleOptions();
     dispatch(userActions.logoutUser(currentUser));
-    dispatch(userActions.setUser(users[0]));
+    if (users.length > 1) {
+      dispatch(userActions.setUser(users[0]));
+    }
     dispatch(chatsActions.setChats([]));
+
+    location.route('/auth')
   }
 
   return (

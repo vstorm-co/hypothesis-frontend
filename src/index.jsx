@@ -7,6 +7,7 @@ import { Provider, useDispatch } from "react-redux";
 
 import store from './store/index';
 
+import { Authorize } from "./pages/Authorize";
 import { Chat } from './pages/Chat.jsx';
 import { NotFound } from './pages/_404.jsx';
 import { SideBar } from './components/SideBar/SideBar';
@@ -25,6 +26,7 @@ export function App() {
 							<SideBar />
 							<Router>
 								<Route path="/" component={Chat} />
+								<Route path="/auth" component={Authorize} />
 								<Route path="/:id" component={Chat} />
 								<Route default component={NotFound} />
 							</Router>

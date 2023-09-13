@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
+import { useLocation } from 'preact-iso';
 
 import { chatsActions, getChatsData } from '../store/chats-slice';
 import { Message } from '../components/Message';
@@ -13,6 +14,7 @@ import send from '../assets/send.svg';
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const user = useSelector(state => state.user.currentUser);
+	const location = useLocation();
 
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
@@ -20,10 +22,14 @@ export function Chat(props) {
 	const chatRef = useRef(null);
 
 	useEffect(() => {
+		if (user.access_token === null) {
+			location.route('/auth')
+		}
+
 		dispatch(getChatsData(props.params.id));
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 100)
+		}, 100);
 	}, [user])
 
 	function handleInputChange(event) {

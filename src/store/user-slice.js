@@ -39,15 +39,6 @@ const userSlice = createSlice({
 
     },
     logoutUser(state, action) {
-      if (state.currentUser.email === action.payload.email) {
-        state.access_token = '';
-        state.email = '';
-        state.name = '';
-        state.picture = '';
-
-        localStorage.removeItem('ANT_currentUser');
-      }
-
       let users = state.users;
 
       let targetUser = users.find(user => user.email === action.payload.email);
@@ -57,6 +48,15 @@ const userSlice = createSlice({
 
       state.users = users;
       localStorage.setItem('ANT_users', JSON.stringify(users));
+
+      if (state.currentUser.email === action.payload.email) {
+        state.currentUser.access_token = '';
+        state.currentUser.email = '';
+        state.currentUser.name = '';
+        state.currentUser.picture = '';
+
+        localStorage.removeItem('ANT_currentUser');
+      }
     }
   }
 });
