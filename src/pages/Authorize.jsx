@@ -46,7 +46,7 @@ export function Authorize() {
   }
 
   return (
-    <div className={'mx-auto mt-8'}>
+    <div className={'mx-auto mt-6'}>
       <div className={'w-[720px] text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
         Authorize an Account to Begin
       </div>

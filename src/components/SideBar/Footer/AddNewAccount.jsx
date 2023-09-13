@@ -30,6 +30,7 @@ export function AddNewAccount() {
 
       dispatch(userActions.setUser(data));
       dispatch(userActions.setUsers(data));
+      toggleLoading();
       toggleShowAddAccount();
     },
     flow: 'auth-code',

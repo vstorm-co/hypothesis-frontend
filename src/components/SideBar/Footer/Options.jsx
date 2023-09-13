@@ -9,7 +9,7 @@ import { chatsActions } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
 import { uiActions } from '../../../store/ui-slice';
 
-import dots from '../../../assets/dots.svg';
+import settings from '../../../assets/settings.svg';
 
 const showOptions = signal(false);
 
@@ -52,16 +52,17 @@ export function Options(props) {
     dispatch(userActions.logoutUser(currentUser));
     if (users.length > 1) {
       dispatch(userActions.setUser(users[0]));
+    } else {
+      location.route('/auth');
     }
     dispatch(chatsActions.setChats([]));
 
-    location.route('/auth')
   }
 
   return (
     <div ref={optionsRef} className="ml-2 relative">
       <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
-        <img src={dots} alt="options" />
+        <img src={settings} alt="options" />
       </div>
       <div className={"absolute border border-[#595959] rounded min-w-[160px] -top-[8.5rem] -left-[8rem] bg-[#0F0F0F] " + (showOptions.value ? '' : 'hidden')}>
         <div className="text-sm leading-6">
