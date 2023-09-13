@@ -47,18 +47,50 @@ export function Chat(props) {
 		}
 	}
 
-	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`, {
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`, {
 		onOpen: () => {
 		},
-		onClose: () => {
-		},
+		onClose: (event) => {
+			// Handle the connection close event
+			if (event.code === 1000) {
+			  // Normal closure, no need to reconnect
+			  return;
+			}
+
+			// Reconnect after a delay (e.g., 3 seconds)
+			setTimeout(() => {
+			  // Reconnect logic here
+			  const newSocket = new WebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`);
+			  newSocket.onopen = () => {
+				// Connection reopened, you can handle this event
+			  };
+
+			  newSocket.onmessage = (event) => {
+				  // Handle incoming messages
+				  console.log("New message: ", event.data)
+			  };
+
+			  // Update the sendMessage function with the new socket
+			  sendMessage(newSocket.send.bind(newSocket));
+			}, 3000); // 3 seconds delay
+	  	},
 		onError: (err) => {
 		},
 		onMessage: (e) => {
+			// The data is always a string and comes as whatever the server sent
+			let json_data = JSON.parse(e.data)
+			let message = json_data.message;
+
+			if (user.access_token !== json_data.sender) {
+				// this is the situation when the message is sent by other user
+				// so, we need to reload the chat
+				dispatch(getChatsData(props.params.id));
+			}
+
 			if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
 				dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
 			} else {
-				dispatch(chatsActions.concatDataToMsg({ data: e.data }))
+				dispatch(chatsActions.concatDataToMsg({ data: message }))
 			}
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}
