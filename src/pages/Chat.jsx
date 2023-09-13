@@ -3,7 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
-import { chatsActions, getChatsData } from '../store/chats-slice';
+import { chatsActions, getChatsData, updateChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { Toast } from '../components/Toast';
@@ -42,7 +42,7 @@ export function Chat(props) {
 
 			} else {
 				event.preventDefault();
-				console.log('SEND');
+				sendMsg();
 			}
 		}
 	}
@@ -64,9 +64,11 @@ export function Chat(props) {
 		}
 	})
 
-	function sendMsg(e) {
-		e.preventDefault();
-		dispatch(chatsActions.addMessage({ created_by: "user", content: input }))
+	function sendMsg() {
+		if (currentChat.messages.length === 0) {
+			dispatch(updateChat({ uuid: currentChat.uuid, name: input }))
+		}
+		dispatch(chatsActions.addMessage({ created_by: "user", content: input }));
 		sendMessage(input)
 		setInput('');
 	}
