@@ -52,6 +52,7 @@ export function Options(props) {
     dispatch(userActions.logoutUser(currentUser));
     if (users.length > 1) {
       dispatch(userActions.setUser(users[0]));
+      location.route('/');
     } else {
       location.route('/auth');
     }

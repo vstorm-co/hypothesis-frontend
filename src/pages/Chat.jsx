@@ -47,7 +47,7 @@ export function Chat(props) {
 		}
 	}
 
-	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`, {
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}?token=${user.access_token}`, {
 		onOpen: () => {
 		},
 		onClose: () => {
