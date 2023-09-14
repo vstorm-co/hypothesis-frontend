@@ -81,17 +81,17 @@ export function Chat(props) {
 			let json_data = JSON.parse(e.data)
 			let message = json_data.message;
 
-			if (user.access_token !== json_data.sender) {
-				// this is the situation when the message is sent by other user
-				// so, we need to reload the chat
-				dispatch(getChatsData(props.params.id));
+			if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
+				dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, content: message }));
+			} else {
+				console.log(currentChat.messages[currentChat.messages.length - 1]);
+				if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
+					dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
+				} else {
+					dispatch(chatsActions.concatDataToMsg({ data: message }))
+				}
 			}
 
-			if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
-				dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
-			} else {
-				dispatch(chatsActions.concatDataToMsg({ data: message }))
-			}
 			chatRef.current.scrollTop = chatRef.current.scrollHeight;
 		}
 	})
@@ -136,7 +136,7 @@ export function Chat(props) {
 
 						</div>
 						<form onSubmit={sendMsg} className="mt-auto">
-							<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none p-4 resize-none text-sm leading-6"></textarea>
+							<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
 						</form>
 						<div className="flex justify-end items-center mt-2 gap-x-4">
 							{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
