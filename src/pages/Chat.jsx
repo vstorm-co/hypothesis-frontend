@@ -29,7 +29,7 @@ export function Chat(props) {
 		dispatch(getChatsData(props.params.id));
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 100);
+		}, 300);
 	}, [user])
 
 	function handleInputChange(event) {
@@ -47,37 +47,33 @@ export function Chat(props) {
 		}
 	}
 
-<<<<<<< HEAD
-	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}?token=${user.access_token}`, {
-=======
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`, {
->>>>>>> d5f225b9cfc2353886aede7817f9166a90099fb0
 		onOpen: () => {
 		},
 		onClose: (event) => {
-			// Handle the connection close event
-			if (event.code === 1000) {
-			  // Normal closure, no need to reconnect
-			  return;
-			}
+			// // Handle the connection close event
+			// if (event.code === 1000) {
+			// 	// Normal closure, no need to reconnect
+			// 	return;
+			// }
 
-			// Reconnect after a delay (e.g., 3 seconds)
-			setTimeout(() => {
-			  // Reconnect logic here
-			  const newSocket = new WebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`);
-			  newSocket.onopen = () => {
-				// Connection reopened, you can handle this event
-			  };
+			// // Reconnect after a delay (e.g., 3 seconds)
+			// setTimeout(() => {
+			// 	// Reconnect logic here
+			// 	const newSocket = new WebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`);
+			// 	newSocket.onopen = () => {
+			// 		// Connection reopened, you can handle this event
+			// 	};
 
-			  newSocket.onmessage = (event) => {
-				  // Handle incoming messages
-				  console.log("New message: ", event.data)
-			  };
+			// 	newSocket.onmessage = (event) => {
+			// 		// Handle incoming messages
+			// 		console.log("New message: ", event.data)
+			// 	};
 
-			  // Update the sendMessage function with the new socket
-			  sendMessage(newSocket.send.bind(newSocket));
-			}, 3000); // 3 seconds delay
-	  	},
+			// 	// Update the sendMessage function with the new socket
+			// 	sendMessage(newSocket.send.bind(newSocket));
+			// }, 3000); // 3 seconds delay
+		},
 		onError: (err) => {
 		},
 		onMessage: (e) => {
@@ -96,7 +92,7 @@ export function Chat(props) {
 			} else {
 				dispatch(chatsActions.concatDataToMsg({ data: message }))
 			}
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
+			chatRef.current.scrollTop = chatRef.current.scrollHeight;
 		}
 	})
 
@@ -105,6 +101,9 @@ export function Chat(props) {
 			dispatch(updateChat({ uuid: currentChat.uuid, name: input }))
 		}
 		dispatch(chatsActions.addMessage({ created_by: "user", content: input }));
+		setTimeout(() => {
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
+		}, 100);
 		sendMessage(input)
 		setInput('');
 	}
