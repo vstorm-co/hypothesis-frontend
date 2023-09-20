@@ -11,6 +11,7 @@ const chatsSlice = createSlice({
         selected: false,
       },
     ],
+    organizationChats: [],
     currentChat: {
       name: null,
       uuid: null,
@@ -28,6 +29,9 @@ const chatsSlice = createSlice({
     },
     setChats(state, action) {
       state.chats = action.payload;
+    },
+    setOrganizationChats(state, action) {
+      state.organizationChats = action.payload;
     },
     setChatSelected(state, action) {
       state.chats.map(c => c.selected = false);
@@ -71,6 +75,24 @@ export const getChatsData = (payload) => {
       dispatch(selectChat(payload));
     }
   }
+}
+
+export const getOrganizationChatsData = (payload) => {
+    return async (dispatch) => {
+        const sendRequest = async () => {
+        const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/organization-rooms/${payload}`, {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+              'Content-Type': 'application/json'
+              },
+          }).then(res => res.json());
+
+          return data;
+        };
+
+        const chats = await sendRequest();
+        dispatch(chatsActions.setOrganizationChats(chats));
+    }
 }
 
 export const createChat = (payload) => {

@@ -13,6 +13,8 @@ export function Chats() {
   const chats = useSelector(state => state.chats.chats);
   const currentChat = useSelector(state => state.chats.currentChat);
 
+  const organizationChats = useSelector(state => state.chats.organizationChats);
+
   const location = useLocation();
 
   const dispatch = useDispatch();
@@ -22,6 +24,11 @@ export function Chats() {
       location.route(`/${currentChat.uuid}`);
     }
   }, [currentChat])
+
+  useEffect(() => {
+    // console.log("chats", chats);
+    console.log("organizationChats", organizationChats);
+  }, [organizationChats]);
 
   function callCreateChat() {
     dispatch(createChat('New Chat'));
@@ -38,7 +45,21 @@ export function Chats() {
       {chats.map(chat => (
         <ChatBar ChatData={chat} />
       ))}
-      <div className={'text-center text-sm mt-2 ' + (chats.length === 0 ? '' : 'hidden')}>
+      {organizationChats.length > 0 && (
+        <div className="mt-4 pb-2">
+          <div className="w-full h-0.5 bg-[#595959]"></div>
+          <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2 mt-2">
+            <div>Organizations Chats</div>
+            <div className="ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px]">
+              {organizationChats.length}
+            </div>
+          </div>
+          {organizationChats.map(chat => (
+            <ChatBar ChatData={chat} organizationShared={true} key={chat.uuid} />
+          ))}
+        </div>
+      )}
+      <div className={'text-center text-sm mt-2 ' + (chats.length === 0 && organizationChats.length === 0 ? '' : 'hidden')}>
         No chats yet! go ahead create one
       </div>
     </div>
