@@ -29,7 +29,7 @@ export function Authorize() {
       dispatch(userActions.setUsers(data));
 
       toggleLoading();
-      location.route('/')
+      location.route('/setup')
     },
     flow: 'auth-code',
     onError: err => {

@@ -60,9 +60,11 @@ export function AccountOptions(props) {
           <div onClick={runSelectAccount} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
             <img className="w-4" src={check} alt="" /> <div className="ml-2">Select Account</div>
           </div>
-          <div onClick={callLogout} className={"cursor-pointer border-t border-[#595959] flex p-2 hover:bg-[#595959]"}>
-            <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
-          </div>
+          {!!!props.user.organization_uuid &&
+            <div onClick={callLogout} className={"cursor-pointer border-t border-[#595959] flex p-2 hover:bg-[#595959]"}>
+              <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
+            </div>
+          }
         </div>
       </div>
     </div>
