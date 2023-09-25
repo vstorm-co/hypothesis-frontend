@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
+import { getOrganizationsData } from '../store/organizations-slice';
 import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { Toast } from '../components/Toast';
@@ -26,6 +27,8 @@ export function Chat(props) {
 			location.route('/auth')
 		}
 
+
+		dispatch(getOrganizationsData(user.access_token));
 		dispatch(getChatsData(props.params.id));
 
 		// get organization-shared chats

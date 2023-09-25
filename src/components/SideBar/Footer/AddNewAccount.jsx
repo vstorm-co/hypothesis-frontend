@@ -7,7 +7,7 @@ import { Loading } from '../../Loading';
 import plus from '../../../assets/plus.svg';
 import google from '../../../assets/google.svg';
 import arrow from '../../../assets/arrow.svg';
-import {useLocation} from "preact-iso";
+import { useLocation } from "preact-iso";
 
 
 const showAddAccount = signal(false);
@@ -36,6 +36,7 @@ export function AddNewAccount() {
       location.route('/setup');
 
       toggleShowAddAccount();
+      toggleLoading();
     },
     flow: 'auth-code',
     onError: err => {

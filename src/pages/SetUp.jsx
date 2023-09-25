@@ -164,7 +164,7 @@ export const SetUp = (props) => {
             </div>
 
             {/* Organization Name */}
-            <div className={'flex flex-col mt-4 rounded-lg p-2 w-full'}>
+            <div className={'flex flex-col mt-4 rounded-lg py-2 w-full'}>
               <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
               <input
                 type="text"
@@ -175,7 +175,7 @@ export const SetUp = (props) => {
             </div>
 
             {/* Organization Logo */}
-            <div className={'flex flex-col mt-4 rounded-lg p-2 w-full'}>
+            <div className={'flex flex-col mt-4 rounded-lg py-2 w-full'}>
               <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
               <div className="relative rounded-md shadow-sm">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
