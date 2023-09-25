@@ -97,7 +97,7 @@ export function Chat(props) {
 	})
 
 	function sendMsg() {
-		if (currentChat.messages.length === 0) {
+		if (currentChat.uuid === 0) {
 			dispatch(updateChat({ uuid: currentChat.uuid, name: input }))
 		}
 		dispatch(chatsActions.addMessage({ created_by: "user", content: input }));

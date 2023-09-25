@@ -35,7 +35,11 @@ const chatsSlice = createSlice({
       state.chats[chatIndex].selected = true;
     },
     setCurrentChat(state, action) {
-      state.currentChat = action.payload;
+      if (action.payload.uuid === 0) {
+        state.currentChat = { ...state.chats[0] };
+      } else {
+        state.currentChat = action.payload;
+      }
     },
     addMessage(state, action) {
       state.currentChat.messages.push(action.payload);
@@ -64,6 +68,19 @@ export const getChatsData = (payload) => {
     };
 
     const chats = await sendRequest();
+
+    if (chats.length === 0) {
+      chats.push({
+        name: 'Your First Chat',
+        uuid: 0,
+        messages: [
+          {
+            created_by: "bot",
+            content: `Welcome, start your first chat with me by entering a prompt below.`
+          }
+        ]
+      })
+    };
 
     dispatch(chatsActions.setChats(chats))
 
@@ -95,20 +112,26 @@ export const createChat = (payload) => {
 
 export const selectChat = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
-        },
-      }).then(res => res.json());
+    if (payload != 0) {
+      const sendRequest = async () => {
+        const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+            'Content-Type': 'application/json'
+          },
+        }).then(res => res.json());
 
-      return data;
-    };
+        return data;
+      };
 
-    const chat = await sendRequest();
+      const chat = await sendRequest();
 
-    dispatch(chatsActions.setCurrentChat(chat));
+      dispatch(chatsActions.setCurrentChat(chat));
+    } else {
+      {
+        dispatch(chatsActions.setCurrentChat({ uuid: 0 }));
+      }
+    }
   }
 }
 

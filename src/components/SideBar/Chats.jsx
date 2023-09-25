@@ -38,7 +38,7 @@ export function Chats() {
       {chats.map(chat => (
         <ChatBar ChatData={chat} />
       ))}
-      <div className={'text-center text-sm mt-2 ' + (chats.length === 0 ? '' : 'hidden')}>
+      <div className={'text-center text-sm mt-4 ' + (chats.length === 0 ? '' : 'hidden')}>
         No chats yet! go ahead create one
       </div>
     </div>

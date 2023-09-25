@@ -36,7 +36,7 @@ export function Footer() {
           </div>
           <Options />
         </div>
-        <div className={'flex flex-col transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[200px]' : 'max-h-[0]  overflow-hidden')}>
+        <div className={'flex mt-4 flex-col border-[#747474] transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[200px] border-t' : 'max-h-[0]  overflow-hidden')}>
           {users.map(user => {
             if (user.access_token != currentUser.access_token)
               return (
