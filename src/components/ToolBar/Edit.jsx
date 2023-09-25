@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useSelector, useDispatch } from 'react-redux';
-import {getChatsData, getOrganizationChatsData, updateChat} from '../../store/chats-slice';
+import { getChatsData, getOrganizationChatsData, updateChat } from '../../store/chats-slice';
 import { signal } from '@preact/signals';
 import { useLocation } from 'preact-iso';
 import { useRef, useEffect } from 'preact/hooks';
@@ -52,13 +52,14 @@ export function Edit(props) {
     dispatch(deleteChat({ chatId: currentChat.uuid }));
     location.route('/');
     toggleConfirmDelete();
+    toggleEdit();
     props.onToggle();
   }
 
   const editChatShare = (tgl) => {
-        updateChatShare(tgl);
-        updateOrganizationChats();
-        updateChats();
+    updateChatShare(tgl);
+    updateOrganizationChats();
+    updateChats();
   }
 
   const updateChatShare = (tgl) => {
@@ -69,12 +70,12 @@ export function Edit(props) {
     }));
   }
 
-  const updateOrganizationChats = ()  => {
-      dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
+  const updateOrganizationChats = () => {
+    dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
   }
 
   const updateChats = () => {
-        dispatch(getChatsData());
+    dispatch(getChatsData());
   }
 
 
@@ -101,9 +102,9 @@ export function Edit(props) {
             press 'Enter' to confirm
           </div>
         </div>
-        <div className="border-b p-2">
-          {/*We won't see this when on personal account*/}
-          {user.organization_uuid &&
+        {user.organization_uuid &&
+          <div className="border-b p-2">
+            {/*We won't see this when on personal account*/}
             <>
               <div className="text-xs font-bold text-[#747474] mb-1">
                 Visibility
@@ -115,8 +116,8 @@ export function Edit(props) {
                 <div onClick={() => { editChatShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>
               </div>
             </>
-          }
-        </div>
+          </div>
+        }
         <div className={'p-1.5'}>
           <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={bin} alt="" />

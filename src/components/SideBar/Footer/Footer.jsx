@@ -2,7 +2,7 @@
 import { signal } from '@preact/signals';
 import { Options } from './Options';
 import { useSelector, useDispatch } from 'react-redux';
-import { AccountOptions } from './AccountOptions';
+import AccountOptions from './AccountOptions';
 
 import { AddNewAccount } from './AddNewAccount';
 

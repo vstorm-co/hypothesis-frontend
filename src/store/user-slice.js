@@ -23,25 +23,26 @@ const userSlice = createSlice({
 
         localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
       }
+      // console.log("AAAA");
     },
     updateCurrentUser(state, action) {
       // update user in ANT_users
-        let users = JSON.parse(localStorage.getItem('ANT_users'));
-        let usersTable = users ? users : [];
+      let users = JSON.parse(localStorage.getItem('ANT_users'));
+      let usersTable = users ? users : [];
 
-        // update user with the same email and organization_uuid
-        let targetUser = usersTable.find(user => user.email === action.payload.email && user.organization_uuid === action.payload.organization_uuid);
-        const index = usersTable.indexOf(targetUser);
+      // update user with the same email and organization_uuid
+      let targetUser = usersTable.find(user => user.email === action.payload.email && user.organization_uuid === action.payload.organization_uuid);
+      const index = usersTable.indexOf(targetUser);
 
-        if (index !== -1){
-          usersTable[index].name = action.payload.name;
-          usersTable[index].picture = action.payload.picture;
-          usersTable[index].set_up = action.payload.set_up;
-          usersTable[index].organization_logo = action.payload.organization_logo;
-        }
+      if (index !== -1) {
+        usersTable[index].name = action.payload.name;
+        usersTable[index].picture = action.payload.picture;
+        usersTable[index].set_up = action.payload.set_up;
+        usersTable[index].organization_logo = action.payload.organization_logo;
+      }
 
-        state.users = usersTable;
-        localStorage.setItem('ANT_users', JSON.stringify(usersTable));
+      state.users = usersTable;
+      localStorage.setItem('ANT_users', JSON.stringify(usersTable));
     },
     setUsers(state, action) {
       let users = JSON.parse(localStorage.getItem('ANT_users'));

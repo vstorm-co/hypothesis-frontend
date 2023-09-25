@@ -95,21 +95,21 @@ export const getChatsData = (payload) => {
 }
 
 export const getOrganizationChatsData = (payload) => {
-    return async (dispatch) => {
-        const sendRequest = async () => {
-        const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/organization-rooms/${payload}`, {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-              'Content-Type': 'application/json'
-              },
-          }).then(res => res.json());
+  return async (dispatch) => {
+    const sendRequest = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/organization-rooms/${payload}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          'Content-Type': 'application/json'
+        },
+      }).then(res => res.json());
 
-          return data;
-        };
+      return data;
+    };
 
-        const chats = await sendRequest();
-        dispatch(chatsActions.setOrganizationChats(chats));
-    }
+    const chats = await sendRequest();
+    dispatch(chatsActions.setOrganizationChats(chats));
+  }
 }
 
 export const createChat = (payload) => {

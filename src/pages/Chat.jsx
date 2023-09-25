@@ -3,7 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
-import {chatsActions, getChatsData, getOrganizationChatsData, updateChat} from '../store/chats-slice';
+import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { Toast } from '../components/Toast';
@@ -29,7 +29,7 @@ export function Chat(props) {
 		dispatch(getChatsData(props.params.id));
 
 		// get organization-shared chats
-		if(!!user.organization_uuid){
+		if (!!user.organization_uuid) {
 			dispatch(getOrganizationChatsData(user.organization_uuid));
 		} else {
 			dispatch(chatsActions.setOrganizationChats([]));
@@ -106,14 +106,15 @@ export function Chat(props) {
 
 	function sendMsg() {
 		if (currentChat.uuid === 0) {
-			dispatch(updateChat({ uuid: currentChat.uuid, name: input }))
+			dispatch(createChat(input));
+		} else {
+			dispatch(chatsActions.addMessage({ created_by: "user", content: input }));
+			setTimeout(() => {
+				chatRef.current.scrollTop = chatRef.current.scrollHeight
+			}, 100);
+			sendMessage(input)
+			setInput('');
 		}
-		dispatch(chatsActions.addMessage({ created_by: "user", content: input }));
-		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 100);
-		sendMessage(input)
-		setInput('');
 	}
 
 	if (currentChat.name) {

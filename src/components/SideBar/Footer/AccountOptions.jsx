@@ -1,8 +1,9 @@
 import logoutIcon from '../../../assets/logout.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/compat';
-import { useLocation } from 'preact-iso';
+import { LocationProvider } from 'preact-iso';
+import { Component, createRef } from 'preact';
 
 import { userActions } from '../../../store/user-slice';
 import { chatsActions } from '../../../store/chats-slice';
@@ -10,63 +11,71 @@ import { chatsActions } from '../../../store/chats-slice';
 import dots from '../../../assets/dots.svg';
 import check from '../../../assets/check.svg';
 
-const showAccountOptions = signal(false);
-
-function toggleAccountOptions() {
-  showAccountOptions.value = !showAccountOptions.value
-}
-
-function outsideClickHanlder(ref) {
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
-        showAccountOptions.value = false;
-      }
+class AccountOptions extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOptions: false,
     }
+    this.AccountOptionsRef = createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+  static get contextType() { return LocationProvider.ctx; }
 
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-    }
-  }, [ref])
-}
-
-export function AccountOptions(props) {
-  const dispatch = useDispatch();
-  const location = useLocation();
-
-  const AccountOptionsRef = useRef(null);
-  outsideClickHanlder(AccountOptionsRef);
-
-  function callLogout() {
-    dispatch(userActions.logoutUser(props.user));
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
-  function runSelectAccount() {
-    toggleAccountOptions();
-    props.tglSwitch();
-    dispatch(userActions.setUser(props.user));
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  handleClickOutside(e) {
+    console.log(this.AccountOptionsRef);
+    if (this.AccountOptionsRef && !this.AccountOptionsRef.current.contains(e.target)) {
+      this.setState({ showOptions: false })
+    }
+  }
+
+  toggleAccountOptions = () => {
+    this.setState({ showOptions: !this.state.showOptions })
+  }
+
+  setUser = (e) => {
+    const { dispatch } = this.props
+    this.toggleAccountOptions();
+    this.props.tglSwitch();
+    dispatch(userActions.setUser(this.props.user));
     dispatch(chatsActions.setCurrentChat({}))
-    location.route('/');
+    this.context.route('/')
   }
 
-  return (
-    <div ref={AccountOptionsRef} className="ml-auto relative">
-      <div onClick={toggleAccountOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showAccountOptions.value ? "bg-[#595959]" : '')}>
-        <img src={dots} alt="options" />
-      </div>
-      <div className={"absolute border border-[#595959] rounded min-w-[160px] -top-[5.5rem] -left-[8rem] bg-[#0F0F0F] " + (showAccountOptions.value ? '' : 'hidden')}>
-        <div className="text-sm leading-6">
-          <div onClick={runSelectAccount} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
-            <img className="w-4" src={check} alt="" /> <div className="ml-2">Select Account</div>
-          </div>
-          {!!!props.user.organization_uuid &&
-            <div onClick={callLogout} className={"cursor-pointer border-t border-[#595959] flex p-2 hover:bg-[#595959]"}>
-              <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
+  logOut = () => {
+    this.props.dispatch(userActions.logoutUser(this.props.user));
+    this.props.tglSwitch();
+  }
+
+  render() {
+    return (
+      <div ref={this.AccountOptionsRef} className="ml-auto relative">
+        <div onClick={this.toggleAccountOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (this.state.showOptions ? "bg-[#595959]" : '')}>
+          <img src={dots} alt="options" />
+        </div>
+        <div className={"absolute border border-[#595959] rounded min-w-[160px] -top-[5.5rem] -left-[8rem] bg-[#0F0F0F] " + (this.state.showOptions ? '' : 'hidden')}>
+          <div className="text-sm leading-6">
+            <div onClick={this.setUser} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
+              <img className="w-4" src={check} alt="" /> <div className="ml-2">Select Account</div>
             </div>
-          }
+            {!!!this.props.user.organization_uuid &&
+              <div onClick={this.logOut} className={"cursor-pointer border-t border-[#595959] flex p-2 hover:bg-[#595959]"}>
+                <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
+              </div>
+            }
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
+export default connect(null)(AccountOptions)
