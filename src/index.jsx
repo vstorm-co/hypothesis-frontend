@@ -10,6 +10,7 @@ import store from './store/index';
 import { Authorize } from "./pages/Authorize";
 import { Chat } from './pages/Chat.jsx';
 import { NotFound } from './pages/_404.jsx';
+import { SetUp } from './pages/SetUp.jsx';
 import { SideBar } from './components/SideBar/SideBar';
 import { AdminBar } from './components/AdminBar/AdminBar';
 
@@ -27,6 +28,7 @@ export function App() {
 							<Router>
 								<Route path="/" component={Chat} />
 								<Route path="/auth" component={Authorize} />
+								<Route path="/setup" component={SetUp} />
 								<Route path="/:id" component={Chat} />
 								<Route default component={NotFound} />
 							</Router>

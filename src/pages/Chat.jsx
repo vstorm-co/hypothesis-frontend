@@ -3,7 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
-import { chatsActions, getChatsData, updateChat } from '../store/chats-slice';
+import {chatsActions, getChatsData, getOrganizationChatsData, updateChat} from '../store/chats-slice';
 import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { Toast } from '../components/Toast';
@@ -27,6 +27,14 @@ export function Chat(props) {
 		}
 
 		dispatch(getChatsData(props.params.id));
+
+		// get organization-shared chats
+		if(!!user.organization_uuid){
+			dispatch(getOrganizationChatsData(user.organization_uuid));
+		} else {
+			dispatch(chatsActions.setOrganizationChats([]));
+		}
+
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 300);
