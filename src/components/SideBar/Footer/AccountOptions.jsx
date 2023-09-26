@@ -61,7 +61,7 @@ class AccountOptions extends Component {
         <div onClick={this.toggleAccountOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (this.state.showOptions ? "bg-[#595959]" : '')}>
           <img src={dots} alt="options" />
         </div>
-        <div className={"absolute border border-[#595959] rounded min-w-[160px] -top-[5.5rem] -left-[8rem] bg-[#0F0F0F] " + (this.state.showOptions ? '' : 'hidden')}>
+        <div className={"absolute border border-[#595959] rounded min-w-[160px] bottom-[2rem] -left-[8rem] bg-[#0F0F0F] " + (this.state.showOptions ? '' : 'hidden')}>
           <div className="text-sm leading-6">
             <div onClick={this.setUser} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
               <img className="w-4" src={check} alt="" /> <div className="ml-2">Select Account</div>

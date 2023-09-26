@@ -18,6 +18,7 @@ const userSlice = createSlice({
         state.currentUser.name = action.payload.name;
         state.currentUser.picture = action.payload.picture;
         state.currentUser.set_up = action.payload.set_up ? action.payload.set_up : false;
+        state.currentUser.organization_name = action.payload.organization_name ? action.payload.organization_name : null;
         state.currentUser.organization_uuid = action.payload.organization_uuid ? action.payload.organization_uuid : null;
         state.currentUser.organization_logo = action.payload.organization_logo ? action.payload.organization_logo : null;
 
@@ -48,13 +49,14 @@ const userSlice = createSlice({
       let users = JSON.parse(localStorage.getItem('ANT_users'));
       let usersTable = users ? users : [];
 
-      if (action.payload.access_token) {
+      if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid)) {
         usersTable.push({
           access_token: action.payload.access_token,
           email: action.payload.email,
           name: action.payload.name,
           picture: action.payload.picture,
           set_up: action.payload.set_up ? action.payload.set_up : false,
+          organization_name: action.payload.organization_name ? action.payload.organization_name : null,
           organization_uuid: action.payload.organization_uuid ? action.payload.organization_uuid : null,
           organization_logo: action.payload.organization_logo ? action.payload.organization_logo : null,
         });

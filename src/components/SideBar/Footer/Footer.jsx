@@ -29,7 +29,7 @@ export function Footer() {
               {currentUser.name}
             </div>
             <div className={'text-xs text-[#747474]'}>
-              {currentUser.organization_uuid && currentOrganization ? currentOrganization.name : currentUser.email}
+              {currentUser.organization_uuid ? currentUser.organization_name : currentUser.email}
             </div>
           </div>
           <div onClick={() => toggleSwitchUser()} className={'ml-auto cursor-pointer'}>
@@ -37,7 +37,7 @@ export function Footer() {
           </div>
           <Options />
         </div>
-        <div className={'flex mt-4 flex-col border-[#747474] transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[200px] border-t' : 'max-h-[0]  overflow-hidden')}>
+        <div className={'flex mt-4 flex-col border-[#747474] transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[230px] border-t' : 'max-h-[0] overflow-hidden')}>
           {users.map(user => {
             if (user.access_token !== currentUser.access_token || (user.access_token === currentUser.access_token && user.organization_uuid !== currentUser.organization_uuid))
               return (
@@ -48,7 +48,7 @@ export function Footer() {
                       {user.name}
                     </div>
                     <div className={'text-xs text-[#747474]'}>
-                      {user.organization_uuid && currentOrganization ? currentOrganization.name : user.email}
+                      {user.organization_uuid ? user.organization_name : user.email}
                     </div>
                   </div>
                   <AccountOptions tglSwitch={toggleSwitchUser} user={user} />

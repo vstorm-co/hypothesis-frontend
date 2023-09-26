@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import { userActions } from "./user-slice";
 
 const organizationsSlice = createSlice({
   name: 'organizations',
@@ -13,7 +14,7 @@ const organizationsSlice = createSlice({
       state.organizations = action.payload;
     },
     setUserOrganizations(state, action) {
-        state.userOrganizations = action.payload;
+      state.userOrganizations = action.payload;
     },
     setCurrentOrganization(state, action) {
       state.currentOrganization = JSON.parse(JSON.stringify(action.payload));
@@ -41,7 +42,7 @@ export default organizationsSlice;
 export const getOrganizationsData = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organizations`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
@@ -59,23 +60,41 @@ export const getOrganizationsData = () => {
 }
 
 export const getUserOrganizationsData = () => {
-    return async (dispatch) => {
-        try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/user-organizations`, {
-            headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-            'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch organizations.');
-        }
-        const organizations = await response.json();
-        dispatch(organizationsActions.setUserOrganizations(organizations));
-        } catch (error) {
-        // Handle error
-        }
+  return async (dispatch) => {
+    console.log("AAA");
+    const user = JSON.parse(localStorage.getItem('ANT_currentUser'))
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/user-organizations`, {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch organizations.');
+      }
+      const organizations = await response.json();
+
+      organizations.forEach(org => {
+        const newUserWithOrganization = {
+          access_token: user.access_token,
+          email: user.email,
+          name: user.name,
+          picture: user.picture,
+          set_up: true,
+          organization_name: org.name,
+          organization_uuid: org.uuid, // Add organization UUID
+          organization_logo: org.picture, // Add organization logo
+        };
+
+        dispatch(userActions.setUsers(newUserWithOrganization));
+      })
+
+      dispatch(organizationsActions.setUserOrganizations(organizations));
+    } catch (error) {
+      // Handle error
     }
+  }
 }
 
 export const createNewOrganization = (payload) => {

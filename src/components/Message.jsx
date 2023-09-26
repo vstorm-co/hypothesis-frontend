@@ -12,7 +12,8 @@ export function Message(props) {
     return (
       <div className="flex my-4">
         <div className="bg-[#F2F2F2] rounded flex items-center p-2">
-          <div className="w-8 h-8 bg-black rounded-full mr-2 text-sm leading-6"></div> <div className="ml-2">{props.Message.content}</div>
+          <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2" />
+          <div className="ml-2">{props.Message.content}</div>
         </div>
       </div>
     )

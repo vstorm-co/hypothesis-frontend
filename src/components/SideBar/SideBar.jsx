@@ -1,5 +1,6 @@
 import { SearchBar } from './SearchBar';
 import { Chats } from './Chats';
+import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
 import { useSelector } from 'react-redux';
 
@@ -18,6 +19,7 @@ export function SideBar() {
           <div className="p-4">
             <SearchBar />
             <Chats />
+            <Templates />
           </div>
           <Footer />
         </div>

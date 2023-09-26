@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
-import { getOrganizationsData } from '../store/organizations-slice';
+import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
 import { Message } from '../components/Message';
 import { ToolBar } from '../components/ToolBar/ToolBar';
 import { Toast } from '../components/Toast';
+import { getTemplatesData } from '../store/templates-slice';
 
 
 import send from '../assets/send.svg';
@@ -28,8 +29,10 @@ export function Chat(props) {
 		}
 
 
-		dispatch(getOrganizationsData(user.access_token));
+		// dispatch(getOrganizationsData(user.access_token));
+		dispatch(getUserOrganizationsData());
 		dispatch(getChatsData(props.params.id));
+		dispatch(getTemplatesData());
 
 		// get organization-shared chats
 		if (!!user.organization_uuid) {
@@ -92,14 +95,16 @@ export function Chat(props) {
 			let json_data = JSON.parse(e.data)
 			let message = json_data.message;
 
-			if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
-				dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, content: message }));
-			} else {
-				console.log(currentChat.messages[currentChat.messages.length - 1]);
-				if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
-					dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
+			if (!message.type) {
+				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
+					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else {
-					dispatch(chatsActions.concatDataToMsg({ data: message }))
+					console.log(currentChat.messages[currentChat.messages.length - 1]);
+					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
+						dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
+					} else {
+						dispatch(chatsActions.concatDataToMsg({ data: message }))
+					}
 				}
 			}
 
@@ -111,7 +116,7 @@ export function Chat(props) {
 		if (currentChat.uuid === 0) {
 			dispatch(createChat(input));
 		} else {
-			dispatch(chatsActions.addMessage({ created_by: "user", content: input }));
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: input }));
 			setTimeout(() => {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}, 100);
