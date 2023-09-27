@@ -51,6 +51,7 @@ export function Chat(props) {
 	}, [user])
 
 	function handleInputChange(event) {
+		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
 		setInput(event.target.value);
 	}
 
