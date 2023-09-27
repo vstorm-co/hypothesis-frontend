@@ -123,11 +123,11 @@ export function Chat(props) {
 				clearTimeout(typingTimeout);
 				if (!WhosTyping.value.find(u => u.name === json_data.content)) {
 					WhosTyping.value.push({ name: json_data.content });
-				}
 
-				typingTimeout = setTimeout(() => {
-					WhosTyping.value = [];
-				}, 5000)
+					typingTimeout = setTimeout(() => {
+						WhosTyping.value = [];
+					}, 3000)
+				}
 			}
 
 			msgLoading.value = false;
