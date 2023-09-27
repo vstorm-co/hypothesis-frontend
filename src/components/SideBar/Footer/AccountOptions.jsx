@@ -31,7 +31,7 @@ class AccountOptions extends Component {
   }
 
   handleClickOutside(e) {
-    console.log(this.AccountOptionsRef);
+    // console.log(this.AccountOptionsRef);
     if (this.AccountOptionsRef && !this.AccountOptionsRef.current.contains(e.target)) {
       this.setState({ showOptions: false })
     }

@@ -29,7 +29,4 @@ export function Message(props) {
       </div>
     )
   }
-
-
-
 }

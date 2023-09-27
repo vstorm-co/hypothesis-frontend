@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { signal } from '@preact/signals';
 import { Options } from './Options';
+import { useRef, useEffect } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountOptions from './AccountOptions';
 
@@ -14,13 +15,31 @@ function toggleSwitchUser() {
   switchUserActive.value = !switchUserActive.value;
 }
 
+function outsideClickHanlder(ref) {
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        switchUserActive.value = false;
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+    }
+  }, [ref])
+}
+
 export function Footer() {
   let currentUser = useSelector(state => state.user.currentUser);
   let users = useSelector(state => state.user.users);
   let currentOrganization = useSelector(state => state.organizations.currentOrganization);
 
+  const footerRef = useRef(null);
+  outsideClickHanlder(footerRef);
+
   return (
-    <div className={"border-t border-[#747474] px-2 py-4 mt-auto"}>
+    <div ref={footerRef} className={"border-t border-[#747474] px-2 py-4 mt-auto absolute bg-[#202020] w-80 duration-300 " + (switchUserActive.value ? 'bottom-0' : '-bottom-[15.2rem]')}>
       <div className="flex flex-col px-2 py-1">
         <div class={'flex items-center'}>
           <img src={currentUser.organization_uuid ? currentUser.organization_logo : currentUser.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
@@ -37,7 +56,7 @@ export function Footer() {
           </div>
           <Options />
         </div>
-        <div className={'flex mt-4 flex-col border-[#747474] transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[230px] border-t' : 'max-h-[0] overflow-hidden')}>
+        <div className={'flex mt-4 flex-col border-[#747474] border-t transition-all duration-300'}>
           {users.map(user => {
             if (user.access_token !== currentUser.access_token || (user.access_token === currentUser.access_token && user.organization_uuid !== currentUser.organization_uuid))
               return (

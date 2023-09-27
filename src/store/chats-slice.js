@@ -64,7 +64,8 @@ export const getChatsData = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/rooms/`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
       }).then(res => res.json());
 
@@ -72,19 +73,6 @@ export const getChatsData = (payload) => {
     };
 
     const chats = await sendRequest();
-
-    if (chats.length === 0) {
-      chats.push({
-        name: 'Your First Chat',
-        uuid: 0,
-        messages: [
-          {
-            created_by: "bot",
-            content: `Welcome, start your first chat with me by entering a prompt below.`
-          }
-        ]
-      })
-    };
 
     dispatch(chatsActions.setChats(chats))
 
@@ -100,14 +88,18 @@ export const getOrganizationChatsData = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/organization-rooms/${payload}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
       }).then(res => res.json());
 
       return data;
     };
 
+
     const chats = await sendRequest();
+    console.log("ORGANIZATIOS");
+    console.log(chats);
     dispatch(chatsActions.setOrganizationChats(chats));
   }
 }
@@ -119,7 +111,8 @@ export const createChat = (payload) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
         body: JSON.stringify({ name: payload })
       }).then(res => res.json());
@@ -139,7 +132,8 @@ export const selectChat = (payload) => {
         const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+
           },
         }).then(res => res.json());
 
@@ -164,7 +158,8 @@ export const updateChat = (payload) => {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
         body: JSON.stringify(payload)
       }).then(res => res.json());
@@ -184,7 +179,8 @@ export const deleteChat = (payload) => {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+
         },
       }).then(res => res.json());
 

@@ -101,9 +101,6 @@ export const SetUp = (props) => {
       dispatch(userActions.setUsers(newUserWithOrganization));
       dispatch(userActions.setUser(newUserWithOrganization));
 
-      console.log("current user: ", user)
-      console.log("current organization: ", currentOrganization)
-
       toggleLoading();
       location.route('/');
     } catch (error) {

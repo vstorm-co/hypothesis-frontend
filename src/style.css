@@ -43,6 +43,28 @@ body {
 	font-family: 'SF Pro';
 }
 
+/* width */
+.scrollBar-dark::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+.scrollBar-dark::-webkit-scrollbar-track {
+	background: #595959;
+	border-radius: 5px;
+}
+
+/* Handle */
+.scrollBar-dark::-webkit-scrollbar-thumb {
+	background: #0F0F0F;
+	border-radius: 5px;
+}
+
+/* Handle on hover */
+.scrollBar-dark::-webkit-scrollbar-thumb:hover {
+	/* background: #555; */
+}
+
 pre,
 code {
 	white-space: pre-wrap !important;

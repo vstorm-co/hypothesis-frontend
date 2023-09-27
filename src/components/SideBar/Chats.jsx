@@ -27,7 +27,7 @@ export function Chats() {
 
   useEffect(() => {
     // console.log("chats", chats);
-    console.log("organizationChats", organizationChats);
+    // console.log("organizationChats", organizationChats);
   }, [organizationChats]);
 
   function callCreateChat() {
@@ -35,19 +35,20 @@ export function Chats() {
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 ">
       <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2">
         <div>Chats</div> <div class="ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px]">{chats.length}</div>
         <div onClick={callCreateChat} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
-      {chats.map(chat => (
-        <ChatBar ChatData={chat} />
-      ))}
+      <div className={''}>
+        {chats.map(chat => (
+          <ChatBar ChatData={chat} />
+        ))}
+      </div>
       {organizationChats.length > 0 && (
         <div className="mt-4 pb-2">
-          <div className="w-full h-0.5 bg-[#595959]"></div>
           <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2 mt-2">
             <div>Organizations Chats</div>
             <div className="ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px]">

@@ -19,9 +19,11 @@ export function Templates() {
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
-      {templates.map(temp => (
-        <TemplateBar TemplateData={temp} />
-      ))}
+      <div className={''}>
+        {templates.map(temp => (
+          <TemplateBar TemplateData={temp} />
+        ))}
+      </div>
       <div className={'text-center text-sm mt-2 ' + (false ? '' : 'hidden')}>
         No templates yet! go ahead create one
       </div>
