@@ -127,7 +127,7 @@ export function Chat(props) {
 
 				typingTimeout = setTimeout(() => {
 					WhosTyping.value = [];
-				}, 2000)
+				}, 5000)
 			}
 
 			msgLoading.value = false;
