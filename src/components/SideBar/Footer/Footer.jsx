@@ -19,7 +19,7 @@ function outsideClickHanlder(ref) {
   useEffect(() => {
     function handleClickOutside(e) {
       if (ref.current && !ref.current.contains(e.target)) {
-        switchUserActive.value = false;
+        // switchUserActive.value = false;
       }
     }
 
@@ -39,7 +39,7 @@ export function Footer() {
   outsideClickHanlder(footerRef);
 
   return (
-    <div ref={footerRef} className={"border-t border-[#747474] px-2 py-4 mt-auto absolute bg-[#202020] w-80 duration-300 bottom-0 "}>
+    <div ref={footerRef} className={"border-t border-[#747474] px-2 py-4 mt-auto absolute z-20 bg-[#202020] w-80 duration-300 bottom-0 "}>
       <div className="flex flex-col px-2 py-1">
         <div class={'flex items-center'}>
           <img src={currentUser.organization_uuid ? currentUser.organization_logo : currentUser.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>

@@ -55,7 +55,6 @@ export function Chat(props) {
 	}
 
 	function handleKeyDown(event) {
-		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }));
 		if (event.key === 'Enter') {
 			if (event.shiftKey) {
 
@@ -100,8 +99,6 @@ export function Chat(props) {
 			let json_data = JSON.parse(e.data)
 			let message = json_data.message;
 
-			console.log(json_data);
-
 			if (json_data.type === 'message') {
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
@@ -134,7 +131,7 @@ export function Chat(props) {
 			setTimeout(() => {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}, 100);
-			sendMessage(input)
+			sendMessage(JSON.stringify({ type: 'message', content: input }))
 			setInput('');
 		}
 	}

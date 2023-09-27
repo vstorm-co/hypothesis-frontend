@@ -19,7 +19,7 @@ export function SideBar() {
           <div className={'px-4 py-2'}>
             <SearchBar />
           </div>
-          <div className="px-4 overflow-auto scrollBar-dark">
+          <div className="px-4 overflow-auto overflow-x-visible scrollBar-dark">
             <Chats />
             <Templates />
           </div>
