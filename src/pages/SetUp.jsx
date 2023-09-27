@@ -273,7 +273,7 @@ export const SetUp = (props) => {
             </div>
 
             <div className={'mt-5'}>
-              <div className={'text-[#595959] font-bold text-lg leading-6 mb-2'}>
+              <div className={'text-[#595959] font-bold text-lg leading-6 mb-2 ' + (DomainOrgs.value.length > 0 ? '' : 'hidden')}>
                 Organizations in your domain
               </div>
               {DomainOrgs.value.map(org => (

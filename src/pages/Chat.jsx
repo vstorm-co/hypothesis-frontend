@@ -21,7 +21,9 @@ export function Chat(props) {
 	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
 	const location = useLocation();
+
 	const activeUsers = useSignal([]);
+	const WhosTyping = useSignal([]);
 
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
@@ -99,6 +101,7 @@ export function Chat(props) {
 			// The data is always a string and comes as whatever the server sent
 			let json_data = JSON.parse(e.data)
 			let message = json_data.message;
+			let typingTimeout;
 
 			if (json_data.type === 'message') {
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
@@ -116,6 +119,15 @@ export function Chat(props) {
 						...json_data
 					})
 				}
+			} else if (json_data.type === 'typing') {
+				clearTimeout(typingTimeout);
+				if (!WhosTyping.value.find(u => u.name === json_data.content)) {
+					WhosTyping.value.push({ name: json_data.content });
+				}
+
+				typingTimeout = setTimeout(() => {
+					WhosTyping.value = [];
+				}, 2000)
 			}
 
 			msgLoading.value = false;
@@ -171,8 +183,19 @@ export function Chat(props) {
 						<form onSubmit={sendMsg} className="mt-auto">
 							<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
 						</form>
-						<div className="flex justify-end items-center mt-2 gap-x-4">
-							{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
+
+						<div className="flex justify-between items-center mt-2 gap-x-4">
+							<div className={'text-[#747474] text-xs self-start'}>
+								{WhosTyping.value.map(u => (
+									<span>{u.name} </span>
+								))}
+								{WhosTyping.value.length > 0 &&
+									<span>
+
+										is typing...
+									</span>
+								}
+							</div>
 							<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 						</div>
 					</div>
