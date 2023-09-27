@@ -15,9 +15,11 @@ export function SideBar() {
   if (currentUser.access_token && currentUser.set_up) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
-        <div className="w-80 h-[100vh] flex flex-col relative overflow-y-hidden pb-10">
-          <div className="p-4 overflow-auto scrollBar-dark">
+        <div className="w-80 h-[100vh] flex flex-col relative overflow-y-hidden pb-20">
+          <div className={'px-4 py-2'}>
             <SearchBar />
+          </div>
+          <div className="px-4 overflow-auto scrollBar-dark">
             <Chats />
             <Templates />
           </div>

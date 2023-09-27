@@ -75,7 +75,7 @@ const userSlice = createSlice({
 
       localStorage.setItem('ANT_users', JSON.stringify(newUsers));
 
-      if (state.currentUser.email === action.payload.email) {
+      if (state.currentUser.email === action.payload.email && state.currentUser.organization_uuid === action.payload.organization_uuid) {
         state.currentUser.access_token = '';
         state.currentUser.email = '';
         state.currentUser.name = '';

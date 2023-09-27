@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
-import { signal } from '@preact/signals';
+import { signal, useSignal } from '@preact/signals';
 
 import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
 import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
@@ -21,6 +21,7 @@ export function Chat(props) {
 	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
 	const location = useLocation();
+	const activeUsers = useSignal([]);
 
 	const [input, setInput] = useState('');
 	const dispatch = useDispatch();
@@ -99,16 +100,23 @@ export function Chat(props) {
 			let json_data = JSON.parse(e.data)
 			let message = json_data.message;
 
-			if (!message.type) {
+			console.log(json_data);
+
+			if (json_data.type === 'message') {
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else {
-					console.log(currentChat.messages[currentChat.messages.length - 1]);
 					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
 						dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
 					} else {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
+				}
+			} else if (json_data.type === 'user_joined') {
+				if (!activeUsers.value.find(u => u.user_email === json_data.user_email)) {
+					activeUsers.value.push({
+						...json_data
+					})
 				}
 			}
 
@@ -134,7 +142,10 @@ export function Chat(props) {
 	if (currentChat.name) {
 		return (
 			<div className={'flex w-full mx-4'}>
-				<div>
+				<div className={'pt-10 pl-4 flex flex-col'}>
+					{activeUsers.value.map(u => (
+						<img src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
+					))}
 				</div>
 				<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 					<div className="h-[100vh] flex flex-col pt-4 pb-2">

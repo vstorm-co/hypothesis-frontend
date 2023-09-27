@@ -153,11 +153,12 @@ export const selectChat = (payload) => {
 
 export const updateChat = (payload) => {
   return async (dispatch) => {
+    let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
     const sendRequest = async () => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.uuid}`, {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${user.access_token}`,
           'Content-Type': 'application/json',
 
         },
@@ -169,6 +170,8 @@ export const updateChat = (payload) => {
 
     const chat = await sendRequest();
     dispatch(chatsActions.editChat(payload));
+    dispatch(getChatsData());
+    dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
   }
 }
 

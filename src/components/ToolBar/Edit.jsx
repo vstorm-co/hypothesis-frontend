@@ -32,7 +32,6 @@ function outsideClickHanlder(ref) {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      console.log("A");
     }
   }, [ref])
 }
@@ -58,8 +57,6 @@ export function Edit(props) {
 
   const editChatShare = (tgl) => {
     updateChatShare(tgl);
-    updateOrganizationChats();
-    updateChats();
   }
 
   const updateChatShare = (tgl) => {

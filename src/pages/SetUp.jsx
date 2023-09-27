@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "preact-iso";
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { getOrganizationsData, organizationsActions } from '../store/organizations-slice.js';
 import { userActions } from '../store/user-slice.js';
 
 
 import logo from '../assets/org-logo.svg';
-import { signal } from "@preact/signals";
+import { signal, useSignal } from "@preact/signals";
 
 const loading = signal(true);
 
@@ -19,6 +19,7 @@ export const SetUp = (props) => {
   const user = useSelector(state => state.user.currentUser);
   const location = useLocation();
   const dispatch = useDispatch();
+  const DomainOrgs = useSignal([]);
 
   let currentOrganization = useSelector(state => state.organizations.currentOrganization);
   let userOrganizations = useSelector(state => state.organizations.userOrganizations);
@@ -93,6 +94,7 @@ export const SetUp = (props) => {
         name: user.name,
         picture: user.picture,
         set_up: true,
+        organization_name: organization.name,
         organization_uuid: organization.uuid, // Add organization UUID
         organization_logo: organization.picture, // Add organization logo
       };
@@ -109,6 +111,79 @@ export const SetUp = (props) => {
     }
   };
 
+  const getDomainOrganizations = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/domain-organizations`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch the organization.');
+      }
+
+      const organizations = await response.json();
+
+      DomainOrgs.value = [...organizations];
+    } catch (error) {
+      // Handle error
+      console.error('Error creating organization:', error);
+    }
+  }
+
+  const addUserToDomainOrg = async (org) => {
+    // Update set up status
+    const updateUserSetUp = {
+      ...user,
+      set_up: true,
+    }
+    dispatch(userActions.updateCurrentUser(updateUserSetUp));
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/add-user`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ organization_uuid: org.uuid }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create the organization.');
+      }
+
+      const organization = await response.json();
+
+      // Create a new user object with the organization information
+      const newUserWithOrganization = {
+        access_token: user.access_token,
+        email: user.email,
+        name: user.name,
+        picture: user.picture,
+        set_up: true,
+        organization_name: org.name,
+        organization_uuid: org.uuid, // Add organization UUID
+        organization_logo: org.picture, // Add organization logo
+      };
+
+      // Dispatch an action to add the new user to the users state
+      dispatch(userActions.setUsers(newUserWithOrganization));
+      dispatch(userActions.setUser(newUserWithOrganization));
+
+      location.route('/');
+    } catch (error) {
+      // Handle error
+      console.error('Error creating organization:', error);
+    }
+  }
+
+  useEffect(() => {
+    getDomainOrganizations();
+  }, [])
 
   return (
     <div className={'flex flex-col w-full mx-4'}>
@@ -196,7 +271,24 @@ export const SetUp = (props) => {
                 Add as Organization
               </button>
             </div>
+
+            <div className={'mt-5'}>
+              <div className={'text-[#595959] font-bold text-lg leading-6 mb-2'}>
+                Organizations in your domain
+              </div>
+              {DomainOrgs.value.map(org => (
+                <div onClick={() => addUserToDomainOrg(org)} className={'border rounded-lg p-2 pt-0 cursor-pointer'}>
+                  <div className={'flex flex-row items-center mt-2'}>
+                    <img src={org.picture} alt="" className={'w-10 h-10 rounded-full'} />
+                    <div className={'ml-4'}>
+                      <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+
 
         </div>
       </div>
