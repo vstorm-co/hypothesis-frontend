@@ -5,7 +5,7 @@ import { useLocation } from 'preact-iso';
 import { signal, useSignal } from '@preact/signals';
 import ContentEditable from 'react-contenteditable'
 
-import { chatsActions, createChat, selectChat } from '../store/chats-slice';
+import { chatsActions, createChat, getChatsData, getOrganizationChatsData, selectChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
 import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
 import { Toast } from '../components/Toast';
@@ -13,9 +13,12 @@ import { Loading } from '../components/Loading';
 import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 
 import send from '../assets/send.svg';
+import { getUserOrganizationsData } from '../store/organizations-slice';
+import { getTemplatesData } from '../store/templates-slice';
 
 const msgLoading = signal(false);
 export function Chat(props) {
+	const location = useLocation();
 
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const user = useSelector(state => state.user.currentUser);
@@ -35,6 +38,25 @@ export function Chat(props) {
 	}, [])
 
 	useEffect(() => {
+		if (user.access_token === null) {
+			location.route('/auth')
+		}
+
+		// dispatch(getOrganizationsData(user.access_token));
+		dispatch(getUserOrganizationsData());
+		dispatch(getChatsData(props.params.id));
+		dispatch(getTemplatesData());
+
+		// get organization-shared chats
+		if (!!user.organization_uuid) {
+			dispatch(getOrganizationChatsData(user.organization_uuid));
+		} else {
+			dispatch(chatsActions.setOrganizationChats([]));
+		}
+
+		setTimeout(() => {
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
+		}, 300);
 
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
@@ -139,7 +161,6 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		console.log(template);
 		setText(`${text ? text : ''} ${template.content}`);
 		// setText(`${text ? text : ''} <span contenteditable='false' data-content='${template}' class="p-1 bg-[#747474] text-white">${template.name}</span>`)
 		// input.current = `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
@@ -149,6 +170,8 @@ export function Chat(props) {
 		// 	}
 		// })
 	}
+
+	console.log(currentChat);
 
 	return (
 		<div className={'flex w-full mx-4'}>
@@ -173,8 +196,8 @@ export function Chat(props) {
 						</div>
 					</div>
 					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto mb-2" ref={chatRef}>
-						{currentChat.messages.map(chat => (
-							<Message Message={chat} />
+						{currentChat.messages.map(msg => (
+							<Message Message={msg} />
 						))}
 						<div className={'flex justify-center py-4 ' + (msgLoading.value ? '' : 'hidden')}>
 							<Loading />
