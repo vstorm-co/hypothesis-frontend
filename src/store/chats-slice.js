@@ -39,11 +39,7 @@ const chatsSlice = createSlice({
       state.chats[chatIndex].selected = true;
     },
     setCurrentChat(state, action) {
-      if (action.payload.uuid === 0) {
-        state.currentChat = { ...state.chats[0] };
-      } else {
-        state.currentChat = action.payload;
-      }
+      state.currentChat = action.payload;
     },
     addMessage(state, action) {
       state.currentChat.messages.push(action.payload);

@@ -3,58 +3,47 @@ import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 import { signal, useSignal } from '@preact/signals';
+import ContentEditable from 'react-contenteditable'
 
-import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
-import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
+import { chatsActions, createChat, selectChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
-import { ToolBar } from '../components/ToolBar/ToolBar';
+import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
 import { Toast } from '../components/Toast';
 import { Loading } from '../components/Loading';
-import { getTemplatesData } from '../store/templates-slice';
+import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 
 import send from '../assets/send.svg';
 
 const msgLoading = signal(false);
-
 export function Chat(props) {
+
 	const currentChat = useSelector(state => state.chats.currentChat);
-	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
-	const location = useLocation();
 
 	const activeUsers = useSignal([]);
 	const WhosTyping = useSignal([]);
 
-	const [input, setInput] = useState('');
+	const input = useRef('');
+	const [text, setText] = useState();
+
 	const dispatch = useDispatch();
 
 	const chatRef = useRef(null);
 
 	useEffect(() => {
-		if (user.access_token === null) {
-			location.route('/auth')
-		}
+		dispatch(selectChat(props.params.id));
+	}, [])
 
-		// dispatch(getOrganizationsData(user.access_token));
-		dispatch(getUserOrganizationsData());
-		dispatch(getChatsData(props.params.id));
-		dispatch(getTemplatesData());
-
-		// get organization-shared chats
-		if (!!user.organization_uuid) {
-			dispatch(getOrganizationChatsData(user.organization_uuid));
-		} else {
-			dispatch(chatsActions.setOrganizationChats([]));
-		}
+	useEffect(() => {
 
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 300);
-	}, [user])
+	}, [currentChat.messages])
 
 	function handleInputChange(event) {
 		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
-		setInput(event.target.value);
+		input.current = event.target.value;
 	}
 
 	function handleKeyDown(event) {
@@ -67,8 +56,8 @@ export function Chat(props) {
 			}
 		}
 	}
-
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`, {
+
 		onOpen: () => {
 		},
 		onClose: (event) => {
@@ -80,8 +69,8 @@ export function Chat(props) {
 
 			// // Reconnect after a delay (e.g., 3 seconds)
 			// setTimeout(() => {
-			// 	// Reconnect logic here
 			// 	const newSocket = new WebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`);
+			// 	// Reconnect logic here
 			// 	newSocket.onopen = () => {
 			// 		// Connection reopened, you can handle this event
 			// 	};
@@ -108,7 +97,7 @@ export function Chat(props) {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else {
 					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
-						dispatch(chatsActions.addMessage({ created_by: "bot", content: input }))
+						dispatch(chatsActions.addMessage({ created_by: "bot", content: '' }))
 					} else {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
@@ -136,147 +125,86 @@ export function Chat(props) {
 	})
 
 	function sendMsg() {
+		console.log(input);
 		msgLoading.value = true;
-		if (currentChat.uuid === 0) {
-			dispatch(createChat(input));
-		} else {
-			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: input }));
-			setTimeout(() => {
-				chatRef.current.scrollTop = chatRef.current.scrollHeight
-			}, 100);
-			sendMessage(JSON.stringify({ type: 'message', content: input }))
-			setInput('');
-		}
+
+		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: text }));
+
+		setTimeout(() => {
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
+		}, 100);
+
+		sendMessage(JSON.stringify({ type: 'message', content: text }))
+		setText('');
 	}
 
-	if (currentChat.name) {
-		return (
-			<div className={'flex w-full mx-4'}>
-				<div className={'pt-10 pl-4 flex flex-col'}>
-					{activeUsers.value.map(u => (
-						<img src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
-					))}
-				</div>
-				<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-					<div className="h-[100vh] flex flex-col pt-4 pb-2">
-						<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
-							<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-								{currentChat.name}
-							</div>
+	function handleUseTemplate(template) {
+		console.log(template);
+		setText(`${text ? text : ''} ${template.content}`);
+		// setText(`${text ? text : ''} <span contenteditable='false' data-content='${template}' class="p-1 bg-[#747474] text-white">${template.name}</span>`)
+		// input.current = `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
+		// handleInputChange({
+		// 	target: {
+		// 		value: `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
+		// 	}
+		// })
+	}
 
-							<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-								<Toast />
-							</div>
-
-							<div>
-								<ToolBar />
-							</div>
+	return (
+		<div className={'flex w-full mx-4'}>
+			<div className={'pt-10 pl-4 flex flex-col'}>
+				{activeUsers.value.map(u => (
+					<img src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
+				))}
+			</div>
+			<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
+				<div className="h-[100vh] flex flex-col pt-4 pb-2">
+					<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
+						<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
+							{currentChat.name}
 						</div>
-						<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-							{currentChat.messages.map(chat => (
-								<Message Message={chat} />
+
+						<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
+							<Toast />
+						</div>
+
+						<div>
+							<ChatToolBar />
+						</div>
+					</div>
+					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto mb-2" ref={chatRef}>
+						{currentChat.messages.map(chat => (
+							<Message Message={chat} />
+						))}
+						<div className={'flex justify-center py-4 ' + (msgLoading.value ? '' : 'hidden')}>
+							<Loading />
+						</div>
+					</div>
+					<form onSubmit={sendMsg} className="mt-auto">
+						<UseTemplate TemplatePicked={handleUseTemplate} />
+						{/* <ContentEditable html={input.current} onKeyDown={handleKeyDown} onChange={handleInputChange} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+						</ContentEditable> */}
+						<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							{text}
+						</div>
+					</form>
+
+					<div className="flex justify-between items-center mt-2 gap-x-4">
+						<div className={'text-[#747474] text-xs self-start'}>
+							{WhosTyping.value.map(u => (
+								<span>{u.name} </span>
 							))}
-							<div className={'flex justify-center py-4 ' + (msgLoading.value ? '' : 'hidden')}>
-								<Loading />
-							</div>
-						</div>
-						<form onSubmit={sendMsg} className="mt-auto">
-							<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-						</form>
+							{WhosTyping.value.length > 0 &&
+								<span>
 
-						<div className="flex justify-between items-center mt-2 gap-x-4">
-							<div className={'text-[#747474] text-xs self-start'}>
-								{WhosTyping.value.map(u => (
-									<span>{u.name} </span>
-								))}
-								{WhosTyping.value.length > 0 &&
-									<span>
-
-										is typing...
-									</span>
-								}
-							</div>
-							<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+									is typing...
+								</span>
+							}
 						</div>
+						<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 					</div>
 				</div>
 			</div>
-		);
-	} else {
-		if (chats.length === 0) {
-			const msg = {
-				created_by: 'bot',
-				content: 'Hello! Create Your First Chat!'
-			}
-			return (
-				<div className={'flex w-full mx-4'}>
-					<div>
-					</div>
-					<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-						<div className="h-[100vh] flex flex-col pt-4 pb-2">
-							<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
-								<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-									Welcome!
-								</div>
-
-								<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-									<Toast />
-								</div>
-
-								<div>
-									<ToolBar />
-								</div>
-							</div>
-							<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-
-								<Message Loading={true} Message={msg} />
-							</div>
-							<form onSubmit={sendMsg} className="mt-auto">
-								<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-							</form>
-							<div className="flex justify-end items-center mt-2 gap-x-4">
-								{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-								<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
-							</div>
-						</div>
-					</div>
-				</div>
-			)
-		} else {
-			return (
-				<div className={'flex w-full mx-4'}>
-					<div>
-					</div>
-					<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-						<div className="h-[100vh] flex flex-col pt-4 pb-2">
-							<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
-								<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-									Welcome back!
-								</div>
-
-								<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-									<Toast />
-								</div>
-
-								<div>
-									<ToolBar />
-								</div>
-							</div>
-							<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-
-								{/* <Message Loading={true} Message={msg} /> */}
-							</div>
-							<form onSubmit={sendMsg} className="mt-auto">
-								<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-							</form>
-							<div className="flex justify-end items-center mt-2 gap-x-4">
-								{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-								<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
-							</div>
-						</div>
-					</div>
-				</div>
-			)
-		}
-	}
+		</div>
+	);
 }

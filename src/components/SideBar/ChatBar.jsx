@@ -2,6 +2,7 @@
 import chatIcon from '../../assets/chat.svg';
 import { useLocation } from 'preact-iso';
 import { selectChat } from '../../store/chats-slice';
+import { templatesActions } from '../../store/templates-slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const ChatBar = props => {
@@ -10,8 +11,9 @@ export const ChatBar = props => {
   const currentChat = useSelector(state => state.chats.currentChat)
 
   const callSelectChat = () => {
-    location.route(`/${props.ChatData.uuid}`);
+    location.route(`/chats/${props.ChatData.uuid}`);
     dispatch(selectChat(props.ChatData.uuid));
+    dispatch(templatesActions.setCurrentTemplate({}));
   }
 
   function isSelected() {

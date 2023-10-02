@@ -20,12 +20,6 @@ export function Chats() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentChat.uuid) {
-      location.route(`/${currentChat.uuid}`);
-    }
-  }, [currentChat])
-
-  useEffect(() => {
     // console.log("chats", chats);
     // console.log("organizationChats", organizationChats);
   }, [organizationChats]);

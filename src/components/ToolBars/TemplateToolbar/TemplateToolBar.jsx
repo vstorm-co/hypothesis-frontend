@@ -1,11 +1,8 @@
 import { Edit } from './Edit';
-import { Share } from './Share';
 
-
-export function ToolBar() {
+export function TemplateToolBar() {
   return (
     <div className="flex">
-      <Share />
       <Edit />
     </div>
   )

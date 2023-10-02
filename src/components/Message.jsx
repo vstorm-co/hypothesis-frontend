@@ -11,9 +11,9 @@ export function Message(props) {
   if (props.Message.created_by === 'user') {
     return (
       <div className="flex my-4">
-        <div className="bg-[#F2F2F2] rounded flex items-center p-2">
-          <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2" />
-          <div className="ml-2">{props.Message.content}</div>
+        <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3">
+          <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
+          <div className="ml-4 self-center" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
         </div>
       </div>
     )

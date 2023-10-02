@@ -1,14 +1,14 @@
 // @ts-nocheck
 import { useSelector, useDispatch } from 'react-redux';
-import { getChatsData, getOrganizationChatsData, updateChat } from '../../store/chats-slice';
+import { getChatsData, getOrganizationChatsData, updateChat } from '../../../store/chats-slice';
 import { signal } from '@preact/signals';
 import { useLocation } from 'preact-iso';
 import { useRef, useEffect } from 'preact/hooks';
 
-import { deleteChat } from '../../store/chats-slice';
+import { deleteChat } from '../../../store/chats-slice';
 
-import dots from '../../assets/dots.svg';
-import bin from '../../assets/bin.svg';
+import dots from '../../../assets/dots.svg';
+import bin from '../../../assets/bin.svg';
 
 const confirmDelete = signal(false);
 const showEdit = signal(false);
@@ -37,7 +37,6 @@ function outsideClickHanlder(ref) {
 }
 
 export function Edit(props) {
-  const chats = useSelector(state => state.chats.chats);
   const currentChat = useSelector(state => state.chats.currentChat)
   const user = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
