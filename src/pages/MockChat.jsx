@@ -23,7 +23,25 @@ export function MockChat(props) {
   const chatRef = useRef(null);
 
   useEffect(() => {
+    if (user.access_token === null) {
+      location.route('/auth')
+    }
 
+    // dispatch(getOrganizationsData(user.access_token));
+    dispatch(getUserOrganizationsData());
+    dispatch(getChatsData(props.params.id));
+    dispatch(getTemplatesData());
+
+    // get organization-shared chats
+    if (!!user.organization_uuid) {
+      dispatch(getOrganizationChatsData(user.organization_uuid));
+    } else {
+      dispatch(chatsActions.setOrganizationChats([]));
+    }
+
+    setTimeout(() => {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight
+    }, 300);
   }, [user])
 
   function handleInputChange(event) {
