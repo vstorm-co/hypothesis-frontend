@@ -59,11 +59,11 @@ export function Chat(props) {
 	}, [currentChat.messages])
 
 	function handleInputChange(event) {
-		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
 		input.current = event.target.value;
 	}
 
 	function handleKeyDown(event) {
+		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
 		if (event.key === 'Enter') {
 			if (event.shiftKey) {
 
@@ -165,8 +165,6 @@ export function Chat(props) {
 		// 	}
 		// })
 	}
-
-	console.log(currentChat);
 
 	return (
 		<div className={'flex w-full mx-4'}>

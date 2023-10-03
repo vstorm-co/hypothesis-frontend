@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { SearchBarSkeleton } from '../Skeletons/SearchBarSkeleton';
 import { ChatSkeleton } from '../Skeletons/ChatSkeleton';
 import { FooterSkeleton } from '../Skeletons/FooterSkeleton';
+import { Filters } from './Filters';
 
 
 export function SideBar() {
@@ -15,15 +16,22 @@ export function SideBar() {
   if (currentUser.access_token) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
-        <div className="w-80 h-[100vh] flex flex-col relative overflow-y-hidden pb-20">
-          <div className={'px-4 py-2'}>
-            <SearchBar />
+        <div className="w-80 h-[100vh] flex flex-col relative pb-20">
+          <div className={'pl-4 pr-2 py-2 flex'}>
+            <div className={'w-11/12'}>
+              <SearchBar />
+            </div>
+            <div className={'self-center ml-1'}>
+              <Filters />
+            </div>
           </div>
           <div className="px-4 overflow-auto overflow-x-visible scrollBar-dark">
             <Chats />
             <Templates />
           </div>
-          <Footer />
+          <div className={'overflow-y-hidden'}>
+            <Footer />
+          </div>
         </div>
       </div>
     )

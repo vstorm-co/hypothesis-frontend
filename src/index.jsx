@@ -56,7 +56,7 @@ export function App() {
 			<LocationProvider>
 				<Provider store={store}>
 					<main>
-						<div className="flex">
+						<div className="flex overflow-hidden">
 							<SideBar />
 							<Router>
 								<Route path="/" component={MockChat} />
