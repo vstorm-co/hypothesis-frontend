@@ -94,8 +94,6 @@ export const getOrganizationChatsData = (payload) => {
 
 
     const chats = await sendRequest();
-    console.log("ORGANIZATIOS");
-    console.log(chats);
     dispatch(chatsActions.setOrganizationChats(chats));
   }
 }

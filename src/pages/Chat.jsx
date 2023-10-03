@@ -35,14 +35,7 @@ export function Chat(props) {
 
 	useEffect(() => {
 		dispatch(selectChat(props.params.id));
-	}, [])
 
-	useEffect(() => {
-		if (user.access_token === null) {
-			location.route('/auth')
-		}
-
-		// dispatch(getOrganizationsData(user.access_token));
 		dispatch(getUserOrganizationsData());
 		dispatch(getChatsData(props.params.id));
 		dispatch(getTemplatesData());
@@ -53,10 +46,12 @@ export function Chat(props) {
 		} else {
 			dispatch(chatsActions.setOrganizationChats([]));
 		}
+	}, [])
 
-		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 300);
+	useEffect(() => {
+		if (user.access_token === null) {
+			location.route('/auth')
+		}
 
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight

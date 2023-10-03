@@ -12,7 +12,7 @@ import { FooterSkeleton } from '../Skeletons/FooterSkeleton';
 export function SideBar() {
   const currentUser = useSelector(state => state.user.currentUser)
 
-  if (currentUser.access_token && currentUser.set_up) {
+  if (currentUser.access_token) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
         <div className="w-80 h-[100vh] flex flex-col relative overflow-y-hidden pb-20">
