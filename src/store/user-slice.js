@@ -49,8 +49,10 @@ const userSlice = createSlice({
       let users = JSON.parse(localStorage.getItem('ANT_users'));
       let usersTable = users ? users : [];
 
+      console.log(action.payload.organization_logo);
+
       if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid)) {
-        usersTable.push({
+        let newUser = {
           access_token: action.payload.access_token,
           email: action.payload.email,
           name: action.payload.name,
@@ -59,7 +61,9 @@ const userSlice = createSlice({
           organization_name: action.payload.organization_name ? action.payload.organization_name : null,
           organization_uuid: action.payload.organization_uuid ? action.payload.organization_uuid : null,
           organization_logo: action.payload.organization_logo ? action.payload.organization_logo : null,
-        });
+        }
+
+        usersTable.push(newUser);
 
         state.users = usersTable;
         localStorage.setItem('ANT_users', JSON.stringify(usersTable));

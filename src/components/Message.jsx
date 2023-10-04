@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import rehypePrism from '@mapbox/rehype-prism';
-
+import { SaveAsTemplate } from './ToolBars/ChatToolbar/SaveAsTemplate';
 
 import bot from '../assets/bot.svg';
 
@@ -10,10 +10,13 @@ export function Message(props) {
 
   if (props.Message.created_by === 'user') {
     return (
-      <div className="flex my-4">
+      <div className="flex my-4 group">
         <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3">
           <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
           <div className="ml-4 self-center" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
+        </div>
+        <div className={'ml-auto hidden group-hover:flex items-center'}>
+          <SaveAsTemplate />
         </div>
       </div>
     )

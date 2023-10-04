@@ -51,14 +51,7 @@ export const SetUp = (props) => {
   }
 
   // Function to handle adding as an organization
-  const handleAddOrganization = async () => {
-    // Update set up status
-    const updateUserSetUp = {
-      ...user,
-      set_up: true,
-    }
-    dispatch(userActions.updateCurrentUser(updateUserSetUp));
-
+  const handleUpdateOrganization = async () => {
     try {
       // Create an object with the organization data
       const organizationData = {
@@ -66,9 +59,11 @@ export const SetUp = (props) => {
         picture: orgLogo,
       };
 
+      console.log(DomainOrgs.value);
+
       // Send a POST request to create the organization
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization`, {
-        method: 'POST',
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
@@ -82,30 +77,9 @@ export const SetUp = (props) => {
 
       const organization = await response.json();
 
-      // Dispatch an action to update the Redux store with the new organization
-      dispatch(organizationsActions.createOrganizationSuccess(organization));
-
-      // Set the current organization
-      dispatch(organizationsActions.setCurrentOrganization(organization));
-
-      // Create a new user object with the organization information
-      const newUserWithOrganization = {
-        access_token: user.access_token,
-        email: user.email,
-        name: user.name,
-        picture: user.picture,
-        set_up: true,
-        organization_name: organization.name,
-        organization_uuid: organization.uuid, // Add organization UUID
-        organization_logo: organization.picture, // Add organization logo
-      };
-
-      // Dispatch an action to add the new user to the users state
-      dispatch(userActions.setUsers(newUserWithOrganization));
-      dispatch(userActions.setUser(newUserWithOrganization));
+      getDomainOrganizations();
 
       toggleLoading();
-      location.route('/');
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);
@@ -129,6 +103,9 @@ export const SetUp = (props) => {
       const organizations = await response.json();
 
       DomainOrgs.value = [...organizations];
+
+      setOrgName(DomainOrgs.value[0].name);
+      setOrgLogo(DomainOrgs.value[0].picture);
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);
@@ -227,15 +204,56 @@ export const SetUp = (props) => {
               Organizations allow you to invite other users and control the visibility
               of chats and templates.
               {organizationCreated &&
-                <div className={'text-sm text-gray-400 mt-2'}>
+                <div className={'text-sm text-gray-400 mt-8'}>
                   <div className={(organizationCreated.created ? '' : 'hidden')}>
                     This is first account registered on this domain. Therefore we created a organisation for you.
+                    You can edit name or enter a URL logo here.
                   </div>
                   <div className={(organizationCreated.created ? 'hidden' : '')}>
                     Below Organizations are registered on your domain. Therefore you are automatically added to them.
+
                   </div>
                 </div>}
             </div>
+
+            {organizationCreated &&
+              <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
+                <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
+                  <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
+                  <input
+                    type="text"
+                    className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
+                    placeholder="Enter name..."
+                    value={orgName}
+                    onChange={(e) => setOrgName(e.target.value)}
+                  />
+                </div>
+
+                {/* Organization Logo */}
+                <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/2'}>
+                  <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
+                  <div className="relative rounded-md shadow-sm">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <img src={logo} alt="Placeholder SVG" className="h-5 w-5" />
+                    </span>
+                    <input
+                      type="text"
+                      value={orgLogo}
+                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
+                      placeholder="Enter URL..."
+                      onChange={(e) => setOrgLogo(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className={'flex self-end ml-2 py-2'}>
+                  <button
+                    onClick={() => { handleUpdateOrganization() }}
+                    className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center'}>
+                    Save
+                  </button>
+                </div>
+              </div>}
 
             <div className={'mt-1'}>
 
@@ -252,10 +270,12 @@ export const SetUp = (props) => {
             </div>
           </div>
 
-          <div className={'flex mt-5'}>
+
+
+          <div className={'flex mt-16 justify-end'}>
             <button
               onClick={() => handleAddPersonal()}
-              className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
+              className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1.5 rounded flex items-center'}>
               Continue
             </button>
           </div>
