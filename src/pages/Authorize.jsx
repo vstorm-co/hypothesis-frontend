@@ -3,6 +3,7 @@ import { Loading } from '../components/Loading';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../store/user-slice';
+import { uiActions } from '../store/ui-slice';
 import { useLocation } from 'preact-iso';
 
 
@@ -26,6 +27,7 @@ export function Authorize() {
       });
 
       dispatch(userActions.setUser(data));
+      dispatch(uiActions.setOrganizationCreated(data.organization))
       dispatch(userActions.setUsers(data));
 
       toggleLoading();

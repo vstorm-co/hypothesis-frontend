@@ -17,6 +17,7 @@ function toggleLoading() {
 
 export const SetUp = (props) => {
   const user = useSelector(state => state.user.currentUser);
+  const organizationCreated = useSelector(state => state.ui.organizationCreated)
   const location = useLocation();
   const dispatch = useDispatch();
   const DomainOrgs = useSignal([]);
@@ -195,15 +196,15 @@ export const SetUp = (props) => {
         </div>
 
         {/* Row 2 */}
-        <div className={'flex flex-row'}>
+        <div className={''}>
           {/* Left Column */}
-          <div className={'flex flex-col w-1/2 border-r border-[#DBDBDB] py-5 px-3'}>
+          <div className={'pt-2'}>
             <div
-              className={'text-[#595959] font-bold text-lg leading-6 py-5'}>
-              Set-up as Personal
+              className={'text-[#595959] font-bold text-lg leading-6 my-2'}>
+              Personal account
             </div>
             <div className={'text-sm text-gray-400 pb-5'}>
-              Personal accounts are great are great when you don't intend to collaborate or just
+              This is your Personal Account. Its great when you don't intend to collaborate or just
               wanting to try things out.
             </div>
             <div className={'border rounded-lg p-4 pt-0'}>
@@ -215,69 +216,31 @@ export const SetUp = (props) => {
                 </div>
               </div>
             </div>
-
-            <div className={'flex mt-5'}>
-              <button
-                onClick={() => handleAddPersonal()}
-                className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
-                Add as Personal
-              </button>
-            </div>
           </div>
 
           {/* Right Column */}
-          <div className={'flex flex-col w-1/2 py-5 px-3'}>
-            <div className={'text-[#595959] font-bold text-lg leading-6 py-5'}>
-              Set-up as Organization
+          <div className={'flex flex-col py-5'}>
+            <div className={'text-[#595959] font-bold text-lg leading-6 mt-2'}>
+              Organizations
             </div>
             <div className={'text-sm text-gray-400'}>
               Organizations allow you to invite other users and control the visibility
               of chats and templates.
+              {organizationCreated &&
+                <div className={'text-sm text-gray-400 mt-2'}>
+                  <div className={(organizationCreated.created ? '' : 'hidden')}>
+                    This is first account registered on this domain. Therefore we created a organisation for you.
+                  </div>
+                  <div className={(organizationCreated.created ? 'hidden' : '')}>
+                    Below Organizations are registered on your domain. Therefore you are automatically added to them.
+                  </div>
+                </div>}
             </div>
 
-            {/* Organization Name */}
-            <div className={'flex flex-col mt-4 rounded-lg py-2 w-full'}>
-              <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
-              <input
-                type="text"
-                className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
-                placeholder="Enter name..."
-                onChange={(e) => setOrgName(e.target.value)}
-              />
-            </div>
+            <div className={'mt-1'}>
 
-            {/* Organization Logo */}
-            <div className={'flex flex-col mt-4 rounded-lg py-2 w-full'}>
-              <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
-              <div className="relative rounded-md shadow-sm">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <img src={logo} alt="Placeholder SVG" className="h-5 w-5" />
-                </span>
-                <input
-                  type="text"
-                  className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
-                  placeholder="Enter URL..."
-                  onChange={(e) => setOrgLogo(e.target.value)}
-                />
-              </div>
-            </div>
-
-
-            {/* Add as Organization Button */}
-            <div className={'flex mt-5'}>
-              <button
-                onClick={() => handleAddOrganization()}
-                className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
-                Add as Organization
-              </button>
-            </div>
-
-            <div className={'mt-5'}>
-              <div className={'text-[#595959] font-bold text-lg leading-6 mb-2 ' + (DomainOrgs.value.length > 0 ? '' : 'hidden')}>
-                Organizations in your domain
-              </div>
               {DomainOrgs.value.map(org => (
-                <div onClick={() => addUserToDomainOrg(org)} className={'border rounded-lg p-2 pt-0 cursor-pointer'}>
+                <div className={'border rounded-lg p-2 pt-0'}>
                   <div className={'flex flex-row items-center mt-2'}>
                     <img src={org.picture} alt="" className={'w-10 h-10 rounded-full'} />
                     <div className={'ml-4'}>
@@ -289,6 +252,13 @@ export const SetUp = (props) => {
             </div>
           </div>
 
+          <div className={'flex mt-5'}>
+            <button
+              onClick={() => handleAddPersonal()}
+              className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
+              Continue
+            </button>
+          </div>
 
         </div>
       </div>
