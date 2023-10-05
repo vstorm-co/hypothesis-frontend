@@ -78,7 +78,7 @@ export function Edit(props) {
 
   function editChatTitle(event) {
     if (event.target.value != '') {
-      dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value }))
+      dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, }))
     }
   }
 
