@@ -19,7 +19,12 @@ export function Share() {
       dispatch(showToast({ content: `Link copied to clipboard` }))
     }
 
-    dispatch(updateChat({ uuid: currentChat.uuid, share: !currentChat.share }));
+    dispatch(updateChat({
+      uuid: currentChat.uuid,
+      organization_uuid: currentChat.organization_uuid,
+      visibility: currentChat.visibility,
+      share: !currentChat.share
+    }));
   }
 
   return (
