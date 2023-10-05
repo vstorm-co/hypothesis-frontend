@@ -62,7 +62,8 @@ export function Edit(props) {
     dispatch(updateChat({
       uuid: currentChat.uuid,
       visibility: tgl,
-      organization_uuid: tgl === "organization" ? user.organization_uuid.toString() : null
+      organization_uuid: tgl === "organization" ? user.organization_uuid.toString() : null,
+      share: currentChat.share,
     }));
   }
 
