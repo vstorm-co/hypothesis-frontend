@@ -216,7 +216,7 @@ export const SetUp = (props) => {
                 </div>}
             </div>
 
-            {organizationCreated &&
+            {(organizationCreated && organizationCreated.created) &&
               <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
                 <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
                   <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
