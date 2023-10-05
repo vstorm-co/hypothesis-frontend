@@ -13,6 +13,7 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action) {
       if (action.payload.access_token) {
+        state.currentUser.user_id = action.payload.user_id;
         state.currentUser.access_token = action.payload.access_token;
         state.currentUser.email = action.payload.email;
         state.currentUser.name = action.payload.name;
@@ -49,10 +50,11 @@ const userSlice = createSlice({
       let users = JSON.parse(localStorage.getItem('ANT_users'));
       let usersTable = users ? users : [];
 
-      console.log(action.payload.organization_logo);
+      console.log(action.payload);
 
-      if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid)) {
+      if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid && u.user_id === action.payload.user_id)) {
         let newUser = {
+          user_id: action.payload.user_id,
           access_token: action.payload.access_token,
           email: action.payload.email,
           name: action.payload.name,

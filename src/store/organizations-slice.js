@@ -77,6 +77,7 @@ export const getUserOrganizationsData = () => {
 
       organizations.forEach(org => {
         const newUserWithOrganization = {
+          user_id: user.user_id,
           access_token: user.access_token,
           email: user.email,
           name: user.name,
