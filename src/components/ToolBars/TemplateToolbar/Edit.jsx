@@ -92,7 +92,7 @@ export function Edit(props) {
           <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={bin} alt="" />
             <div className={'ml-2'}>
-              Delete chat
+              Delete Template
             </div>
           </div>
           <div className={'absolute right-0 rounded -bottom-[5.8rem] flex flex-col bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>

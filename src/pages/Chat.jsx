@@ -189,7 +189,7 @@ export function Chat(props) {
 						</div>
 					</div>
 					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto mb-2" ref={chatRef}>
-						{currentChat.messages.map(msg => (
+						{currentChat.messages?.map(msg => (
 							<Message Message={msg} />
 						))}
 						<div className={'flex justify-center py-4 ' + (msgLoading.value ? '' : 'hidden')}>
