@@ -1,17 +1,16 @@
 // @ts-nocheck
 import chatIcon from '../../assets/chat.svg';
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router'
 import { selectChat } from '../../store/chats-slice';
 import { templatesActions } from '../../store/templates-slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const ChatBar = props => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat)
 
   const callSelectChat = () => {
-    location.route(`/chats/${props.ChatData.uuid}`);
+    route(`/chats/${props.ChatData.uuid}`);
     dispatch(selectChat(props.ChatData.uuid));
     dispatch(templatesActions.setCurrentTemplate({}));
   }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useSelector, useDispatch } from 'react-redux';
 import { signal } from '@preact/signals';
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router';
 import { useRef, useEffect } from 'preact/hooks';
 
 import { deleteChat } from '../../../store/chats-slice';
@@ -43,11 +43,9 @@ export function Edit(props) {
   const templateEditRef = useRef(null);
   outsideClickHanlder(templateEditRef);
 
-  const location = useLocation();
-
   function callDeleteTemplate() {
     dispatch(deleteTemplate(currentTemplate.uuid));
-    location.route('/');
+    route('/');
     toggleConfirmDelete();
     toggleEdit();
     props.onToggle();

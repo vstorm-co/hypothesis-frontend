@@ -4,8 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../store/user-slice';
 import { uiActions } from '../store/ui-slice';
-import { useLocation } from 'preact-iso';
-
+import { route } from 'preact-router';
 
 const loading = signal(false);
 
@@ -18,8 +17,6 @@ import arrow from '../assets/arrow.svg';
 
 export function Authorize() {
   const dispatch = useDispatch();
-  const location = useLocation();
-
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
       let data = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify?code=${response.code}`).then(res => res.json()).catch(err => {
@@ -31,7 +28,7 @@ export function Authorize() {
       dispatch(userActions.setUsers(data));
 
       toggleLoading();
-      location.route('/setup')
+      route('/setup')
     },
     flow: 'auth-code',
     onError: err => {

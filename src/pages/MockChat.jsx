@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router';
 
 import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
 import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
@@ -15,7 +15,6 @@ import send from '../assets/send.svg';
 export function MockChat(props) {
   const chats = useSelector(state => state.chats.chats);
   const user = useSelector(state => state.user.currentUser);
-  const location = useLocation();
 
   const [input, setInput] = useState('');
   const dispatch = useDispatch();
@@ -24,12 +23,12 @@ export function MockChat(props) {
 
   useEffect(() => {
     if (user.access_token === null) {
-      location.route('/auth')
+      route('/auth')
     }
 
     // dispatch(getOrganizationsData(user.access_token));
     dispatch(getUserOrganizationsData());
-    dispatch(getChatsData(props.params.id));
+    dispatch(getChatsData());
     dispatch(getTemplatesData());
 
     // get organization-shared chats

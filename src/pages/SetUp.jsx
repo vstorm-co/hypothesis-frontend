@@ -1,9 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "preact-iso";
+import { route } from 'preact-router';
 import { useState, useEffect } from 'preact/hooks';
 import { getOrganizationsData, organizationsActions } from '../store/organizations-slice.js';
 import { userActions } from '../store/user-slice.js';
-
 
 import logo from '../assets/org-logo.svg';
 import { signal, useSignal } from "@preact/signals";
@@ -18,7 +17,6 @@ function toggleLoading() {
 export const SetUp = (props) => {
   const user = useSelector(state => state.user.currentUser);
   const organizationCreated = useSelector(state => state.ui.organizationCreated)
-  const location = useLocation();
   const dispatch = useDispatch();
   const DomainOrgs = useSignal([]);
 
@@ -27,7 +25,7 @@ export const SetUp = (props) => {
 
   // check if user is logged in
   if (!user.access_token) {
-    location.route('/auth');
+    route('/auth');
   }
 
   // get user organizations
@@ -47,7 +45,7 @@ export const SetUp = (props) => {
     }
     dispatch(userActions.setUser(updateUserSetUp));
     dispatch(userActions.updateCurrentUser(updateUserSetUp));
-    location.route('/');
+    route('/');
   }
 
   // Function to handle adding as an organization
@@ -152,7 +150,7 @@ export const SetUp = (props) => {
       dispatch(userActions.setUsers(newUserWithOrganization));
       dispatch(userActions.setUser(newUserWithOrganization));
 
-      location.route('/');
+      route('/');
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);

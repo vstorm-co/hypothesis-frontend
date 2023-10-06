@@ -3,7 +3,6 @@ import { Chats } from './Chats';
 import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'preact-iso';
 
 import { SearchBarSkeleton } from '../Skeletons/SearchBarSkeleton';
 import { ChatSkeleton } from '../Skeletons/ChatSkeleton';
@@ -13,11 +12,8 @@ import { Filters } from './Filters';
 
 export function SideBar() {
   const currentUser = useSelector(state => state.user.currentUser);
-  const location = useLocation();
 
-  console.log(location.path)
-
-  if (currentUser.access_token && location.path != '/setup') {
+  if (currentUser.access_token && true) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
         <div className="w-80 h-[100vh] flex flex-col relative pb-20">

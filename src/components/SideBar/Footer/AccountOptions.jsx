@@ -1,8 +1,6 @@
 import logoutIcon from '../../../assets/logout.svg';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { signal } from '@preact/signals';
-import { useEffect, useRef } from 'preact/compat';
-import { LocationProvider } from 'preact-iso';
+import { route } from 'preact-router';
 import { Component, createRef } from 'preact';
 
 import { userActions } from '../../../store/user-slice';
@@ -20,7 +18,6 @@ class AccountOptions extends Component {
     this.AccountOptionsRef = createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
-  static get contextType() { return LocationProvider.ctx; }
 
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside);
@@ -31,7 +28,6 @@ class AccountOptions extends Component {
   }
 
   handleClickOutside(e) {
-    // console.log(this.AccountOptionsRef);
     if (this.AccountOptionsRef && !this.AccountOptionsRef.current.contains(e.target)) {
       this.setState({ showOptions: false })
     }
@@ -47,7 +43,7 @@ class AccountOptions extends Component {
     this.props.tglSwitch();
     dispatch(userActions.setUser(this.props.user));
     dispatch(chatsActions.setCurrentChat({}))
-    this.context.route('/')
+    route('/');
   }
 
   logOut = () => {

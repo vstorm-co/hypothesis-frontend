@@ -1,7 +1,7 @@
 // @ts-nocheck
 import "preact/devtools";
 import { render } from 'preact';
-import { LocationProvider, Router, Route, useLocation } from 'preact-iso';
+import Router from 'preact-router';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'preact/hooks';
@@ -53,24 +53,22 @@ export function App() {
 
 	return (
 		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-			<LocationProvider>
-				<Provider store={store}>
-					<main>
-						<div className="flex overflow-hidden">
-							<SideBar />
-							<Router>
-								<Route path="/" component={MockChat} />
-								<Route path="/auth" component={Authorize} />
-								<Route path="/setup" component={SetUp} />
-								<Route path="/chats/:id" component={Chat} />
-								<Route path="/templates/:id" component={Template} />
-								<Route default component={NotFound} />
-							</Router>
-							<AdminBar />
-						</div>
-					</main>
-				</Provider>
-			</LocationProvider>
+			<Provider store={store}>
+				<main>
+					<div className="flex overflow-hidden">
+						<SideBar />
+						<Router>
+							<MockChat path="/" />
+							<Authorize path="/auth" />
+							<SetUp path="/setup" />
+							<Chat path="/chats/:id" />
+							<Template path="/templates/:id" />
+							<NotFound default />
+						</Router>
+						<AdminBar />
+					</div>
+				</main>
+			</Provider>
 		</GoogleOAuthProvider>
 	);
 }

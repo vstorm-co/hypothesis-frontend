@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import { route } from 'preact-router';
 
 const templatesSlice = createSlice({
   name: 'templates',
@@ -56,6 +57,7 @@ export const createTemplate = (payload) => {
     };
 
     const template = await sendRequest();
+    route(`/templates/${template.uuid}`);
     dispatch(getTemplatesData());
   }
 }

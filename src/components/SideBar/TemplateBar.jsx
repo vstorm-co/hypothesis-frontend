@@ -1,4 +1,4 @@
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { templatesActions } from '../../store/templates-slice';
 import { chatsActions } from '../../store/chats-slice';
@@ -8,11 +8,10 @@ import braces from '../../assets/braces.svg'
 
 export function TemplateBar(props) {
   const dispatch = useDispatch();
-  const location = useLocation();
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
 
   const callSelectTemplate = () => {
-    location.route(`/templates/${props.TemplateData.uuid}`);
+    route(`/templates/${props.TemplateData.uuid}`);
     dispatch(selectTemplate(props.TemplateData.uuid));
     dispatch(chatsActions.setCurrentChat({ messages: [] }));
   }

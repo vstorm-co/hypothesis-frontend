@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router'
 import { signal, useSignal } from '@preact/signals';
 import ContentEditable from 'react-contenteditable'
 
@@ -18,8 +18,6 @@ import { getTemplatesData } from '../store/templates-slice';
 
 const msgLoading = signal(false);
 export function Chat(props) {
-	const location = useLocation();
-
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const user = useSelector(state => state.user.currentUser);
 
@@ -34,10 +32,10 @@ export function Chat(props) {
 	const chatRef = useRef(null);
 
 	useEffect(() => {
-		dispatch(selectChat(props.params.id));
+		dispatch(selectChat(props.matches.id));
 
 		dispatch(getUserOrganizationsData());
-		dispatch(getChatsData(props.params.id));
+		dispatch(getChatsData(props.matches.id));
 		dispatch(getTemplatesData());
 
 		// get organization-shared chats
@@ -50,7 +48,7 @@ export function Chat(props) {
 
 	useEffect(() => {
 		if (user.access_token === null) {
-			location.route('/auth')
+			route('/auth')
 		}
 
 		setTimeout(() => {
@@ -73,7 +71,7 @@ export function Chat(props) {
 			}
 		}
 	}
-	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}/${user.access_token}`, {
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}/${user.access_token}`, {
 
 		onOpen: () => {
 		},

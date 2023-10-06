@@ -7,7 +7,7 @@ import { Loading } from '../../Loading';
 import plus from '../../../assets/plus.svg';
 import google from '../../../assets/google.svg';
 import arrow from '../../../assets/arrow.svg';
-import { useLocation } from "preact-iso";
+import { route } from 'preact-router';
 
 
 const showAddAccount = signal(false);
@@ -23,7 +23,6 @@ function toggleLoading() {
 
 export function AddNewAccount() {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
@@ -33,7 +32,7 @@ export function AddNewAccount() {
       dispatch(userActions.setUser(data));
       dispatch(userActions.setUsers(data));
 
-      location.route('/setup');
+      route('/setup');
 
       toggleShowAddAccount();
       toggleLoading();

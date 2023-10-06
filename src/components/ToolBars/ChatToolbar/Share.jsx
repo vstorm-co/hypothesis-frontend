@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { showToast } from '../../../store/ui-slice';
-import { useLocation } from 'preact-iso';
 
 import share from '../../../assets/share.svg';
 import { updateChat } from "../../../store/chats-slice.js";

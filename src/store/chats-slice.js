@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import { route } from 'preact-router';
 
 const chatsSlice = createSlice({
   name: 'chats',
@@ -115,7 +116,7 @@ export const createChat = (payload) => {
     };
 
     const chat = await sendRequest();
-    dispatch(getChatsData(chat.uuid));
+    route(`/chats/${chat.uuid}`);
   }
 }
 

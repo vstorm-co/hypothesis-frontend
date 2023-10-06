@@ -2,7 +2,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getChatsData, getOrganizationChatsData, updateChat } from '../../../store/chats-slice';
 import { signal } from '@preact/signals';
-import { useLocation } from 'preact-iso';
+import { route } from 'preact-router';
 import { useRef, useEffect } from 'preact/hooks';
 
 import { deleteChat } from '../../../store/chats-slice';
@@ -44,11 +44,9 @@ export function Edit(props) {
   const editRef = useRef(null);
   outsideClickHanlder(editRef);
 
-  const location = useLocation();
-
   function callDeleteChat() {
     dispatch(deleteChat({ chatId: currentChat.uuid }));
-    location.route('/');
+    route('/');
     toggleConfirmDelete();
     toggleEdit();
     props.onToggle();

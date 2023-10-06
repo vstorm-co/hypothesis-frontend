@@ -18,7 +18,7 @@ export function Template(props) {
   }
 
   useEffect(() => {
-    dispatch(selectTemplate(props.params.id));
+    dispatch(selectTemplate(props.matches.id));
   }, []);
 
   useEffect(() => {

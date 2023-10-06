@@ -5,17 +5,12 @@ import { createChat } from "../../store/chats-slice";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'preact/hooks';
 
-import { useLocation } from 'preact-iso';
-
-
 
 export function Chats() {
   const chats = useSelector(state => state.chats.chats);
   const currentChat = useSelector(state => state.chats.currentChat);
 
   const organizationChats = useSelector(state => state.chats.organizationChats);
-
-  const location = useLocation();
 
   const dispatch = useDispatch();
 
