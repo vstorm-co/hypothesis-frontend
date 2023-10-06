@@ -12,6 +12,7 @@ const uiSlice = createSlice({
       active: false,
     },
     organizationCreated: null,
+    hideSideBar: false,
   },
   reducers: {
     toggleToast(state, action) {
@@ -25,6 +26,9 @@ const uiSlice = createSlice({
     },
     setOrganizationCreated(state, action) {
       state.organizationCreated = action.payload;
+    },
+    setHideSideBar(state, action) {
+      state.hideSideBar = action.payload;
     }
   }
 });

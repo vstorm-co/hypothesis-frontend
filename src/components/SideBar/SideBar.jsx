@@ -2,19 +2,20 @@ import { SearchBar } from './SearchBar';
 import { Chats } from './Chats';
 import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SearchBarSkeleton } from '../Skeletons/SearchBarSkeleton';
 import { ChatSkeleton } from '../Skeletons/ChatSkeleton';
 import { FooterSkeleton } from '../Skeletons/FooterSkeleton';
 import { Filters } from './Filters';
+import { useEffect } from 'preact/hooks';
 
 
 export function SideBar(props) {
   const currentUser = useSelector(state => state.user.currentUser);
-  console.log(window.location);
+  const hideSideBar = useSelector(state => state.ui.hideSideBar);
 
-  if (currentUser.access_token && window.location.pathname != '/setup') {
+  if (!hideSideBar) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
         <div className="w-80 h-[100vh] flex flex-col relative pb-20">

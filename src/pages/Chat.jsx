@@ -49,7 +49,8 @@ export function Chat(props) {
 
 	useEffect(() => {
 		if (user.access_token === null) {
-			route('/auth')
+			route('/auth');
+			localStorage.setItem("redirect_to_chat", props.matches.id);
 		}
 
 		setTimeout(() => {
@@ -172,9 +173,9 @@ export function Chat(props) {
 	let MockMessage = {
 		created_by: 'bot',
 		content: chats.length > 1 ?
-			`Welcome ${user.name.split(" ")[0]}, start this chat by entering a prompt below.`
+			`Welcome ${user.name?.split(" ")[0]}, start this chat by entering a prompt below.`
 			:
-			`Welcome ${user.name.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
+			`Welcome ${user.name?.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
 	}
 
 	return (

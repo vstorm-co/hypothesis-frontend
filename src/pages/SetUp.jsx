@@ -6,6 +6,7 @@ import { userActions } from '../store/user-slice.js';
 
 import logo from '../assets/org-logo.svg';
 import { signal, useSignal } from "@preact/signals";
+import { uiActions } from "../store/ui-slice.js";
 
 const loading = signal(true);
 
@@ -45,7 +46,16 @@ export const SetUp = (props) => {
     }
     dispatch(userActions.setUser(updateUserSetUp));
     dispatch(userActions.updateCurrentUser(updateUserSetUp));
-    route('/');
+
+    let redirectToChat = localStorage.getItem("redirect_to_chat");
+    if (redirectToChat?.length > 0) {
+      route(`/chats/${redirectToChat}`);
+      let redirectToChat = localStorage.setItem("redirect_to_chat", "");
+    } else {
+      route('/');
+    }
+
+    dispatch(uiActions.setHideSideBar(false));
   }
 
   // Function to handle adding as an organization

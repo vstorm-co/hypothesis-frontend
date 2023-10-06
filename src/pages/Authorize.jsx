@@ -1,7 +1,7 @@
 import { signal } from '@preact/signals';
 import { Loading } from '../components/Loading';
 import { useGoogleLogin } from '@react-oauth/google';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../store/user-slice';
 import { uiActions } from '../store/ui-slice';
 import { route } from 'preact-router';
@@ -16,7 +16,18 @@ import google from '../assets/google.svg';
 import arrow from '../assets/arrow.svg';
 
 export function Authorize() {
+  const user = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
+
+
+  if (user.access_token) {
+    route('/');
+  } else {
+    dispatch(uiActions.setHideSideBar(true));
+
+  }
+
+
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
       let data = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify?code=${response.code}`).then(res => res.json()).catch(err => {
