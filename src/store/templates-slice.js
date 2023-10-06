@@ -10,7 +10,7 @@ const templatesSlice = createSlice({
   },
   reducers: {
     setTemplates(state, action) {
-      state.templates = action.payload;
+      state.templates = action.payload.items;
     },
     setCurrentTemplate(state, action) {
       state.currentTemplate = action.payload

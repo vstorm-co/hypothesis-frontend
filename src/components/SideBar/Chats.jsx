@@ -36,7 +36,7 @@ export function Chats() {
           <ChatBar ChatData={chat} />
         ))}
       </div>
-      {organizationChats.length > 0 && (
+      {organizationChats?.length > 0 && (
         <div className="mt-4 pb-2">
           <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2 mt-2">
             <div>Organizations Chats</div>
@@ -44,7 +44,7 @@ export function Chats() {
               {organizationChats.length}
             </div>
           </div>
-          {organizationChats.map(chat => (
+          {organizationChats?.map(chat => (
             <ChatBar ChatData={chat} organizationShared={true} key={chat.uuid} />
           ))}
         </div>

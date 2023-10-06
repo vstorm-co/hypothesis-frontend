@@ -7,9 +7,6 @@ export function ChatToolBar() {
   const user = useSelector(state => state.user.currentUser);
   const currentChat = useSelector(state => state.chats.currentChat);
 
-  console.log(user);
-  console.log(currentChat);
-
   if (user.user_id === currentChat.owner) {
     return (
       <div className="flex">

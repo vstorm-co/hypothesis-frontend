@@ -10,10 +10,11 @@ import { FooterSkeleton } from '../Skeletons/FooterSkeleton';
 import { Filters } from './Filters';
 
 
-export function SideBar() {
+export function SideBar(props) {
   const currentUser = useSelector(state => state.user.currentUser);
+  console.log(window.location);
 
-  if (currentUser.access_token && true) {
+  if (currentUser.access_token && window.location.pathname != '/setup') {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
         <div className="w-80 h-[100vh] flex flex-col relative pb-20">

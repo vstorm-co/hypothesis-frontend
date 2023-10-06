@@ -10,10 +10,10 @@ export function Message(props) {
 
   if (props.Message.created_by === 'user') {
     return (
-      <div className="flex my-4 group">
+      <div className="flex items-start my-4 group">
         <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3">
           <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
-          <div className="ml-4 self-center" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
+          <div className="ml-4 self-center text-[#202020]" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
         </div>
         <div className={'ml-auto hidden group-hover:flex items-center'}>
           <SaveAsTemplate />
@@ -25,7 +25,7 @@ export function Message(props) {
       <div className="flex my-4">
         <div className="rounded flex p-2">
           <div className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2 flex items-center justify-center shrink-0"><img src={bot} className="w-4" alt="" /></div>
-          <div className="ml-2 mt-1">
+          <div className="ml-2 mt-1 text-[#202020]">
             <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
           </div>
         </div>

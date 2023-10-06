@@ -5,7 +5,7 @@ import { route } from 'preact-router'
 import { signal, useSignal } from '@preact/signals';
 import ContentEditable from 'react-contenteditable'
 
-import { chatsActions, createChat, getChatsData, getOrganizationChatsData, selectChat } from '../store/chats-slice';
+import { chatsActions, createChat, getChatsData, getOrganizationChatsData, selectChat, updateChat } from '../store/chats-slice';
 import { Message } from '../components/Message';
 import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
 import { Toast } from '../components/Toast';
@@ -19,6 +19,7 @@ import { getTemplatesData } from '../store/templates-slice';
 const msgLoading = signal(false);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
+	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
 
 	const activeUsers = useSignal([]);
@@ -145,6 +146,10 @@ export function Chat(props) {
 
 		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: text }));
 
+		if (currentChat.messages?.length === 0) {
+			dispatch(updateChat({ uuid: currentChat.uuid, name: text, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
+		}
+
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 100);
@@ -162,6 +167,14 @@ export function Chat(props) {
 		// 		value: `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
 		// 	}
 		// })
+	}
+
+	let MockMessage = {
+		created_by: 'bot',
+		content: chats.length > 1 ?
+			`Welcome ${user.name.split(" ")[0]}, start this chat by entering a prompt below.`
+			:
+			`Welcome ${user.name.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
 	}
 
 	return (
@@ -186,7 +199,12 @@ export function Chat(props) {
 							<ChatToolBar />
 						</div>
 					</div>
-					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto mb-2" ref={chatRef}>
+					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto pb-4" ref={chatRef}>
+						{currentChat.messages?.length === 0 &&
+							<div>
+								<Message Message={MockMessage} />
+							</div>
+						}
 						{currentChat.messages?.map(msg => (
 							<Message Message={msg} />
 						))}

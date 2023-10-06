@@ -29,7 +29,7 @@ const chatsSlice = createSlice({
       }
     },
     setChats(state, action) {
-      state.chats = action.payload;
+      state.chats = action.payload.items;
     },
     setOrganizationChats(state, action) {
       state.organizationChats = action.payload;
@@ -90,6 +90,7 @@ export const getOrganizationChatsData = (payload) => {
         },
       }).then(res => res.json());
 
+      console.log(data);
       return data;
     };
 
@@ -117,6 +118,7 @@ export const createChat = (payload) => {
 
     const chat = await sendRequest();
     route(`/chats/${chat.uuid}`);
+    dispatch(getChatsData(chat.uuid));
   }
 }
 
@@ -164,8 +166,7 @@ export const updateChat = (payload) => {
     };
 
     const chat = await sendRequest();
-    dispatch(chatsActions.editChat(payload));
-    dispatch(getChatsData());
+    dispatch(getChatsData(payload.uuid));
     dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
   }
 }
