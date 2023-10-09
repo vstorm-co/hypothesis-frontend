@@ -57,7 +57,7 @@ export function MockChat(props) {
     }
   }
 
-  if (chats.length === 0) {
+  if (chats?.length === 0) {
     const msg = {
       created_by: 'bot',
       content: 'Hello! Create Your First Chat!'

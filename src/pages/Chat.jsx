@@ -127,9 +127,9 @@ export function Chat(props) {
 				}
 			} else if (json_data.type === 'user_left') {
 				if (activeUsers.value.find(u => u.user_email === json_data.user_email)) {
-					let index = activeUsers.value.find(u => u.user_email === json_data.user_email);
+					let index = activeUsers.value.indexOf(activeUsers.value.find(u => u.user_email === json_data.user_email));
 					console.log(index);
-					activeUsers.value = activeUsers.value.splice(index, 1);
+					activeUsers.value.splice(index, 1);
 				}
 			} else if (json_data.type === 'typing') {
 				clearTimeout(typingTimeout);
@@ -141,8 +141,6 @@ export function Chat(props) {
 					}, 3000)
 				}
 			}
-
-			console.log(activeUsers.value);
 
 			msgLoading.value = false;
 			chatRef.current.scrollTop = chatRef.current.scrollHeight;
