@@ -57,7 +57,10 @@ export const createTemplate = (payload) => {
     };
 
     const template = await sendRequest();
-    route(`/templates/${template.uuid}`);
+
+    if (template.content.length === 0) {
+      route(`/templates/${template.uuid}`);
+    }
     dispatch(getTemplatesData());
   }
 }

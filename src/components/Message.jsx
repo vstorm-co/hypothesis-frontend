@@ -16,7 +16,7 @@ export function Message(props) {
           <div className="ml-4 self-center text-[#202020]" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
         </div>
         <div className={'ml-auto hidden group-hover:flex items-center'}>
-          <SaveAsTemplate />
+          <SaveAsTemplate msg={props.Message} />
         </div>
       </div>
     )

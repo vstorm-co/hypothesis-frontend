@@ -50,7 +50,7 @@ export const SetUp = (props) => {
     let redirectToChat = localStorage.getItem("redirect_to_chat");
     if (redirectToChat?.length > 0) {
       route(`/chats/${redirectToChat}`);
-      let redirectToChat = localStorage.setItem("redirect_to_chat", "");
+      localStorage.removeItem("redirect_to_chat");
     } else {
       route('/');
     }
