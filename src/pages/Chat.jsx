@@ -76,6 +76,7 @@ export function Chat(props) {
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}/${user.access_token}`, {
 
 		onOpen: () => {
+			activeUsers.value = []
 		},
 		onClose: (event) => {
 			// // Handle the connection close event
