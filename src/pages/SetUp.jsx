@@ -62,10 +62,15 @@ export const SetUp = (props) => {
   const handleUpdateOrganization = async () => {
     try {
       // Create an object with the organization data
-      const organizationData = {
-        name: orgName,
-        picture: orgLogo,
-      };
+      // const organizationData = {
+      //   name: orgName,
+      //   picture: orgLogo,
+      // };
+
+      const organizationData = new FormData();
+
+      organizationData.append("name", orgName);
+      organizationData.append("picture", orgLogo)
 
       console.log(DomainOrgs.value);
 
@@ -76,7 +81,7 @@ export const SetUp = (props) => {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(organizationData),
+        body: organizationData,
       });
 
       if (!response.ok) {
@@ -223,7 +228,8 @@ export const SetUp = (props) => {
                   </div>
                 </div>}
             </div>
-
+            {/* (organizationCreated && organizationCreated.created) */}
+            {/* organizationCreated.created  */}
             {(organizationCreated && organizationCreated.created) &&
               <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
                 <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
@@ -240,28 +246,33 @@ export const SetUp = (props) => {
                 {/* Organization Logo */}
                 <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/2'}>
                   <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
-                  <div className="relative rounded-md shadow-sm">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <img src={logo} alt="Placeholder SVG" className="h-5 w-5" />
-                    </span>
+                  <div className="relative rounded-md shadow-sm mt-2">
                     <input
+                      type="file"
+                      value={orgLogo}
+                      className=""
+                      placeholder="Enter URL..."
+                      onChange={(e) => setOrgLogo(e.target.value)}
+                    />
+                    {/* <input
                       type="text"
                       value={orgLogo}
                       className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
                       placeholder="Enter URL..."
                       onChange={(e) => setOrgLogo(e.target.value)}
-                    />
+                    /> */}
                   </div>
                 </div>
 
-                <div className={'flex self-end ml-2 py-2'}>
+                <div className={' ml-2 flex items-end py-2'}>
                   <button
                     onClick={() => { handleUpdateOrganization() }}
                     className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center'}>
                     Save
                   </button>
                 </div>
-              </div>}
+              </div>
+            }
 
             <div className={'mt-1'}>
 

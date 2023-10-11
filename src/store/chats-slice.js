@@ -5,18 +5,16 @@ import { route } from 'preact-router';
 const chatsSlice = createSlice({
   name: 'chats',
   initialState: {
-    chats: [
-      {
-        uuid: 0,
-        name: 'How to Log In?',
-        selected: false,
-      },
-    ],
+    chats: [],
     organizationChats: [],
     currentChat: {
       name: null,
       uuid: null,
       messages: [],
+    },
+    searchFilters: {
+      visibility: 'all',
+      searchFor: '',
     }
   },
   reducers: {
@@ -47,6 +45,12 @@ const chatsSlice = createSlice({
     },
     concatDataToMsg(state, action) {
       state.currentChat.messages[state.currentChat.messages.length - 1].content += action.payload.data;
+    },
+    setFiltersVisibility(state, action) {
+      state.searchFilters.visibility = action.payload.visibility;
+    },
+    setFiltersSearch(state, action) {
+      state.searchFilters.searchFor = action.payload.searchFor;
     }
   }
 });
@@ -56,13 +60,37 @@ export const chatsActions = chatsSlice.actions;
 export default chatsSlice;
 
 export const getChatsData = (payload) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+
+    let state = getState();
+    let url = `${import.meta.env.VITE_API_URL}`;
+
+    if (state.chats.searchFilters.visibility === 'all') {
+      if (state.user.currentUser.organization_uuid) {
+        url = `${url}/chat/rooms/?organization_uuid=${state.user.currentUser.organization_uuid}`
+      } else {
+        url = `${url}/chat/rooms/?visibility=just_me`
+      }
+    } else if (state.chats.searchFilters.visibility === 'just_me') {
+      url = `${url}/chat/rooms/?visibility=just_me`
+    } else if (state.chats.searchFilters.visibility === 'organization') {
+      if (state.user.currentUser.organization_uuid) {
+        url = `${url}/chat/rooms/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
+      } else {
+        url = `${url}/chat/rooms/?visibility=just_me`
+      }
+    }
+
+    if (state.chats.searchFilters.searchFor) {
+      url = `${url}&name__like=${state.chats.searchFilters.searchFor}`;
+    }
+
+
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/rooms/`, {
+      const data = await fetch(url, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
-
         },
       }).then(res => res.json());
 
@@ -167,7 +195,6 @@ export const updateChat = (payload) => {
 
     const chat = await sendRequest();
     dispatch(getChatsData(payload.uuid));
-    dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
   }
 }
 

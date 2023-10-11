@@ -23,9 +23,29 @@ export const templatesActions = templatesSlice.actions;
 export default templatesSlice;
 
 export const getTemplatesData = (payload) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+
+    let state = getState();
+    let url = ``;
+
+    if (state.chats.searchFilters.visibility === 'all') {
+      if (state.user.currentUser.organization_uuid) {
+        url = `${import.meta.env.VITE_API_URL}/template/?organization_uuid=${state.user.currentUser.organization_uuid}`
+      } else {
+        url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
+      }
+    } else if (state.chats.searchFilters.visibility === 'just_me') {
+      url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
+    } else if (state.chats.searchFilters.visibility === 'organization') {
+      if (state.user.currentUser.organization_uuid) {
+        url = `${import.meta.env.VITE_API_URL}/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
+      } else {
+        url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
+      }
+    }
+
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
+      const data = await fetch(url, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json'

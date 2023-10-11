@@ -4,11 +4,13 @@ import plus from '../../assets/plus.svg';
 import { createChat } from "../../store/chats-slice";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'preact/hooks';
+import { Loading } from '../Loading';
 
 
 export function Chats() {
   const chats = useSelector(state => state.chats.chats);
   const currentChat = useSelector(state => state.chats.currentChat);
+  const ui = useSelector(state => state.ui);
 
   const organizationChats = useSelector(state => state.chats.organizationChats);
 
@@ -31,24 +33,16 @@ export function Chats() {
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
-      <div className={''}>
-        {chats?.map(chat => (
-          <ChatBar ChatData={chat} />
-        ))}
-      </div>
-      {organizationChats?.length > 0 && (
-        <div className="mt-4 pb-2">
-          <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2 mt-2">
-            <div>Organizations Chats</div>
-            <div className="ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px]">
-              {organizationChats.length}
-            </div>
-          </div>
-          {organizationChats?.map(chat => (
-            <ChatBar ChatData={chat} organizationShared={true} key={chat.uuid} />
+      {!ui.chatsLoading &&
+        <div className={''}>
+          {chats?.map(chat => (
+            <ChatBar ChatData={chat} />
           ))}
-        </div>
-      )}
+        </div>}
+      {ui.chatsLoading &&
+        <div className={'flex items-center justify-center'}>
+          <Loading />
+        </div>}
       <div className={'text-center text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
         No chats yet! go ahead create one
       </div>

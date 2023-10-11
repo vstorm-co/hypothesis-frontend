@@ -65,7 +65,7 @@ export function Edit(props) {
   }
 
   const updateOrganizationChats = () => {
-    dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
+    // dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
   }
 
   const updateChats = () => {

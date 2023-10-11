@@ -1,5 +1,6 @@
 // @ts-nocheck
 import chatIcon from '../../assets/chat.svg';
+import meChat from '../../assets/me-chat.svg';
 import { route } from 'preact-router'
 import { selectChat } from '../../store/chats-slice';
 import { templatesActions } from '../../store/templates-slice';
@@ -21,7 +22,7 @@ export const ChatBar = props => {
 
   return (
     <div onClick={callSelectChat} className={"flex items-center py-2 px-2 rounded cursor-pointer " + (isSelected() ? 'bg-[#595959]' : 'hover:bg-[#0F0F0F]')}>
-      <img className={"w-4"} src={chatIcon} alt="" />
+      <img className={"w-4"} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
       <div className="font-base text-sm leading-6 ml-2">
         {props.ChatData.name}
       </div>

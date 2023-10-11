@@ -32,11 +32,6 @@ export function MockChat(props) {
     dispatch(getTemplatesData());
 
     // get organization-shared chats
-    if (!!user.organization_uuid) {
-      dispatch(getOrganizationChatsData(user.organization_uuid));
-    } else {
-      dispatch(chatsActions.setOrganizationChats([]));
-    }
 
     setTimeout(() => {
       chatRef.current.scrollTop = chatRef.current.scrollHeight

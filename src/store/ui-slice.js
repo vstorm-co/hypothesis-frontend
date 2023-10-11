@@ -13,6 +13,7 @@ const uiSlice = createSlice({
     },
     organizationCreated: null,
     hideSideBar: false,
+    chatsLoading: false,
   },
   reducers: {
     toggleToast(state, action) {
@@ -29,6 +30,9 @@ const uiSlice = createSlice({
     },
     setHideSideBar(state, action) {
       state.hideSideBar = action.payload;
+    },
+    toggleChatsLoading(state, action) {
+      state.chatsLoading = action.payload;
     }
   }
 });

@@ -1,7 +1,9 @@
 import { signal } from '@preact/signals'
+import { useDispatch, useSelector } from 'react-redux';
 
 import filtersIcon from '../../assets/filters.svg'
 import { useEffect, useRef } from 'preact/hooks';
+import { chatsActions, getChatsData } from '../../store/chats-slice';
 
 const showFilters = signal(false);
 function toggleShowFilters() {
@@ -27,6 +29,17 @@ export function Filters() {
   const filtersRef = useRef(null);
   outsideClickHanlder(filtersRef);
 
+  const dispatch = useDispatch();
+  const filters = useSelector(state => state.chats.searchFilters);
+  const currentUser = useSelector(state => state.user.currentUser);
+
+  function setFilter(tgl) {
+    dispatch(chatsActions.setFiltersVisibility({ visibility: tgl }));
+    dispatch(getChatsData());
+
+    showFilters.value = false;
+  }
+
   return (
     <div ref={filtersRef} className={'relative'}>
       <div className={'hover:bg-[#595959] cursor-pointer rounded p-2 ' + (showFilters.value ? 'bg-[#595959]' : '')} onClick={toggleShowFilters}>
@@ -38,9 +51,10 @@ export function Filters() {
             Visibility
           </div>
           <div className={'text-sm leading-6 flex text-[#747474]'}>
-            <div className={'cursor-pointer px-2 py-1 rounded hover:bg-[#747474] hover:text-white'}>All</div>
-            <div className={'cursor-pointer px-2 py-1 rounded bg-[#747474] text-white'}>Just Me</div>
-            <div className={'cursor-pointer px-2 py-1 rounded hover:bg-[#747474] hover:text-white'}> Organization</div>
+            <div onClick={() => setFilter('all')} className={'cursor-pointer px-2 mx-1 py-1 rounded hover:bg-[#747474] hover:text-white ' + (filters.visibility === 'all' ? 'bg-[#747474] text-white' : '')}>All</div>
+            <div onClick={() => setFilter('just_me')} className={'cursor-pointer px-2 mx-1 py-1 rounded hover:bg-[#747474] hover:text-white ' + (filters.visibility === 'just_me' ? 'bg-[#747474] text-white' : '')}>Just Me</div>
+            {currentUser.organization_uuid &&
+              <div onClick={() => setFilter('organization')} className={'cursor-pointer px-2 mx-1 py-1 rounded hover:bg-[#747474] hover:text-white ' + (filters.visibility === 'organization' ? 'bg-[#747474] text-white' : '')}> Organization</div>}
           </div>
         </div>
         <div className="pt-4 px-4 pb-2">
