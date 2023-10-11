@@ -67,10 +67,12 @@ export const SetUp = (props) => {
       //   picture: orgLogo,
       // };
 
-      const organizationData = new FormData();
+      let organizationData = new FormData();
 
       organizationData.append("name", orgName);
-      organizationData.append("picture", orgLogo)
+      organizationData.append("picture", orgLogo);
+
+      console.log(organizationData);
 
       console.log(DomainOrgs.value);
 
@@ -252,7 +254,7 @@ export const SetUp = (props) => {
                       value={orgLogo}
                       className=""
                       placeholder="Enter URL..."
-                      onChange={(e) => setOrgLogo(e.target.value)}
+                      onChange={(e) => setOrgLogo(e.target.files[0])}
                     />
                     {/* <input
                       type="text"
