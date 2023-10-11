@@ -1,28 +1,54 @@
 import { useSelector } from 'react-redux';
 import { ChatBar } from './ChatBar';
 import plus from '../../assets/plus.svg';
-import { createChat } from "../../store/chats-slice";
+import { chatsActions, createChat, getChatsData } from "../../store/chats-slice";
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { Loading } from '../Loading';
 
+import arrowDown from '../../assets/arrow-down.svg';
 
 export function Chats() {
   const chats = useSelector(state => state.chats.chats);
+  const size = useSelector(state => state.chats.size);
+  const info = useSelector(state => state.chats.info);
   const currentChat = useSelector(state => state.chats.currentChat);
   const ui = useSelector(state => state.ui);
+
+  const [loadSize, setLoadSize] = useState(5);
 
   const organizationChats = useSelector(state => state.chats.organizationChats);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log("chats", chats);
-    // console.log("organizationChats", organizationChats);
-  }, [organizationChats]);
+    if (info.total <= 5) {
+      setLoadSize(0);
+    }
+  }, [info.total]);
 
   function callCreateChat() {
     dispatch(createChat('New Chat'));
+  }
+
+  function callLoadMore() {
+    dispatch(chatsActions.setSize(size + loadSize));
+
+    if (info.total > 20) {
+      setLoadSize(10);
+    }
+
+    if ((info.total - (size + loadSize)) < 5) {
+      setLoadSize(info.total - (size + loadSize));
+    }
+
+    if (info.total < size + loadSize) {
+      setLoadSize(0)
+    }
+
+    console.log(size + loadSize, info.total);
+
+    dispatch(getChatsData());
   }
 
   return (
@@ -34,11 +60,22 @@ export function Chats() {
         </div>
       </div>
       {!ui.chatsLoading &&
-        <div className={''}>
-          {chats?.map(chat => (
-            <ChatBar ChatData={chat} />
-          ))}
-        </div>}
+        <div>
+          <div className={''}>
+            {chats?.map(chat => (
+              <ChatBar ChatData={chat} />
+            ))}
+          </div>
+          {loadSize > 0 && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
+            <div className={'py-[2px] px-[3px]'}>
+              <img className={"w-[10px] h-[12px]"} src={arrowDown} alt="" />
+            </div>
+            <div className="font-normal text-sm leading-6 ml-2">
+              Load {loadSize} More
+            </div>
+          </div>}
+        </div>
+      }
       {ui.chatsLoading &&
         <div className={'flex items-center justify-center'}>
           <Loading />

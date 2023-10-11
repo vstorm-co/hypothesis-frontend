@@ -6,6 +6,10 @@ const chatsSlice = createSlice({
   name: 'chats',
   initialState: {
     chats: [],
+    size: 5,
+    info: {
+      total: 6,
+    },
     organizationChats: [],
     currentChat: {
       name: null,
@@ -15,7 +19,7 @@ const chatsSlice = createSlice({
     searchFilters: {
       visibility: 'all',
       searchFor: '',
-    }
+    },
   },
   reducers: {
     editChat(state, action) {
@@ -28,6 +32,10 @@ const chatsSlice = createSlice({
     },
     setChats(state, action) {
       state.chats = action.payload.items;
+      state.info.total = action.payload.total;
+    },
+    setSize(state, action) {
+      state.size = action.payload
     },
     setOrganizationChats(state, action) {
       state.organizationChats = action.payload;
@@ -84,6 +92,12 @@ export const getChatsData = (payload) => {
     if (state.chats.searchFilters.searchFor) {
       url = `${url}&name__like=${state.chats.searchFilters.searchFor}`;
     }
+
+    if (state.chats.size) {
+      url = `${url}&size=${state.chats.size}`;
+    };
+
+    url = `${url}&order_by=visibility,-created_at`;
 
 
     const sendRequest = async () => {
