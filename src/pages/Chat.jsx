@@ -149,7 +149,7 @@ export function Chat(props) {
 
 		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: text }));
 
-		if (currentChat.messages?.length === 0) {
+		if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
 			dispatch(updateChat({ uuid: currentChat.uuid, name: text, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
 		}
 
