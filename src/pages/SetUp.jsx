@@ -62,19 +62,19 @@ export const SetUp = (props) => {
   const handleUpdateOrganization = async () => {
     try {
       // Create an object with the organization data
-      // const organizationData = {
-      //   name: orgName,
-      //   picture: orgLogo,
-      // };
+      const organizationData = {
+        name: orgName,
+        picture: orgLogo,
+      };
 
-      let organizationData = new FormData();
+      // let organizationData = new FormData();
 
-      organizationData.append("name", orgName);
-      organizationData.append("picture", orgLogo);
+      // organizationData.append("name", orgName);
+      // organizationData.append("picture", orgLogo);
 
-      console.log(organizationData);
+      // console.log(organizationData);
 
-      console.log(DomainOrgs.value);
+      // console.log(DomainOrgs.value);
 
       // Send a POST request to create the organization
       const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
@@ -250,11 +250,11 @@ export const SetUp = (props) => {
                   <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
                   <div className="relative rounded-md shadow-sm mt-2">
                     <input
-                      type="file"
+                      type="text"
                       value={orgLogo}
-                      className=""
+                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
                       placeholder="Enter URL..."
-                      onChange={(e) => setOrgLogo(e.target.files[0])}
+                      onChange={(e) => setOrgLogo(e.target.value)}
                     />
                     {/* <input
                       type="text"
