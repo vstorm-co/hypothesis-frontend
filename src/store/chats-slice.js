@@ -103,7 +103,7 @@ export const getChatsData = (payload) => {
     const sendRequest = async () => {
       const data = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
         },
       }).then(res => res.json());
@@ -126,7 +126,7 @@ export const getOrganizationChatsData = (payload) => {
     const sendRequest = async () => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/organization-rooms/${payload}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
 
         },
@@ -148,7 +148,7 @@ export const createChat = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
 
         },
@@ -170,7 +170,7 @@ export const selectChat = (payload) => {
       const sendRequest = async () => {
         const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
           headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
             'Content-Type': 'application/json',
 
           },
@@ -218,7 +218,7 @@ export const deleteChat = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
 
         },

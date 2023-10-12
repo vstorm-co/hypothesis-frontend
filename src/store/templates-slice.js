@@ -47,7 +47,7 @@ export const getTemplatesData = (payload) => {
     const sendRequest = async () => {
       const data = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json'
         },
       }).then(res => res.json());
@@ -67,7 +67,7 @@ export const createTemplate = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
@@ -90,7 +90,7 @@ export const selectTemplate = (payload) => {
     const sendRequest = async () => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
 
         },
@@ -134,7 +134,7 @@ export const deleteTemplate = (payload) => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',
 
         },

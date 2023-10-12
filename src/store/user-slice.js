@@ -24,6 +24,8 @@ const userSlice = createSlice({
         state.currentUser.organization_logo = action.payload.organization_logo ? action.payload.organization_logo : null;
 
         localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
+      } else {
+        state.currentUser = {}
       }
       // console.log("AAAA");
     },
@@ -50,8 +52,6 @@ const userSlice = createSlice({
       let users = JSON.parse(localStorage.getItem('ANT_users'));
       let usersTable = users ? users : [];
 
-      console.log(action.payload);
-
       if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid && u.user_id === action.payload.user_id)) {
         let newUser = {
           user_id: action.payload.user_id,
@@ -70,7 +70,6 @@ const userSlice = createSlice({
         state.users = usersTable;
         localStorage.setItem('ANT_users', JSON.stringify(usersTable));
       }
-
     },
     logoutUser(state, action) {
       let users = state.users;

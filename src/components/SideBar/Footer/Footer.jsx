@@ -4,10 +4,13 @@ import { Options } from './Options';
 import { useRef, useEffect } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountOptions from './AccountOptions';
+import bin from '../../../assets/bin.svg';
 
 import { AddNewAccount } from './AddNewAccount';
 
 import arrows from '../../../assets/arrows-up-down.svg'
+import { userActions } from '../../../store/user-slice';
+import { route } from 'preact-router';
 
 const switchUserActive = signal(false);
 
@@ -19,7 +22,7 @@ function outsideClickHanlder(ref) {
   useEffect(() => {
     function handleClickOutside(e) {
       if (ref.current && !ref.current.contains(e.target)) {
-        // switchUserActive.value = false;
+        switchUserActive.value = false;
       }
     }
 
@@ -30,13 +33,26 @@ function outsideClickHanlder(ref) {
   }, [ref])
 }
 
+
 export function Footer() {
   let currentUser = useSelector(state => state.user.currentUser);
   let users = useSelector(state => state.user.users);
   let currentOrganization = useSelector(state => state.organizations.currentOrganization);
+  const dispatch = useDispatch()
 
   const footerRef = useRef(null);
   outsideClickHanlder(footerRef);
+
+  function clearStorage() {
+    dispatch(userActions.setUser({}));
+    localStorage.clear();
+    dispatch(userActions.setUsers([]));
+    switchUserActive.value = false;
+
+    setTimeout(() => {
+      route('/auth');
+    }, 100)
+  }
 
   return (
     <div ref={footerRef} className={"border-t border-[#747474] px-2 py-4 mt-auto absolute z-20 bg-[#202020] w-80 duration-300 bottom-0 "}>
@@ -75,6 +91,10 @@ export function Footer() {
               )
           })}
           <AddNewAccount />
+          <div onClick={clearStorage} className={'flex px-3 py-2 border border-dashed rounded border-[#595959] mt-3 cursor-pointer'}>
+            <img src={bin} alt="" />
+            <div className={'ml-4 text-sm leading-6'}>Clear Local Storage</div>
+          </div>
         </div>
       </div>
     </div>
