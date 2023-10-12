@@ -16,7 +16,7 @@ import send from '../assets/send.svg';
 import { getUserOrganizationsData } from '../store/organizations-slice';
 import { getTemplatesData } from '../store/templates-slice';
 
-const msgLoading = signal(false);
+const msgLoading = signal(true);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const chats = useSelector(state => state.chats.chats);
@@ -71,7 +71,21 @@ export function Chat(props) {
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}/${user.access_token}`, {
 
 		onOpen: () => {
-			activeUsers.value = []
+			activeUsers.value = [];
+
+			let msgToSend = localStorage.getItem("MsgToSend");
+
+			if (msgToSend) {
+				setTimeout(() => {
+					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: msgToSend }));
+					sendMessage(JSON.stringify({ type: 'message', content: msgToSend }))
+
+					localStorage.removeItem("MsgToSend");
+					msgLoading.value = false;
+				}, 500)
+			} else {
+				msgLoading.value = false;
+			}
 		},
 		onClose: (event) => {
 			// // Handle the connection close event
@@ -144,7 +158,6 @@ export function Chat(props) {
 	})
 
 	function sendMsg() {
-		console.log(input);
 		msgLoading.value = true;
 
 		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: text }));

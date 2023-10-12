@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
-import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { route } from 'preact-router';
 
-import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
-import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
+import { getChatsData, createChat } from '../store/chats-slice';
+import { getUserOrganizationsData } from '../store/organizations-slice';
 import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
 import { getTemplatesData } from '../store/templates-slice';
@@ -26,16 +25,9 @@ export function MockChat(props) {
       route('/auth')
     }
 
-    // dispatch(getOrganizationsData(user.access_token));
     dispatch(getUserOrganizationsData());
     dispatch(getChatsData());
     dispatch(getTemplatesData());
-
-    // get organization-shared chats
-
-    setTimeout(() => {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight
-    }, 300);
   }, [user])
 
   function handleInputChange(event) {
@@ -48,14 +40,20 @@ export function MockChat(props) {
 
       } else {
         event.preventDefault();
+        callCreateChat();
       }
     }
+  }
+
+  function callCreateChat(e) {
+    localStorage.setItem("MsgToSend", input);
+    dispatch(createChat(input));
   }
 
   if (chats?.length === 0) {
     const msg = {
       created_by: 'bot',
-      content: 'Hello! Create Your First Chat!'
+      content: 'Hello! Create Your First Chat by sending a prompt!'
     }
     return (
       <div className={'flex w-full mx-4'}>
@@ -76,12 +74,12 @@ export function MockChat(props) {
 
               <Message Loading={true} Message={msg} />
             </div>
-            <form className="mt-auto">
+            <form onSubmit={callCreateChat} className="mt-auto">
               <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+              <button onClick={callCreateChat} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
             </div>
           </div>
         </div>
@@ -90,7 +88,7 @@ export function MockChat(props) {
   } else {
     const msg = {
       created_by: 'bot',
-      content: 'Go on, check your chats!'
+      content: 'Go on, to start a new chat just send prompt!'
     }
     return (
       <div className={'flex w-full mx-4'}>
@@ -111,12 +109,12 @@ export function MockChat(props) {
 
               <Message Loading={true} Message={msg} />
             </div>
-            <form className="mt-auto">
+            <form onSubmit={callCreateChat} className="mt-auto">
               <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+              <button onClick={callCreateChat} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
             </div>
           </div>
         </div>
