@@ -67,16 +67,6 @@ export const SetUp = (props) => {
         picture: orgLogo,
       };
 
-      // let organizationData = new FormData();
-
-      // organizationData.append("name", orgName);
-      // organizationData.append("picture", orgLogo);
-
-      // console.log(organizationData);
-
-      // console.log(DomainOrgs.value);
-
-      // Send a POST request to create the organization
       const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
         method: 'PUT',
         headers: {
