@@ -85,12 +85,12 @@ export const SetUp = (props) => {
       let imgData = new FormData();
 
       imgData.append("picture", orgLogo);
+      console.log(imgData);
 
       const response_img = await fetch(`${import.meta.env.VITE_API_URL}/organization/set-image/${DomainOrgs.value[0].uuid}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'multipart/form-data',
         },
         body: imgData,
       });
