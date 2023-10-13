@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { signal } from '@preact/signals';
 import { route } from 'preact-router';
 import { useRef, useEffect } from 'preact/hooks';
+import { createTemplate, deleteTemplate, updateTemplate } from '../../../store/templates-slice';
 
-import { deleteChat } from '../../../store/chats-slice';
 
 import dots from '../../../assets/dots.svg';
 import bin from '../../../assets/bin.svg';
-import { deleteTemplate, updateTemplate } from '../../../store/templates-slice';
+import duplicate from '../../../assets/duplicate.svg';
 
 const confirmDelete = signal(false);
 const showEdit = signal(false);
@@ -69,6 +69,10 @@ export function Edit(props) {
     }
   }
 
+  function duplicateTemplate() {
+    dispatch(createTemplate({ name: `Copy of${currentTemplate.name}`, content: currentTemplate.content }))
+  }
+
   return (
     <div ref={templateEditRef} className="relative">
       <div onClick={toggleEdit} className={"p-1 border border-[#DBDBDB] rounded-r cursor-pointer"}>
@@ -86,6 +90,15 @@ export function Edit(props) {
             press 'Enter' to confirm
           </div>
         </div>
+        <div className="border-b p-2">
+          <div onClick={duplicateTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+            <img src={duplicate} alt="" />
+            <div className={'ml-2'}>
+              Duplicate template
+            </div>
+          </div>
+        </div>
+
         <div className={'p-1.5'}>
           <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={bin} alt="" />
