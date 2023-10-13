@@ -6,11 +6,19 @@ const templatesSlice = createSlice({
   name: 'templates',
   initialState: {
     templates: [],
-    currentTemplate: {}
+    currentTemplate: {},
+    size: 5,
+    info: {
+      total: 6,
+    }
   },
   reducers: {
     setTemplates(state, action) {
       state.templates = action.payload.items;
+      state.info.total = action.payload.total;
+    },
+    setSize(state, action) {
+      state.size = action.payload;
     },
     setCurrentTemplate(state, action) {
       state.currentTemplate = action.payload
@@ -28,21 +36,31 @@ export const getTemplatesData = (payload) => {
     let state = getState();
     let url = ``;
 
-    if (state.chats.searchFilters.visibility === 'all') {
+    if (state.ui.searchFilters.visibility === 'all') {
       if (state.user.currentUser.organization_uuid) {
         url = `${import.meta.env.VITE_API_URL}/template/?organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
         url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
       }
-    } else if (state.chats.searchFilters.visibility === 'just_me') {
+    } else if (state.ui.searchFilters.visibility === 'just_me') {
       url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
-    } else if (state.chats.searchFilters.visibility === 'organization') {
+    } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
         url = `${import.meta.env.VITE_API_URL}/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
         url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
       }
     }
+
+    if (state.ui.searchFilters.searchFor) {
+      url = `${url}&name__like=${state.ui.searchFilters.searchFor}`;
+    }
+
+    if (state.templates.size) {
+      url = `${url}&size=${state.templates.size}`;
+    };
+
+    url = `${url}&order_by=visibility,-created_at`;
 
     const sendRequest = async () => {
       const data = await fetch(url, {

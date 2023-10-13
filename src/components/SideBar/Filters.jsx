@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import filtersIcon from '../../assets/filters.svg'
 import { useEffect, useRef } from 'preact/hooks';
 import { chatsActions, getChatsData } from '../../store/chats-slice';
+import { uiActions } from '../../store/ui-slice';
+import { getTemplatesData } from '../../store/templates-slice';
 
 const showFilters = signal(false);
 function toggleShowFilters() {
@@ -30,12 +32,21 @@ export function Filters() {
   outsideClickHanlder(filtersRef);
 
   const dispatch = useDispatch();
-  const filters = useSelector(state => state.chats.searchFilters);
+  const filters = useSelector(state => state.ui.searchFilters);
   const currentUser = useSelector(state => state.user.currentUser);
 
   function setFilter(tgl) {
-    dispatch(chatsActions.setFiltersVisibility({ visibility: tgl }));
+    dispatch(uiActions.setFiltersVisibility({ visibility: tgl }));
     dispatch(getChatsData());
+    dispatch(getTemplatesData());
+
+    showFilters.value = false;
+  }
+
+  function setTimeSpan(tgl) {
+    dispatch(uiActions.setFiltersTimeSpan(tgl));
+    dispatch(getChatsData());
+    dispatch(getTemplatesData());
 
     showFilters.value = false;
   }
@@ -62,10 +73,10 @@ export function Filters() {
             Recent Items
           </div>
           <div className={'text-sm leading-6 flex text-[#747474]'}>
-            <div className={'cursor-pointer px-2 py-1 rounded border border-[#747474] text-white'}>All</div>
-            <div className={'cursor-pointer px-2 py-1 rounded hover:border border-[#747474] hover:text-white'}>Last Week</div>
-            <div className={'cursor-pointer px-2 py-1 rounded hover:border border-[#747474] hover:text-white'}>Last 30 Days</div>
-            <div className={'cursor-pointer px-2 py-1 rounded hover:border border-[#747474] hover:text-white'}>Older</div>
+            <div onClick={() => { setTimeSpan('all') }} className={'cursor-pointer px-2 py-1 rounded border-[#747474] ' + (filters.timeSpan === 'all' ? 'border text-white' : '')}>All</div>
+            <div onClick={() => { setTimeSpan('last_week') }} className={'cursor-pointer px-2 py-1 ml-1 rounded hover:border border-[#747474] hover:text-white ' + (filters.timeSpan === 'last_week' ? 'border text-white' : '')}>Last Week</div>
+            <div onClick={() => { setTimeSpan('last_30_days') }} className={'cursor-pointer px-2 py-1 ml-1 rounded hover:border border-[#747474] hover:text-white ' + (filters.timeSpan === 'last_30_days' ? 'border text-white' : '')}>Last 30 Days</div>
+            <div onClick={() => { setTimeSpan('older') }} className={'cursor-pointer px-2 py-1 ml-1 rounded hover:border border-[#747474] hover:text-white ' + (filters.timeSpan === 'older' ? 'border text-white' : '')}>Older</div>
           </div>
         </div>
       </div>

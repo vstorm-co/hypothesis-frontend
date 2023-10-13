@@ -16,10 +16,6 @@ const chatsSlice = createSlice({
       uuid: null,
       messages: [],
     },
-    searchFilters: {
-      visibility: 'all',
-      searchFor: '',
-    },
   },
   reducers: {
     editChat(state, action) {
@@ -54,12 +50,6 @@ const chatsSlice = createSlice({
     concatDataToMsg(state, action) {
       state.currentChat.messages[state.currentChat.messages.length - 1].content += action.payload.data;
     },
-    setFiltersVisibility(state, action) {
-      state.searchFilters.visibility = action.payload.visibility;
-    },
-    setFiltersSearch(state, action) {
-      state.searchFilters.searchFor = action.payload.searchFor;
-    }
   }
 });
 
@@ -73,15 +63,15 @@ export const getChatsData = (payload) => {
     let state = getState();
     let url = `${import.meta.env.VITE_API_URL}`;
 
-    if (state.chats.searchFilters.visibility === 'all') {
+    if (state.ui.searchFilters.visibility === 'all') {
       if (state.user.currentUser.organization_uuid) {
         url = `${url}/chat/rooms/?organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
         url = `${url}/chat/rooms/?visibility=just_me`
       }
-    } else if (state.chats.searchFilters.visibility === 'just_me') {
+    } else if (state.ui.searchFilters.visibility === 'just_me') {
       url = `${url}/chat/rooms/?visibility=just_me`
-    } else if (state.chats.searchFilters.visibility === 'organization') {
+    } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
         url = `${url}/chat/rooms/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
@@ -89,8 +79,8 @@ export const getChatsData = (payload) => {
       }
     }
 
-    if (state.chats.searchFilters.searchFor) {
-      url = `${url}&name__like=${state.chats.searchFilters.searchFor}`;
+    if (state.ui.searchFilters.searchFor) {
+      url = `${url}&name__like=${state.ui.searchFilters.searchFor}`;
     }
 
     if (state.chats.size) {
@@ -99,6 +89,8 @@ export const getChatsData = (payload) => {
 
     url = `${url}&order_by=visibility,-created_at`;
 
+    let today = new Date();
+    let priorDate = new Date(new Date().setDate(today.getDate() - 7));
 
     const sendRequest = async () => {
       const data = await fetch(url, {

@@ -14,6 +14,11 @@ const uiSlice = createSlice({
     organizationCreated: null,
     hideSideBar: false,
     chatsLoading: false,
+    searchFilters: {
+      visibility: 'all',
+      timeSpan: 'all',
+      searchFor: '',
+    },
   },
   reducers: {
     toggleToast(state, action) {
@@ -21,6 +26,15 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    setFiltersVisibility(state, action) {
+      state.searchFilters.visibility = action.payload.visibility;
+    },
+    setFiltersSearch(state, action) {
+      state.searchFilters.searchFor = action.payload.searchFor;
+    },
+    setFiltersTimeSpan(state, action) {
+      state.searchFilters.timeSpan = action.payload;
     },
     toggleAdminBar(state, action) {
       state.adminBar.active = action.payload.tgl;

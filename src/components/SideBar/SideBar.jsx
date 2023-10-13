@@ -19,11 +19,11 @@ export function SideBar(props) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
         <div className="w-80 h-[100vh] flex flex-col relative pb-28">
-          <div className={'pl-4 pr-2 py-2 flex'}>
+          <div className={'pl-4 pr-2 pt-2 flex'}>
             <div className={'w-11/12'}>
               <SearchBar />
             </div>
-            <div className={'self-center ml-1'}>
+            <div className={'mt-1 ml-1'}>
               <Filters />
             </div>
           </div>
