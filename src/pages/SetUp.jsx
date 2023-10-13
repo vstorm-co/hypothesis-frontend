@@ -64,17 +64,7 @@ export const SetUp = (props) => {
       // Create an object with the organization data
       const organizationData = {
         name: orgName,
-        picture: orgLogo,
       };
-
-      // let organizationData = new FormData();
-
-      // organizationData.append("name", orgName);
-      // organizationData.append("picture", orgLogo);
-
-      // console.log(organizationData);
-
-      // console.log(DomainOrgs.value);
 
       // Send a POST request to create the organization
       const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
@@ -83,7 +73,7 @@ export const SetUp = (props) => {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
         },
-        body: organizationData,
+        body: JSON.stringify(organizationData),
       });
 
       if (!response.ok) {
@@ -92,12 +82,31 @@ export const SetUp = (props) => {
 
       const organization = await response.json();
 
+      let imgData = new FormData();
+
+      imgData.append("picture", orgLogo);
+
+      const response_img = await fetch(`${import.meta.env.VITE_API_URL}/organization/set-image/${DomainOrgs.value[0].uuid}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        body: imgData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create the organization.');
+      }
+
+      const img = await response_img.json();
+
       getDomainOrganizations();
 
       toggleLoading();
     } catch (error) {
       // Handle error
-      console.error('Error creating organization:', error);
+      console.error('Error updating organization:', error);
     }
   };
 
@@ -232,8 +241,8 @@ export const SetUp = (props) => {
             </div>
             {/* (organizationCreated && organizationCreated.created) */}
             {/* organizationCreated.created  */}
-            {(organizationCreated && organizationCreated.created) &&
-              <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
+            {true &&
+              <div className={'flex mt-4 ' + (true ? '' : 'hidden')}>
                 <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
                   <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
                   <input
@@ -250,19 +259,11 @@ export const SetUp = (props) => {
                   <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
                   <div className="relative rounded-md shadow-sm mt-2">
                     <input
-                      type="text"
+                      type="file"
                       value={orgLogo}
-                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
-                      placeholder="Enter URL..."
-                      onChange={(e) => setOrgLogo(e.target.value)}
+                      className=""
+                      onChange={(e) => setOrgLogo(e.target.files[0])}
                     />
-                    {/* <input
-                      type="text"
-                      value={orgLogo}
-                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
-                      placeholder="Enter URL..."
-                      onChange={(e) => setOrgLogo(e.target.value)}
-                    /> */}
                   </div>
                 </div>
 
