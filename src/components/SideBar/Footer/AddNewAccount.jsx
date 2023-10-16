@@ -53,7 +53,7 @@ export function AddNewAccount() {
 
   return (
     <div className={''}>
-      <div onClick={toggleShowAddAccount} className={'flex px-3 py-2 border border-dashed rounded border-[#595959] mt-3 cursor-pointer'}>
+      <div onClick={toggleShowAddAccount} className={'flex px-3 py-2 border border-dashed hover:bg-[#0F0F0F] rounded border-[#595959] mt-3 cursor-pointer'}>
         <img src={plus} alt="" />
         <div className={'ml-4 text-sm leading-6'}>Add New Account</div>
       </div>

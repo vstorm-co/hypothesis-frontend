@@ -70,7 +70,7 @@ export function Edit(props) {
   }
 
   function duplicateTemplate() {
-    dispatch(createTemplate({ name: `Copy of${currentTemplate.name}`, content: currentTemplate.content }))
+    dispatch(createTemplate({ name: `Copy of ${currentTemplate.name}`, content: currentTemplate.content }))
   }
 
   return (

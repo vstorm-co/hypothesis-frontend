@@ -27,11 +27,18 @@ export function Chat(props) {
 	const WhosTyping = useSignal([]);
 
 	const input = useRef('');
-	const [text, setText] = useState();
+	const [text, setText] = useState('');
+	const [preview, setPreview] = useState('');
+
+	const [promptMode, setPromptMode] = useState('write');
 
 	const dispatch = useDispatch();
 
 	const chatRef = useRef(null);
+
+	const updatePreviewValue = (val) => {
+		setPreview(val);
+	}
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
@@ -89,28 +96,6 @@ export function Chat(props) {
 			}
 		},
 		onClose: (event) => {
-			// // Handle the connection close event
-			// if (event.code === 1000) {
-			// 	// Normal closure, no need to reconnect
-			// 	return;
-			// }
-
-			// // Reconnect after a delay (e.g., 3 seconds)
-			// setTimeout(() => {
-			// 	const newSocket = new WebSocket(`${import.meta.env.VITE_WS_URL}/${props.params.id}`);
-			// 	// Reconnect logic here
-			// 	newSocket.onopen = () => {
-			// 		// Connection reopened, you can handle this event
-			// 	};
-
-			// 	newSocket.onmessage = (event) => {
-			// 		// Handle incoming messages
-			// 		console.log("New message: ", event.data)
-			// 	};
-
-			// 	// Update the sendMessage function with the new socket
-			// 	sendMessage(newSocket.send.bind(newSocket));
-			// }, 3000); // 3 seconds delay
 		},
 		onError: (err) => {
 		},
@@ -158,26 +143,60 @@ export function Chat(props) {
 		}
 	})
 
-	function sendMsg() {
+	const generatePreview = () => {
+		const parser = new DOMParser();
+		const htmlText = parser.parseFromString(text, 'text/html');
+
+		let templates = htmlText.querySelectorAll('span');
+
+		let textStripped = text.replace(/<[^>]+>/g, '');
+
+		let targetPreview = textStripped;
+
+		templates.forEach(temp => {
+			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+		});
+
+		setPreview(targetPreview);
+	}
+
+	const sendMsg = () => {
+		const parser = new DOMParser();
+		const htmlText = parser.parseFromString(text, 'text/html');
+
+		let templates = htmlText.querySelectorAll('span');
+
+		let textStripped = text.replace(/<[^>]+>/g, '');
+
+		let targetPreview = textStripped;
+
+		templates.forEach(temp => {
+			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+		});
+
+
 		msgLoading.value = true;
 
-		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: text }));
+		console.log(preview);
+
+		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview }));
 
 		if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
-			dispatch(updateChat({ uuid: currentChat.uuid, name: text, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
+			dispatch(updateChat({ uuid: currentChat.uuid, name: targetPreview, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
 		}
 
 		setTimeout(() => {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 100);
 
-		sendMessage(JSON.stringify({ type: 'message', content: text }))
+		sendMessage(JSON.stringify({ type: 'message', content: targetPreview }))
 		setText('');
+
 	}
 
 	function handleUseTemplate(template) {
-		setText(`${text ? text : ''} ${template.content}`);
-		// setText(`${text ? text : ''} <span contenteditable='false' data-content='${template}' class="p-1 bg-[#747474] text-white">${template.name}</span>`)
+		// setText(`${text ? text : ''} ${template.content}`);
+		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="p-1 bg-[#747474] text-white">${template.name}</span>`)
 		// input.current = `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
 		// handleInputChange({
 		// 	target: {
@@ -229,14 +248,31 @@ export function Chat(props) {
 							<Loading />
 						</div>
 					</div>
-					<form onSubmit={sendMsg} className="mt-auto">
+					<form onSubmit={() => { sendMsg(); }} className="mt-auto">
 						{templates?.length > 0 &&
-							<UseTemplate TemplatePicked={handleUseTemplate} />}
+							<div className={'flex'}>
+								<UseTemplate TemplatePicked={handleUseTemplate} />
+
+								<div className={'ml-auto flex items-center justify-center'}>
+									<div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
+										Write
+									</div>
+									<div onClick={() => { setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+										Preview
+									</div>
+								</div>
+							</div>}
 						{/* <ContentEditable html={input.current} onKeyDown={handleKeyDown} onChange={handleInputChange} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 						</ContentEditable> */}
-						<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-							{text}
-						</div>
+						{promptMode === 'write' &&
+							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+								{text}
+							</div>}
+						{promptMode === 'preview' &&
+							<div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+								{preview}
+							</div>
+						}
 					</form>
 
 					<div className="flex justify-between items-center mt-2 gap-x-4">
@@ -251,7 +287,7 @@ export function Chat(props) {
 								</span>
 							}
 						</div>
-						<button type="submit" onClick={sendMsg} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 					</div>
 				</div>
 			</div>
