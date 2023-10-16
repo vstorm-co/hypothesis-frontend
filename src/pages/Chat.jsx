@@ -198,7 +198,7 @@ export function Chat(props) {
 
 	function handleUseTemplate(template) {
 		// setText(`${text ? text : ''} ${template.content}`);
-		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="p-1 bg-[#747474] text-white">${template.name}</span>`)
+		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`)
 		// input.current = `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
 		// handleInputChange({
 		// 	target: {
