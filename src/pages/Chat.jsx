@@ -149,11 +149,13 @@ export function Chat(props) {
 
 		let templates = htmlText.querySelectorAll('span');
 
-		let textStripped = text.replace(/<[^>]+>/g, '');
+		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+		console.log(textStripped);
 
 		let targetPreview = textStripped;
 
 		templates.forEach(temp => {
+			console.log(targetPreview);
 			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
 		});
 
@@ -166,7 +168,7 @@ export function Chat(props) {
 
 		let templates = htmlText.querySelectorAll('span');
 
-		let textStripped = text.replace(/<[^>]+>/g, '');
+		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
 
 		let targetPreview = textStripped;
 
