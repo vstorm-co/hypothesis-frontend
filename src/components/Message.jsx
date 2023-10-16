@@ -5,6 +5,8 @@ import { SaveAsTemplate } from './ToolBars/ChatToolbar/SaveAsTemplate';
 
 import bot from '../assets/bot.svg';
 
+import papaya from '../assets/images/papaya.png';
+
 export function Message(props) {
   const dispatch = useDispatch();
 
@@ -24,7 +26,9 @@ export function Message(props) {
     return (
       <div className="flex my-4">
         <div className="rounded flex p-2">
-          <div className="w-8 h-8 border border-[#DBDBDB] rounded-full mr-2 flex items-center justify-center shrink-0"><img src={bot} className="w-4" alt="" /></div>
+          <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0">
+            <img src={papaya} className="w-3" alt="" />
+          </div>
           <div className="ml-2 mt-1 text-[#202020]">
             <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
           </div>
