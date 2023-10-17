@@ -34,7 +34,7 @@ export function UseTemplate(props) {
 
 
   return (
-    <div ref={useTempRef} className={'relative'}>
+    <div ref={useTempRef} className={'relative w-full'}>
       <div onClick={toggleVisible} className={'border p-1 border-b-0 cursor-pointer rounded-t border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (isVisible.value ? 'bg-[#F2F2F2]' : '')}>
           <img src={braces} alt="" />
