@@ -1,19 +1,19 @@
-import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect, useRef } from 'preact/hooks';
+import { useSelector, useDispatch } from 'react-redux';
 import { route } from 'preact-router';
 
 import { getChatsData, createChat } from '../store/chats-slice';
-import { getUserOrganizationsData } from '../store/organizations-slice';
+import { getUserOrganizationsData } from '../store/user-slice';
+import { getTemplatesData } from '../store/templates-slice';
 import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
-import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
 
 
 export function MockChat(props) {
-  const chats = useSelector(state => state.chats.chats);
   const user = useSelector(state => state.user.currentUser);
+  const chats = useSelector(state => state.chats.chats);
 
   const [input, setInput] = useState('');
   const dispatch = useDispatch();
@@ -26,8 +26,8 @@ export function MockChat(props) {
     }
 
     dispatch(getUserOrganizationsData());
-    dispatch(getChatsData());
     dispatch(getTemplatesData());
+    dispatch(getChatsData());
   }, [user])
 
   function handleInputChange(event) {

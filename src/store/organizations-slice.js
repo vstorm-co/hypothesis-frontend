@@ -59,45 +59,6 @@ export const getOrganizationsData = () => {
   }
 }
 
-export const getUserOrganizationsData = () => {
-  return async (dispatch) => {
-    console.log("AAA");
-    const user = JSON.parse(localStorage.getItem('ANT_currentUser'))
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/user-organizations`, {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch organizations.');
-      }
-      const organizations = await response.json();
-
-      organizations.forEach(org => {
-        const newUserWithOrganization = {
-          user_id: user.user_id,
-          access_token: user.access_token,
-          email: user.email,
-          name: user.name,
-          picture: user.picture,
-          set_up: true,
-          organization_name: org.name,
-          organization_uuid: org.uuid, // Add organization UUID
-          organization_logo: org.picture, // Add organization logo
-        };
-
-        dispatch(userActions.setUsers(newUserWithOrganization));
-      })
-
-      dispatch(organizationsActions.setUserOrganizations(organizations));
-    } catch (error) {
-      // Handle error
-    }
-  }
-}
-
 export const createNewOrganization = (payload) => {
   return async (dispatch) => {
     try {

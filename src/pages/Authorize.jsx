@@ -82,7 +82,7 @@ export function Authorize() {
         <div className={'px-8 pb-8 bg-white rounded'}>
           <div className={'mx-auto'}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
-              Authorize an Account to Begin
+              Getting Started
             </div>
             <div className={'flex justify-center py-4 ' + (loading.value ? '' : 'hidden')}>
               <Loading />

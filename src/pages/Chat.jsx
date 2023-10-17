@@ -1,20 +1,21 @@
-import { useSelector, useDispatch } from 'react-redux';
-import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { route } from 'preact-router'
+import { useSelector, useDispatch } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
-import ContentEditable from 'react-contenteditable'
+import useWebSocket from 'react-use-websocket';
+import { route } from 'preact-router'
+// import ContentEditable from 'react-contenteditable'
 
-import { chatsActions, createChat, getChatsData, getOrganizationChatsData, selectChat, updateChat } from '../store/chats-slice';
-import { Message } from '../components/Message';
-import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
-import { Toast } from '../components/Toast';
-import { Loading } from '../components/Loading';
 import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
+import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
+import { Message } from '../components/Message';
+import { Loading } from '../components/Loading';
+import { Toast } from '../components/Toast';
+
+import { chatsActions, getChatsData, selectChat, updateChat } from '../store/chats-slice';
+import { getUserOrganizationsData } from '../store/user-slice';
+import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
-import { getUserOrganizationsData } from '../store/organizations-slice';
-import { getTemplatesData } from '../store/templates-slice';
 
 const msgLoading = signal(true);
 export function Chat(props) {

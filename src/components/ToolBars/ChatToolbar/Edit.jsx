@@ -1,11 +1,11 @@
 // @ts-nocheck
+import { getChatsData, updateChat } from '../../../store/chats-slice';
+import { deleteChat } from '../../../store/chats-slice';
 import { useSelector, useDispatch } from 'react-redux';
-import { getChatsData, getOrganizationChatsData, updateChat } from '../../../store/chats-slice';
+import { useRef, useEffect } from 'preact/hooks';
 import { signal } from '@preact/signals';
 import { route } from 'preact-router';
-import { useRef, useEffect } from 'preact/hooks';
 
-import { deleteChat } from '../../../store/chats-slice';
 
 import dots from '../../../assets/dots.svg';
 import bin from '../../../assets/bin.svg';

@@ -1,23 +1,17 @@
-import { useSelector, useDispatch } from 'react-redux';
-import useWebSocket from 'react-use-websocket';
 import { useState, useEffect, useRef } from 'preact/hooks';
+import { useSelector, useDispatch } from 'react-redux';
 import { route } from 'preact-router';
 
-import { chatsActions, getChatsData, getOrganizationChatsData, updateChat, createChat } from '../store/chats-slice';
-import { getOrganizationsData, getUserOrganizationsData } from '../store/organizations-slice';
 import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
-import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
 
 
 export function NotFound(props) {
-	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
 
 	const [input, setInput] = useState('');
-	const dispatch = useDispatch();
 
 	const chatRef = useRef(null);
 
@@ -25,18 +19,7 @@ export function NotFound(props) {
 		if (user.access_token === null) {
 			route('/auth')
 		}
-
-		// dispatch(getOrganizationsData(user.access_token));
-		dispatch(getUserOrganizationsData());
-		dispatch(getChatsData());
-		dispatch(getTemplatesData());
-
-		// get organization-shared chats
-
-		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 300);
-	}, [user])
+	}, [])
 
 	function handleInputChange(event) {
 		setInput(event.target.value);
