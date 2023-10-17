@@ -47,16 +47,16 @@ export const SetUp = (props) => {
     try {
       const organizationData = {
         name: orgName,
-        picture: orgLogo,
       };
 
+      // Send a POST request to create the organization
       const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
           'Content-Type': 'application/json',
         },
-        body: organizationData,
+        body: JSON.stringify(organizationData),
       });
 
       if (!response.ok) {
@@ -64,6 +64,25 @@ export const SetUp = (props) => {
       }
 
       const organization = await response.json();
+
+      let imgData = new FormData();
+
+      imgData.append("picture", orgLogo);
+      console.log(imgData);
+
+      const response_img = await fetch(`${import.meta.env.VITE_API_URL}/organization/set-image/${DomainOrgs.value[0].uuid}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
+        },
+        body: imgData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create the organization.');
+      }
+
+      const img = await response_img.json();
 
       getDomainOrganizations();
 
@@ -135,62 +154,14 @@ export const SetUp = (props) => {
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className={'flex flex-col mt-8'}>
+            <div className={'flex flex-col mt-6'}>
               <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
                 Organization Details
               </div>
               <div className={'text-sm text-gray-400'}>
                 You can customize your organization with a name and logo for others to easily find you.
               </div>
-              {/* (organizationCreated && organizationCreated.created) */}
-              {/* organizationCreated.created  */}
-              {(organizationCreated && organizationCreated.created) &&
-                <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
-                  <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
-                    <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
-                    <input
-                      type="text"
-                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
-                      placeholder="Enter name..."
-                      value={orgName}
-                      onChange={(e) => setOrgName(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Organization Logo */}
-                  <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/2'}>
-                    <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
-                    <div className="relative rounded-md shadow-sm mt-2">
-                      <input
-                        type="text"
-                        value={orgLogo}
-                        className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
-                        placeholder="Enter URL..."
-                        onChange={(e) => setOrgLogo(e.target.value)}
-                      />
-                      {/* <input
-                      type="text"
-                      value={orgLogo}
-                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none py-2 pl-10 pr-3 rounded-md border border-gray-300 w-full"
-                      placeholder="Enter URL..."
-                      onChange={(e) => setOrgLogo(e.target.value)}
-                    /> */}
-                    </div>
-                  </div>
-
-                  <div className={' ml-2 flex items-end py-2'}>
-                    <button
-                      onClick={() => { handleUpdateOrganization() }}
-                      className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center'}>
-                      Save
-                    </button>
-                  </div>
-                </div>
-              }
-
               <div className={'mt-1'}>
-
                 {DomainOrgs.value.map(org => (
                   <div className={'border border-[#DBDBDB] rounded-lg w-[240px]'}>
                     <div className={'flex flex-row items-center px-2'}>
@@ -203,6 +174,48 @@ export const SetUp = (props) => {
                   </div>
                 ))}
               </div>
+
+              {/* (organizationCreated && organizationCreated.created) */}
+              {/* organizationCreated.created  */}
+              {true &&
+                <div className={'flex mt-4 ' + (true ? '' : 'hidden')}>
+                  <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
+                    <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
+                    <input
+                      type="text"
+                      className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
+                      placeholder="Enter name..."
+                      value={orgName}
+                      onChange={(e) => setOrgName(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Organization Logo */}
+                  <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/3'}>
+                    <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
+                    <div className="relative rounded-md shadow-sm">
+                      <div className={'w-full h-[41px] border-dashed border-2 rounded border-gray-200 flex justify-center items-center cursor-pointer'}>
+                        <span className={'text-sm'}>
+                          Click here to upload
+                        </span>
+                      </div>
+                      <input
+                        type="file"
+                        value={orgLogo}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div className={' ml-4 flex items-end py-2'}>
+                    <button
+                      onClick={() => { handleUpdateOrganization() }}
+                      className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center'}>
+                      Save
+                    </button>
+                  </div>
+                </div>
+              }
             </div>
 
 
