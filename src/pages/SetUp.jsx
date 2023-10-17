@@ -1,12 +1,13 @@
-import { getOrganizationsData } from '../store/organizations-slice.js';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from 'preact/hooks';
+import { signal, useSignal } from "@preact/signals";
 import { route } from 'preact-router';
 
 import papaya from '../assets/images/papaya.png';
 
-import { signal, useSignal } from "@preact/signals";
-import { uiActions } from "../store/ui-slice.js";
+import { getOrganizationsData } from '../store/organizations-slice.js';
+import { showToast, uiActions } from "../store/ui-slice.js";
+import { Toast } from '../components/Toast.jsx';
 
 const loading = signal(true);
 
@@ -14,12 +15,12 @@ function toggleLoading() {
   loading.value = !loading.value;
 }
 
-
 export const SetUp = (props) => {
-  const organizationCreated = useSelector(state => state.ui.organizationCreated)
   const user = useSelector(state => state.user.currentUser);
   const DomainOrgs = useSignal([]);
   const dispatch = useDispatch();
+
+  const organizationCreated = useSelector(state => state.ui.organizationCreated)
 
   if (!user.access_token) {
     route('/auth');
@@ -27,8 +28,11 @@ export const SetUp = (props) => {
 
   getOrganizationsData(user.access_token);
 
+  const logoRef = useRef();
+
   const [orgName, setOrgName] = useState('');
   const [orgLogo, setOrgLogo] = useState('');
+  const [orgLogoUrl, setorgLogoUrl] = useState('');
 
   const handleAddPersonal = async () => {
 
@@ -87,6 +91,8 @@ export const SetUp = (props) => {
       getDomainOrganizations();
 
       toggleLoading();
+
+      dispatch(showToast({ content: 'Organization details saved' }))
     } catch (error) {
       console.error('Error creating organization:', error);
     }
@@ -122,6 +128,22 @@ export const SetUp = (props) => {
     getDomainOrganizations();
   }, [])
 
+  const handleUploadClick = () => {
+    logoRef.current.click()
+  }
+
+  const handleUpdateOrgLogo = (e) => {
+    setOrgLogo(e.target.files[0]);
+
+    let file = e.target.files[0];
+    const reader = new FileReader();
+    const url = reader.readAsDataURL(file);
+
+    reader.onloadend = function (e) {
+      setorgLogoUrl(reader.result);
+    }
+  }
+
   return (
     <div className={'flex flex-col w-full bg-[#202020]'}>
       <div className={'mx-auto w-[720px]'}>
@@ -132,7 +154,10 @@ export const SetUp = (props) => {
             Your Team and AI Everywhere
           </div>
         </div>
-        <div className="bg-white px-8 pb-8 rounded">
+        <div className="bg-white px-8 pb-8 rounded relative">
+          <div className={'absolute left-1/2 top-8 transform -translate-x-1/2 -translate-y-1/2'}>
+            <Toast />
+          </div>
           <div
             className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB] mb-4'}>
             Add Account
@@ -165,7 +190,12 @@ export const SetUp = (props) => {
                 {DomainOrgs.value.map(org => (
                   <div className={'border border-[#DBDBDB] rounded-lg w-[240px]'}>
                     <div className={'flex flex-row items-center px-2'}>
-                      <img src={user.picture} alt="" className={'w-8 h-8 rounded-full'} />
+                      {orgLogoUrl &&
+                        <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
+                      }
+                      {!orgLogoUrl &&
+                        <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
+                      }
                       <div className={'ml-4 py-2'}>
                         <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
                         <div className={'text-xs text-[#747474]'}>Click to Edit</div>
@@ -177,8 +207,8 @@ export const SetUp = (props) => {
 
               {/* (organizationCreated && organizationCreated.created) */}
               {/* organizationCreated.created  */}
-              {true &&
-                <div className={'flex mt-4 ' + (true ? '' : 'hidden')}>
+              {(organizationCreated && organizationCreated.created) &&
+                <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
                   <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
                     <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
                     <input
@@ -194,15 +224,22 @@ export const SetUp = (props) => {
                   <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/3'}>
                     <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
                     <div className="relative rounded-md shadow-sm">
-                      <div className={'w-full h-[41px] border-dashed border-2 rounded border-gray-200 flex justify-center items-center cursor-pointer'}>
-                        <span className={'text-sm'}>
-                          Click here to upload
+                      <div onClick={() => handleUploadClick()} className={'w-full p-2 border-dashed border-2 rounded border-gray-200 flex flex-col justify-center items-center cursor-pointer overflow-hidden'}>
+                        {orgLogoUrl &&
+                          <span className={'text-sm text-gray-400'}>
+                            {orgLogo.name}
+                          </span>
+                        }
+                        <span className={'text-gray-400 text-sm'}>
+                          Click here to change
                         </span>
                       </div>
                       <input
                         type="file"
                         value={orgLogo}
                         className="hidden"
+                        onChange={(e) => handleUpdateOrgLogo(e)}
+                        ref={logoRef}
                       />
                     </div>
                   </div>
@@ -231,6 +268,6 @@ export const SetUp = (props) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }

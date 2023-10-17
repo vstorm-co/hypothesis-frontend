@@ -8,6 +8,7 @@ import plus from '../../../assets/plus.svg';
 import google from '../../../assets/google.svg';
 import arrow from '../../../assets/arrow.svg';
 import { route } from 'preact-router';
+import { uiActions } from '../../../store/ui-slice';
 
 
 const showAddAccount = signal(false);
@@ -36,6 +37,7 @@ export function AddNewAccount() {
 
       toggleShowAddAccount();
       toggleLoading();
+      dispatch(uiActions.setHideSideBar(true));
     },
     flow: 'auth-code',
     onError: err => {

@@ -61,7 +61,7 @@ export function Options(props) {
 
   return (
     <div ref={optionsRef} className="ml-2 relative">
-      <div onClick={toggleOptions} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
+      <div onClick={(e) => { toggleOptions(); e.stopPropagation(); }} className={"cursor-pointer p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
         <img src={settings} alt="options" />
       </div>
       <div className={"absolute border border-[#595959] rounded min-w-[160px] -top-[8.5rem] -left-[8rem] bg-[#0F0F0F] " + (showOptions.value ? '' : 'hidden')}>

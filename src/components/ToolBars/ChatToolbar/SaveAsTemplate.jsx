@@ -18,7 +18,6 @@ export function SaveAsTemplate(props) {
   function callCreateTemplate(e) {
     if (e.target.value.length > 1) {
       dispatch(createTemplate({ name: e.target.value, content: props.msg.content }));
-      dispatch(uiActions.toggleToast({ content: 'Template created' }));
     }
     toggleShowSaveAs();
   }

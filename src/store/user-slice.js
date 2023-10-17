@@ -12,6 +12,7 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser(state, action) {
+      console.log(action);
       if (action.payload.access_token) {
         state.currentUser.user_id = action.payload.user_id;
         state.currentUser.access_token = action.payload.access_token;
@@ -28,6 +29,8 @@ const userSlice = createSlice({
     setCurrentUserOrganization(state, action) {
       console.log(action)
       state.currentUser.organization_logo = action.payload.picture;
+      state.currentUser.organization_uuid = action.payload.uuid;
+      state.currentUser.organization_name = action.payload.name;
     },
     setUsers(state, action) {
       let users = JSON.parse(localStorage.getItem('ANT_users'));
@@ -89,7 +92,11 @@ export const getUserOrganizationsData = () => {
       }
       const organizations = await response.json();
 
-      dispatch(userActions.setCurrentUserOrganization(organizations[0]))
+      if (organizations.length > 0) {
+        dispatch(userActions.setCurrentUserOrganization(organizations[0]))
+      } else {
+        dispatch(userActions.setCurrentUserOrganization({ picture: null, name: null, uuid: null }))
+      }
     } catch (error) {
       console.log(error);
     }
