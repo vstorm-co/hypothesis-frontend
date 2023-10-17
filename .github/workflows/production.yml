@@ -1,4 +1,4 @@
-name: Project deploy staging
+name: Project deploy production
 
 on:
   push:
@@ -43,11 +43,11 @@ jobs:
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":white_check_mark: [Annotation project] Staging has been deployed!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":white_check_mark: [Annotation project] production has been deployed!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
 
       - name: Send Mattermost Failure Notification
         if: ${{ failure() }}
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":exclamation: [Annotation project] Failed to deploy staging!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":exclamation: [Annotation project] Failed to deploy production!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'

@@ -3,10 +3,8 @@ name: Project deploy staging
 on:
   push:
     branches:
-      - main
-#  pull_request:
-#    branches:
-#      - main
+      - master
+
 
 # It is important to specify "concurrency" for the workflow,
 # to prevent concurrency between different deploys.
