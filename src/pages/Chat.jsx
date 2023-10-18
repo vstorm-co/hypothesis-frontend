@@ -147,6 +147,7 @@ export function Chat(props) {
 	const generatePreview = () => {
 		const parser = new DOMParser();
 		const htmlText = parser.parseFromString(text, 'text/html');
+		console.log(text);
 
 		let templates = htmlText.querySelectorAll('span');
 
@@ -198,14 +199,8 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		// setText(`${text ? text : ''} ${template.content}`);
+		console.log(template);
 		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`)
-		// input.current = `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
-		// handleInputChange({
-		// 	target: {
-		// 		value: `${input.current} <span contenteditable='false' class="p-1 bg-[#747474] text-white">${template.name}</span>`
-		// 	}
-		// })
 	}
 
 	let MockMessage = {

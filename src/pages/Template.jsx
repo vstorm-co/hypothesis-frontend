@@ -1,14 +1,18 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { Toast } from '../components/Toast';
-import { showToast } from '../store/ui-slice';
-import { selectTemplate, updateTemplate } from '../store/templates-slice';
-import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
 
+import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
+import { selectTemplate, updateTemplate } from '../store/templates-slice';
+import { showToast } from '../store/ui-slice';
+
+import { Toast } from '../components/Toast';
+import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 
 export function Template(props) {
-  const [input, setInput] = useState('');
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
+  const [input, setInput] = useState('');
+  const [preview, setPreview] = useState('');
+  const [promptMode, setPromptMode] = useState('write');
   const dispatch = useDispatch();
 
   const chatRef = useRef(null);
@@ -36,9 +40,48 @@ export function Template(props) {
     }
   }
 
+  const generatePreview = () => {
+    const parser = new DOMParser();
+    const htmlText = parser.parseFromString(input, 'text/html');
+
+    let templates = htmlText.querySelectorAll('span');
+
+    let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+    console.log(textStripped);
+
+    let targetPreview = textStripped;
+
+    templates.forEach(temp => {
+      console.log(targetPreview);
+      targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+    });
+
+    setPreview(targetPreview);
+  }
+
   function saveContent() {
+    const parser = new DOMParser();
+    const htmlText = parser.parseFromString(input, 'text/html');
+
+    let templates = htmlText.querySelectorAll('span');
+
+    let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+    console.log(textStripped);
+
+    let targetPreview = textStripped;
+
+    templates.forEach(temp => {
+      console.log(targetPreview);
+      targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+    });
+
+    dispatch(updateTemplate({ uuid: currentTemplate.uuid, content: targetPreview }));
+
     dispatch(showToast({ content: `Template saved` }))
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, content: input }));
+  }
+
+  function handleUseTemplate(template) {
+    setInput(`${input ? input : ''}<span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`)
   }
 
   return (
@@ -46,7 +89,7 @@ export function Template(props) {
       <div>
       </div>
       <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-        <div className="h-[100vh] flex flex-col pt-4 pb-2">
+        <div className="h-[100vh] flex flex-col pt-16 pb-2">
           <div className={'flex justify-between items-center relative'}>
             <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
               {currentTemplate.name}
@@ -69,7 +112,26 @@ export function Template(props) {
               Prompt
             </div>
             <form onSubmit={saveContent} className="">
-              <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
+              <div className={'flex'}>
+                <UseTemplate TemplatePicked={handleUseTemplate} />
+                <div className={'ml-auto flex items-center justify-end'}>
+                  <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
+                    Write
+                  </div>
+                  <div onClick={() => { setPromptMode('preview'); generatePreview(); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+                    Preview
+                  </div>
+                </div>
+              </div>
+              {promptMode === 'write' &&
+                <div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  {input}
+                </div>}
+              {promptMode === 'preview' &&
+                <div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  {preview}
+                </div>
+              }
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
