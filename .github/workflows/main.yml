@@ -13,6 +13,8 @@ concurrency: staging_environment
 jobs:
   building:
     runs-on: ubuntu-latest
+    # permissions:
+    #   contents: read
     steps:
       - uses: actions/checkout@v2
 
@@ -24,10 +26,10 @@ jobs:
 
       - name: Deploy files
         uses: easingthemes/ssh-deploy@main
-        env:
+        with:
           SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "./dist"
+          SOURCE: "./dist/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
