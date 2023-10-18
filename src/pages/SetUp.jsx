@@ -198,7 +198,7 @@ export const SetUp = (props) => {
                       }
                       <div className={'ml-4 py-2'}>
                         <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
-                        <div className={'text-xs text-[#747474]'}>Click to Edit</div>
+                        <div className={'text-xs text-[#747474] invisible'}>Click to Edit</div>
                       </div>
                     </div>
                   </div>
