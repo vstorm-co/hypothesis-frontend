@@ -31,7 +31,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{secrets.FRONTEND_DIR}}
+          TARGET: ${{secrets.FRONTEND_DIR}}/
           EXCLUDE: ".git, .github"
 #          SCRIPT_AFTER: |
 #            sudo chown -R ubuntu:www-data /home/ubuntu/hypothesis/hypothesis_frontend/html
