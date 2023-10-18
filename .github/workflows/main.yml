@@ -1,16 +1,14 @@
-name: Project deploy production
+name: Project deploy staging
 
 on:
   push:
     branches:
-      - production
-#  pull_request:
-#    branches:
-#      - main
+      - master
+
 
 # It is important to specify "concurrency" for the workflow,
 # to prevent concurrency between different deploys.
-concurrency: production_environment
+concurrency: staging_environment
 
 jobs:
   building:
@@ -33,7 +31,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: /home/ubuntu/hypothesis/hypothesis_frontend/html
+          TARGET: ${{secrets.FRONTEND_DIR}}
           EXCLUDE: ".git, .github"
 #          SCRIPT_AFTER: |
 #            sudo chown -R ubuntu:www-data /home/ubuntu/hypothesis/hypothesis_frontend/html
@@ -43,11 +41,11 @@ jobs:
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":white_check_mark: [Annotation project] production has been deployed!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":white_check_mark: [${{secrets.PROJECT_NAME}}] has been deployed!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
 
       - name: Send Mattermost Failure Notification
         if: ${{ failure() }}
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":exclamation: [Annotation project] Failed to deploy production!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":exclamation: [${{secrets.PROJECT_NAME}}] failed to deploy!", "username": "Deploy", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
