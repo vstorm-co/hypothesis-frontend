@@ -16,6 +16,7 @@ import { getUserOrganizationsData } from '../store/user-slice';
 import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
+import { current } from '@reduxjs/toolkit';
 
 const msgLoading = signal(true);
 export function Chat(props) {
@@ -49,7 +50,7 @@ export function Chat(props) {
 		dispatch(getTemplatesData());
 
 		// get organization-shared chats
-	}, [])
+	}, [user])
 
 	useEffect(() => {
 		if (user.access_token === null) {
