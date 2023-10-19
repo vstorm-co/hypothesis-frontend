@@ -64,15 +64,6 @@ export function Edit(props) {
     }));
   }
 
-  const updateOrganizationChats = () => {
-    // dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
-  }
-
-  const updateChats = () => {
-    dispatch(getChatsData());
-  }
-
-
   function editChatTitle(event) {
     if (event.target.value != '') {
       dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
