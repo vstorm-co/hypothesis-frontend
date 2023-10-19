@@ -96,7 +96,7 @@ export function Edit(props) {
             press 'Enter' to confirm
           </div>
         </div>
-        {user.organization_uuid &&
+        {user.user_id === currentChat.owner &&
           <div className="border-b p-2">
             {/*We won't see this when on personal account*/}
             <>
