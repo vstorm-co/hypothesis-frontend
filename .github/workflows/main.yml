@@ -39,8 +39,8 @@ jobs:
           TARGET: ${{secrets.FRONTEND_DIR}}/
           EXCLUDE: ".git, .github"
           SCRIPT_AFTER: |
-            find html -type f -exec chmod 644 {} \;
-            find html -type d -exec chmod 755 {} \;
+            find . -type f -exec chmod 644 {} \;
+            find . -type d -exec chmod 755 {} \;
 
       - name: Send Mattermost Success Notification
         if: ${{ success() }}
