@@ -6,6 +6,7 @@ const templatesSlice = createSlice({
   name: 'templates',
   initialState: {
     templates: [],
+    useTemplates: [],
     currentTemplate: {},
     size: 5,
     info: {
@@ -16,6 +17,9 @@ const templatesSlice = createSlice({
     setTemplates(state, action) {
       state.templates = action.payload.items;
       state.info.total = action.payload.total;
+    },
+    setUseTemplates(state, action) {
+      state.useTemplates = action.payload.items;
     },
     setSize(state, action) {
       state.size = action.payload;
@@ -37,19 +41,14 @@ export const getTemplatesData = (payload) => {
     let url = ``;
 
     if (state.ui.searchFilters.visibility === 'all') {
+
       if (state.user.currentUser.organization_uuid) {
         url = `${import.meta.env.VITE_API_URL}/template/?organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
         url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
       }
-    } else if (state.ui.searchFilters.visibility === 'just_me') {
+    } else {
       url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
-    } else if (state.ui.searchFilters.visibility === 'organization') {
-      if (state.user.currentUser.organization_uuid) {
-        url = `${import.meta.env.VITE_API_URL}/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
-      } else {
-        url = `${import.meta.env.VITE_API_URL}/template/?visibility=just_me`
-      }
     }
 
     if (state.ui.searchFilters.searchFor) {
@@ -76,6 +75,10 @@ export const getTemplatesData = (payload) => {
     const templates = await sendRequest();
 
     dispatch(templatesActions.setTemplates(templates));
+
+    if (state.ui.searchFilters.visibility === "all" && !state.ui.searchFilters.searchFor) {
+      dispatch(templatesActions.setUseTemplates(templates));
+    }
   }
 }
 

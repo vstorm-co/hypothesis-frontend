@@ -22,7 +22,7 @@ const msgLoading = signal(true);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const chats = useSelector(state => state.chats.chats);
-	const templates = useSelector(state => state.templates.templates);
+	const templates = useSelector(state => state.templates.useTemplates);
 	const user = useSelector(state => state.user.currentUser);
 
 	const activeUsers = useSignal([]);

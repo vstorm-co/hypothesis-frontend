@@ -27,7 +27,7 @@ function outsideClickHanlder(ref) {
 
 
 export function UseTemplate(props) {
-  const templates = useSelector(state => state.templates.templates);
+  const templates = useSelector(state => state.templates.useTemplates);
 
   const useTempRef = useRef(null);
   outsideClickHanlder(useTempRef);
