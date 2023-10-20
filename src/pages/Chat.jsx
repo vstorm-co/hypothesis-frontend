@@ -69,7 +69,7 @@ export function Chat(props) {
 			}
 		}
 	}
-	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}/${user.access_token}`, {
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {
 
 		onOpen: () => {
 			activeUsers.value = [];
