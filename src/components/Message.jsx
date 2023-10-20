@@ -11,11 +11,11 @@ export function Message(props) {
   if (props.Message.created_by === 'user') {
     return (
       <div className="flex items-start my-4 group">
-        <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3">
+        <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3 max-w-3xl">
           <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
           <div className="ml-4 self-center text-[#202020] text-sm" dangerouslySetInnerHTML={{ __html: props.Message.content }}></div>
         </div>
-        <div className={'ml-auto hidden group-hover:flex items-center'}>
+        <div className={'ml-auto hidden group-hover:flex items-center shrink-0'}>
           <SaveAsTemplate msg={props.Message} />
         </div>
       </div>

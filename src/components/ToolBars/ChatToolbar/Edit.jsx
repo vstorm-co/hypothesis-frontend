@@ -64,15 +64,6 @@ export function Edit(props) {
     }));
   }
 
-  const updateOrganizationChats = () => {
-    // dispatch(getOrganizationChatsData(user.organization_uuid.toString()));
-  }
-
-  const updateChats = () => {
-    dispatch(getChatsData());
-  }
-
-
   function editChatTitle(event) {
     if (event.target.value != '') {
       dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
@@ -96,7 +87,7 @@ export function Edit(props) {
             press 'Enter' to confirm
           </div>
         </div>
-        {user.organization_uuid &&
+        {user.user_id === currentChat.owner &&
           <div className="border-b p-2">
             {/*We won't see this when on personal account*/}
             <>
