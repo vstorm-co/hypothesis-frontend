@@ -11,7 +11,7 @@ import { route } from 'preact-router';
 import { uiActions } from '../../../store/ui-slice';
 
 
-const showAddAccount = signal(true);
+const showAddAccount = signal(false);
 const loading = signal(false);
 
 function toggleShowAddAccount() {
