@@ -12,7 +12,6 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser(state, action) {
-      console.log(action);
       if (action.payload.access_token) {
         state.currentUser.user_id = action.payload.user_id;
         state.currentUser.access_token = action.payload.access_token;
@@ -24,10 +23,8 @@ const userSlice = createSlice({
       } else {
         state.currentUser = {}
       }
-      // console.log("AAAA");
     },
     setCurrentUserOrganization(state, action) {
-      console.log(action)
       state.currentUser.organization_logo = action.payload.picture;
       state.currentUser.organization_uuid = action.payload.uuid;
       state.currentUser.organization_name = action.payload.name;

@@ -39,26 +39,26 @@ export function Footer() {
 
   return (
     <div ref={footerRef} className={"border-t border-[#747474] px-2 py-3 mt-auto absolute z-20 bg-[#202020] w-80 duration-300 bottom-0 "}>
-      <div className="flex flex-col px-2 py-1">
-        <div onClick={() => toggleSwitchUser()} class={'flex items-center cursor-pointer'}>
+      <div className="flex flex-col">
+        <div onClick={() => toggleSwitchUser()} class={'flex items-center cursor-pointer px-2 py-1 rounded ' + (switchUserActive.value ? 'bg-[#595959]' : '')}>
           <img src={currentUser.organization_uuid ? `${import.meta.env.VITE_API_URL}${currentUser.organization_logo}` : currentUser.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
           <div>
             <div className="text-sm leading-6">
               {currentUser.name}
             </div>
-            <div className={'text-xs text-[#747474]'}>
+            <div className={'text-xs ' + (switchUserActive.value ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {currentUser.organization_uuid ? currentUser.organization_name : currentUser.email}
             </div>
           </div>
           <div className={'ml-auto'}>
-            <Options />
+            <Options colorClass={switchUserActive.value ? 'text-white' : 'text-[#747474]'} />
           </div>
         </div>
         <div className={'flex flex-col transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[260px]' : 'max-h-0 overflow-hidden')}>
           {users.map(user => {
             if (user.access_token !== currentUser.access_token)
               return (
-                <div class={'flex items-center mt-4 relative'}>
+                <div class={'flex items-center  px-2 py-1 rounded mt-4 relative'}>
                   <img src={user.organization_uuid ? `${import.meta.env.VITE_API_URL}${user.organization_logo}` : user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
                   <div>
                     <div className="text-sm leading-6">

@@ -72,7 +72,6 @@ export const SetUp = (props) => {
       let imgData = new FormData();
 
       imgData.append("picture", orgLogo);
-      console.log(imgData);
 
       const response_img = await fetch(`${import.meta.env.VITE_API_URL}/organization/set-image/${DomainOrgs.value[0].uuid}`, {
         method: 'POST',
@@ -180,35 +179,45 @@ export const SetUp = (props) => {
             </div>
 
             <div className={'flex flex-col mt-6'}>
-              <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
-                Organization Details
-              </div>
-              <div className={'text-sm text-gray-400'}>
-                You can customize your organization with a name and logo for others to easily find you.
-              </div>
-              <div className={'mt-1'}>
-                {DomainOrgs.value.map(org => (
-                  <div className={'border border-[#DBDBDB] rounded-lg w-[240px]'}>
-                    <div className={'flex flex-row items-center px-2'}>
-                      {orgLogoUrl &&
-                        <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
-                      }
-                      {!orgLogoUrl &&
-                        <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
-                      }
-                      <div className={'ml-4 py-2'}>
-                        <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
-                        <div className={'text-xs text-[#747474] invisible'}>Click to Edit</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               {/* (organizationCreated && organizationCreated.created) */}
               {/* organizationCreated.created  */}
+              {(organizationCreated && !organizationCreated.created) &&
+                <div>
+                  <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
+                    Join Organization
+                  </div>
+                  <div className={'text-sm text-[#595959]'}>
+                    It looks likes other co-workers from <span className={'font-semibold'}>{orgName}</span> are already using Papaya. Join them!
+                  </div>
+                </div>
+              }
               {(organizationCreated && organizationCreated.created) &&
                 <div className={'flex mt-4 ' + (organizationCreated.created ? '' : 'hidden')}>
+                  <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
+                    Organization Details
+                  </div>
+                  <div className={'text-sm text-gray-400'}>
+                    You can customize your organization with a name and logo for others to easily find you.
+                  </div>
+                  <div className={'mt-1'}>
+                    {DomainOrgs.value.map(org => (
+                      <div className={'border border-[#DBDBDB] rounded-lg w-[240px]'}>
+                        <div className={'flex flex-row items-center px-2'}>
+                          {orgLogoUrl &&
+                            <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
+                          }
+                          {!orgLogoUrl &&
+                            <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
+                          }
+                          <div className={'ml-4 py-2'}>
+                            <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
+                            <div className={'text-xs text-[#747474] invisible'}>Click to Edit</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                   <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
                     <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
                     <input

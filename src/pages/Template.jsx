@@ -26,7 +26,7 @@ export function Template(props) {
   }, []);
 
   useEffect(() => {
-    setInput(currentTemplate.content);
+    setInput(currentTemplate.content_html);
   }, [currentTemplate])
 
   function handleKeyDown(event) {
@@ -46,13 +46,11 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
-    console.log(textStripped);
+    let textStripped = input.replace(/<[^>]+>/g, '');
 
     let targetPreview = textStripped;
 
     templates.forEach(temp => {
-      console.log(targetPreview);
       targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
     });
 
@@ -65,17 +63,15 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
-    console.log(textStripped);
+    let textStripped = input.replace(/<[^>]+>/g, '');
 
     let targetPreview = textStripped;
 
     templates.forEach(temp => {
-      console.log(targetPreview);
       targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, content: targetPreview }));
+    dispatch(updateTemplate({ uuid: currentTemplate.uuid, content: targetPreview, content_html: input }));
 
     dispatch(showToast({ content: `Template saved` }))
   }

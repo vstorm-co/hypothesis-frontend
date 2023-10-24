@@ -16,9 +16,8 @@ import { getUserOrganizationsData } from '../store/user-slice';
 import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
-import { current } from '@reduxjs/toolkit';
 
-const msgLoading = signal(true);
+const msgLoading = signal(false);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const chats = useSelector(state => state.chats.chats);
@@ -126,7 +125,6 @@ export function Chat(props) {
 			} else if (json_data.type === 'user_left') {
 				if (activeUsers.value.find(u => u.user_email === json_data.user_email)) {
 					let index = activeUsers.value.indexOf(activeUsers.value.find(u => u.user_email === json_data.user_email));
-					console.log(index);
 					activeUsers.value.splice(index, 1);
 				}
 			} else if (json_data.type === 'typing') {
@@ -148,17 +146,14 @@ export function Chat(props) {
 	const generatePreview = () => {
 		const parser = new DOMParser();
 		const htmlText = parser.parseFromString(text, 'text/html');
-		console.log(text);
 
 		let templates = htmlText.querySelectorAll('span');
 
 		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
-		console.log(textStripped);
 
 		let targetPreview = textStripped;
 
 		templates.forEach(temp => {
-			console.log(targetPreview);
 			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
 		});
 
@@ -179,10 +174,7 @@ export function Chat(props) {
 			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
 		});
 
-
 		msgLoading.value = true;
-
-		console.log(preview);
 
 		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview }));
 
@@ -200,7 +192,6 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		console.log(template);
 		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`)
 	}
 

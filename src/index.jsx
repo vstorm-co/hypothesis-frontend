@@ -25,9 +25,6 @@ import 'prismjs/themes/prism.css'
 import './style.css';
 
 export function App() {
-	console.log(store.getState())
-
-
 	useEffect(() => {
 		store.dispatch(getUserOrganizationsData());
 		store.dispatch(getChatsData());

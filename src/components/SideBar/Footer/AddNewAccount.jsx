@@ -11,7 +11,7 @@ import { route } from 'preact-router';
 import { uiActions } from '../../../store/ui-slice';
 
 
-const showAddAccount = signal(false);
+const showAddAccount = signal(true);
 const loading = signal(false);
 
 function toggleShowAddAccount() {
@@ -54,12 +54,12 @@ export function AddNewAccount() {
   }
 
   return (
-    <div className={''}>
+    <div className={'relative'}>
       <div onClick={toggleShowAddAccount} className={'flex px-3 py-2 border border-dashed hover:bg-[#0F0F0F] rounded border-[#595959] mt-3 cursor-pointer'}>
         <img src={plus} alt="" />
         <div className={'ml-4 text-sm leading-6'}>Add New Account</div>
       </div>
-      <div className={'absolute z-20 w-[240px] border border-[#747474] bg-[#0F0F0F] rounded left-1/2 -translate-x-1/2 bottom-10 ' + (showAddAccount.value ? '' : 'hidden')}>
+      <div className={'absolute z-20 w-[240px] border border-[#747474] bg-[#0F0F0F] rounded -bottom-2 left-[20rem] ' + (showAddAccount.value ? '' : 'hidden')}>
         <div className={'flex items-center justify-between border-b border-[#595959]'}>
           <div className={'text-xs pl-4 py-3 font-bold'}>Add New Account</div>
           <div onClick={toggleShowAddAccount} className={'border rounded border-[#595959] mr-2 cursor-pointer'}>

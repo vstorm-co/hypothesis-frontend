@@ -64,11 +64,7 @@ export const getChatsData = (payload) => {
     let url = `${import.meta.env.VITE_API_URL}`;
 
     if (state.ui.searchFilters.visibility === 'all') {
-      if (state.user.currentUser.organization_uuid) {
-        url = `${url}/chat/rooms/?organization_uuid=${state.user.currentUser.organization_uuid}`
-      } else {
-        url = `${url}/chat/rooms/?visibility=just_me`
-      }
+      url = `${url}/chat/rooms?`
     } else if (state.ui.searchFilters.visibility === 'just_me') {
       url = `${url}/chat/rooms/?visibility=just_me`
     } else if (state.ui.searchFilters.visibility === 'organization') {
@@ -154,7 +150,11 @@ export const createChat = (payload) => {
 }
 
 export const selectChat = (payload) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    let state = getState();
+
+    console.log(state);
+
     if (payload != 0) {
       const sendRequest = async () => {
         const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
@@ -168,9 +168,15 @@ export const selectChat = (payload) => {
         return data;
       };
 
-      const chat = await sendRequest();
+      try {
+        const chat = await sendRequest();
+        dispatch(chatsActions.setCurrentChat(chat));
+      } catch (err) {
+        console.log(err);
+        route('/404')
+      }
 
-      dispatch(chatsActions.setCurrentChat(chat));
+
     } else {
       {
         dispatch(chatsActions.setCurrentChat({ uuid: 0 }));

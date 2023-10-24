@@ -87,17 +87,19 @@ export function Authorize() {
             <div className={'flex justify-center py-4 ' + (loading.value ? '' : 'hidden')}>
               <Loading />
             </div>
-            <Message Message={messages[0]} />
-            <Message Message={messages[1]} />
-            <div className={'w-[240px] ml-14 -mt-6 border border-[#DBDBDB] rounded-lg ' + (loading.value ? 'hidden' : '')}>
-              <div onClick={runLogin} className={'pl-2 py-2 flex items-center cursor-pointer'}>
-                <img src={google} alt="" />
-                <div className={'mx-4'}>
-                  <div className={'text-sm leading-6 font-bold'}>Google</div>
-                  <div className={'text-xs text-[#747474]'}>Click to Authorize</div>
-                </div>
-                <div className={'ml-auto p-3'}>
-                  <img src={arrow} alt="" />
+            <div className={(loading.value ? 'hidden' : '')}>
+              <Message Message={messages[0]} />
+              <Message Message={messages[1]} />
+              <div className={'w-[240px] ml-14 -mt-6 border border-[#DBDBDB] rounded-lg ' + (loading.value ? 'hidden' : '')}>
+                <div onClick={runLogin} className={'pl-2 py-2 flex items-center cursor-pointer'}>
+                  <img src={google} alt="" />
+                  <div className={'mx-4'}>
+                    <div className={'text-sm leading-6 font-bold'}>Google</div>
+                    <div className={'text-xs text-[#747474]'}>Click to Authorize</div>
+                  </div>
+                  <div className={'ml-auto p-3'}>
+                    <img src={arrow} alt="" />
+                  </div>
                 </div>
               </div>
             </div>

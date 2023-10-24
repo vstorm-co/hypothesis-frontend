@@ -18,8 +18,6 @@ export function SearchBar() {
     clearTimeout(searchTimeout);
     dispatch(uiActions.toggleChatsLoading(true));
 
-    console.log(e.target.value);
-    console.log(inputValue);
     dispatch(uiActions.setFiltersSearch({ searchFor: e.target.value }));
 
     searchTimeout = setTimeout(() => {

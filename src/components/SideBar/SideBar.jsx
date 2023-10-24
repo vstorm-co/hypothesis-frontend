@@ -18,7 +18,7 @@ export function SideBar(props) {
   if (!hideSideBar) {
     return (
       <div className="bg-[#202020] text-[#FFFFFF]">
-        <div className="w-80 h-[100vh] flex flex-col relative pb-28">
+        <div className="w-80 h-[100vh] flex flex-col relative pb-20">
           <div className={'pl-4 pr-2 pt-2 flex'}>
             <div className={'w-11/12'}>
               <SearchBar />
