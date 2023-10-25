@@ -40,7 +40,7 @@ export function UseTemplate(props) {
           <img src={braces} alt="" />
         </div>
       </div>
-      <div className={"absolute border rounded left-8 w-5/12 bottom-12 p-2 transform bg-[#202020] text-white " + (isVisible.value ? '' : 'hidden')}>
+      <div className={"absolute border rounded left-8 w-5/12 bottom-12 p-2 transform bg-[#202020] text-white max-h-[220px] overflow-auto scrollBar-dark " + (isVisible.value ? '' : 'hidden')}>
         {templates.map(template => (
           <div onClick={() => { props.TemplatePicked(template); toggleVisible() }} className={'p-2 hover:bg-[#0F0F0F] cursor-pointer rounded-lg'}>{template.name}</div>
         ))}

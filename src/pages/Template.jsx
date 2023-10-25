@@ -26,7 +26,7 @@ export function Template(props) {
   }, []);
 
   useEffect(() => {
-    setInput(currentTemplate.content_html);
+    setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
   }, [currentTemplate])
 
   function handleKeyDown(event) {
