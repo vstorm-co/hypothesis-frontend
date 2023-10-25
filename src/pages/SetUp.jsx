@@ -192,7 +192,7 @@ export const SetUp = (props) => {
                   </div>
                 </div>
               }
-              {true &&
+              {(organizationCreated && organizationCreated.created) &&
                 <div className={'flex flex-col mt-4 ' + (true ? '' : 'hidden')}>
                   <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
                     Organization Details
