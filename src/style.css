@@ -43,6 +43,16 @@ body {
 	font-family: 'SF Pro';
 }
 
+ul {
+	list-style-type: disc;
+	padding-left: 20px;
+	padding-top: 20px;
+}
+
+ul li {
+	margin-bottom: 20px;
+}
+
 /* width */
 .scrollBar-dark::-webkit-scrollbar {
 	width: 10px;

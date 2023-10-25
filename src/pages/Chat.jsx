@@ -52,6 +52,10 @@ export function Chat(props) {
 	}, [user])
 
 	useEffect(() => {
+		setText('');
+	}, [currentChat])
+
+	useEffect(() => {
 		if (user.access_token === null) {
 			route('/auth');
 			localStorage.setItem("redirect_to_chat", props.matches.id);

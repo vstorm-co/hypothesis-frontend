@@ -59,7 +59,7 @@ export function Chats() {
   return (
     <div className="mt-4">
       <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2">
-        <div>Chats</div> <div class="ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px]">{info?.total}</div>
+        <div>Chats</div> <div className={"ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px] " + (info?.total > 0 ? '' : 'hidden')}>{info?.total}</div>
         <div onClick={callCreateChat} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
@@ -79,8 +79,8 @@ export function Chats() {
               Load {loadSize} More
             </div>
           </div>}
-          <div className={'text-center text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
-            No chats yet! go ahead create one
+          <div className={'text-[#747474] px-2 text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
+            No chats
           </div>
         </div>
       }
