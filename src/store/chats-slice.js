@@ -130,7 +130,7 @@ export const getChatsData = (payload) => {
 export const createChat = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,

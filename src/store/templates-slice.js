@@ -109,7 +109,7 @@ export const createTemplate = (payload) => {
 export const selectTemplate = (payload) => {
   return async (dispatch) => {
     const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload}`, {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/template?${payload}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
           'Content-Type': 'application/json',

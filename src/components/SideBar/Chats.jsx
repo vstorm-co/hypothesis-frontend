@@ -59,7 +59,7 @@ export function Chats() {
   return (
     <div className="mt-4">
       <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2">
-        <div>Chats</div> <div className={"ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px] " + (info?.total > 0 ? '' : 'hidden')}>{info?.total}</div>
+        <div>Chats</div> <div className={"ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px] " + (info?.total > 0 && chats?.length > 0 ? '' : 'hidden')}>{info?.total}</div>
         <div onClick={callCreateChat} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
@@ -71,7 +71,7 @@ export function Chats() {
               <ChatBar ChatData={chat} />
             ))}
           </div>
-          {loadSize > 0 && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
+          {(loadSize > 0 && chats?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
             <div className={'py-[2px] px-[3px]'}>
               <img className={"w-[10px] h-[12px]"} src={arrowDown} alt="" />
             </div>

@@ -12,6 +12,7 @@ import send from '../assets/send.svg';
 
 
 export function MockChat(props) {
+  const organizationCreated = useSelector(state => state.ui.organizationCreated)
   const user = useSelector(state => state.user.currentUser);
   const chats = useSelector(state => state.chats.chats);
 
@@ -50,7 +51,7 @@ export function MockChat(props) {
     dispatch(createChat(input));
   }
 
-  if (chats?.length === 0) {
+  if (organizationCreated && organizationCreated.created) {
     const msgs = [
       {
         created_by: 'bot',
@@ -63,6 +64,10 @@ export function MockChat(props) {
       {
         created_by: 'bot',
         content: `Prompts are better when you build them together, try inviting a teammate to your AI chat using the button below. Now you can collaborate with AI and your team together.`
+      },
+      {
+        created_by: 'bot',
+        content: `Quickly share your prompt by sharing link at the top of the page.`
       },
     ]
     return (
@@ -84,6 +89,7 @@ export function MockChat(props) {
 
               <Message Loading={true} Message={msgs[0]} />
               <Message Loading={true} Message={msgs[1]} />
+              <Message Loading={true} Message={msgs[2]} />
             </div>
             <form onSubmit={callCreateChat} className="mt-auto">
               <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
