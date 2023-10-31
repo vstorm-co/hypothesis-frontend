@@ -64,9 +64,7 @@ export function Edit(props) {
   }
 
   function editTemplateTitle(event) {
-    if (event.target.value != '') {
-      dispatch(updateTemplate({ uuid: currentTemplate.uuid, name: event.target.value }))
-    }
+    props.callEditTemplate(event.target.value);
   }
 
   function duplicateTemplate() {

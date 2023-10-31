@@ -1,9 +1,9 @@
 import { Edit } from './Edit';
 
-export function TemplateToolBar() {
+export function TemplateToolBar(props) {
   return (
     <div className="flex">
-      <Edit />
+      <Edit callEditTemplate={props.callEditTemplate} />
     </div>
   )
 }

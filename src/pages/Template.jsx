@@ -12,6 +12,7 @@ export function Template(props) {
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
   const [input, setInput] = useState('');
   const [preview, setPreview] = useState('');
+  const [promptSaved, setPromptSaved] = useState(false);
   const [promptMode, setPromptMode] = useState('write');
   const dispatch = useDispatch();
 
@@ -27,9 +28,11 @@ export function Template(props) {
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
+    setPromptSaved(false);
   }, [currentTemplate])
 
   function handleKeyDown(event) {
+    setPromptSaved(false);
     if (event.key === 'Enter') {
       if (event.shiftKey) {
 
@@ -57,7 +60,7 @@ export function Template(props) {
     setPreview(targetPreview);
   }
 
-  function saveContent() {
+  function saveContent(name) {
     const parser = new DOMParser();
     const htmlText = parser.parseFromString(input, 'text/html');
 
@@ -71,9 +74,13 @@ export function Template(props) {
       targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, content: targetPreview, content_html: input }));
+    dispatch(updateTemplate({ uuid: currentTemplate.uuid, name, content: targetPreview, content_html: input }));
 
     dispatch(showToast({ content: `Template saved` }))
+
+    if (!name) {
+      setPromptSaved(true);
+    }
   }
 
   function handleUseTemplate(template) {
@@ -85,7 +92,7 @@ export function Template(props) {
       <div>
       </div>
       <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-        <div className="h-[100vh] flex flex-col pt-16 pb-2">
+        <div className="h-[100vh] flex flex-col pt-28 pb-2">
           <div className={'flex justify-between items-center relative'}>
             <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
               {currentTemplate.name}
@@ -96,7 +103,7 @@ export function Template(props) {
             </div>
 
             <div>
-              <TemplateToolBar />
+              <TemplateToolBar callEditTemplate={saveContent} />
             </div>
           </div>
           <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
@@ -131,7 +138,14 @@ export function Template(props) {
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button onClick={saveContent} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Save Template</button>
+              <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                {promptSaved &&
+                  'Saved'
+                }
+                {!promptSaved &&
+                  'Save Prompt'
+                }
+              </button>
             </div>
           </div>
         </div>
