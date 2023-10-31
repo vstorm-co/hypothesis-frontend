@@ -158,7 +158,9 @@ export function Chat(props) {
 		let targetPreview = textStripped;
 
 		templates.forEach(temp => {
-			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+			if (temp.dataset.content) {
+				targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+			}
 		});
 
 		setPreview(targetPreview);
@@ -175,7 +177,9 @@ export function Chat(props) {
 		let targetPreview = textStripped;
 
 		templates.forEach(temp => {
-			targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+			if (temp.dataset.content) {
+				targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+			}
 		});
 
 		msgLoading.value = true;

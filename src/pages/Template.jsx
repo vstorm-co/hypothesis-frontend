@@ -54,7 +54,9 @@ export function Template(props) {
     let targetPreview = textStripped;
 
     templates.forEach(temp => {
-      targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+      if (temp.dataset.content) {
+        targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+      }
     });
 
     setPreview(targetPreview);
@@ -71,7 +73,9 @@ export function Template(props) {
     let targetPreview = textStripped;
 
     templates.forEach(temp => {
-      targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+      if (temp.dataset.content) {
+        targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+      }
     });
 
     dispatch(updateTemplate({ uuid: currentTemplate.uuid, name, content: targetPreview, content_html: input }));
@@ -121,7 +125,7 @@ export function Template(props) {
                   <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
                     Write
                   </div>
-                  <div onClick={() => { setPromptMode('preview'); generatePreview(); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+                  <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
                     Preview
                   </div>
                 </div>
@@ -131,7 +135,7 @@ export function Template(props) {
                   {input}
                 </div>}
               {promptMode === 'preview' &&
-                <div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                <div className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                   {preview}
                 </div>
               }
