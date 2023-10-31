@@ -92,7 +92,7 @@ export const SetUp = (props) => {
 
       const img = await response_img.json();
 
-      getDomainOrganizations();
+      // getDomainOrganizations();
 
       dispatch(showToast({ content: 'Organization details saved' }))
     } catch (error) {
