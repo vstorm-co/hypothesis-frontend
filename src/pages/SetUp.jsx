@@ -92,7 +92,7 @@ export const SetUp = (props) => {
 
       const img = await response_img.json();
 
-      // getDomainOrganizations();
+      getDomainOrganizations();
 
       dispatch(showToast({ content: 'Organization details saved' }))
     } catch (error) {
@@ -119,7 +119,10 @@ export const SetUp = (props) => {
       DomainOrgs.value = [...organizations];
 
       setOrgName(DomainOrgs.value[0].name);
-      setOrgLogo(DomainOrgs.value[0].picture);
+
+      if (!orgLogo) {
+        setOrgLogo(DomainOrgs.value[0].picture);
+      }
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);
