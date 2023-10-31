@@ -17,7 +17,7 @@ export function SaveAsTemplate(props) {
 
   function callCreateTemplate(e) {
     if (e.target.value.length > 1) {
-      dispatch(createTemplate({ name: e.target.value, content: props.msg.content }));
+      dispatch(createTemplate({ name: e.target.value, content: props.msg.content, content_html: props.msg.content_html }));
     }
     toggleShowSaveAs();
   }

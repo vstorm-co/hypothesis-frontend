@@ -194,7 +194,7 @@ export function Chat(props) {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 100);
 
-		sendMessage(JSON.stringify({ type: 'message', content: targetPreview }))
+		sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
 		setText('');
 
 	}
