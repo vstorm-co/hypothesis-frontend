@@ -184,7 +184,7 @@ export function Chat(props) {
 
 		msgLoading.value = true;
 
-		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview }));
+		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview, content_html: text }));
 
 		if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
 			dispatch(updateChat({ uuid: currentChat.uuid, name: targetPreview, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
