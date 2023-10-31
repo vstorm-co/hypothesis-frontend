@@ -12,7 +12,7 @@ export function Template(props) {
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
   const [input, setInput] = useState('');
   const [preview, setPreview] = useState('');
-  const [promptSaved, setPromptSaved] = useState(false);
+  const [promptSaved, setPromptSaved] = useState(true);
   const [promptMode, setPromptMode] = useState('write');
   const dispatch = useDispatch();
 
@@ -28,7 +28,6 @@ export function Template(props) {
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
-    setPromptSaved(false);
   }, [currentTemplate])
 
   function handleKeyDown(event) {
@@ -62,7 +61,7 @@ export function Template(props) {
     setPreview(targetPreview);
   }
 
-  function saveContent(name) {
+  function saveContent(ev, title) {
     const parser = new DOMParser();
     const htmlText = parser.parseFromString(input, 'text/html');
 
@@ -78,11 +77,11 @@ export function Template(props) {
       }
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, name, content: targetPreview, content_html: input }));
+    dispatch(updateTemplate({ uuid: currentTemplate.uuid, name: title ? title : currentTemplate.name, content: targetPreview, content_html: input }));
 
     dispatch(showToast({ content: `Template saved` }))
 
-    if (!name) {
+    if (!title) {
       setPromptSaved(true);
     }
   }

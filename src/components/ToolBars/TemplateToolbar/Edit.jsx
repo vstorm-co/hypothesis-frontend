@@ -64,7 +64,7 @@ export function Edit(props) {
   }
 
   function editTemplateTitle(event) {
-    props.callEditTemplate(event.target.value);
+    props.callEditTemplate(null, event.target.value);
   }
 
   function duplicateTemplate() {
