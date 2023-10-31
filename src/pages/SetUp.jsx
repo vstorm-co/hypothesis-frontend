@@ -10,9 +10,14 @@ import { showToast, uiActions } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
 
 const loading = signal(true);
+const editOrganization = signal(false);
 
 function toggleLoading() {
   loading.value = !loading.value;
+}
+
+function toggleEditOrganization() {
+  editOrganization.value = !editOrganization.value
 }
 
 export const SetUp = (props) => {
@@ -88,8 +93,6 @@ export const SetUp = (props) => {
       const img = await response_img.json();
 
       getDomainOrganizations();
-
-      toggleLoading();
 
       dispatch(showToast({ content: 'Organization details saved' }))
     } catch (error) {
@@ -178,31 +181,31 @@ export const SetUp = (props) => {
               </div>
             </div>
 
-            <div className={'flex flex-col mt-6'}>
+            <div className={'flex flex-col mt-8'}>
 
               {/* (organizationCreated && organizationCreated.created) */}
               {/* organizationCreated.created  */}
               {(organizationCreated && !organizationCreated.created) &&
                 <div>
-                  <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
+                  <div className={'text-[#202020] font-bold text-sm leading-6'}>
                     Join Organization
                   </div>
-                  <div className={'text-sm text-[#595959]'}>
+                  <div className={'text-sm text-[#595959]  mt-2'}>
                     It looks likes other co-workers from <span className={'font-semibold'}>{orgName}</span> are already using Papaya. Join them!
                   </div>
                 </div>
               }
               {(organizationCreated && organizationCreated.created) &&
-                <div className={'flex flex-col mt-4 ' + (true ? '' : 'hidden')}>
-                  <div className={'text-[#202020] font-bold text-sm leading-6 mt-2'}>
+                <div className={'flex flex-col'}>
+                  <div className={'text-[#202020] font-bold text-sm leading-6'}>
                     Organization Details
                   </div>
-                  <div className={'text-sm text-gray-400'}>
+                  <div className={'text-sm text-[#595959] mt-2'}>
                     You can customize your organization with a name and logo for others to easily find you.
                   </div>
-                  <div className={'mt-1'}>
+                  <div className={'mt-4'}>
                     {DomainOrgs.value.map(org => (
-                      <div className={'border border-[#DBDBDB] rounded-lg w-[240px]'}>
+                      <div onClick={() => toggleEditOrganization()} className={'border border-[#DBDBDB] rounded-lg w-[240px] cursor-pointer'}>
                         <div className={'flex flex-row items-center px-2'}>
                           {orgLogoUrl &&
                             <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
@@ -212,15 +215,15 @@ export const SetUp = (props) => {
                           }
                           <div className={'ml-4 py-2'}>
                             <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
-                            <div className={'text-xs text-[#747474] invisible'}>Click to Edit</div>
+                            <div className={'text-xs text-[#747474]'}>Click to Edit</div>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className={'flex'}>
+                  <div className={'flex mt-4 overflow-hidden duration-300 ' + (editOrganization.value ? 'max-h-[100px]' : 'max-h-0')}>
                     <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
-                      <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Name</div>
+                      <div className={'text-xs text-[#747474] mb-1 font-bold'}>Name</div>
                       <input
                         type="text"
                         className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
@@ -233,13 +236,14 @@ export const SetUp = (props) => {
                     <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/3'}>
                       <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
                       <div className="relative rounded-md shadow-sm">
-                        <div onClick={() => handleUploadClick()} className={'w-full p-2 border-dashed border-2 rounded border-gray-200 flex flex-col justify-center items-center cursor-pointer overflow-hidden'}>
+                        <div onClick={() => handleUploadClick()} className={'w-full px-2 py-1 border-2 rounded border-gray-200 flex items-center cursor-pointer overflow-hidden'}>
                           {orgLogoUrl &&
-                            <span className={'text-sm text-gray-400'}>
-                              {orgLogo.name}
-                            </span>
+                            <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
                           }
-                          <span className={'text-gray-400 text-sm'}>
+                          {!orgLogoUrl &&
+                            <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
+                          }
+                          <span className={'text-[#595959] text-xs ml-2'}>
                             Click here to change
                           </span>
                         </div>
@@ -264,11 +268,11 @@ export const SetUp = (props) => {
                 </div>
               }
             </div>
-            <div className={'flex mt-16 justify-end'}>
+            <div className={'flex mt-16 justify-center'}>
               <button
                 onClick={() => handleAddPersonal()}
-                className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1.5 rounded flex items-center'}>
-                Continue
+                className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
+                Start Using Papaya
               </button>
             </div>
           </div>
