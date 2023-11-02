@@ -8,7 +8,6 @@ import "preact/devtools";
 
 import store from './store/index';
 
-import { AdminBar } from './components/AdminBar/AdminBar';
 import { SideBar } from './components/SideBar/SideBar';
 import { Authorize } from "./pages/Authorize";
 import { MockChat } from './pages/MockChat';
@@ -45,7 +44,6 @@ export function App() {
 							<Template path="/templates/:id" />
 							<NotFound default />
 						</Router>
-						<AdminBar />
 					</div>
 				</main>
 			</Provider>

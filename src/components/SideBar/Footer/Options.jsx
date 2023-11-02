@@ -42,10 +42,6 @@ export function Options(props) {
   const optionsRef = useRef(null);
   outsideClickHanlder(optionsRef);
 
-  function toggleAdminBar() {
-    dispatch(uiActions.toggleAdminBar({ tgl: !ui.adminBar.active }))
-  }
-
   function callLogout() {
     toggleOptions();
     dispatch(userActions.logoutUser(currentUser));
@@ -70,9 +66,6 @@ export function Options(props) {
         <div className="text-sm leading-6">
           <div className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
             <img className="w-4" src={darkmode} alt="" /> <div className="ml-2">Toggle Theme</div>
-          </div>
-          <div onClick={toggleAdminBar} className={"cursor-pointer flex hover:bg-[#595959] p-2 border-y border-[#595959]"}>
-            <img className="w-4" src={darkmode} alt="" /> <div className="ml-2">Admin Panel</div>
           </div>
           <div onClick={callLogout} className={"cursor-pointer flex p-2 hover:bg-[#595959]"}>
             <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
