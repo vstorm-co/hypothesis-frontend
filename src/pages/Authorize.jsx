@@ -70,7 +70,7 @@ export function Authorize() {
   ]
 
   return (
-    <div className={'w-full bg-[#202020]'}>
+    <div className={'w-full h-[100vh] bg-[#202020]'}>
       <div className={'w-[720px] mx-auto'}>
         <div className={'py-9 flex items-center'}>
           <img src={papaya} className={'w-6'} alt="" />

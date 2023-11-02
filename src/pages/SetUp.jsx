@@ -150,7 +150,7 @@ export const SetUp = (props) => {
   }
 
   return (
-    <div className={'flex flex-col w-full bg-[#202020]'}>
+    <div className={'flex flex-col w-full h-[100vh] bg-[#202020]'}>
       <div className={'mx-auto w-[720px]'}>
         <div className={'py-9 flex items-center'}>
           <img src={papaya} className={'w-6'} alt="" />
