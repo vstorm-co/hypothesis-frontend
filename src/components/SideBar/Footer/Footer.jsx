@@ -7,6 +7,7 @@ import AccountOptions from './AccountOptions';
 
 import { AddNewAccount } from './AddNewAccount';
 import { ClearStorage } from './ClearStorage';
+import { Detonate } from './Detonate';
 
 const switchUserActive = signal(false);
 
@@ -74,6 +75,7 @@ export function Footer() {
           })}
           <AddNewAccount />
           <ClearStorage toggle={toggleSwitchUser} />
+          <Detonate />
         </div>
       </div>
     </div>
