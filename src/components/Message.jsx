@@ -27,7 +27,7 @@ export function Message(props) {
           <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0">
             <img src={papaya} className="w-3" alt="" />
           </div>
-          <div className="ml-2 mt-1 text-[#202020] text-sm">
+          <div className="ml-2 mt-1 text-[#202020] text-sm bot-response">
             <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
           </div>
         </div>
