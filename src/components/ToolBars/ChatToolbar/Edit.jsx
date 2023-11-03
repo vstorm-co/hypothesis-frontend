@@ -26,6 +26,7 @@ function outsideClickHanlder(ref) {
     function handleClickOutside(e) {
       if (ref.current && !ref.current.contains(e.target)) {
         showEdit.value = false;
+        confirmDelete.value = false;
       }
     }
 
@@ -110,12 +111,12 @@ export function Edit(props) {
               Delete chat
             </div>
           </div>
-          <div className={'absolute right-0 rounded -bottom-[5.8rem] flex flex-col bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>
+          <div className={'fixed rounded left-1/2 top-10 flex flex-col bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>
             <div className='px-4 py-2'>
               Are you sure you want to delete this chat?
             </div>
             <div className='flex justify-center items-center gap-4 border-t border-[#747474] py-2'>
-              <div onClick={toggleConfirmDelete} className={'px-2 py-1 cursor-pointer'}>Cancel</div>
+              <div onClick={toggleConfirmDelete} className={'px-2 py-1 cursor-pointer hover:bg-[#747474] rounded'}>Cancel</div>
               <div onClick={callDeleteChat} className={'bg-[#EF4444] px-2 py-1 rounded cursor-pointer'}>Delete</div>
             </div>
           </div>
