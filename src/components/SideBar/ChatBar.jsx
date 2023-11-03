@@ -23,7 +23,7 @@ export const ChatBar = props => {
   return (
     <div onClick={callSelectChat} className={"flex items-center py-2 px-2 rounded cursor-pointer " + (isSelected() ? 'bg-[#595959]' : 'hover:bg-[#0F0F0F]')}>
       <img className={"w-4"} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
-      <div className="font-bold text-sm leading-6 ml-2">
+      <div title={props.ChatData.name} className="font-bold text-sm leading-6 ml-2 truncate">
         {props.ChatData.name}
       </div>
     </div>
