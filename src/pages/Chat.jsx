@@ -269,7 +269,7 @@ export function Chat(props) {
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
-							<div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full min-h-[72px] max-h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{preview}
 							</div>
 						}
