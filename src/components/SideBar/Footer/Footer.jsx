@@ -69,7 +69,7 @@ export function Footer() {
                       {user.organization_uuid ? user.organization_name : user.email}
                     </div>
                   </div>
-                  <AccountOptions tglSwitch={toggleSwitchUser} user={user} />
+                  <AccountOptions colorClass={'text-[#747474]'} tglSwitch={toggleSwitchUser} user={user} />
                 </div>
               )
           })}
