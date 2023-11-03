@@ -229,9 +229,9 @@ export function Chat(props) {
 							<Toast />
 						</div>
 
-						<div className={'ml-auto text-xs text-[#747474]'}>
+						<div className={'ml-auto text-xs text-[#747474] shrink-0'}>
 						</div>
-						<div className={'ml-5'}>
+						<div className={'ml-5 shrink-0'}>
 							<ChatToolBar />
 						</div>
 					</div>
