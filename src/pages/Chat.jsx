@@ -220,7 +220,7 @@ export function Chat(props) {
 			</div>
 			<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 				<div className="h-[100vh] flex flex-col pt-4 pb-2">
-					<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
+					<div className={'flex items-center border-b border-[#DBDBDB] relative'}>
 						<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
 							{currentChat.name}
 						</div>
@@ -229,7 +229,9 @@ export function Chat(props) {
 							<Toast />
 						</div>
 
-						<div>
+						<div className={'ml-auto text-xs text-[#747474]'}>
+						</div>
+						<div className={'ml-5'}>
 							<ChatToolBar />
 						</div>
 					</div>
