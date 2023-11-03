@@ -263,7 +263,7 @@ export function Chat(props) {
 						{/* <ContentEditable html={input.current} onKeyDown={handleKeyDown} onChange={handleInputChange} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 						</ContentEditable> */}
 						{promptMode === 'write' &&
-							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
