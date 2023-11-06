@@ -57,11 +57,21 @@ export function Options(props) {
 
   return (
     <div ref={optionsRef} className="ml-2 relative">
-      <div onClick={(e) => { toggleOptions(); e.stopPropagation(); }} className={"cursor-pointer transform rotate-90 p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
-        <svg width="16" height="16" viewBox="0 0 16 16" className={props.colorClass} xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8C6 6.89543 6.89543 6 8 6ZM16 8C16 6.89543 15.1046 6 14 6C12.8954 6 12 6.89543 12 8C12 9.10457 12.8954 10 14 10C15.1046 10 16 9.10457 16 8Z" />
-        </svg>
-      </div>
+      {props.colorClass === 'text-white' &&
+        <div onClick={(e) => { toggleOptions(); e.stopPropagation(); }} className={"cursor-pointer transform rotate-90 p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
+          <svg width="16" height="16" viewBox="0 0 16 16" className={props.colorClass} xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8C6 6.89543 6.89543 6 8 6ZM16 8C16 6.89543 15.1046 6 14 6C12.8954 6 12 6.89543 12 8C12 9.10457 12.8954 10 14 10C15.1046 10 16 9.10457 16 8Z" />
+          </svg>
+        </div>
+
+      }
+      {props.colorClass != 'text-white' &&
+        <div className={"cursor-pointer transform rotate-90 p-1 hover:bg-[#595959] relative rounded " + (showOptions.value ? "bg-[#595959]" : '')}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={'transform rotate-90'}>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.70711 2.29289C8.31658 1.90237 7.68342 1.90237 7.29289 2.29289L4.29289 5.29289C3.90237 5.68342 3.90237 6.31658 4.29289 6.70711C4.68342 7.09763 5.31658 7.09763 5.70711 6.70711L8 4.41421L10.2929 6.70711C10.6834 7.09763 11.3166 7.09763 11.7071 6.70711C12.0976 6.31658 12.0976 5.68342 11.7071 5.29289L8.70711 2.29289ZM7.266 13.7903C7.6418 14.195 8.27453 14.2184 8.67924 13.8426L11.7891 10.955C12.1938 10.5792 12.2172 9.94643 11.8414 9.54171C11.4656 9.137 10.8329 9.11356 10.4282 9.48936L8.05114 11.6966L5.84391 9.31955C5.46811 8.91483 4.83538 8.89139 4.43066 9.26719C4.02595 9.64299 4.00251 10.2757 4.37831 10.6804L7.266 13.7903Z" fill="#747474" />
+          </svg>
+        </div>
+      }
       <div className={"absolute border border-[#595959] rounded w-[240px] bottom-0 left-12 bg-[#0F0F0F] " + (showOptions.value ? '' : 'hidden')}>
         <div className="text-sm leading-6">
           <div className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
