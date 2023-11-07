@@ -223,6 +223,29 @@ export function Chat(props) {
 		}, 100)
 	}
 
+	function EditedAt() {
+		const updatedAt = new Date(currentChat.updated_at ? currentChat.updated_at : currentChat.created_at);
+		const today = new Date();
+
+		// const diffrence = Math.floor((today.getTime() - updatedAt.getTime()) / (1000 * 3600 * 24));
+		var hours = Math.floor(Math.abs(today - updatedAt) / 36e5);
+		// var hours = Math.floor(12 * 24);
+
+		// if (hours === 0) {
+		// 	return 'Just now';
+		// }
+
+		if (hours < 24) {
+			return `${hours} ${hours > 1 ? 'hours' : 'hour'} ago`
+		} else if (hours >= 24 && hours < 7 * 24) {
+			let days = Math.floor(hours / 24);
+			return `${days} ${days > 1 ? 'days' : 'day'} ago`
+		} else if (hours >= 7 * 24) {
+			let weeks = Math.floor((hours / 24) / 7)
+			return `${weeks} ${weeks > 1 ? 'weeks' : 'week'} ago`
+		}
+	}
+
 	let MockMessage = {
 		created_by: 'bot',
 		content: chats.length > 1 ?
@@ -265,6 +288,7 @@ export function Chat(props) {
 						</div>
 
 						<div className={'ml-auto text-xs text-[#747474] shrink-0'}>
+							{EditedAt()}
 						</div>
 						<div className={'ml-5 shrink-0'}>
 							<ChatToolBar />
