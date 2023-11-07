@@ -40,16 +40,19 @@ export const SetUp = (props) => {
   const [orgLogoUrl, setorgLogoUrl] = useState('');
 
   const handleAddPersonal = async () => {
+    handleUpdateOrganization()
+    setTimeout(() => {
+      let redirectToChat = localStorage.getItem("redirect_to_chat");
+      if (redirectToChat?.length > 0) {
+        route(`/chats/${redirectToChat}`);
+        localStorage.removeItem("redirect_to_chat");
+      } else {
+        route('/');
+      }
 
-    let redirectToChat = localStorage.getItem("redirect_to_chat");
-    if (redirectToChat?.length > 0) {
-      route(`/chats/${redirectToChat}`);
-      localStorage.removeItem("redirect_to_chat");
-    } else {
-      route('/');
-    }
+      dispatch(uiActions.setHideSideBar(false));
+    }, 200)
 
-    dispatch(uiActions.setHideSideBar(false));
   }
 
   const handleUpdateOrganization = async () => {
@@ -93,8 +96,6 @@ export const SetUp = (props) => {
       const img = await response_img.json();
 
       getDomainOrganizations();
-
-      dispatch(showToast({ content: 'Organization details saved' }))
     } catch (error) {
       console.error('Error creating organization:', error);
     }
@@ -217,7 +218,7 @@ export const SetUp = (props) => {
                             <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
                           }
                           <div className={'ml-4 py-2'}>
-                            <div className={'text-sm leading-6 font-bold'}>{org.name}</div>
+                            <div className={'text-sm leading-6 font-bold'}>{orgName ? orgName : org.name}</div>
                             <div className={'text-xs text-[#747474]'}>Click to Edit</div>
                           </div>
                         </div>
@@ -225,18 +226,18 @@ export const SetUp = (props) => {
                     ))}
                   </div>
                   <div className={'flex mt-4 overflow-hidden duration-300 ' + (editOrganization.value ? 'max-h-[100px]' : 'max-h-0')}>
-                    <div className={'flex flex-col w-1/3 rounded-lg py-2'}>
+                    <div className={'flex flex-col w-1/2 rounded-lg py-2'}>
                       <div className={'text-xs text-[#747474] mb-1 font-bold'}>Name</div>
                       <input
                         type="text"
-                        className="bg-gray-200 placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
+                        className="bg-[#FAFAFA] placeholder:text-[#747474] focus:outline-none w-full p-2 rounded border border-gray-300"
                         placeholder="Enter name..."
                         value={orgName}
                         onChange={(e) => setOrgName(e.target.value)}
                       />
                     </div>
 
-                    <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/3'}>
+                    <div className={'flex flex-col rounded-lg ml-4 py-2 w-1/2'}>
                       <div className={'text-xs text-[#747474] mb-1 font-bold'}>Organization Logo (Optional)</div>
                       <div className="relative rounded-md shadow-sm">
                         <div onClick={() => handleUploadClick()} className={'w-full px-2 py-1 border-2 rounded border-gray-200 flex items-center cursor-pointer overflow-hidden'}>
@@ -258,13 +259,6 @@ export const SetUp = (props) => {
                           ref={logoRef}
                         />
                       </div>
-                    </div>
-                    <div className={'ml-4 flex items-end py-2'}>
-                      <button
-                        onClick={() => { handleUpdateOrganization() }}
-                        className={'bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center'}>
-                        Save
-                      </button>
                     </div>
                   </div>
 
