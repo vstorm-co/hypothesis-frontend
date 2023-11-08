@@ -175,7 +175,7 @@ export function Chat(props) {
 
 		let templates = htmlText.querySelectorAll('span');
 
-		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');;
 
 		let targetPreview = textStripped;
 
