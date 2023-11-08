@@ -16,7 +16,7 @@ export function Template(props) {
   const [promptMode, setPromptMode] = useState('write');
   const dispatch = useDispatch();
 
-  const chatRef = useRef(null);
+  const templateRef = useRef();
 
   function handleInputChange(event) {
     setInput(event.target.value);
@@ -24,11 +24,18 @@ export function Template(props) {
 
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
+    setTimeout(() => {
+      templateRef.current.focus();
+    }, 800)
   }, []);
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
-  }, [currentTemplate])
+    setTimeout(() => {
+      templateRef.current.focus();
+      console.log("AAA")
+    }, 800)
+  }, [currentTemplate.uuid])
 
   function handleKeyDown(event) {
     setPromptSaved(false);
@@ -110,10 +117,6 @@ export function Template(props) {
               <TemplateToolBar callEditTemplate={saveContent} />
             </div>
           </div>
-          <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-
-            {/* <Message Loading={true} Message={msg} /> */}
-          </div>
           <div className={'mt-12'}>
             <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
               Prompt
@@ -131,7 +134,7 @@ export function Template(props) {
                 </div>
               </div>
               {promptMode === 'write' &&
-                <div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                   {input}
                 </div>}
               {promptMode === 'preview' &&
