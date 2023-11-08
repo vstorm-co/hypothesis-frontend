@@ -217,10 +217,12 @@ export function Chat(props) {
 	}
 
 	function handleTitleInputClick() {
-		setEditTitle(true);
-		setTimeout(() => {
-			titleInputRef.current.focus()
-		}, 100)
+		if (user.user_id === currentChat.owner) {
+			setEditTitle(true);
+			setTimeout(() => {
+				titleInputRef.current.focus()
+			}, 100)
+		}
 	}
 
 	function EditedAt() {
