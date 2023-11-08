@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import Router from 'preact-router';
 import { render } from 'preact';
 import "preact/devtools";
+import useWebSocket from 'react-use-websocket';
+
 
 import store from './store/index';
 
@@ -29,6 +31,21 @@ export function App() {
 		store.dispatch(getChatsData());
 		store.dispatch(getTemplatesData());
 	}, [])
+
+	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
+
+		onOpen: () => {
+			console.log("EEE");
+		},
+		onClose: (event) => {
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+		onMessage: (e) => {
+			store.dispatch(getChatsData());
+		}
+	});
 
 	return (
 		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
