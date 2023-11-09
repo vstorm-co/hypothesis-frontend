@@ -31,6 +31,7 @@ export function Template(props) {
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
+    setPromptMode('write');
     setTimeout(() => {
       templateRef.current.focus();
       console.log("AAA")
