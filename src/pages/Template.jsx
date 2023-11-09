@@ -55,7 +55,7 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '');
+    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
 
     let targetPreview = textStripped;
 
@@ -74,7 +74,7 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '');
+    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
 
     let targetPreview = textStripped;
 
@@ -94,7 +94,7 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`);
+    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">{} ${template.name}</span>`);
     setPromptSaved(false);
   }
 

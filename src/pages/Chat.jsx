@@ -175,7 +175,7 @@ export function Chat(props) {
 
 		let templates = htmlText.querySelectorAll('span');
 
-		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');;
+		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');
 
 		let targetPreview = textStripped;
 
@@ -203,7 +203,7 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		setText(`${text ? text : ''}<span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">${template.name}</span>`)
+		setText(`${text ? text : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">{} ${template.name}</span>`)
 	}
 
 	function callEditChatTitle(event) {

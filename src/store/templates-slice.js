@@ -41,14 +41,15 @@ export const getTemplatesData = (payload) => {
     let url = ``;
 
     if (state.ui.searchFilters.visibility === 'all') {
-
+      url = `${import.meta.env.VITE_API_URL}/template?`
+    } else if (state.ui.searchFilters.visibility === 'just_me') {
+      url = `${url}/chat/template/?visibility=just_me`
+    } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
-        url = `${import.meta.env.VITE_API_URL}/template?organization_uuid=${state.user.currentUser.organization_uuid}`
+        url = `${url}/chat/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
-        url = `${import.meta.env.VITE_API_URL}/template?visibility=just_me`
+        url = `${url}/chat/template/?visibility=just_me`
       }
-    } else {
-      url = `${import.meta.env.VITE_API_URL}/template?visibility=just_me`
     }
 
     if (state.ui.searchFilters.searchFor) {
@@ -99,9 +100,8 @@ export const createTemplate = (payload) => {
 
     const template = await sendRequest();
 
-    if (template.content.length === 0) {
-      route(`/templates/${template.uuid}`);
-    }
+    route(`/templates/${template.uuid}`);
+    dispatch(selectTemplate(template.uuid));
     dispatch(getTemplatesData());
   }
 }
