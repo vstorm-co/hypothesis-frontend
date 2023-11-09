@@ -28,9 +28,9 @@ export const ChatBar = props => {
     var hours = Math.floor(Math.abs(today - updatedAt) / 36e5);
     // var hours = Math.floor(12 * 24);
 
-    // if (hours === 0) {
-    // 	return 'Just now';
-    // }
+    if (hours === 0) {
+    	return 'Just now';
+    }
 
     if (hours < 24) {
       return `${hours} ${hours > 1 ? 'hours' : 'hour'} ago`
