@@ -4,9 +4,13 @@ import rehypePrism from '@mapbox/rehype-prism';
 import { SaveAsTemplate } from './ToolBars/ChatToolbar/SaveAsTemplate';
 
 import papaya from '../assets/images/papaya.png';
+import CopyAs from './ToolBars/ChatToolbar/CopyAs';
+import { useState } from 'preact/hooks';
 
 export function Message(props) {
   const dispatch = useDispatch();
+
+  const [showCopyAs, setShowCopyAs] = useState(false);
 
   if (props.Message.created_by === 'user') {
     return (
@@ -22,13 +26,16 @@ export function Message(props) {
     )
   } else {
     return (
-      <div className="flex my-4">
-        <div className="rounded flex p-2">
+      <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4 group">
+        <div className="rounded flex p-2 w-full">
           <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0">
             <img src={papaya} className="w-3" alt="" />
           </div>
-          <div className="ml-2 mt-1 text-[#202020] text-sm bot-response">
+          <div className={`ml-2 mt-1 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
             <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
+          </div>
+          <div className={'ml-auto shrink-0 hidden group-hover:block'}>
+            <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
           </div>
         </div>
       </div>
