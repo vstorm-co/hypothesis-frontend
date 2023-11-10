@@ -27,6 +27,8 @@ export function Chat(props) {
 	const activeUsers = useSignal([]);
 	const WhosTyping = useSignal([]);
 
+	const [blockSending, setBlockSending] = useState(false);
+
 	const input = useRef('');
 	const [text, setText] = useState('');
 	const [preview, setPreview] = useState('');
@@ -56,7 +58,7 @@ export function Chat(props) {
 
 	useEffect(() => {
 		setText('');
-	}, [currentChat])
+	}, [currentChat.uuid])
 
 	useEffect(() => {
 		if (user.access_token === null) {
@@ -80,7 +82,9 @@ export function Chat(props) {
 
 			} else {
 				event.preventDefault();
-				sendMsg();
+				if (!blockSending) {
+					sendMsg();
+				}
 			}
 		}
 	}
@@ -104,6 +108,7 @@ export function Chat(props) {
 			}
 		},
 		onClose: (event) => {
+
 		},
 		onError: (err) => {
 		},
@@ -144,6 +149,8 @@ export function Chat(props) {
 					}, 3000)
 				}
 			}
+
+
 
 			msgLoading.value = false;
 			chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -199,7 +206,7 @@ export function Chat(props) {
 
 		sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
 		setText('');
-
+		setBlockSending(true);
 	}
 
 	function handleUseTemplate(template) {
@@ -223,6 +230,13 @@ export function Chat(props) {
 				titleInputRef.current.focus()
 			}, 100)
 		}
+	}
+
+	function handleOnInput(e) {
+		let currentText = e.currentTarget.innerHTML
+		setText(currentText);
+		if (currentText[currentText.length - 1] === '{' && currentText[currentText.length - 2] === '{') {
+		};
 	}
 
 	function EditedAt() {
@@ -309,7 +323,7 @@ export function Chat(props) {
 							<Loading />
 						</div>
 					</div>
-					<form onSubmit={() => { sendMsg(); }} className="mt-auto">
+					<form onSubmit={() => { if (!blockSending) { sendMsg(); } }} className="mt-auto">
 						{templates?.length > 0 &&
 							<div className={'flex'}>
 								<UseTemplate TemplatePicked={handleUseTemplate} />
@@ -326,7 +340,7 @@ export function Chat(props) {
 						{/* <ContentEditable html={input.current} onKeyDown={handleKeyDown} onChange={handleInputChange} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 						</ContentEditable> */}
 						{promptMode === 'write' &&
-							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setText(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
@@ -348,7 +362,7 @@ export function Chat(props) {
 								</span>
 							}
 						</div>
-						<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						<button type="submit" disabled={blockSending} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 					</div>
 				</div>
 			</div>

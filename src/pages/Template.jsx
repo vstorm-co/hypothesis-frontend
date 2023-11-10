@@ -47,6 +47,8 @@ export function Template(props) {
         event.preventDefault();
         saveContent();
       }
+    } else {
+      console.log(input);
     }
   }
 
