@@ -41,6 +41,7 @@ export function Chat(props) {
 	const dispatch = useDispatch();
 
 	const chatRef = useRef();
+	const chatInputRef = useRef();
 
 	const updatePreviewValue = (val) => {
 		setPreview(val);
@@ -58,6 +59,9 @@ export function Chat(props) {
 
 	useEffect(() => {
 		setText('');
+		setTimeout(() => {
+			chatInputRef.current.focus();
+		}, 100)
 	}, [currentChat.uuid])
 
 	useEffect(() => {
@@ -337,10 +341,8 @@ export function Chat(props) {
 									</div>
 								</div>
 							</div>}
-						{/* <ContentEditable html={input.current} onKeyDown={handleKeyDown} onChange={handleInputChange} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-						</ContentEditable> */}
 						{promptMode === 'write' &&
-							<div contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{text}
 							</div>}
 						{promptMode === 'preview' &&

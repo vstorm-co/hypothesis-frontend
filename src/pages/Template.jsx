@@ -26,16 +26,22 @@ export function Template(props) {
     dispatch(selectTemplate(props.matches.id));
     setTimeout(() => {
       templateRef.current.focus();
-    }, 800)
+    }, 100)
   }, []);
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
     setPromptMode('write');
     setTimeout(() => {
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.selectNodeContents(templateRef.current);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
       templateRef.current.focus();
-      console.log("AAA")
-    }, 800)
+      range.detach()
+    }, 100);
   }, [currentTemplate.uuid])
 
   function handleKeyDown(event) {
