@@ -85,10 +85,7 @@ export function Chat(props) {
 			if (event.shiftKey) {
 
 			} else {
-				event.preventDefault();
-				if (!blockSending) {
-					sendMsg();
-				}
+				sendMsg();
 			}
 		}
 	}
@@ -210,7 +207,6 @@ export function Chat(props) {
 
 		sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
 		setText('');
-		setBlockSending(true);
 	}
 
 	function handleUseTemplate(template) {
@@ -314,7 +310,7 @@ export function Chat(props) {
 							<ChatToolBar />
 						</div>
 					</div>
-					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto pb-4" ref={chatRef}>
+					<div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto pb-4" ref={chatRef}>
 						{currentChat.messages?.length === 0 &&
 							<div>
 								<Message Message={MockMessage} />
@@ -327,7 +323,7 @@ export function Chat(props) {
 							<Loading />
 						</div>
 					</div>
-					<form onSubmit={() => { if (!blockSending) { sendMsg(); } }} className="mt-auto">
+					<form onSubmit={() => { sendMsg() }} className="mt-auto">
 						{templates?.length > 0 &&
 							<div className={'flex'}>
 								<UseTemplate TemplatePicked={handleUseTemplate} />
@@ -364,7 +360,7 @@ export function Chat(props) {
 								</span>
 							}
 						</div>
-						<button type="submit" disabled={blockSending} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 					</div>
 				</div>
 			</div>
