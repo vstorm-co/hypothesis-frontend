@@ -40,7 +40,9 @@ export const SetUp = (props) => {
   const [orgLogoUrl, setorgLogoUrl] = useState('');
 
   const handleAddPersonal = async () => {
-    handleUpdateOrganization()
+    if (DomainOrgs.value[0]) {
+      handleUpdateOrganization()
+    }
     setTimeout(() => {
       let redirectToChat = localStorage.getItem("redirect_to_chat");
       if (redirectToChat?.length > 0) {

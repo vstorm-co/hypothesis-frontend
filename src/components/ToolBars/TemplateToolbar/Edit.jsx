@@ -26,6 +26,7 @@ function outsideClickHanlder(ref) {
     function handleClickOutside(e) {
       if (ref.current && !ref.current.contains(e.target)) {
         showEdit.value = false;
+        confirmDelete.value = false;
       }
     }
 
@@ -104,7 +105,7 @@ export function Edit(props) {
               Delete Template
             </div>
           </div>
-          <div className={'absolute right-0 rounded -bottom-[5.8rem] flex flex-col bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>
+          <div className={'fixed rounded left-1/2 top-10 flex flex-col text-center bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>
             <div className='px-4 py-2'>
               Are you sure you want to delete this template?
             </div>
