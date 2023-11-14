@@ -65,6 +65,7 @@ export function Template(props) {
     let templates = htmlText.querySelectorAll('span');
 
     let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
+    // let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
 
     let targetPreview = textStripped;
 
