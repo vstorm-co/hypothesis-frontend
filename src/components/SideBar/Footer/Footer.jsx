@@ -4,6 +4,10 @@ import { Options } from './Options';
 import { useRef, useEffect } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountOptions from './AccountOptions';
+import { route } from 'preact-router';
+
+import { userActions } from '../../../store/user-slice';
+import { chatsActions } from '../../../store/chats-slice';
 
 import { AddNewAccount } from './AddNewAccount';
 import { ClearStorage } from './ClearStorage';
@@ -35,8 +39,17 @@ export function Footer() {
   let currentUser = useSelector(state => state.user.currentUser);
   let users = useSelector(state => state.user.users);
 
+  const dispatch = useDispatch();
+
   const footerRef = useRef(null);
   outsideClickHanlder(footerRef);
+
+  function setUser(user) {
+    dispatch(userActions.setUser(user));
+    dispatch(chatsActions.setCurrentChat({}))
+    route('/');
+    switchUserActive.value = false;
+  }
 
   return (
     <div ref={footerRef} className={"border-t border-[#747474] px-2 py-3 mt-auto absolute z-20 bg-[#202020] w-80 duration-300 bottom-0 "}>
@@ -59,7 +72,7 @@ export function Footer() {
           {users.map(user => {
             if (user.access_token !== currentUser.access_token)
               return (
-                <div class={'flex items-center  px-2 py-1 rounded mt-4 relative'}>
+                <div onClick={() => setUser(user)} class={'flex items-center px-2 py-1 rounded mt-4 relative cursor-pointer'}>
                   <img src={user.organization_uuid ? `${import.meta.env.VITE_API_URL}${user.organization_logo}` : user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
                   <div>
                     <div className="text-sm leading-6">
