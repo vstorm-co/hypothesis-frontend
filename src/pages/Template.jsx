@@ -46,16 +46,6 @@ export function Template(props) {
 
   function handleKeyDown(event) {
     setPromptSaved(false);
-    if (event.key === 'Enter') {
-      if (event.shiftKey) {
-
-      } else {
-        event.preventDefault();
-        saveContent();
-      }
-    } else {
-      console.log(input);
-    }
   }
 
   const generatePreview = () => {

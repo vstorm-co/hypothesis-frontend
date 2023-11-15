@@ -80,11 +80,10 @@ export function Chat(props) {
 	}
 
 	function handleKeyDown(event) {
+		console.log(event);
 		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
 		if (event.key === 'Enter') {
-			if (event.shiftKey) {
-
-			} else {
+			if (event.ctrlKey) {
 				sendMsg();
 			}
 		}
@@ -360,7 +359,9 @@ export function Chat(props) {
 								</span>
 							}
 						</div>
-						<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						<div className={'flex gap-4'}>
+							<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+						</div>
 					</div>
 				</div>
 			</div>
