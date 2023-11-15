@@ -47,8 +47,10 @@ export function MockChat(props) {
   }
 
   function callCreateChat(e) {
-    localStorage.setItem("MsgToSend", input);
-    dispatch(createChat(input));
+    if (input.length > 0) {
+      localStorage.setItem("MsgToSend", input);
+      dispatch(createChat(input));
+    }
   }
 
   if (organizationCreated && organizationCreated.created) {
@@ -131,7 +133,7 @@ export function MockChat(props) {
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button onClick={callCreateChat} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+              <button onClick={callCreateChat} disabled={input.length === 0} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
             </div>
           </div>
         </div>
