@@ -177,35 +177,37 @@ export function Chat(props) {
 	}
 
 	const sendMsg = () => {
-		const parser = new DOMParser();
-		const htmlText = parser.parseFromString(text, 'text/html');
+		if (text.length > 0) {
+			const parser = new DOMParser();
+			const htmlText = parser.parseFromString(text, 'text/html');
 
-		let templates = htmlText.querySelectorAll('span');
+			let templates = htmlText.querySelectorAll('span');
 
-		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');
+			let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');
 
-		let targetPreview = textStripped;
+			let targetPreview = textStripped;
 
-		templates.forEach(temp => {
-			if (temp.dataset.content) {
-				targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+			templates.forEach(temp => {
+				if (temp.dataset.content) {
+					targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+				}
+			});
+
+			msgLoading.value = true;
+
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview, content_html: text }));
+
+			if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
+				dispatch(updateChat({ uuid: currentChat.uuid, name: targetPreview, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
 			}
-		});
 
-		msgLoading.value = true;
+			setTimeout(() => {
+				chatRef.current.scrollTop = chatRef.current.scrollHeight
+			}, 100);
 
-		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview, content_html: text }));
-
-		if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
-			dispatch(updateChat({ uuid: currentChat.uuid, name: targetPreview, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
+			sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
+			setText('');
 		}
-
-		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 100);
-
-		sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
-		setText('');
 	}
 
 	function handleUseTemplate(template) {
@@ -360,7 +362,7 @@ export function Chat(props) {
 							}
 						</div>
 						<div className={'flex gap-4'}>
-							<button type="submit" onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+							<button type="submit" disabled={text.length === 0} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 						</div>
 					</div>
 				</div>
