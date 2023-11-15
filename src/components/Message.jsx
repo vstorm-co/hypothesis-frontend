@@ -7,11 +7,14 @@ import papaya from '../assets/images/papaya.png';
 import CopyAs from './ToolBars/ChatToolbar/CopyAs';
 import { useState } from 'preact/hooks';
 
+
 export function Message(props) {
   const dispatch = useDispatch();
 
   const [showSaveAs, setShowSaveAs] = useState(false);
   const [showCopyAs, setShowCopyAs] = useState(false);
+
+  let hideCopyAsHere = ['/auth', '/']
 
   if (props.Message.created_by === 'user') {
     return (
@@ -35,7 +38,7 @@ export function Message(props) {
           <div className={`ml-2 mt-1 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
             <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
           </div>
-          <div className={'ml-auto shrink-0 hidden group-hover:block'}>
+          <div className={'ml-auto shrink-0 hidden ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
             <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
           </div>
         </div>
