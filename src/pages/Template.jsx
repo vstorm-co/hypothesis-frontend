@@ -54,16 +54,20 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<span class=("">.*)>.*?<\/span>/g, '');
-    console.log(input, textStripped);
+    // let textStripped = input.replace(/<span class=("py-1 px-2 bg-[#747474] rounded text-white text-sm pill">.*)>.*?<\/span>/g, '');
     // let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
+
+    // console.log(input, textStripped);
 
     let targetPreview = textStripped;
+    console.log(targetPreview);
 
     templates.forEach(temp => {
       if (temp.dataset.content) {
         targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
       }
+      console.log(targetPreview);
     });
 
     setPreview(targetPreview);
@@ -95,7 +99,7 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">{} ${template.name}</span>`);
+    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill">{} ${template.name}</span>`);
     setPromptSaved(false);
   }
 
