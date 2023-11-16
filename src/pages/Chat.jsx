@@ -82,10 +82,8 @@ export function Chat(props) {
 	function handleKeyDown(event) {
 		console.log(event);
 		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
-		if (event.key === 'Enter') {
-			if (event.ctrlKey) {
-				sendMsg();
-			}
+		if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+			sendMsg();
 		}
 	}
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {
