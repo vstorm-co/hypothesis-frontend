@@ -32,9 +32,14 @@ export function Template(props) {
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
 
+    if (currentTemplate.user_id === user.user_id) {
+      setPromptMode('write');
+    } else {
+      setPromptMode('preview');
+    }
+
     setTimeout(() => {
       if (currentTemplate.user_id === user.user_id) {
-        setPromptMode('write');
         const range = document.createRange();
         const sel = window.getSelection();
         range.selectNodeContents(templateRef.current);
@@ -44,7 +49,6 @@ export function Template(props) {
         templateRef.current.focus();
         range.detach();
       } else {
-        setPromptMode('preview');
         setPreview(currentTemplate.content);
       }
     }, 100);
