@@ -37,6 +37,7 @@ export function Template(props) {
     if (currentTemplate.user_id === user.user_id) {
       setPromptMode('write');
     } else {
+      generatePreview();
       setPromptMode('preview');
     }
 
@@ -138,7 +139,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  <UseTemplate TemplatePicked={handleUseTemplate} />
+                  {currentTemplate.user_id === user.user_id && <UseTemplate TemplatePicked={handleUseTemplate} />}
                   <div className={'ml-auto flex items-center justify-end'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '') + (currentTemplate.user_id === user.user_id ? '' : 'hidden')}>
                       Write
