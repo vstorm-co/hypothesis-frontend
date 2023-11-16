@@ -263,7 +263,7 @@ export function Chat(props) {
 
 	let MockMessage = {
 		created_by: 'bot',
-		content: chats.length > 1 ?
+		content: chats?.length > 1 ?
 			`Welcome ${user.name?.split(" ")[0]}, start this chat by entering a prompt below.`
 			:
 			`Welcome ${user.name?.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
