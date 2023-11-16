@@ -120,9 +120,15 @@ export const selectTemplate = (payload) => {
       return data;
     };
 
-    const template = await sendRequest();
 
-    dispatch(templatesActions.setCurrentTemplate(template));
+
+    try {
+      const template = await sendRequest();
+      dispatch(templatesActions.setCurrentTemplate(template));
+    } catch (err) {
+      console.log(err);
+      route('/404')
+    }
   }
 }
 

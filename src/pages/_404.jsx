@@ -37,7 +37,7 @@ export function NotFound(props) {
 
 	const msg = {
 		created_by: 'bot',
-		content: 'unfortunately, we cant find page you are looking for.'
+		content: 'Unfortunately, we cant find page you are looking for.'
 	}
 	return (
 		<div className={'flex w-full mx-4'}>
