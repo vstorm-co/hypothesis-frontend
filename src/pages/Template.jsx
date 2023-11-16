@@ -131,13 +131,21 @@ export function Template(props) {
               </div>
             </div>
             <div className={'mt-12'}>
-              <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
-                Prompt
-              </div>
+              {currentTemplate.user_id === user.user_id &&
+                <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
+                  Prompt
+                </div>
+              }
+
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
                   {currentTemplate.user_id === user.user_id && <UseTemplate TemplatePicked={handleUseTemplate} />}
-                  <div className={'ml-auto flex items-center justify-end'}>
+                  <div className={'ml-auto flex items-center justify-end w-full'}>
+                    {currentTemplate.user_id != user.user_id &&
+                      <div className={'mb-2 pl-1 font-bold text-xs text-[#747474] mr-auto'}>
+                        Prompt
+                      </div>
+                    }
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '') + (currentTemplate.user_id === user.user_id ? '' : 'hidden')}>
                       Write
                     </div>
