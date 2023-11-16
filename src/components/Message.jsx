@@ -20,7 +20,7 @@ export function Message(props) {
     return (
       <div onMouseLeave={() => setShowSaveAs(false)} className="flex items-start my-4 group">
         <div className="bg-[#F2F2F2] rounded-lg flex items-start p-2 pr-3 max-w-3xl">
-          <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
+          <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
           <div className="ml-4 self-center text-[#202020] text-sm" title={props.Message.content} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
         </div>
         <div className={'ml-auto hidden group-hover:flex items-center shrink-0'}>
