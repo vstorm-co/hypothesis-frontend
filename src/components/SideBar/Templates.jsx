@@ -8,6 +8,7 @@ import { Loading } from '../Loading';
 
 export function Templates() {
   const templates = useSelector(state => state.templates.templates);
+  const user = useSelector(state => state.user.currentUser);
   const size = useSelector(state => state.templates.size);
   const info = useSelector(state => state.templates.info);
   const ui = useSelector(state => state.ui);
@@ -61,9 +62,9 @@ export function Templates() {
       {!ui.chatsLoading &&
         <div>
           <div className={''}>
-            {templates?.map(temp => (
-              <TemplateBar TemplateData={temp} />
-            ))}
+            {templates?.map(temp => {
+              return temp.user_id === user.user_id ? <TemplateBar TemplateData={temp} /> : '';
+            })}
           </div>
           {(loadSize > 0 && templates?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
             <div className={'py-[2px] px-[3px]'}>
