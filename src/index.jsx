@@ -44,6 +44,7 @@ export function App() {
 		},
 		onMessage: (e) => {
 			store.dispatch(getChatsData());
+			store.dispatch(getTemplatesData());
 		}
 	});
 

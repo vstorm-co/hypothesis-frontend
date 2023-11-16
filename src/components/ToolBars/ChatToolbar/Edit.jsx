@@ -81,7 +81,6 @@ export function Edit(props) {
       <div className={"absolute border rounded right-0 w-[240px] top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
         {user.user_id === currentChat.owner &&
           <div className="border-b p-2">
-            {/*We won't see this when on personal account*/}
             <>
               <div className="text-xs font-bold text-[#747474] mb-1">
                 Visibility
