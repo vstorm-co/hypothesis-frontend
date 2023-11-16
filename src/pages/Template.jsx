@@ -10,6 +10,7 @@ import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 
 export function Template(props) {
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
+  const user = useSelector(state => state.user.currentUser);
   const [input, setInput] = useState('');
   const [preview, setPreview] = useState('');
   const [promptSaved, setPromptSaved] = useState(true);
@@ -145,14 +146,16 @@ export function Template(props) {
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                {promptSaved &&
-                  'Saved'
-                }
-                {!promptSaved &&
-                  'Save Prompt'
-                }
-              </button>
+              {user.user_id === currentTemplate.user_id &&
+                <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  {promptSaved &&
+                    'Saved'
+                  }
+                  {!promptSaved &&
+                    'Save Prompt'
+                  }
+                </button>
+              }
             </div>
           </div>
         </div>
