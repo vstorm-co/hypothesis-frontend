@@ -54,7 +54,8 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
+    let textStripped = input.replace(/<span class=("">.*)>.*?<\/span>/g, '');
+    console.log(input, textStripped);
     // let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
 
     let targetPreview = textStripped;
@@ -138,7 +139,7 @@ export function Template(props) {
                   {input}
                 </div>}
               {promptMode === 'preview' &&
-                <div className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg w-full h-[156px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                   {preview}
                 </div>
               }

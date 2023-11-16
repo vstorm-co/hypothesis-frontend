@@ -28,7 +28,7 @@ export function Chat(props) {
 	const WhosTyping = useSignal([]);
 
 	const blockSending = useSignal(false);
-	let blockTimeout;
+	const blockTimeout = useRef(null);
 
 	const input = useRef('');
 	const [text, setText] = useState('');
@@ -119,22 +119,23 @@ export function Chat(props) {
 			let message = json_data.message;
 			let typingTimeout;
 
-			blockSending.value = true;
-
 			if (json_data.type === 'message') {
+				blockSending.value = true;
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else {
-					clearTimeout(blockTimeout);
+					if (blockTimeout.current) {
+						clearTimeout(blockTimeout.current);
+					}
 					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
 						dispatch(chatsActions.addMessage({ created_by: "bot", content: '' }))
 					} else {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
 
-					blockTimeout = setTimeout(() => {
+					blockTimeout.current = setTimeout(() => {
 						blockSending.value = false;
-					})
+					}, 1000);
 				}
 			} else if (json_data.type === 'user_joined') {
 				if (!activeUsers.value.find(u => u.user_email === json_data.user_email)) {
@@ -185,7 +186,7 @@ export function Chat(props) {
 	}
 
 	const sendMsg = () => {
-		if (text.length > 0) {
+		if (text.length > 0 && !blockSending.value) {
 			const parser = new DOMParser();
 			const htmlText = parser.parseFromString(text, 'text/html');
 
@@ -370,7 +371,7 @@ export function Chat(props) {
 							}
 						</div>
 						<div className={'flex gap-4'}>
-							<button type="submit" disabled={text.length === 0 || !blockSending.value} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+							<button type="submit" disabled={text.length === 0 || blockSending.value} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 						</div>
 					</div>
 				</div>
