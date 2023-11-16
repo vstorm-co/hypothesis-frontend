@@ -26,30 +26,27 @@ export function Template(props) {
 
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
-    setTimeout(() => {
-      templateRef.current.focus();
-    }, 100)
+    setPromptMode('write');
   }, []);
 
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
 
-    if (currentTemplate.user_id === user.user_id) {
-      setPromptMode('write');
-    } else {
-      generatePreview();
-      setPromptMode('preview');
-    }
-
     setTimeout(() => {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.selectNodeContents(templateRef.current);
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      templateRef.current.focus();
-      range.detach()
+      if (currentTemplate.user_id === user.user_id) {
+        setPromptMode('write');
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(templateRef.current);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        templateRef.current.focus();
+        range.detach();
+      } else {
+        setPromptMode('preview');
+        setPreview(currentTemplate.content);
+      }
     }, 100);
   }, [currentTemplate.uuid])
 
