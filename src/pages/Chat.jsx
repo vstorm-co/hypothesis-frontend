@@ -275,6 +275,7 @@ export function Chat(props) {
 				{activeUsers.value.map(u => (
 					<img src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
 				))}
+				<img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
 			</div>
 			<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 				<div className="h-[100vh] flex flex-col pt-4 pb-2">

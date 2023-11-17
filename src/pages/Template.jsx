@@ -111,9 +111,9 @@ export function Template(props) {
         <div>
         </div>
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-          <div className="h-[100vh] flex flex-col pt-28 pb-2">
-            <div className={'flex justify-between items-center relative'}>
-              <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
+          <div className="h-[100vh] flex flex-col pt-4 pb-2">
+            <div className={'flex items-center py-3 border-b border-[#DBDBDB] relative'}>
+              <div className={'text-lg leading-6 font-bold py-2 text-[#595959] '}>
                 {currentTemplate.name}
               </div>
 
@@ -121,7 +121,7 @@ export function Template(props) {
                 <Toast />
               </div>
 
-              <div>
+              <div className={'ml-auto'}>
                 <TemplateToolBar callEditTemplate={saveContent} />
               </div>
             </div>
@@ -142,11 +142,11 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full min-h-[156px] max-h-[480px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&
-                  <div className="msg w-full h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div className="msg w-full min-h-[156px] max-h-[480px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {preview}
                   </div>
                 }
