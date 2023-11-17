@@ -32,25 +32,16 @@ export function Template(props) {
   useEffect(() => {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
 
-    if (currentTemplate.user_id === user.user_id) {
-      setPromptMode('write');
-    } else {
-      setPromptMode('preview');
-    }
-
     setTimeout(() => {
-      if (currentTemplate.user_id === user.user_id) {
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.selectNodeContents(templateRef.current);
-        range.collapse(false);
-        sel.removeAllRanges();
-        sel.addRange(range);
-        templateRef.current.focus();
-        range.detach();
-      } else {
-        setPreview(currentTemplate.content);
-      }
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.selectNodeContents(templateRef.current);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      templateRef.current.focus();
+      range.detach();
+      setPreview(currentTemplate.content);
     }, 100);
   }, [currentTemplate.uuid])
 
@@ -135,22 +126,14 @@ export function Template(props) {
               </div>
             </div>
             <div className={'mt-12'}>
-              {currentTemplate.user_id === user.user_id &&
-                <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
-                  Prompt
-                </div>
-              }
-
+              <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
+                Prompt
+              </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
                   {currentTemplate.user_id === user.user_id && <UseTemplate TemplatePicked={handleUseTemplate} />}
                   <div className={'ml-auto flex items-center justify-end w-full'}>
-                    {currentTemplate.user_id != user.user_id &&
-                      <div className={'mb-2 pl-1 font-bold text-xs text-[#747474] mr-auto'}>
-                        Prompt
-                      </div>
-                    }
-                    <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '') + (currentTemplate.user_id === user.user_id ? '' : 'hidden')}>
+                    <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '')}>
                       Write
                     </div>
                     <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>

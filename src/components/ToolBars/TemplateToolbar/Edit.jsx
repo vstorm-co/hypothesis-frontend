@@ -89,17 +89,15 @@ export function Edit(props) {
           </div>
         </div>
         <div className="border-b p-2">
-          {user.user_id === currentTemplate.user_id &&
-            <>
-              <div className="text-xs font-bold text-[#747474] mb-1">
-                Visibility
-              </div>
-              <div className={'text-sm leading-6 flex'}>
-                <div onClick={() => { updateTemplateShare("just_me") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentTemplate.visibility === "organization" ? '' : 'bg-[#747474] text-white')}>Just Me</div>
-                <div onClick={() => { updateTemplateShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentTemplate.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>
-              </div>
-            </>
-          }
+          <>
+            <div className="text-xs font-bold text-[#747474] mb-1">
+              Visibility
+            </div>
+            <div className={'text-sm leading-6 flex'}>
+              <div onClick={() => { updateTemplateShare("just_me") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentTemplate.visibility === "organization" ? '' : 'bg-[#747474] text-white')}>Just Me</div>
+              <div onClick={() => { updateTemplateShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentTemplate.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>
+            </div>
+          </>
         </div>
         <div className="border-b p-2">
           <div onClick={duplicateTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
