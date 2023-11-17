@@ -20,6 +20,13 @@ export function MockChat(props) {
   const dispatch = useDispatch();
 
   const chatRef = useRef(null);
+  const MockChatRef = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      MockChatRef.current.focus();
+    }, 100)
+  })
 
   useEffect(() => {
     if (user.access_token === null) {
@@ -129,7 +136,7 @@ export function MockChat(props) {
               <Message Loading={true} Message={msg} />
             </div>
             <form onSubmit={callCreateChat} className="mt-auto">
-              <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
+              <textarea ref={MockChatRef} onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
             </form>
             <div className="flex justify-end items-center mt-2 gap-x-4">
               {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}

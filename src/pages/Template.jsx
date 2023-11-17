@@ -85,7 +85,7 @@ export function Template(props) {
       }
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, name: title ? title : currentTemplate.name, content: targetPreview, content_html: input }));
+    dispatch(updateTemplate({ uuid: currentTemplate.uuid, visibility: currentTemplate.visibility, name: title ? title : currentTemplate.name, content: targetPreview, content_html: input }));
 
     dispatch(showToast({ content: `Template saved` }))
 
