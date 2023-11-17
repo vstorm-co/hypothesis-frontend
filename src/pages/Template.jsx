@@ -7,6 +7,7 @@ import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
 import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
+import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
 
 export function Template(props) {
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
@@ -79,7 +80,9 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
+    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
+
+    let textFormatted = textStripped.replace(/<\/?div[^>]*>/g, "");
 
     let targetPreview = textStripped;
 
@@ -101,6 +104,11 @@ export function Template(props) {
   function handleUseTemplate(template) {
     setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill">{} ${template.name}</span>`);
     setPromptSaved(false);
+  }
+
+  function handleReturnResponse() {
+    // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
+    setInput(`${input ? input : ''} <br> <div contentEditable='false' class="return-box"></div>`);
   }
 
   return (
@@ -129,6 +137,7 @@ export function Template(props) {
             <form onSubmit={saveContent} className="">
               <div className={'flex'}>
                 <UseTemplate TemplatePicked={handleUseTemplate} />
+                <ReturnResponse ReturnResponse={handleReturnResponse} />
                 <div className={'ml-auto flex items-center justify-end'}>
                   <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
                     Write

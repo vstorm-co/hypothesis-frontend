@@ -39,6 +39,19 @@
 	font-weight: 900;
 }
 
+.return-box {
+	background-image: url('./assets/return.svg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 24px;
+	height: 24px;
+
+	display: inline-block;
+
+	border: 1px solid #DBDBDB;
+	background-color: white;
+}
+
 body {
 	font-family: 'SF Pro';
 }
