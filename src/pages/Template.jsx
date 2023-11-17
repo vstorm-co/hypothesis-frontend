@@ -131,7 +131,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  {currentTemplate.user_id === user.user_id && <UseTemplate TemplatePicked={handleUseTemplate} />}
+                  <UseTemplate TemplatePicked={handleUseTemplate} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '')}>
                       Write
@@ -153,16 +153,14 @@ export function Template(props) {
               </form>
               <div className="flex justify-end items-center mt-2 gap-x-4">
                 {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-                {user.user_id === currentTemplate.user_id &&
-                  <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                    {promptSaved &&
-                      'Saved'
-                    }
-                    {!promptSaved &&
-                      'Save Prompt'
-                    }
-                  </button>
-                }
+                <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  {promptSaved &&
+                    'Saved'
+                  }
+                  {!promptSaved &&
+                    'Save Prompt'
+                  }
+                </button>
               </div>
             </div>
           </div>
