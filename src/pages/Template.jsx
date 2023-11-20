@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -55,20 +56,14 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    // let textStripped = input.replace(/<span class=("py-1 px-2 bg-[#747474] rounded text-white text-sm pill">.*)>.*?<\/span>/g, '');
-    // let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
     let textStripped = input.replace(/<\/?span[^>]*>/g, "");
 
-    // console.log(input, textStripped);
-
     let targetPreview = textStripped;
-    console.log(targetPreview);
 
     templates.forEach(temp => {
       if (temp.dataset.content) {
         targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
       }
-      console.log(targetPreview);
     });
 
     setPreview(targetPreview);
@@ -82,17 +77,19 @@ export function Template(props) {
 
     let textStripped = input.replace(/<\/?span[^>]*>/g, "");
 
-    let textFormatted = textStripped.replace(/<\/?div[^>]*>/g, "");
-
     let targetPreview = textStripped;
-
     templates.forEach(temp => {
       if (temp.dataset.content) {
         targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
       }
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, name: title ? title : currentTemplate.name, content: targetPreview, content_html: input }));
+    dispatch(updateTemplate({
+      uuid: currentTemplate.uuid,
+      name: title ? title : currentTemplate.name,
+      content: targetPreview,
+      content_html: input
+    }));
 
     dispatch(showToast({ content: `Template saved` }))
 
@@ -102,13 +99,13 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill">{} ${template.name}</span>`);
+    setInput(`${input ? input : ''} <span contenteditable="false" class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill" data-content="${template.content}">{} ${template.name}</span>`);
     setPromptSaved(false);
   }
 
   function handleReturnResponse() {
     // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
-    setInput(`${input ? input : ''} <br> <div contentEditable='false' class="return-box"></div>`);
+    setInput(`${input ? input : ''} <br> <div contenteditable="false" class="return-box"></div>`);
   }
 
   return (
@@ -139,7 +136,7 @@ export function Template(props) {
                 <UseTemplate TemplatePicked={handleUseTemplate} />
                 <ReturnResponse ReturnResponse={handleReturnResponse} />
                 <div className={'ml-auto flex items-center justify-end'}>
-                  <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
+                  <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA]' : '')}>
                     Write
                   </div>
                   <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
@@ -148,11 +145,11 @@ export function Template(props) {
                 </div>
               </div>
               {promptMode === 'write' &&
-                <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                <div ref={templateRef} contentEditable={'plaintext-only'} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg write-box w-full h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                   {input}
                 </div>}
               {promptMode === 'preview' &&
-                <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg w-full h-[156px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full h-[156px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                   {preview}
                 </div>
               }

@@ -26,13 +26,14 @@ export function Chat(props) {
 
 	const activeUsers = useSignal([]);
 	const WhosTyping = useSignal([]);
+	const promptsLeft = useSignal([]);
+	const preview = useSignal('');
 
 	const blockSending = useSignal(false);
 	const blockTimeout = useRef(null);
 
 	const input = useRef('');
 	const [text, setText] = useState('');
-	const [preview, setPreview] = useState('');
 
 	const [editTitle, setEditTitle] = useState(false);
 	const titleInputRef = useRef(null);
@@ -43,10 +44,6 @@ export function Chat(props) {
 
 	const chatRef = useRef();
 	const chatInputRef = useRef();
-
-	const updatePreviewValue = (val) => {
-		setPreview(val);
-	}
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
@@ -121,6 +118,7 @@ export function Chat(props) {
 
 			if (json_data.type === 'message') {
 				blockSending.value = true;
+				msgLoading.value = true;
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else {
@@ -135,7 +133,15 @@ export function Chat(props) {
 
 					blockTimeout.current = setTimeout(() => {
 						blockSending.value = false;
-					}, 1000);
+						msgLoading.value = false;
+
+						if (promptsLeft.value.length > 0) {
+							dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0], content_html: promptsLeft.value[0] }));
+
+							sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0], content_html: promptsLeft.value[0] }));
+							promptsLeft.value.shift();
+						}
+					}, 3500);
 				}
 			} else if (json_data.type === 'user_joined') {
 				if (!activeUsers.value.find(u => u.user_email === json_data.user_email)) {
@@ -159,9 +165,6 @@ export function Chat(props) {
 				}
 			}
 
-
-
-			msgLoading.value = false;
 			chatRef.current.scrollTop = chatRef.current.scrollHeight;
 		}
 	})
@@ -170,19 +173,29 @@ export function Chat(props) {
 		const parser = new DOMParser();
 		const htmlText = parser.parseFromString(text, 'text/html');
 
-		let templates = htmlText.querySelectorAll('span');
+		console.log(text);
 
-		let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+		let currentTemplates = htmlText.querySelectorAll('span');
 
-		let targetPreview = textStripped;
+		let targetPreview = text;
 
-		templates.forEach(temp => {
+		currentTemplates.forEach(temp => {
 			if (temp.dataset.content) {
-				targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+				let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+				console.log(`${temp.outerHTML}`);
+				console.log(`${targetPreview}`);
+				targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 			}
 		});
 
-		setPreview(targetPreview);
+		preview.value = targetPreview;
+	}
+
+	const shiftPrompts = () => {
+		const newItems = [...promptsLeft];
+		console.log(newItems);
+		newItems.shift();
+		setPromptsLeft(newItems);
 	}
 
 	const sendMsg = () => {
@@ -190,37 +203,50 @@ export function Chat(props) {
 			const parser = new DOMParser();
 			const htmlText = parser.parseFromString(text, 'text/html');
 
-			let templates = htmlText.querySelectorAll('span');
+			let currentTemplates = htmlText.querySelectorAll('span');
 
-			let textStripped = text.replace(/<(?!br\s*\/?)[^>]+>/g, '').replace(/&nbsp;/g, '');
+			let targetPreview = text;
 
-			let targetPreview = textStripped;
-
-			templates.forEach(temp => {
+			currentTemplates.forEach(temp => {
 				if (temp.dataset.content) {
-					targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 				}
 			});
 
-			msgLoading.value = true;
+			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box"></div>`);
 
-			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: targetPreview, content_html: text }));
+			promptArray = promptArray.map(p => {
+				return p.replace("&nbsp;", "").replace("<br>", "").trim();
+			});
 
-			if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
-				dispatch(updateChat({ uuid: currentChat.uuid, name: targetPreview, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
+			if (promptArray.length > 1) {
+				promptsLeft.value = promptArray;
+				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0], content_html: promptArray[0] }));
+
+				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0] }));
+				promptsLeft.value.shift();
+			} else {
+
+				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0], content_html: promptArray[0] }));
+
+				if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
+					dispatch(updateChat({ uuid: currentChat.uuid, name: promptArray[0], share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
+				}
+
+				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0], }));
 			}
 
 			setTimeout(() => {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}, 100);
-
-			sendMessage(JSON.stringify({ type: 'message', content: targetPreview, content_html: text }))
 			setText('');
+			msgLoading.value = true;
 		}
 	}
 
 	function handleUseTemplate(template) {
-		setText(`${text ? text : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">{} ${template.name}</span>`)
+		setText(`${text ? text : ''} <span contenteditable="false" class="py-1 px-2 bg-[#747474] rounded text-white text-sm" data-content="${template.uuid}">{} ${template.name}</span>`)
 	}
 
 	function callEditChatTitle(event) {
@@ -333,7 +359,7 @@ export function Chat(props) {
 							<Loading />
 						</div>
 					</div>
-					<form onSubmit={() => { sendMsg() }} className="mt-auto">
+					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">
 						{templates?.length > 0 &&
 							<div className={'flex'}>
 								<UseTemplate TemplatePicked={handleUseTemplate} />
@@ -348,12 +374,12 @@ export function Chat(props) {
 								</div>
 							</div>}
 						{promptMode === 'write' &&
-							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg write-box w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
-							<div dangerouslySetInnerHTML={{ __html: preview }} className="msg w-full min-h-[72px] max-h-[156px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-								{preview}
+							<div dangerouslySetInnerHTML={{ __html: preview.value }} className="msg w-full min-h-[72px] max-h-[156px] preview-box bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+								{preview.value}
 							</div>
 						}
 					</form>
