@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,7 +8,11 @@ import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
 import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
+<<<<<<< HEAD
 import { Loading } from '../components/Loading';
+=======
+import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
+>>>>>>> PA-116
 
 export function Template(props) {
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
@@ -55,8 +60,7 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
-    // let textStripped = input.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
 
     let targetPreview = textStripped;
 
@@ -75,17 +79,21 @@ export function Template(props) {
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '');
+    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
 
     let targetPreview = textStripped;
-
     templates.forEach(temp => {
       if (temp.dataset.content) {
         targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
       }
     });
 
-    dispatch(updateTemplate({ uuid: currentTemplate.uuid, visibility: currentTemplate.visibility, name: title ? title : currentTemplate.name, content: targetPreview, content_html: input }));
+    dispatch(updateTemplate({
+      uuid: currentTemplate.uuid,
+      name: title ? title : currentTemplate.name,
+      content: targetPreview,
+      content_html: input
+    }));
 
     dispatch(showToast({ content: `Template saved` }))
 
@@ -95,10 +103,11 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    setInput(`${input ? input : ''} <span contenteditable='false' data-content='${template.content}' class="py-1 px-2 bg-[#747474] rounded text-white text-sm">{} ${template.name}</span>`);
+    setInput(`${input ? input : ''} <span contenteditable="false" class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill" data-content="${template.content}">{} ${template.name}</span>`);
     setPromptSaved(false);
   }
 
+<<<<<<< HEAD
   if (!currentTemplate.uuid) {
     return (
       <div className={'w-full h-[100vh] flex justify-center pt-20'}>
@@ -140,32 +149,82 @@ export function Template(props) {
                       Preview
                     </div>
                   </div>
-                </div>
+=======
+  function handleReturnResponse() {
+                    // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
+                    setInput(`${input ? input : ''} <br> <div contenteditable="false" class="return-box"></div>`);
+  }
+
+                  return (
+                  <div className={'flex w-full mx-4'} >
+                    <div>
+                    </div>
+                    <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
+                      <div className="h-[100vh] flex flex-col pt-28 pb-2">
+                        <div className={'flex justify-between items-center relative'}>
+                          <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
+                            {currentTemplate.name}
+                          </div>
+
+                          <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
+                            <Toast />
+                          </div>
+
+                          <div>
+                            <TemplateToolBar callEditTemplate={saveContent} />
+                          </div>
+                        </div>
+                        <div className={'mt-12'}>
+                          <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
+                            Prompt
+                          </div>
+                          <form onSubmit={saveContent} className="">
+                            <div className={'flex'}>
+                              <UseTemplate TemplatePicked={handleUseTemplate} />
+                              <ReturnResponse ReturnResponse={handleReturnResponse} />
+                              <div className={'ml-auto flex items-center justify-end'}>
+                                <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA]' : '')}>
+                                  Write
+                                </div>
+                                <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+                                  Preview
+                                </div>
+                              </div>
+                            </div>
+                            {promptMode === 'write' &&
+                              <div ref={templateRef} contentEditable={'plaintext-only'} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg write-box w-full h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                                {input}
+                              </div>}
+                            {promptMode === 'preview' &&
+                              <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full h-[156px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                                {preview}
+>>>>>>> PA-116
+                              </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full min-h-[156px] max-h-[480px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-                    {input}
-                  </div>}
-                {promptMode === 'preview' &&
-                  <div className="msg w-full min-h-[156px] max-h-[480px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-                    {preview}
-                  </div>
-                }
-              </form>
-              <div className="flex justify-end items-center mt-2 gap-x-4">
-                {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-                <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                  {promptSaved &&
-                    'Saved'
-                  }
-                  {!promptSaved &&
-                    'Save Prompt'
-                  }
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div >
-    )
+                              <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg w-full min-h-[156px] max-h-[480px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                                {input}
+                              </div>}
+                            {promptMode === 'preview' &&
+                              <div className="msg w-full min-h-[156px] max-h-[480px] bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                                {preview}
+                              </div>
+                            }
+                          </form>
+                          <div className="flex justify-end items-center mt-2 gap-x-4">
+                            {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
+                            <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                              {promptSaved &&
+                                'Saved'
+                              }
+                              {!promptSaved &&
+                                'Save Prompt'
+                              }
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div >
+                  )
   }
 }

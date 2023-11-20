@@ -39,8 +39,50 @@
 	font-weight: 900;
 }
 
+.write-box * {
+	line-height: 24px;
+}
+
+.write-box .return-box {
+	background-image: url('./assets/return.svg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 24px;
+	height: 24px;
+	margin-right: 4px;
+
+
+	display: inline-block;
+
+	border: 1px solid #DBDBDB;
+	background-color: white;
+}
+
+.preview-box .return-box {
+	height: 24px;
+	font-size: 14px;
+	line-height: 24px;
+	color: #747474;
+
+	border: 1px dotted #DBDBDB;
+	border-radius: 4px;
+	background-color: white;
+
+	width: 70%;
+}
+
+.preview-box .return-box:before {
+	content: "Response is returned before proceeding to next prompt";
+	padding: 4px 8px;
+
+}
+
 body {
 	font-family: 'SF Pro';
+}
+
+.templatePreview span {
+	background-color: transparent !important
 }
 
 ul {
