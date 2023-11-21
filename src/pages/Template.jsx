@@ -122,8 +122,8 @@ export function Template(props) {
         </div>
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
           <div className="h-[100vh] flex flex-col pt-4 pb-2">
-            <div className={'flex items-center py-3 border-b border-[#DBDBDB] relative'}>
-              <div className={'text-lg leading-6 font-bold py-2 text-[#595959] '}>
+            <div className={'flex items-center py-4 border-b border-[#DBDBDB] relative'}>
+              <div className={'text-lg leading-6 font-bold text-[#595959] '}>
                 {currentTemplate.name}
               </div>
 
@@ -135,7 +135,7 @@ export function Template(props) {
                 <TemplateToolBar callEditTemplate={saveContent} />
               </div>
             </div>
-            <div className={'mt-12'}>
+            <div className={'mt-4'}>
               <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
                 Prompt
               </div>
@@ -153,11 +153,11 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={'plaintext-only'} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg write-box w-full h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={'plaintext-only'} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&
-                  <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full h-[156px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {preview}
                   </div>
                 }

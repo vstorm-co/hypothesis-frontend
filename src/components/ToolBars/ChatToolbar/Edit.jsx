@@ -3,12 +3,14 @@ import { getChatsData, updateChat } from '../../../store/chats-slice';
 import { deleteChat } from '../../../store/chats-slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useEffect } from 'preact/hooks';
+import { createTemplate } from '../../../store/templates-slice';
 import { signal } from '@preact/signals';
 import { route } from 'preact-router';
 
 
 import dots from '../../../assets/dots.svg';
 import bin from '../../../assets/bin.svg';
+import braces from '../../../assets/braces.svg'
 
 const confirmDelete = signal(false);
 const showEdit = signal(false);
@@ -65,6 +67,21 @@ export function Edit(props) {
     }));
   }
 
+  function toggleSaveChatAsTemplate() {
+    let array = currentChat.messages.filter(m => m.created_by === "user");
+    let targetContent = '';
+
+    array.forEach((m, i) => {
+      targetContent += `${m.content}`
+      if (i < array.length - 1) {
+        targetContent += '<br><div contenteditable="false" class="return-box"></div>'
+      }
+    });
+
+    console.log(targetContent);
+    dispatch(createTemplate({ name: currentChat.name, content: targetContent, content_html: targetContent }))
+  }
+
   function editChatTitle(event) {
     if (event.target.value != '') {
       dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
@@ -94,6 +111,14 @@ export function Edit(props) {
             </>
           </div>
         }
+        <div className={'p-1.5 border-b'}>
+          <div onClick={toggleSaveChatAsTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+            <img src={braces} alt="" />
+            <div className={'ml-2'}>
+              Save as Template
+            </div>
+          </div>
+        </div>
         <div className={'p-1.5'}>
           <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={bin} alt="" />
