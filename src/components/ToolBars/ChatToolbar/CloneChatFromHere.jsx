@@ -9,7 +9,12 @@ export function CloneChatFromHere(props) {
     const CopyUntil = currentChat.messages.find(msg => msg.uuid === props.msg.uuid);
     localStorage.setItem("MsgToSend", CopyUntil.content);
     const deleteTo = currentChat.messages[currentChat.messages.indexOf(CopyUntil) - 1];
-    dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
+    if (deleteTo) {
+      dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
+    } else {
+      // dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
+      console.log("AAA");
+    }
   }
 
   return (
