@@ -6,7 +6,10 @@ export function CloneChatFromHere(props) {
   const currentChat = useSelector(state => state.chats.currentChat)
 
   function callDuplicateChat() {
-    dispatch(cloneChat({ roomId: currentChat.uuid, messageId: props.msg.uuid }));
+    const CopyUntil = currentChat.messages.find(msg => msg.uuid === props.msg.uuid);
+    localStorage.setItem("MsgToSend", CopyUntil.content);
+    const deleteTo = currentChat.messages[currentChat.messages.indexOf(CopyUntil) - 1];
+    dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
   }
 
   return (
