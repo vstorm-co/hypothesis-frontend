@@ -6,6 +6,7 @@ import SaveAsTemplate from './ToolBars/ChatToolbar/SaveAsTemplate';
 import papaya from '../assets/images/papaya.png';
 import CopyAs from './ToolBars/ChatToolbar/CopyAs';
 import { useState } from 'preact/hooks';
+import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 
 
 export function Message(props) {
@@ -25,6 +26,7 @@ export function Message(props) {
         </div>
         <div className={'ml-auto hidden group-hover:flex items-center shrink-0'}>
           <SaveAsTemplate toggleShowSaveAs={tgl => setShowSaveAs(tgl)} showSaveAs={showSaveAs} msg={props.Message} />
+          <CloneChatFromHere msg={props.Message} />
         </div>
       </div>
     )

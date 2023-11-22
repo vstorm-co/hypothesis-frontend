@@ -149,6 +149,30 @@ export const createChat = (payload) => {
   }
 }
 
+export const cloneChat = (payload) => {
+  return async (dispatch, getState) => {
+    let state = getState();
+
+    const sendRequest = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/clone-room/${payload.roomId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
+          'Content-Type': 'application/json',
+
+        },
+        body: JSON.stringify({ message_id: payload.messageId ? payload.messageId : "" })
+      }).then(res => res.json());
+
+      return data;
+    };
+
+    const chat = await sendRequest();
+    route(`/chats/${chat.chat.uuid}`);
+    dispatch(getChatsData(chat.chat.uuid));
+  }
+}
+
 export const selectChat = (payload) => {
   return async (dispatch, getState) => {
     let state = getState();

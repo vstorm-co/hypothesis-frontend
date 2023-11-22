@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getChatsData, updateChat } from '../../../store/chats-slice';
+import { cloneChat, getChatsData, updateChat } from '../../../store/chats-slice';
 import { deleteChat } from '../../../store/chats-slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useEffect } from 'preact/hooks';
@@ -11,6 +11,7 @@ import { route } from 'preact-router';
 import dots from '../../../assets/dots.svg';
 import bin from '../../../assets/bin.svg';
 import braces from '../../../assets/braces.svg'
+import duplicate from '../../../assets/duplicate.svg';
 
 const confirmDelete = signal(false);
 const showEdit = signal(false);
@@ -82,6 +83,11 @@ export function Edit(props) {
     dispatch(createTemplate({ name: currentChat.name, content: targetContent, content_html: targetContent }))
   }
 
+  function toggleDuplicateChat() {
+    dispatch(cloneChat({ roomId: currentChat.uuid }));
+    toggleEdit();
+  }
+
   function editChatTitle(event) {
     if (event.target.value != '') {
       dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
@@ -116,6 +122,14 @@ export function Edit(props) {
             <img src={braces} alt="" />
             <div className={'ml-2'}>
               Save as Template
+            </div>
+          </div>
+        </div>
+        <div className={'p-1.5 border-b'}>
+          <div onClick={toggleDuplicateChat} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+            <img src={duplicate} alt="" />
+            <div className={'ml-2'}>
+              Duplicate Chat
             </div>
           </div>
         </div>
