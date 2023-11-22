@@ -216,8 +216,13 @@ export const SetUp = (props) => {
                           {orgLogoUrl &&
                             <img src={orgLogoUrl} alt="" className={'w-8 h-8 rounded-full'} />
                           }
-                          {!orgLogoUrl &&
+                          {!orgLogoUrl && orgLogo &&
                             <img src={`${import.meta.env.VITE_API_URL}${orgLogo}`} alt="" className={'w-8 h-8 rounded-full'} />
+                          }
+                          {!orgLogo &&
+                            <div className={'w-8 h-8 flex items-center justify-center rounded-full bg-[#FAFAFA] text-xl'}>
+                              {org.name[0]}{org.name[1]}
+                            </div>
                           }
                           <div className={'ml-4 py-2'}>
                             <div className={'text-sm leading-6 font-bold'}>{orgName ? orgName : org.name}</div>
