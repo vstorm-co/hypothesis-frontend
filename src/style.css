@@ -39,23 +39,30 @@
 	font-weight: 900;
 }
 
-.write-box * {
+.write-box #text {
 	line-height: 24px;
 }
 
 .write-box .return-box {
-	background-image: url('./assets/return.svg');
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 24px;
-	height: 24px;
-	margin-right: 4px;
-
-
+	/* background-image: url('./assets/return.svg'); */
+	/* background-repeat: no-repeat; */
+	/* background-position: center center; */
+	/* width: 24px; */
+	/* height: 24px; */
 	display: inline-block;
+	margin-right: 4px;
+	margin-top: 2px;
+
+
+	/* display: inline-block; */
 
 	border: 1px solid #DBDBDB;
 	background-color: white;
+}
+
+.write-box .return-box:before {
+	font-weight: 700;
+	content: "↩";
 }
 
 .preview-box .return-box {
@@ -73,7 +80,7 @@
 
 .preview-box .return-box:before {
 	content: "Response is returned before proceeding to next prompt";
-	padding: 4px 8px;
+	/* padding: 4px 8px; */
 
 }
 

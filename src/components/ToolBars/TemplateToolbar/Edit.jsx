@@ -78,7 +78,7 @@ export function Edit(props) {
           <img className="w-4 rotate-90" src={dots} alt="edit" />
         </div>
       </div>
-      <div className={"absolute border rounded right-0 top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
+      <div className={"absolute z-50 border rounded right-0 top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
         <div className="border-b p-2">
           <div className="text-xs font-bold text-[#747474] mb-1">
             Title

@@ -106,7 +106,7 @@ export function Template(props) {
 
   function handleReturnResponse() {
     // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
-    setInput(`${input ? input : ''} <br><div contenteditable="false" class="return-box"></div>`);
+    setInput(`${input ? input : ''}<br><div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
   }
 
   if (!currentTemplate.uuid) {
@@ -144,7 +144,7 @@ export function Template(props) {
                   <UseTemplate TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
-                    <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2] ' : '')}>
+                    <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
                       Write
                     </div>
                     <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>

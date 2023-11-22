@@ -74,7 +74,7 @@ export function Edit(props) {
     array.forEach((m, i) => {
       targetContent += `${m.content}`
       if (i < array.length - 1) {
-        targetContent += '<br><div contenteditable="false" class="return-box"></div>'
+        targetContent += '<br><div contenteditable="false" class="return-box px-1.5 rounded"></div>'
       }
     });
 
