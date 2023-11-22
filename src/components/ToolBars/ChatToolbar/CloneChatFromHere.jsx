@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { cloneChat } from "../../../store/chats-slice";
+import { cloneChat, createChat } from "../../../store/chats-slice";
 
 export function CloneChatFromHere(props) {
   const dispatch = useDispatch();
@@ -12,8 +12,7 @@ export function CloneChatFromHere(props) {
     if (deleteTo) {
       dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
     } else {
-      // dispatch(cloneChat({ roomId: currentChat.uuid, messageId: deleteTo.uuid }));
-      console.log("AAA");
+      dispatch(createChat(`Copy of ${currentChat.name}`));
     }
   }
 
