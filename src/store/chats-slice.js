@@ -190,9 +190,12 @@ export const selectChat = (payload) => {
             'Content-Type': 'application/json',
 
           },
-        }).then(res => res.json());
-
-        return data;
+        })
+        if (data.status === 404) {
+          route('/404');
+        } else {
+          return data.json();
+        }
       };
 
       try {
@@ -200,7 +203,7 @@ export const selectChat = (payload) => {
         dispatch(chatsActions.setCurrentChat(chat));
       } catch (err) {
         console.log(err);
-        route('/404')
+        route('/404');
       }
 
 

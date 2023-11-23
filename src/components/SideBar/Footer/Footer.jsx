@@ -55,7 +55,7 @@ export function Footer() {
     <div ref={footerRef} className={"border-t border-[#747474] px-2 py-3 mt-auto absolute z-20 bg-[#202020] w-80 duration-300 bottom-0 "}>
       <div className="flex flex-col">
         <div onClick={() => toggleSwitchUser()} class={'flex items-center cursor-pointer px-2 py-1 rounded ' + (switchUserActive.value ? 'bg-[#595959]' : '')}>
-          <img src={currentUser.organization_uuid ? `${import.meta.env.VITE_API_URL}${currentUser.organization_logo}` : currentUser.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
+          <img src={currentUser.organization_uuid && currentUser.organization_logo ? `${import.meta.env.VITE_API_URL}${currentUser.organization_logo}` : currentUser.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>
           <div>
             <div className="text-sm leading-6">
               {currentUser.name}
