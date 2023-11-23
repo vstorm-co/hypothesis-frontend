@@ -43,7 +43,9 @@ export function App() {
 			console.log(err);
 		},
 		onMessage: (e) => {
-			store.dispatch(getChatsData());
+			let state = store.getState();
+
+			store.dispatch(getChatsData(state.chats.currentChat.uuid));
 			store.dispatch(getTemplatesData());
 		}
 	});
