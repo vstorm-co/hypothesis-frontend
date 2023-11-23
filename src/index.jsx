@@ -44,8 +44,13 @@ export function App() {
 		},
 		onMessage: (e) => {
 			let state = store.getState();
+			// console.log();
 
-			store.dispatch(getChatsData(state.chats.currentChat.uuid));
+			if (e.data === 'room-changed') {
+				store.dispatch(getChatsData(state.chats.currentChat.uuid));
+			} else {
+				store.dispatch(getChatsData());
+			}
 			store.dispatch(getTemplatesData());
 		}
 	});

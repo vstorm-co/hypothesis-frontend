@@ -124,6 +124,9 @@ export const getChatsData = (payload) => {
     if (payload) {
       dispatch(selectChat(payload));
     }
+    if (state.chats.currentChat.uuid) {
+      // dispatch(selectChat(state.chats.currentChat.uuid));
+    }
   }
 }
 
