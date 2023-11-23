@@ -16,6 +16,7 @@ const chatsSlice = createSlice({
       uuid: null,
       messages: [],
     },
+    usersActive: [],
   },
   reducers: {
     editChat(state, action) {
@@ -50,6 +51,18 @@ const chatsSlice = createSlice({
     concatDataToMsg(state, action) {
       state.currentChat.messages[state.currentChat.messages.length - 1].content += action.payload.data;
     },
+    addUserActive(state, action) {
+      console.log(action.payload);
+      if (!state.usersActive.find(u => (u.user_email === action.payload.user_email && u.room_id === action.payload.room_id))) {
+        state.usersActive.push(action.payload);
+      }
+    },
+    removeUserActive(state, action) {
+      let index = state.usersActive.indexOf(state.usersActive.find(u => u.user_email === action.payload.user_email));
+      if (index != -1) {
+        state.usersActive.splice(index, 1);
+      }
+    }
   }
 });
 
@@ -179,8 +192,6 @@ export const cloneChat = (payload) => {
 export const selectChat = (payload) => {
   return async (dispatch, getState) => {
     let state = getState();
-
-    console.log(state);
 
     if (payload != 0) {
       const sendRequest = async () => {

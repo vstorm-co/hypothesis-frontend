@@ -79,7 +79,6 @@ export function Edit(props) {
       }
     });
 
-    console.log(targetContent);
     dispatch(createTemplate({ name: currentChat.name, content: targetContent, content_html: targetContent }))
   }
 

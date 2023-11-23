@@ -20,7 +20,7 @@ import { Chat } from './pages/Chat.jsx';
 
 import { getUserOrganizationsData } from "./store/user-slice";
 import { getTemplatesData } from "./store/templates-slice";
-import { getChatsData } from "./store/chats-slice";
+import { getChatsData, chatsActions } from "./store/chats-slice";
 
 import 'prismjs/themes/prism.css'
 import './style.css';
@@ -35,7 +35,6 @@ export function App() {
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
 
 		onOpen: () => {
-			console.log("EEE");
 		},
 		onClose: (event) => {
 		},
@@ -44,14 +43,22 @@ export function App() {
 		},
 		onMessage: (e) => {
 			let state = store.getState();
-			// console.log();
+			let json_data = JSON.parse(JSON.parse(e.data))
 
+			console.log(e);
+			console.log(json_data);
 			if (e.data === 'room-changed') {
 				store.dispatch(getChatsData(state.chats.currentChat.uuid));
+			} else if (json_data.type === 'user_joined') {
+				console.log(json_data);
+				store.dispatch(chatsActions.addUserActive(json_data));
+			} else if (json_data.type === 'user_left') {
+				console.log(json_data);
+				store.dispatch(chatsActions.removeUserActive(json_data));
 			} else {
 				store.dispatch(getChatsData());
+				store.dispatch(getTemplatesData());
 			}
-			store.dispatch(getTemplatesData());
 		}
 	});
 

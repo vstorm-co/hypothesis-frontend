@@ -78,7 +78,6 @@ export function Chat(props) {
 	}
 
 	function handleKeyDown(event) {
-		console.log(event);
 		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
 		if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
 			sendMsg();
@@ -171,8 +170,6 @@ export function Chat(props) {
 		const parser = new DOMParser();
 		const htmlText = parser.parseFromString(text, 'text/html');
 
-		console.log(text);
-
 		let currentTemplates = htmlText.querySelectorAll('span');
 
 		let targetPreview = text;
@@ -180,8 +177,6 @@ export function Chat(props) {
 		currentTemplates.forEach(temp => {
 			if (temp.dataset.content) {
 				let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-				console.log(`${temp.outerHTML}`);
-				console.log(`${targetPreview}`);
 				targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 			}
 		});
@@ -191,7 +186,6 @@ export function Chat(props) {
 
 	const shiftPrompts = () => {
 		const newItems = [...promptsLeft];
-		console.log(newItems);
 		newItems.shift();
 		setPromptsLeft(newItems);
 	}
@@ -248,7 +242,6 @@ export function Chat(props) {
 	}
 
 	function callEditChatTitle(event) {
-		console.log(event);
 		if (event.keyCode === 13) {
 			dispatch(updateChat({ uuid: currentChat.uuid, name: event.target.value, share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }));
 			setTimeout(() => {
