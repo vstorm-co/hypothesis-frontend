@@ -124,7 +124,7 @@ export function Chat(props) {
 						clearTimeout(blockTimeout.current);
 					}
 					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
-						dispatch(chatsActions.addMessage({ created_by: "bot", content: '' }))
+						dispatch(chatsActions.addMessage({ created_by: "bot", content: message }))
 					} else {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
