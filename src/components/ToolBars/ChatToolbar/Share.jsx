@@ -7,23 +7,29 @@ import { updateChat } from "../../../store/chats-slice.js";
 export function Share() {
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat);
+  const user = useSelector(state => state.user.currentUser);
 
   function callShowToast() {
     navigator.clipboard.writeText(window.location.href);
     let sharedInfo = !currentChat.share ? 'shared' : 'unshared';
 
-    if (currentChat.share) {
-      dispatch(showToast({ content: `Sharing chat by link disabled` }))
-    } else {
+    if (user.user_id != currentChat.owner) {
       dispatch(showToast({ content: `Link copied to clipboard` }))
+    } else {
+      if (currentChat.share) {
+        dispatch(showToast({ content: `Sharing chat by link disabled` }))
+      } else {
+        dispatch(showToast({ content: `Link copied to clipboard` }))
+      }
+
+      dispatch(updateChat({
+        uuid: currentChat.uuid,
+        organization_uuid: currentChat.organization_uuid,
+        visibility: currentChat.visibility,
+        share: !currentChat.share
+      }));
     }
 
-    dispatch(updateChat({
-      uuid: currentChat.uuid,
-      organization_uuid: currentChat.organization_uuid,
-      visibility: currentChat.visibility,
-      share: !currentChat.share
-    }));
   }
 
   return (
