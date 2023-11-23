@@ -212,7 +212,7 @@ export function Chat(props) {
 				}
 			});
 
-			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box"></div>`);
+			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
 			promptArray = promptArray.map(p => {
 				return p.replace("&nbsp;", "").replace("<br>", "").trim();
