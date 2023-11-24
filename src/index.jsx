@@ -47,7 +47,7 @@ export function App() {
 
 			// console.log(e);
 			// console.log(json_dta);
-			if (e.data === 'room-changed') {
+			if (json_data.type === 'room-changed') {
 				store.dispatch(getChatsData(state.chats.currentChat.uuid));
 			} else if (json_data.type === 'user_joined') {
 				console.log(json_data);
