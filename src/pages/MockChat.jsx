@@ -43,20 +43,16 @@ export function MockChat(props) {
   }
 
   function handleKeyDown(event) {
-    if (event.key === 'Enter') {
-      if (event.shiftKey) {
-
-      } else {
-        event.preventDefault();
-        callCreateChat();
-      }
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      event.preventDefault();
+      callCreateChat();
     }
   }
 
   function callCreateChat(e) {
     if (input.length > 0) {
       localStorage.setItem("MsgToSend", input);
-      dispatch(createChat(input));
+      dispatch(createChat("New Chat"));
     }
   }
 
