@@ -118,7 +118,7 @@ export function Chat(props) {
 				msgLoading.value = true;
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
-				} else {
+				} else if (json_data.created_by === 'bot') {
 					if (blockTimeout.current) {
 						clearTimeout(blockTimeout.current);
 					}
@@ -209,7 +209,7 @@ export function Chat(props) {
 			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
 			promptArray = promptArray.map(p => {
-				return p.replace("&nbsp;", "").replace("<br>", "").trim();
+				return p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim();
 			});
 
 			if (promptArray.length > 1) {
@@ -219,12 +219,8 @@ export function Chat(props) {
 				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0] }));
 				promptsLeft.value.shift();
 			} else {
-
+				console.log(promptArray);
 				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0], content_html: promptArray[0] }));
-
-				if (currentChat.messages?.length === 0 && currentChat.name === 'New Chat') {
-					dispatch(updateChat({ uuid: currentChat.uuid, name: promptArray[0], share: currentChat.share, organization_uuid: currentChat.organization_uuid, visibility: currentChat.visibility }))
-				}
 
 				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0], }));
 			}

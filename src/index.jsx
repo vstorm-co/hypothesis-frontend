@@ -45,8 +45,8 @@ export function App() {
 			let state = store.getState();
 			let json_data = JSON.parse(JSON.parse(e.data))
 
-			console.log(e);
-			console.log(json_data);
+			// console.log(e);
+			// console.log(json_dta);
 			if (e.data === 'room-changed') {
 				store.dispatch(getChatsData(state.chats.currentChat.uuid));
 			} else if (json_data.type === 'user_joined') {
