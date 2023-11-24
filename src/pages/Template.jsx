@@ -123,7 +123,7 @@ export function Template(props) {
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
           <div className="h-[100vh] flex flex-col pt-4 pb-2">
             <div className={'flex items-center py-4 border-b border-[#DBDBDB] relative'}>
-              <div className={'text-lg leading-6 font-bold text-[#595959] '}>
+              <div className={'text-lg leading-6 font-bold max-h-[156px] overflow-hidden text-[#595959] '}>
                 {currentTemplate.name}
               </div>
 
@@ -131,7 +131,7 @@ export function Template(props) {
                 <Toast />
               </div>
 
-              <div className={'ml-auto'}>
+              <div className={'ml-auto shrink-0'}>
                 <TemplateToolBar callEditTemplate={saveContent} />
               </div>
             </div>

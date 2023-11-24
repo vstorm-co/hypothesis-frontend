@@ -43,7 +43,7 @@ export function App() {
 		},
 		onMessage: (e) => {
 			let state = store.getState();
-			let json_data = JSON.parse(JSON.parse(e.data))
+			let json_data = JSON.parse(e.data)
 
 			// console.log(e);
 			// console.log(json_dta);
