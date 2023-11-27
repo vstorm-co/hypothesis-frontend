@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
-import { signal } from '@preact/signals';
+import { signal, useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 
 import braces from '../../../assets/braces.svg';
+import loopSvg from '../../../assets/loop.svg';
 
 const isVisible = signal(false);
 
@@ -32,6 +33,18 @@ export function UseTemplate(props) {
   const useTempRef = useRef(null);
   outsideClickHanlder(useTempRef);
 
+  const searchFor = useSignal('');
+  const filteredTemplates = useSignal([]);
+
+  function handleSearchForUpdate(e) {
+    searchFor.value = e.target.value;
+  }
+
+  useEffect(() => {
+    console.log(searchFor.value);
+    filteredTemplates.value = templates.filter(temp => temp.name.toLowerCase().includes(searchFor.value));
+    console.log(filteredTemplates.value);
+  }, [searchFor.value])
 
   return (
     <div ref={useTempRef} className={'relative'}>
@@ -40,10 +53,23 @@ export function UseTemplate(props) {
           <img src={braces} alt="" />
         </div>
       </div>
-      <div className={"absolute w-[240px] border rounded left-0 bottom-10 p-2 transform bg-[#202020] text-white max-h-[220px] overflow-auto scrollBar-dark " + (isVisible.value ? '' : 'hidden')}>
-        {templates.map(template => (
-          <div onClick={() => { props.TemplatePicked(template); toggleVisible() }} className={'p-2 hover:bg-[#0F0F0F] cursor-pointer rounded-lg'}>{template.name}</div>
-        ))}
+      <div className={"absolute w-[240px] border rounded bg-white z-50 transform max-h-[220px] scrollBar-dark " + (isVisible.value ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+        <div className={'p-2 border-b'}>
+          <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
+            <img className="w-4" src={loopSvg} alt="" />
+            <input onInput={(e) => handleSearchForUpdate(e)} value={searchFor.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="Search..." />
+          </div>
+        </div>
+        <div>
+          {filteredTemplates.value.map(template => (
+            <div onClick={() => { props.TemplatePicked(template); toggleVisible() }} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA]'}>
+              <img className="w-4" src={braces} alt="" />
+              <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
+                {template.name}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
 

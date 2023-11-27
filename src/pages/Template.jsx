@@ -141,7 +141,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  <UseTemplate TemplatePicked={handleUseTemplate} />
+                  <UseTemplate Position={'bottom'} TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>

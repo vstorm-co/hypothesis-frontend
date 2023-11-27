@@ -350,7 +350,7 @@ export function Chat(props) {
 					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">
 						{templates?.length > 0 &&
 							<div className={'flex'}>
-								<UseTemplate TemplatePicked={handleUseTemplate} />
+								<UseTemplate Position={'top'} TemplatePicked={handleUseTemplate} />
 
 								<div className={'ml-auto flex items-center justify-center'}>
 									<div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
