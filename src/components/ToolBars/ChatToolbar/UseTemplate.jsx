@@ -42,12 +42,12 @@ export function UseTemplate(props) {
 
   return (
     <div ref={useTempRef} className={'relative'}>
-      <div onClick={toggleVisible} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
-        <div className={'p-1 hover:bg-[#F2F2F2] ' + (isVisible.value ? 'bg-[#F2F2F2]' : '')}>
+      <div onClick={() => props.onToggleVisible()} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
+        <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <img src={braces} alt="" />
         </div>
       </div>
-      <div className={"absolute w-[240px] border rounded bg-white z-50 transform max-h-[220px] scrollBar-dark " + (isVisible.value ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+      <div className={"absolute w-[240px] border rounded bg-white z-50 transform max-h-[220px] scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={loopSvg} alt="" />

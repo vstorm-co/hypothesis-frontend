@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSignal } from '@preact/signals';
 
 import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
 import { selectTemplate, updateTemplate } from '../store/templates-slice';
@@ -21,6 +22,8 @@ export function Template(props) {
   const dispatch = useDispatch();
 
   const templateRef = useRef();
+
+  const useTemplateVisible = useSignal(false);
 
   function handleInputChange(event) {
     setInput(event.target.value);
@@ -58,11 +61,15 @@ export function Template(props) {
       setTimeout(() => {
         setRange();
       }, 100);
-      // console.log("AAA");
     }
-    // setInput(input.replace("&nbsp;", "").replace(/<br>$/, ''))
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       saveContent()
+    }
+  }
+
+  function handleKeyUp() {
+    if (input.lastIndexOf("{{") != -1) {
+      useTemplateVisible.value = true;
     }
   }
 
@@ -157,7 +164,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  <UseTemplate Position={'bottom'} TemplatePicked={handleUseTemplate} />
+                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={() => useTemplateVisible.value = !useTemplateVisible.value} Position={'bottom'} TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
@@ -169,7 +176,7 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap inline-block write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&
