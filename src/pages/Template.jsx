@@ -110,7 +110,9 @@ export function Template(props) {
 
   function handleReturnResponse() {
     // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
-    setInput(`${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+    let pastedCode = `${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
+    let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
+    setInput(codeWithEntities);
   }
 
   if (!currentTemplate.uuid) {
