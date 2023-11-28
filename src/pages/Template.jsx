@@ -26,6 +26,17 @@ export function Template(props) {
     setInput(event.target.value);
   }
 
+  function setRange() {
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(templateRef.current);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    templateRef.current.focus();
+    range.detach();
+  }
+
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
     setPromptMode('write');
@@ -35,21 +46,21 @@ export function Template(props) {
     setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
 
     setTimeout(() => {
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.selectNodeContents(templateRef.current);
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
-      templateRef.current.focus();
-      range.detach();
+      setRange();
       setPreview(currentTemplate.content);
     }, 100);
   }, [currentTemplate.uuid])
 
   function handleKeyDown(event) {
     setPromptSaved(false);
-    setInput(input.replace("&nbsp;", "").replace(/<br>$/, ''))
+    if (input.lastIndexOf("<br>") != -1) {
+      setInput(`${input.substring(0, input.lastIndexOf("<br>"))}`);
+      setTimeout(() => {
+        setRange();
+      }, 100);
+      // console.log("AAA");
+    }
+    // setInput(input.replace("&nbsp;", "").replace(/<br>$/, ''))
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       saveContent()
     }
@@ -109,7 +120,6 @@ export function Template(props) {
   }
 
   function handleReturnResponse() {
-    // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
     let pastedCode = `${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
     let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
     setInput(codeWithEntities);
