@@ -49,6 +49,10 @@ export function Template(props) {
 
   function handleKeyDown(event) {
     setPromptSaved(false);
+    setInput(input.replace("&nbsp;", "").replace(/<br>$/, ''))
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      saveContent()
+    }
   }
 
   const generatePreview = () => {
@@ -106,7 +110,7 @@ export function Template(props) {
 
   function handleReturnResponse() {
     // setInput(`${input ? input : ''} <div class="text-xs leading-6 rounded px-2 py-1 border border-dotted border-[#DBDBDB] text-[#747474]" contenteditable='false'>RETURN</div>`);
-    setInput(`${input ? input : ''}<br><div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+    setInput(`${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
   }
 
   if (!currentTemplate.uuid) {
@@ -153,7 +157,7 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={'plaintext-only'} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap inline-block write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&

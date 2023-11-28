@@ -52,7 +52,7 @@
 	display: inline-block;
 	margin-right: 4px;
 	margin-top: 2px;
-
+	-webkit-user-modify: read-only;
 
 	/* display: inline-block; */
 
