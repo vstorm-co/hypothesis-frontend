@@ -142,8 +142,12 @@ export function Template(props) {
     setInput(codeWithEntities);
   }
 
-  function handleToggleVisible() {
-    useTemplateVisible.value = !useTemplateVisible.value;
+  function handleToggleVisible(tgl) {
+    if (tgl != undefined) {
+      useTemplateVisible.value = tgl;
+    } else {
+      useTemplateVisible.value = !useTemplateVisible.value;
+    }
     if (useTemplateVisible) {
       templateRef.current.focus();
     }
@@ -188,7 +192,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'bottom'} TemplatePicked={handleUseTemplate} />
+                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={(tgl) => handleToggleVisible(tgl)} Position={'bottom'} TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>

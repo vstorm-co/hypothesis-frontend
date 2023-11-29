@@ -301,8 +301,12 @@ export function Chat(props) {
 		}
 	}
 
-	function handleToggleVisible() {
-		useTemplateVisible.value = !useTemplateVisible.value;
+	function handleToggleVisible(tgl) {
+		if (tgl != undefined) {
+			useTemplateVisible.value = tgl;
+		} else {
+			useTemplateVisible.value = !useTemplateVisible.value;
+		}
 		if (useTemplateVisible) {
 			chatInputRef.current.focus();
 		}
