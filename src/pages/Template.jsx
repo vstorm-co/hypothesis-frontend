@@ -27,9 +27,9 @@ export function Template(props) {
   const useTemplateVisible = useSignal(false);
   const caret = useSignal(0);
 
-  function handleInputChange(event) {
+  function handleInputChange(e) {
     saveCaret();
-    setInput(event.target.value);
+    setInput(e.currentTarget.innerHTML);
   }
 
   function setRange() {
@@ -125,29 +125,14 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    console.log(caret);
-    console.log(input.substring(0, caret.value));
-    console.log(input.substring(caret.value));
     let element = `<span contenteditable="false" class="pill" data-content="${template.content}">{} ${template.name}</span>`;
     setInput(input.substring(0, caret.value) + `${element}` + input.substring(caret.value));
 
     setTimeout(() => {
       setRange();
       useTemplateVisible.value = false;
-    }, 100)
+    }, 100);
 
-    // let tempElement = document.createElement('div');
-    // tempElement.innerHTML = editorRef.current.innerHTML;
-
-    // // Append the new element at the caret position
-    // let children = tempElement.childNodes;
-
-    // let newRange = document.createRange();
-    // let newCaretPosition = range.startOffset + `{} ${template.name}`.length; // Assuming the new element has a length of 1
-    // newRange.setStart(children[newCaretPosition], 0);
-    // newRange.setEnd(children[newCaretPosition], 0);
-    // window.getSelection().removeAllRanges();
-    // window.getSelection().addRange(newRange);
     setPromptSaved(false);
   }
 
@@ -215,7 +200,7 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleInputChange(e)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&

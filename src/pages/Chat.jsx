@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
@@ -24,12 +25,14 @@ export function Chat(props) {
 	const templates = useSelector(state => state.templates.useTemplates);
 	const user = useSelector(state => state.user.currentUser);
 
-	const activeUsers = useSignal([]);
-	const WhosTyping = useSignal([]);
-	const promptsLeft = useSignal([]);
-	const preview = useSignal('');
-
+	const useTemplateVisible = useSignal(false);
 	const blockSending = useSignal(false);
+	const activeUsers = useSignal([]);
+	const promptsLeft = useSignal([]);
+	const WhosTyping = useSignal([]);
+	const preview = useSignal('');
+	const caret = useSignal();
+
 	const blockTimeout = useRef(null);
 
 	const input = useRef('');
@@ -58,7 +61,7 @@ export function Chat(props) {
 	useEffect(() => {
 		setText('');
 		setTimeout(() => {
-			chatInputRef.current.focus();
+			setRange();
 		}, 100)
 	}, [currentChat.uuid])
 
@@ -73,8 +76,22 @@ export function Chat(props) {
 		}, 300);
 	}, [currentChat.messages])
 
-	function handleInputChange(event) {
-		input.current = event.target.value;
+	function saveCaret() {
+		let range = window.getSelection().getRangeAt(0);
+		let caretPosition = range.startOffset;
+
+		caret.value = caretPosition;
+	}
+
+	function setRange() {
+		const range = document.createRange();
+		const sel = window.getSelection();
+		range.selectNodeContents(chatInputRef.current);
+		range.collapse(false);
+		sel.removeAllRanges();
+		sel.addRange(range);
+		chatInputRef.current.focus();
+		range.detach();
 	}
 
 	function handleKeyDown(event) {
@@ -184,12 +201,6 @@ export function Chat(props) {
 		preview.value = targetPreview;
 	}
 
-	const shiftPrompts = () => {
-		const newItems = [...promptsLeft];
-		newItems.shift();
-		setPromptsLeft(newItems);
-	}
-
 	const sendMsg = () => {
 		if (text.length > 0 && !blockSending.value) {
 			const parser = new DOMParser();
@@ -234,7 +245,13 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		setText(`${text ? text : ''} <span contenteditable="false" class="py-1 px-2 bg-[#747474] rounded text-white text-sm" data-content="${template.uuid}">{} ${template.name}</span>`)
+		let element = `<span contenteditable="false" class="pill" data-content="${template.uuid}">{} ${template.name}</span>`;
+		setText(text.substring(0, caret.value) + `${element}` + text.substring(caret.value));
+
+		setTimeout(() => {
+			setRange();
+			useTemplateVisible.value = false;
+		}, 100);
 	}
 
 	function callEditChatTitle(event) {
@@ -258,8 +275,7 @@ export function Chat(props) {
 	function handleOnInput(e) {
 		let currentText = e.currentTarget.innerHTML
 		setText(currentText);
-		if (currentText[currentText.length - 1] === '{' && currentText[currentText.length - 2] === '{') {
-		};
+		saveCaret();
 	}
 
 	function EditedAt() {
@@ -282,6 +298,13 @@ export function Chat(props) {
 		} else if (hours >= 7 * 24) {
 			let weeks = Math.floor((hours / 24) / 7)
 			return `${weeks} ${weeks > 1 ? 'weeks' : 'week'} ago`
+		}
+	}
+
+	function handleToggleVisible() {
+		useTemplateVisible.value = !useTemplateVisible.value;
+		if (useTemplateVisible) {
+			chatInputRef.current.focus();
 		}
 	}
 
@@ -350,7 +373,7 @@ export function Chat(props) {
 					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">
 						{templates?.length > 0 &&
 							<div className={'flex'}>
-								<UseTemplate Position={'top'} TemplatePicked={handleUseTemplate} />
+								<UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'top'} TemplatePicked={handleUseTemplate} />
 
 								<div className={'ml-auto flex items-center justify-center'}>
 									<div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
@@ -362,7 +385,7 @@ export function Chat(props) {
 								</div>
 							</div>}
 						{promptMode === 'write' &&
-							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg write-box w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
