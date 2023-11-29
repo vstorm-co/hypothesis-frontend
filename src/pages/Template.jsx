@@ -114,7 +114,8 @@ export function Template(props) {
       uuid: currentTemplate.uuid,
       name: title ? title : currentTemplate.name,
       content: targetPreview,
-      content_html: input
+      content_html: input,
+      visibility: currentTemplate.visibility,
     }));
 
     dispatch(showToast({ content: `Template saved` }))
