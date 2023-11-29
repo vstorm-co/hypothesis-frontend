@@ -60,7 +60,7 @@ export function Template(props) {
   function handleKeyDown(event) {
     setPromptSaved(false);
     if (input.lastIndexOf("<br>") != -1) {
-      setInput(`${input.substring(0, input.lastIndexOf("<br>"))}`);
+      setInput(`${input.replace(/&lt;br&gt;/g, "")}`);
       setTimeout(() => {
         setRange();
       }, 100);
