@@ -40,6 +40,10 @@ export function UseTemplate(props) {
     searchFor.value = e.target.value;
   }
 
+  function handleClick(e, template) {
+    props.TemplatePicked(template);
+  }
+
   return (
     <div ref={useTempRef} className={'relative'}>
       <div onClick={() => props.onToggleVisible()} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
@@ -56,7 +60,7 @@ export function UseTemplate(props) {
         </div>
         <div>
           {templates.filter(temp => temp.name.toLowerCase().includes(searchFor.value)).map(template => (
-            <div onClick={() => { props.TemplatePicked(template); toggleVisible() }} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA]'}>
+            <div onClick={(e) => handleClick(e, template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA]'}>
               <img className="w-4" src={braces} alt="" />
               <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
                 {template.name}

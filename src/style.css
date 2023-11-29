@@ -93,6 +93,10 @@
 	background-color: white;
 }
 
+.pill {
+	@apply py-1 px-2 mx-0.5 bg-[#747474] rounded text-white text-sm;
+}
+
 .write-box .return-box:before {
 	font-weight: 700;
 	content: "↩";

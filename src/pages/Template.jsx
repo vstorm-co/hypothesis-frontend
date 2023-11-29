@@ -13,19 +13,22 @@ import { Loading } from '../components/Loading';
 import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
 
 export function Template(props) {
+  const dispatch = useDispatch();
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
   const user = useSelector(state => state.user.currentUser);
-  const [input, setInput] = useState('');
-  const [preview, setPreview] = useState('');
+
   const [promptSaved, setPromptSaved] = useState(true);
   const [promptMode, setPromptMode] = useState('write');
-  const dispatch = useDispatch();
+  const [preview, setPreview] = useState('');
+  const [input, setInput] = useState('');
 
   const templateRef = useRef();
 
   const useTemplateVisible = useSignal(false);
+  const caret = useSignal(0);
 
   function handleInputChange(event) {
+    saveCaret();
     setInput(event.target.value);
   }
 
@@ -122,7 +125,29 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    setInput(`${input ? input : ''} <span contenteditable="false" class="py-1 px-2 bg-[#747474] rounded text-white text-sm pill" data-content="${template.content}">{} ${template.name}</span>`);
+    console.log(caret);
+    console.log(input.substring(0, caret.value));
+    console.log(input.substring(caret.value));
+    let element = `<span contenteditable="false" class="pill" data-content="${template.content}">{} ${template.name}</span>`;
+    setInput(input.substring(0, caret.value) + `${element}` + input.substring(caret.value));
+
+    setTimeout(() => {
+      setRange();
+      useTemplateVisible.value = false;
+    }, 100)
+
+    // let tempElement = document.createElement('div');
+    // tempElement.innerHTML = editorRef.current.innerHTML;
+
+    // // Append the new element at the caret position
+    // let children = tempElement.childNodes;
+
+    // let newRange = document.createRange();
+    // let newCaretPosition = range.startOffset + `{} ${template.name}`.length; // Assuming the new element has a length of 1
+    // newRange.setStart(children[newCaretPosition], 0);
+    // newRange.setEnd(children[newCaretPosition], 0);
+    // window.getSelection().removeAllRanges();
+    // window.getSelection().addRange(newRange);
     setPromptSaved(false);
   }
 
@@ -130,6 +155,20 @@ export function Template(props) {
     let pastedCode = `${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
     let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
     setInput(codeWithEntities);
+  }
+
+  function handleToggleVisible() {
+    useTemplateVisible.value = !useTemplateVisible.value;
+    if (useTemplateVisible) {
+      templateRef.current.focus();
+    }
+  }
+
+  function saveCaret() {
+    let range = window.getSelection().getRangeAt(0);
+    let caretPosition = range.startOffset;
+
+    caret.value = caretPosition;
   }
 
   if (!currentTemplate.uuid) {
@@ -164,7 +203,7 @@ export function Template(props) {
               </div>
               <form onSubmit={saveContent} className="">
                 <div className={'flex'}>
-                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={() => useTemplateVisible.value = !useTemplateVisible.value} Position={'bottom'} TemplatePicked={handleUseTemplate} />
+                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'bottom'} TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
                     <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
@@ -176,7 +215,7 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => setInput(e.currentTarget.innerHTML)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
                     {input}
                   </div>}
                 {promptMode === 'preview' &&
