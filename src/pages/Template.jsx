@@ -20,7 +20,8 @@ export function Template(props) {
   const [promptSaved, setPromptSaved] = useState(true);
   const [promptMode, setPromptMode] = useState('write');
   const [preview, setPreview] = useState('');
-  const [input, setInput] = useState('');
+
+  const input = useSignal('');
 
   const templateRef = useRef();
 
@@ -29,7 +30,7 @@ export function Template(props) {
 
   function handleInputChange(e) {
     saveCaret();
-    setInput(e.currentTarget.innerHTML);
+    input.value = e.currentTarget.innerHTML;
   }
 
   function setRange() {
@@ -49,7 +50,7 @@ export function Template(props) {
   }, []);
 
   useEffect(() => {
-    setInput(currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content);
+    input.value = currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content;
 
     setTimeout(() => {
       setRange();
@@ -59,30 +60,29 @@ export function Template(props) {
 
   function handleKeyDown(event) {
     setPromptSaved(false);
-    if (input.lastIndexOf("<br>") != -1) {
-      setInput(`${input.replace(/&lt;br&gt;/g, "")}`);
-      setTimeout(() => {
-        setRange();
-      }, 100);
-    }
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       saveContent()
+    };
+    if (event.keyCode === 13) {
+      window.document.execCommand('insertHTML', false, '<br>');
+      return false;
     }
+
   }
 
   function handleKeyUp() {
-    if (input.lastIndexOf("{{") != -1) {
+    if (input.value.lastIndexOf("{{") != -1) {
       useTemplateVisible.value = true;
     }
   }
 
   const generatePreview = () => {
     const parser = new DOMParser();
-    const htmlText = parser.parseFromString(input, 'text/html');
+    const htmlText = parser.parseFromString(input.value, 'text/html');
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
+    let textStripped = input.value.replace(/<\/?span[^>]*>/g, "");
 
     let targetPreview = textStripped;
 
@@ -97,11 +97,11 @@ export function Template(props) {
 
   function saveContent(ev, title) {
     const parser = new DOMParser();
-    const htmlText = parser.parseFromString(input, 'text/html');
+    const htmlText = parser.parseFromString(input.value, 'text/html');
 
     let templates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.replace(/<\/?span[^>]*>/g, "");
+    let textStripped = input.value.replace(/<\/?span[^>]*>/g, "");
 
     let targetPreview = textStripped;
     templates.forEach(temp => {
@@ -114,7 +114,7 @@ export function Template(props) {
       uuid: currentTemplate.uuid,
       name: title ? title : currentTemplate.name,
       content: targetPreview,
-      content_html: input,
+      content_html: input.value,
       visibility: currentTemplate.visibility,
     }));
 
@@ -126,11 +126,24 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    let element = `<span contenteditable="false" class="pill" data-content="${template.content}">{} ${template.name}</span>`;
-    setInput(input.substring(0, caret.value) + `${element}` + input.substring(caret.value));
+    // let element = `<span contenteditable="false" class="pill" data-content="${template.content}">{} ${template.name}</span>`;
+    // setInput(input.substring(0, caret.value) + `${element}` + input.substring(caret.value));
+
+    let element = document.createElement('span');
+    element.innerText = `{} ${template.name}`;
+    element.dataset.content = `${template.content}`;
+    element.classList.add('pill');
+    element.setAttribute("contenteditable", false);
+
+    caret.value.insertNode(element);
+
+    // Move the caret after the inserted element
+    caret.value.setStartAfter(element);
+    caret.value.setEndAfter(element);
 
     setTimeout(() => {
       setRange();
+      input.value = `${templateRef.current.innerHTML}`;
       useTemplateVisible.value = false;
     }, 100);
 
@@ -138,9 +151,14 @@ export function Template(props) {
   }
 
   function handleReturnResponse() {
-    let pastedCode = `${input ? input : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
+    input.value = `${input.value.replace("<div><br></div>", "").replace("<br>", "")}`;
+    console.log(input.value);
+    let pastedCode = `${input.value ? input.value : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
     let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
-    setInput(codeWithEntities);
+    input.value = codeWithEntities;
+    setTimeout(() => {
+      setRange();
+    }, 100);
   }
 
   function handleToggleVisible(tgl) {
@@ -156,9 +174,8 @@ export function Template(props) {
 
   function saveCaret() {
     let range = window.getSelection().getRangeAt(0);
-    let caretPosition = range.startOffset;
 
-    caret.value = caretPosition;
+    caret.value = range;
   }
 
   if (!currentTemplate.uuid) {
@@ -205,8 +222,8 @@ export function Template(props) {
                   </div>
                 </div>
                 {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleInputChange(e)} dangerouslySetInnerHTML={{ __html: input }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-                    {input}
+                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleInputChange(e)} dangerouslySetInnerHTML={{ __html: input.value }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+                    {input.value}
                   </div>}
                 {promptMode === 'preview' &&
                   <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
