@@ -98,8 +98,6 @@ class CopyAs extends Component {
     localStorage.setItem('ANT_defaultSaveAs', 'ftd');
     this.setState({ defaultSaveAs: 'ftd' })
 
-
-
     this.props.dispatch(showToast({ content: `Copied as Formatted` }));
     this.props.toggleShowCopyAs(false);
   }

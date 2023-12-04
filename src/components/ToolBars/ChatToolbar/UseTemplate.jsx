@@ -20,6 +20,9 @@ function outsideClickHanlder(ref, callback) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", e => {
+      // console.log(e);
+    })
 
     return () => {
     }
@@ -60,7 +63,7 @@ export function UseTemplate(props) {
         </div>
         <div className={''}>
           {templates.filter(temp => temp.name.toLowerCase().includes(searchFor.value)).map(template => (
-            <div onClick={(e) => handleClick(e, template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA]'}>
+            <div onClick={(e) => handleClick(e, template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
               <img className="w-4" src={braces} alt="" />
               <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
                 {template.name}

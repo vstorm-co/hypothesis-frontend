@@ -150,9 +150,9 @@ export function Chat(props) {
 						msgLoading.value = false;
 
 						if (promptsLeft.value.length > 0) {
-							dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0], content_html: promptsLeft.value[0] }));
+							dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 
-							sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0], content_html: promptsLeft.value[0] }));
+							sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 							promptsLeft.value.shift();
 						}
 					}, 3500);
@@ -209,31 +209,39 @@ export function Chat(props) {
 			let currentTemplates = htmlText.querySelectorAll('span');
 
 			let targetPreview = text;
+			let htmlPreview = '';
 
 			currentTemplates.forEach(temp => {
 				if (temp.dataset.content) {
 					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+					console.log(targetPreview);
+					htmlPreview = templateTarget.content_html;
 					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 				}
 			});
 
 			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+			let htmlArray = htmlPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
-			promptArray = promptArray.map(p => {
-				return p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim();
+			promptArray = promptArray.map((p, index) => {
+				return {
+					prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+					html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
+				};
 			});
+
+			console.log(promptArray);
 
 			if (promptArray.length > 1) {
 				promptsLeft.value = promptArray;
-				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0], content_html: promptArray[0] }));
+				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0] }));
+				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
 				promptsLeft.value.shift();
 			} else {
-				console.log(promptArray);
-				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0], content_html: promptArray[0] }));
+				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0], content_html: promptArray[0], }));
+				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
 			}
 
 			setTimeout(() => {

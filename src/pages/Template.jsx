@@ -152,7 +152,6 @@ export function Template(props) {
 
   function handleReturnResponse() {
     input.value = `${input.value.replace("<div><br></div>", "").replace("<br>", "")}`;
-    console.log(input.value);
     let pastedCode = `${input.value ? input.value : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
     let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
     input.value = codeWithEntities;

@@ -50,10 +50,8 @@ export function App() {
 			if (json_data.type === 'room-changed') {
 				store.dispatch(getChatsData(state.chats.currentChat.uuid));
 			} else if (json_data.type === 'user_joined') {
-				console.log(json_data);
 				store.dispatch(chatsActions.addUserActive(json_data));
 			} else if (json_data.type === 'user_left') {
-				console.log(json_data);
 				store.dispatch(chatsActions.removeUserActive(json_data));
 			} else {
 				store.dispatch(getChatsData());

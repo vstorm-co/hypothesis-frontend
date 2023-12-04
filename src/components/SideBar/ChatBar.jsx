@@ -23,7 +23,6 @@ export const ChatBar = props => {
 
   useEffect(() => {
     usersActive.forEach(u => {
-      console.log(u.room_id, props.ChatData.uuid);
     })
     usersOnChat.value = usersActive.filter(u => u.room_id === props.ChatData.uuid);
   }, [usersActive])

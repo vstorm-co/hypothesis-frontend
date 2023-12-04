@@ -121,6 +121,10 @@
 
 }
 
+.hover\:box-shadow:hover {
+	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
+}
+
 body {
 	font-family: 'SF Pro';
 }

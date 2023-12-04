@@ -52,7 +52,6 @@ const chatsSlice = createSlice({
       state.currentChat.messages[state.currentChat.messages.length - 1].content += action.payload.data;
     },
     addUserActive(state, action) {
-      console.log(action.payload);
       if (!state.usersActive.find(u => (u.user_email === action.payload.user_email && u.room_id === action.payload.room_id))) {
         state.usersActive.push(action.payload);
       }
