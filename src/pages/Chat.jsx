@@ -78,9 +78,8 @@ export function Chat(props) {
 
 	function saveCaret() {
 		let range = window.getSelection().getRangeAt(0);
-		let caretPosition = range.startOffset;
 
-		caret.value = caretPosition;
+		caret.value = range;
 	}
 
 	function setRange() {
@@ -194,6 +193,7 @@ export function Chat(props) {
 		currentTemplates.forEach(temp => {
 			if (temp.dataset.content) {
 				let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+				console.log(templateTarget);
 				targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 			}
 		});
@@ -214,7 +214,6 @@ export function Chat(props) {
 			currentTemplates.forEach(temp => {
 				if (temp.dataset.content) {
 					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-					console.log(targetPreview);
 					htmlPreview = templateTarget.content_html;
 					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 				}
@@ -253,11 +252,21 @@ export function Chat(props) {
 	}
 
 	function handleUseTemplate(template) {
-		let element = `<span contenteditable="false" class="pill" data-content="${template.uuid}">{} ${template.name}</span>`;
-		setText(text.substring(0, caret.value) + `${element}` + text.substring(caret.value));
+		let element = document.createElement('span');
+		element.innerText = `{} ${template.name}`;
+		element.dataset.content = `${template.uuid}`;
+		element.classList.add('pill');
+		element.setAttribute("contenteditable", false);
+
+		caret.value.insertNode(element);
+
+		// Move the caret after the inserted element
+		caret.value.setStartAfter(element);
+		caret.value.setEndAfter(element);
 
 		setTimeout(() => {
-			setRange();
+			// setRange();
+			setText(`${chatInputRef.current.innerHTML}`);
 			useTemplateVisible.value = false;
 		}, 100);
 	}
