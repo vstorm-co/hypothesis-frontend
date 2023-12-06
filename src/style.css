@@ -95,6 +95,35 @@
 
 .pill {
 	@apply py-1 px-2 mx-0.5 bg-[#747474] rounded text-white text-sm;
+	position: relative;
+	padding-left: 24px;
+}
+
+.pill:before {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 0;
+
+	background-image: url('./assets/braces-light.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 24px;
+	height: 24px;
+}
+
+.write-box:empty:before {
+	content: attr(data-placeholder);
+	display: block;
+	color: #747474;
+
+	pointer-events: none;
+	user-select: none;
+}
+
+.write-box .return-box {
+	position: relative;
 }
 
 .write-box .return-box:before {

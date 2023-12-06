@@ -43,6 +43,8 @@ export function Template(props) {
     sel.addRange(range);
     templateRef.current.focus();
     range.detach();
+
+    saveCaret();
   }
 
   useEffect(() => {
@@ -123,11 +125,8 @@ export function Template(props) {
   }
 
   function handleUseTemplate(template) {
-    // let element = `<span contenteditable="false" class="pill" data-content="${template.content}">{} ${template.name}</span>`;
-    // setInput(input.substring(0, caret.value) + `${element}` + input.substring(caret.value));
-
     let element = document.createElement('span');
-    element.innerText = `{} ${template.name}`;
+    element.innerText = ` font-bold${template.name}`;
     element.dataset.content = `${template.uuid}`;
     element.classList.add('pill');
     element.setAttribute("contenteditable", false);
@@ -135,8 +134,8 @@ export function Template(props) {
     caret.value.insertNode(element);
 
     // Move the caret after the inserted element
-    caret.value.setStartAfter(element);
-    caret.value.setEndAfter(element);
+    // caret.value.setStartAfter(element);
+    // caret.value.setEndAfter(element);
 
     setTimeout(() => {
       setRange();
@@ -208,10 +207,10 @@ export function Template(props) {
                   <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={(tgl) => handleToggleVisible(tgl)} Position={'bottom'} TemplatePicked={handleUseTemplate} />
                   <ReturnResponse ReturnResponse={handleReturnResponse} />
                   <div className={'ml-auto flex items-center justify-end w-full'}>
-                    <div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
+                    <div onClick={() => { setPromptMode('write') }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
                       Write
                     </div>
-                    <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+                    <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
                       Preview
                     </div>
                   </div>

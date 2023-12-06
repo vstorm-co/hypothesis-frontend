@@ -89,6 +89,8 @@ export function Chat(props) {
 		sel.addRange(range);
 		chatInputRef.current.focus();
 		range.detach();
+
+		saveCaret();
 	}
 
 	function handleKeyDown(event) {
@@ -254,7 +256,7 @@ export function Chat(props) {
 
 	function handleUseTemplate(template) {
 		let element = document.createElement('span');
-		element.innerText = `{} ${template.name}`;
+		element.innerText = `${template.name}`;
 		element.dataset.content = `${template.uuid}`;
 		element.classList.add('pill');
 		element.setAttribute("contenteditable", false);
@@ -388,9 +390,6 @@ export function Chat(props) {
 						{currentChat.messages?.map(msg => (
 							<Message Message={msg} />
 						))}
-						<div className={'flex justify-center py-4 ' + (msgLoading.value ? '' : 'hidden')}>
-							<Loading />
-						</div>
 					</div>
 					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">
 						{templates?.length > 0 &&
@@ -398,20 +397,20 @@ export function Chat(props) {
 								<UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'top'} TemplatePicked={handleUseTemplate} />
 
 								<div className={'ml-auto flex items-center justify-center'}>
-									<div onClick={() => { setPromptMode('write') }} className={'px-4 cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#F2F2F2]' : '')}>
+									<div onClick={() => { setPromptMode('write') }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA]' : '')}>
 										Write
 									</div>
-									<div onClick={() => { setPromptMode('preview'); generatePreview(); }} className={'px-4 cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
+									<div onClick={() => { setPromptMode('preview'); generatePreview(); }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
 										Preview
 									</div>
 								</div>
 							</div>}
 						{promptMode === 'write' &&
-							<div ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className="msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#F2F2F2] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div data-placeholder={blockSending.value ? 'Processing...' : 'Enter a prompt...'} spellCheck={false} ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className={"msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"}>
 								{text}
 							</div>}
 						{promptMode === 'preview' &&
-							<div dangerouslySetInnerHTML={{ __html: preview.value }} className="msg w-full min-h-[72px] max-h-[156px] preview-box bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
+							<div spellCheck={false} dangerouslySetInnerHTML={{ __html: preview.value }} className="msg w-full min-h-[72px] max-h-[156px] preview-box bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
 								{preview.value}
 							</div>
 						}
