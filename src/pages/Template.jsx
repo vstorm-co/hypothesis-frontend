@@ -15,6 +15,7 @@ import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnRes
 export function Template(props) {
   const dispatch = useDispatch();
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
+  const templates = useSelector(state => state.templates.templates)
   const user = useSelector(state => state.user.currentUser);
 
   const [promptSaved, setPromptSaved] = useState(true);
@@ -63,11 +64,6 @@ export function Template(props) {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       saveContent()
     };
-    if (event.keyCode === 13) {
-      window.document.execCommand('insertHTML', false, '<br>');
-      return false;
-    }
-
   }
 
   function handleKeyUp() {
@@ -80,15 +76,15 @@ export function Template(props) {
     const parser = new DOMParser();
     const htmlText = parser.parseFromString(input.value, 'text/html');
 
-    let templates = htmlText.querySelectorAll('span');
+    let currentTemplates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.value.replace(/<\/?span[^>]*>/g, "");
+    let targetPreview = input.value;
 
-    let targetPreview = textStripped;
-
-    templates.forEach(temp => {
+    currentTemplates.forEach(temp => {
       if (temp.dataset.content) {
-        targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+        let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+        console.log(templateTarget);
+        targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
       }
     });
 
@@ -99,14 +95,15 @@ export function Template(props) {
     const parser = new DOMParser();
     const htmlText = parser.parseFromString(input.value, 'text/html');
 
-    let templates = htmlText.querySelectorAll('span');
+    let currentTemplates = htmlText.querySelectorAll('span');
 
-    let textStripped = input.value.replace(/<\/?span[^>]*>/g, "");
+    let textStripped = input.value;
 
     let targetPreview = textStripped;
-    templates.forEach(temp => {
+    currentTemplates.forEach(temp => {
       if (temp.dataset.content) {
-        targetPreview = targetPreview.replace(temp.innerHTML, temp.dataset.content)
+        let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+        targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
       }
     });
 
@@ -131,7 +128,7 @@ export function Template(props) {
 
     let element = document.createElement('span');
     element.innerText = `{} ${template.name}`;
-    element.dataset.content = `${template.content}`;
+    element.dataset.content = `${template.uuid}`;
     element.classList.add('pill');
     element.setAttribute("contenteditable", false);
 
@@ -167,7 +164,6 @@ export function Template(props) {
       useTemplateVisible.value = !useTemplateVisible.value;
     }
     if (useTemplateVisible) {
-      templateRef.current.focus();
     }
   }
 

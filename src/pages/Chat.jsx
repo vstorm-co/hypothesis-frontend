@@ -33,8 +33,6 @@ export function Chat(props) {
 	const preview = useSignal('');
 	const caret = useSignal();
 
-	const blockTimeout = useRef(null);
-
 	const input = useRef('');
 	const [text, setText] = useState('');
 
@@ -119,7 +117,6 @@ export function Chat(props) {
 			}
 		},
 		onClose: (event) => {
-
 		},
 		onError: (err) => {
 		},
@@ -135,26 +132,11 @@ export function Chat(props) {
 				if (user.email != json_data.sender_email && json_data.created_by != 'bot') {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_email: json_data.email, sender_picture: json_data.sender_picture, content: message }));
 				} else if (json_data.created_by === 'bot') {
-					if (blockTimeout.current) {
-						clearTimeout(blockTimeout.current);
-					}
 					if (currentChat.messages[currentChat.messages.length - 1].created_by === 'user') {
 						dispatch(chatsActions.addMessage({ created_by: "bot", content: message }))
 					} else {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
-
-					blockTimeout.current = setTimeout(() => {
-						blockSending.value = false;
-						msgLoading.value = false;
-
-						if (promptsLeft.value.length > 0) {
-							dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
-
-							sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
-							promptsLeft.value.shift();
-						}
-					}, 3500);
 				}
 			} else if (json_data.type === 'user_joined') {
 				if (!activeUsers.value.find(u => u.user_email === json_data.user_email)) {
@@ -176,6 +158,16 @@ export function Chat(props) {
 						WhosTyping.value = [];
 					}, 3000)
 				}
+			} else if (json_data.type === 'bot-message-creation-finished') {
+				blockSending.value = false;
+				msgLoading.value = false;
+
+				if (promptsLeft.value.length > 0) {
+					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
+
+					sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
+					promptsLeft.value.shift();
+				}
 			}
 
 			chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -193,7 +185,6 @@ export function Chat(props) {
 		currentTemplates.forEach(temp => {
 			if (temp.dataset.content) {
 				let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-				console.log(templateTarget);
 				targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
 			}
 		});
@@ -222,12 +213,22 @@ export function Chat(props) {
 			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 			let htmlArray = htmlPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
-			promptArray = promptArray.map((p, index) => {
-				return {
-					prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-					html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
-				};
-			});
+			if (promptArray.length === htmlArray.length) {
+				promptArray = promptArray.map((p, index) => {
+					return {
+						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+						html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
+					};
+				});
+			} else {
+				promptArray = promptArray.map((p, index) => {
+					return {
+						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+						html: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+					};
+				});
+			}
+
 
 			console.log(promptArray);
 
