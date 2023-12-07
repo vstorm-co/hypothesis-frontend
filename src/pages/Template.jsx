@@ -54,6 +54,8 @@ export function Template(props) {
 
   useEffect(() => {
     input.value = currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content;
+    setPreview('');
+    setPromptMode('write');
 
     setTimeout(() => {
       setRange();

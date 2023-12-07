@@ -17,6 +17,7 @@ import { getUserOrganizationsData } from '../store/user-slice';
 import { getTemplatesData } from '../store/templates-slice';
 
 import send from '../assets/send.svg';
+import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
 
 const msgLoading = signal(false);
 export function Chat(props) {
@@ -34,7 +35,7 @@ export function Chat(props) {
 	const caret = useSignal();
 
 	const input = useRef('');
-	const [text, setText] = useState('');
+	const text = useSignal('');
 
 	const [editTitle, setEditTitle] = useState(false);
 	const titleInputRef = useRef(null);
@@ -57,7 +58,7 @@ export function Chat(props) {
 	}, [user])
 
 	useEffect(() => {
-		setText('');
+		text.value = '';
 		setTimeout(() => {
 			setRange();
 		}, 100)
@@ -178,11 +179,11 @@ export function Chat(props) {
 
 	const generatePreview = () => {
 		const parser = new DOMParser();
-		const htmlText = parser.parseFromString(text, 'text/html');
+		const htmlText = parser.parseFromString(text.value, 'text/html');
 
 		let currentTemplates = htmlText.querySelectorAll('span');
 
-		let targetPreview = text;
+		let targetPreview = text.value;
 
 		currentTemplates.forEach(temp => {
 			if (temp.dataset.content) {
@@ -195,44 +196,39 @@ export function Chat(props) {
 	}
 
 	const sendMsg = () => {
-		if (text.length > 0 && !blockSending.value) {
+		if (text.value.length > 0 && !blockSending.value) {
 			const parser = new DOMParser();
-			const htmlText = parser.parseFromString(text, 'text/html');
-
+			const htmlText = parser.parseFromString(text.value, 'text/html');
 			let currentTemplates = htmlText.querySelectorAll('span');
 
-			let targetPreview = text;
-			let htmlPreview = '';
+			let targetPreview = text.value;
+			let htmlArray = [];
 
 			currentTemplates.forEach(temp => {
 				if (temp.dataset.content) {
 					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-					htmlPreview = templateTarget.content_html;
-					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
+					let targetHTML = templateTarget.content_html.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+					htmlArray = [...htmlArray, ...targetHTML];
+
+					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content);
 				}
 			});
 
 			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-			let htmlArray = htmlPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
-			if (promptArray.length === htmlArray.length) {
-				promptArray = promptArray.map((p, index) => {
+			promptArray = promptArray.map((p, index) => {
+				if (htmlArray[index] !== undefined) {
 					return {
 						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
 						html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
 					};
-				});
-			} else {
-				promptArray = promptArray.map((p, index) => {
+				} else {
 					return {
 						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+						html: promptArray.length > 1 ? htmlArray[htmlArray.length - 1].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
 					};
-				});
-			}
-
-
-			console.log(promptArray);
+				}
+			});
 
 			if (promptArray.length > 1) {
 				promptsLeft.value = promptArray;
@@ -249,7 +245,7 @@ export function Chat(props) {
 			setTimeout(() => {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}, 100);
-			setText('');
+			text.value = '';
 			msgLoading.value = true;
 		}
 	}
@@ -269,8 +265,18 @@ export function Chat(props) {
 
 		setTimeout(() => {
 			// setRange();
-			setText(`${chatInputRef.current.innerHTML}`);
+			text.value = `${chatInputRef.current.innerHTML}`;
 			useTemplateVisible.value = false;
+		}, 100);
+	}
+
+	function handleReturnResponse() {
+		text.value = `${text.value.replace("<div><br></div>", "").replace("<br>", "")}`;
+		let pastedCode = `${text.value ? text.value : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
+		let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
+		text.value = codeWithEntities;
+		setTimeout(() => {
+			setRange();
 		}, 100);
 	}
 
@@ -294,7 +300,7 @@ export function Chat(props) {
 
 	function handleOnInput(e) {
 		let currentText = e.currentTarget.innerHTML
-		setText(currentText);
+		text.value = currentText;
 		saveCaret();
 	}
 
@@ -395,7 +401,7 @@ export function Chat(props) {
 						{templates?.length > 0 &&
 							<div className={'flex'}>
 								<UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'top'} TemplatePicked={handleUseTemplate} />
-
+								<ReturnResponse ReturnResponse={handleReturnResponse} />
 								<div className={'ml-auto flex items-center justify-center'}>
 									<div onClick={() => { setPromptMode('write') }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA]' : '')}>
 										Write
@@ -406,8 +412,8 @@ export function Chat(props) {
 								</div>
 							</div>}
 						{promptMode === 'write' &&
-							<div data-placeholder={blockSending.value ? 'Processing...' : 'Enter a prompt...'} spellCheck={false} ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text }} className={"msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"}>
-								{text}
+							<div data-placeholder={blockSending.value ? 'Processing...' : 'Enter a prompt...'} spellCheck={false} ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text.value }} className={"msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"}>
+								{text.value}
 							</div>}
 						{promptMode === 'preview' &&
 							<div spellCheck={false} dangerouslySetInnerHTML={{ __html: preview.value }} className="msg w-full min-h-[72px] max-h-[156px] preview-box bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
@@ -429,7 +435,7 @@ export function Chat(props) {
 							}
 						</div>
 						<div className={'flex gap-4'}>
-							<button type="submit" disabled={text.length === 0 || blockSending.value} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+							<button type="submit" disabled={text.value.length === 0 || blockSending.value} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 						</div>
 					</div>
 				</div>
