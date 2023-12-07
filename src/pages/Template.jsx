@@ -126,7 +126,7 @@ export function Template(props) {
 
   function handleUseTemplate(template) {
     let element = document.createElement('span');
-    element.innerText = ` font-bold${template.name}`;
+    element.innerText = `${template.name}`;
     element.dataset.content = `${template.uuid}`;
     element.classList.add('pill');
     element.setAttribute("contenteditable", false);
