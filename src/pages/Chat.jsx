@@ -165,12 +165,14 @@ export function Chat(props) {
 				blockSending.value = false;
 				msgLoading.value = false;
 
+				setRange();
+
+
 				if (promptsLeft.value.length > 0) {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 
 					sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 					promptsLeft.value.shift();
-					setRange();
 				}
 			}
 
