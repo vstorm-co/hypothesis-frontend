@@ -162,7 +162,6 @@ export function Chat(props) {
 					}, 3000)
 				}
 			} else if (json_data.type === 'bot-message-creation-finished') {
-				setRange();
 				blockSending.value = false;
 				msgLoading.value = false;
 
@@ -171,6 +170,7 @@ export function Chat(props) {
 
 					sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 					promptsLeft.value.shift();
+					setRange();
 				}
 			}
 
@@ -210,24 +210,13 @@ export function Chat(props) {
 					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
 					let targetHTML = templateTarget.content_html.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
 
-					let html = parser.parseFromString(targetHTML, 'text/html');
-
-					let subTemplates = html.querySelectorAll('span');
-
-					subTemplates.forEach(subTemp => {
-						if (subTemp.dataset.content) {
-							let subTemplateTarget = templates.find(t => t.uuid === subTemp.dataset.content);
-							htmlArray = [...htmlArray, subTemplateTarget.content_html];
-						}
-					})
+					htmlArray = [...htmlArray, ...targetHTML];
 
 					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content);
 				}
 			});
 
 			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-			console.log(promptArray);
-			console.log(htmlArray);
 
 			promptArray = promptArray.map((p, index) => {
 				if (htmlArray[index] !== undefined) {
