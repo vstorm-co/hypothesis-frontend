@@ -224,12 +224,12 @@ export function Chat(props) {
 				if (htmlArray[index] !== undefined) {
 					return {
 						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
+						html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text.value,
 					};
 				} else {
 					return {
 						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: promptArray.length > 1 ? htmlArray[htmlArray.length - 1].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text,
+						html: promptArray.length > 1 ? htmlArray[htmlArray.length - 1].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text.value,
 					};
 				}
 			});

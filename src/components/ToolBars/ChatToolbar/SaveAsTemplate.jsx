@@ -44,7 +44,7 @@ class SaveAsTemplate extends Component {
   render() {
     return (
       <div ref={this.SaveAsTemplateRef} className={'relative mt-2'}>
-        <div title={'Save as Template'} onClick={this.toggleShowSaveAs} className={"border border-[#DBDBDB] rounded rounded-r-none border-r-0 cursor-pointer"}>
+        <div title={'Save as Template'} onClick={this.toggleShowSaveAs} className={"border-x-0 border border-[#DBDBDB] cursor-pointer"}>
           <div className={"p-1 hover:bg-[#F2F2F2] " + (this.props.showSaveAs ? 'bg-[#F2F2F2]' : '')}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M13 18.5C13 18.7761 13.2239 19 13.5 19H14.2305C16.4453 19 17.1836 18.294 17.1836 16.1831V14.6369C17.1836 13.6522 17.4797 13.2898 18.5021 13.2131C18.7774 13.1924 19.002 12.9728 19.002 12.6967V11.3104C19.002 11.0342 18.7774 10.8147 18.5021 10.794C17.4797 10.7172 17.1836 10.3549 17.1836 9.37015V7.81694C17.1836 5.706 16.4453 5 14.2305 5H13.5C13.2239 5 13 5.22386 13 5.5V6.4062C13 6.68235 13.2239 6.9062 13.5 6.9062H13.5879C14.5107 6.9062 14.6953 7.13212 14.6953 8.25466V10.2738C14.6953 11.2269 15.3379 11.8341 16.4521 11.9329V12.0741C15.3379 12.173 14.6953 12.7801 14.6953 13.7332V15.7453C14.6953 16.8679 14.5107 17.0938 13.5879 17.0938H13.5C13.2239 17.0938 13 17.3177 13 17.5938V18.5Z" fill="#747474" />
