@@ -264,11 +264,11 @@ export function Chat(props) {
 		caret.value.insertNode(element);
 
 		// Move the caret after the inserted element
-		caret.value.setStartAfter(element);
-		caret.value.setEndAfter(element);
 
 		setTimeout(() => {
 			// setRange();
+			caret.value.setStartAfter(element);
+			caret.value.setEndAfter(element);
 			text.value = `${chatInputRef.current.innerHTML}`;
 			useTemplateVisible.value = false;
 		}, 100);
@@ -350,6 +350,12 @@ export function Chat(props) {
 			`Welcome ${user.name?.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
 	}
 
+	function handleUpdateMessage(msg) {
+		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: msg, content_html: msg }));
+
+		sendMessage(JSON.stringify({ type: 'message', content: msg, content_html: msg }));
+	}
+
 	return (
 		<div className={'flex w-full mx-4'}>
 			<div className={'pt-10 pl-4 mr-7 flex flex-col'}>
@@ -398,7 +404,7 @@ export function Chat(props) {
 							</div>
 						}
 						{currentChat.messages?.map(msg => (
-							<Message Message={msg} />
+							<Message handleUpdateMessage={handleUpdateMessage} Message={msg} />
 						))}
 					</div>
 					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">

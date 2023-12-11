@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import rehypePrism from '@mapbox/rehype-prism';
 import SaveAsTemplate from './ToolBars/ChatToolbar/SaveAsTemplate';
@@ -6,41 +6,84 @@ import { useSignal } from '@preact/signals';
 
 import papaya from '../assets/images/papaya.png';
 import CopyAs from './ToolBars/ChatToolbar/CopyAs';
-import { useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
 
 
 export function Message(props) {
   const dispatch = useDispatch();
+  const currentChat = useSelector(state => state.chats.currentChat);
+  const user = useSelector(state => state.user.currentUser);
 
   const [showSaveAs, setShowSaveAs] = useState(false);
   const [showCopyAs, setShowCopyAs] = useState(false);
 
   const EditEnabled = useSignal(false);
+  const newMessage = useSignal('');
+
+  const UpdateMessage = useRef(null);
 
   let hideCopyAsHere = ['/auth', '/']
 
   function toggleEdit() {
+    if (!EditEnabled.value) {
+      newMessage.value = props.Message.content;
+    }
     EditEnabled.value = !EditEnabled.value;
+  }
+
+  function updateNewMessageValue(event) {
+    newMessage.value = event.target.value;
+  }
+
+  async function callEditMessage() {
+    toggleEdit()
+    let obj = {
+      room_id: currentChat.uuid,
+      date_from: props.Message.updated_at,
+      organization_uuid: user.organization_uuid,
+    };
+
+
+    const sendRequest = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/messages`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+          'Content-Type': 'application/json',
+
+        },
+        body: JSON.stringify(obj)
+      }).then(res => res.json());
+
+      return data;
+    };
+
+    try {
+      const msg = await sendRequest();
+      props.handleUpdateMessage(newMessage.value);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   if (props.Message.created_by === 'user') {
     return (
-      <div className={'flex group'}>
+      <div className={'flex my-4 group'}>
         <div class={'bg-[#F2F2F2] max-w-[720px] p-2 pr-3 rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
           <div onMouseLeave={() => setShowSaveAs(false)} className="items-start">
             <div className="flex items-start max-w-3xl">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
               <div className={(EditEnabled.value ? 'hidden' : '') + " ml-4 self-center text-[#202020] text-sm"} title={props.Message.content} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
               <div className={(EditEnabled.value ? '' : 'hidden') + ' ml-4 border p-2 bg-[#FAFAFA] border-[#DBDBDB] rounded w-full flex items-center'}>
-                <input value={props.Message.content} className={'text-sm text-[#202020] leading-6 focus:outline-none bg-[#FAFAFA] w-full'} type="text" />
+                <input onInput={(e) => updateNewMessageValue(e)} ref={UpdateMessage} value={props.Message.content} className={'text-sm text-[#202020] leading-6 focus:outline-none bg-[#FAFAFA] w-full'} type="text" />
               </div>
             </div>
           </div>
           <div className={(EditEnabled.value ? '' : 'hidden') + ' w-full flex justify-end mt-2'}>
             <button onClick={() => toggleEdit()} type="submit" className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">Cancel</button>
-            <button type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
+            <button onClick={() => { callEditMessage() }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
           </div>
         </div>
         <div className={'ml-auto hidden group-hover:flex items-start shrink-0'}>
