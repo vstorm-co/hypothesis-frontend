@@ -95,16 +95,29 @@ export function Message(props) {
     )
   } else {
     return (
-      <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4 group">
-        <div className="rounded flex p-2 w-full">
-          <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0">
+      <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4">
+        <div className="rounded flex p-2 w-full overflow-x-visible">
+          <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible cursor-pointer group">
             <img src={papaya} className="w-3" alt="" />
+            <div className={'absolute hidden group-hover:block py-2 px-3 bg-white w-[240px] top-10 z-50 left-0 rounded border text-xs'}>
+              <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
+              <div className={'mt-2'}>
+                <span className={'font-bold text-[#747474]'}>Tokens:</span>
+                <ul className={'list-disc tokens mt-0.5'}>
+                  <li>{props.Message.usage?.prompt_tokens_count} prompt tokens (${props.Message.usage?.prompt_value.toFixed(3)})</li>
+                  <li>{props.Message.usage?.completion_tokens_count} completion tokens (${props.Message.usage?.completion_value.toFixed(3)})</li>
+                  <li>{props.Message.usage?.total_tokens_count} total tokens (${props.Message.usage?.total_value.toFixed(3)})</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
-            <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
-          </div>
-          <div className={'ml-auto shrink-0 hidden ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
-            <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
+          <div className={'flex group w-full'}>
+            <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
+              <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
+            </div>
+            <div className={'ml-auto shrink-0 hidden ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
+              <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
+            </div>
           </div>
         </div>
       </div>

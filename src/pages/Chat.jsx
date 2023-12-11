@@ -397,7 +397,7 @@ export function Chat(props) {
 							<ChatToolBar />
 						</div>
 					</div>
-					<div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto pb-4" ref={chatRef}>
+					<div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
 						{currentChat.messages?.length === 0 &&
 							<div>
 								<Message Message={MockMessage} />

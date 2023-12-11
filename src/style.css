@@ -172,6 +172,14 @@ ul li {
 	margin-bottom: 20px;
 }
 
+ul.tokens {
+	padding-top: 0px;
+}
+
+ul.tokens li {
+	margin-bottom: 0px;
+}
+
 .bot-response p {
 	padding-bottom: 16px;
 }

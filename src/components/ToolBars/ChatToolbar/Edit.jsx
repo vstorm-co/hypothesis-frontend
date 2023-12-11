@@ -116,6 +116,17 @@ export function Edit(props) {
             </>
           </div>
         }
+        <div className={'py-2 px-3 bg-white w-[240px] top-10 z-50 left-0 rounded border text-xs'}>
+          <div className={''}><span className={'text-[#747474]'}>Model:</span> GPT-4</div>
+          <div className={'mt-2'}>
+            <span className={'text-[#747474]'}>Tokens:</span>
+            <ul className={'list-disc tokens mt-0.5'}>
+              <li>{currentChat?.prompt_tokens_count} prompt tokens (${currentChat.prompt_value?.toFixed(3)})</li>
+              <li>{currentChat?.completion_tokens_count} completion tokens (${currentChat.completion_value?.toFixed(3)})</li>
+              <li>{currentChat?.total_tokens_count} total tokens (${currentChat.total_value?.toFixed(3)})</li>
+            </ul>
+          </div>
+        </div>
         <div className={'p-1.5 border-b'}>
           <div onClick={toggleSaveChatAsTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
             <img src={braces} alt="" />
