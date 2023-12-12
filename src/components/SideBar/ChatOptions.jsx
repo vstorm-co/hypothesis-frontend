@@ -111,7 +111,7 @@ export function ChatOptions(props) {
               </div>
             </div>
           </div>
-          <div className={'py-2 px-3 text-white w-[240px] top-10 z-50 left-0 rounded text-xs'}>
+          <div className={'p-4 text-white w-[240px] top-10 z-50 left-0 rounded text-xs'}>
             <div className={''}><span className={'text-[#747474]'}>Model:</span> GPT-4</div>
             <div className={'mt-2'}>
               <span className={'text-[#747474]'}>Tokens:</span>
