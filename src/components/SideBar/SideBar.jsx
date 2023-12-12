@@ -27,7 +27,7 @@ export function SideBar(props) {
               <Filters />
             </div>
           </div>
-          <div className="px-4 overflow-auto overflow-x-visible scrollBar-dark">
+          <div className="px-4 overflow-x-visible scrollBar-dark">
             <Chats />
             <Templates />
           </div>

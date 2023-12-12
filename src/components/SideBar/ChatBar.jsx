@@ -7,6 +7,7 @@ import { templatesActions } from '../../store/templates-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals';
+import { ChatOptions } from './ChatOptions';
 
 export const ChatBar = props => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ export const ChatBar = props => {
   const usersActive = useSelector(state => state.chats.usersActive);
 
   const usersOnChat = useSignal([]);
+  const ShowOptions = useSignal(false);
 
   const callSelectChat = () => {
     route(`/chats/${props.ChatData.uuid}`);
@@ -54,13 +56,19 @@ export const ChatBar = props => {
     }
   }
 
-  let bol = true
+  function handleToggleOptions(tgl) {
+    if (tgl != undefined) {
+      ShowOptions.value = false;
+    } else {
+      ShowOptions.value = !ShowOptions.value;
+    }
+  }
 
   return (
-    <div onClick={callSelectChat} className={"flex py-2 px-2 items-start rounded cursor-pointer " + (isSelected() ? 'bg-[#595959]' : 'hover:bg-[#0F0F0F]')}>
+    <div onClick={callSelectChat} className={"flex hover:py-1 pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (ShowOptions.value ? 'py-1' : 'py-2')}>
       <img className={"w-4 mt-1"} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
       <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 1 ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold max-w-[168px] text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4' : 'truncate leading-6')}>
+        <div title={props.ChatData.name} className={"font-bold max-w-[168px] group-hover:max-w-[128px] text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (ShowOptions.value ? 'max-w-[128px]' : '')}>
           {props.ChatData.name}
         </div>
         <div className={'flex items-center ' + (usersOnChat.value.length > 1 ? 'mt-1' : 'ml-auto')}>
@@ -73,6 +81,9 @@ export const ChatBar = props => {
             ))}
           </div>
         </div>
+      </div>
+      <div className={'' + (ShowOptions.value ? 'block' : 'group-hover:block hidden')}>
+        <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={handleToggleOptions} ShowOptions={ShowOptions.value} />
       </div>
     </div>
   )
