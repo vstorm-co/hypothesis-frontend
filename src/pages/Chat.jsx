@@ -229,7 +229,7 @@ export function Chat(props) {
 				} else {
 					return {
 						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: promptArray.length > 1 ? htmlArray[htmlArray.length - 1].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text.value,
+						html: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
 					};
 				}
 			});
@@ -263,24 +263,47 @@ export function Chat(props) {
 
 		caret.value.insertNode(element);
 
-		// Move the caret after the inserted element
+		caret.value.setStartAfter(element);
+		caret.value.setEndAfter(element);
+
+		const space = document.createTextNode(' ');
+		caret.value.insertNode(space);
+
+		caret.value.collapse(false);
+
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(caret.value);
+		caret.value.detach();
+
 
 		setTimeout(() => {
-			// setRange();
-			caret.value.setStartAfter(element);
-			caret.value.setEndAfter(element);
 			text.value = `${chatInputRef.current.innerHTML}`;
 			useTemplateVisible.value = false;
 		}, 100);
 	}
 
 	function handleReturnResponse() {
-		text.value = `${text.value.replace("<div><br></div>", "").replace("<br>", "")}`;
-		let pastedCode = `${text.value ? text.value : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
-		let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
-		text.value = codeWithEntities;
+		let element = document.createElement('div');
+		element.setAttribute("contenteditable", false);
+		element.classList.add('return-box', 'px-1.5', 'rounded');
+
+		caret.value.insertNode(element);
+
+		caret.value.setStartAfter(element);
+		caret.value.setEndAfter(element);
+
+		const space = document.createTextNode(' ');
+		caret.value.insertNode(space);
+
+		caret.value.collapse(false);
+
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(caret.value);
+		caret.value.detach();
+
 		setTimeout(() => {
-			setRange();
+			text.value = `${chatInputRef.current.innerHTML}`;
+			useTemplateVisible.value = false;
 		}, 100);
 	}
 
@@ -336,9 +359,6 @@ export function Chat(props) {
 			useTemplateVisible.value = tgl;
 		} else {
 			useTemplateVisible.value = !useTemplateVisible.value;
-		}
-		if (useTemplateVisible) {
-			chatInputRef.current.focus();
 		}
 	}
 

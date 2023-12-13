@@ -88,7 +88,7 @@ export function Footer() {
           })}
           <AddNewAccount />
           <ClearStorage toggle={toggleSwitchUser} />
-          <Detonate />
+          {/* <Detonate /> */}
         </div>
       </div>
     </div>

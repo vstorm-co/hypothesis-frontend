@@ -135,12 +135,19 @@ export function Template(props) {
 
     caret.value.insertNode(element);
 
-    // Move the caret after the inserted element
-    // caret.value.setStartAfter(element);
-    // caret.value.setEndAfter(element);
+    caret.value.setStartAfter(element);
+    caret.value.setEndAfter(element);
+
+    const space = document.createTextNode(' ');
+    caret.value.insertNode(space);
+
+    caret.value.collapse(false);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(caret.value);
+    caret.value.detach();
 
     setTimeout(() => {
-      setRange();
       input.value = `${templateRef.current.innerHTML}`;
       useTemplateVisible.value = false;
     }, 100);
@@ -149,12 +156,27 @@ export function Template(props) {
   }
 
   function handleReturnResponse() {
-    input.value = `${input.value.replace("<div><br></div>", "").replace("<br>", "")}`;
-    let pastedCode = `${input.value ? input.value : ''}\n<div contenteditable="false" class="return-box px-1.5 rounded"></div>`
-    let codeWithEntities = pastedCode.replace(/[\r\n]+/g, '&#13;&#10;');
-    input.value = codeWithEntities;
+    let element = document.createElement('div');
+    element.setAttribute("contenteditable", false);
+    element.classList.add('return-box', 'px-1.5', 'rounded');
+
+    caret.value.insertNode(element);
+
+    caret.value.setStartAfter(element);
+    caret.value.setEndAfter(element);
+
+    const space = document.createTextNode(' ');
+    caret.value.insertNode(space);
+
+    caret.value.collapse(false);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(caret.value);
+    caret.value.detach();
+
     setTimeout(() => {
-      setRange();
+      input.value = `${templateRef.current.innerHTML}`;
+      useTemplateVisible.value = false;
     }, 100);
   }
 
