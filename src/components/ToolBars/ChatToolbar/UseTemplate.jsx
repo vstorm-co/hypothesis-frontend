@@ -29,12 +29,17 @@ function outsideClickHanlder(ref, callback) {
   }, [ref])
 }
 
-
 export function UseTemplate(props) {
   const templates = useSelector(state => state.templates.useTemplates);
 
   const useTempRef = useRef(null);
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
+
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [props.Visible]);
 
   const searchFor = useSignal('');
   const filteredTemplates = useSignal([]);
@@ -58,7 +63,7 @@ export function UseTemplate(props) {
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={loopSvg} alt="" />
-            <input onInput={(e) => handleSearchForUpdate(e)} value={searchFor.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="Search..." />
+            <input ref={inputRef} onInput={(e) => handleSearchForUpdate(e)} value={searchFor.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="Search..." />
           </div>
         </div>
         <div className={''}>
