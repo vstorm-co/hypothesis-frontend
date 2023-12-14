@@ -65,6 +65,9 @@ export function ChatOptions(props) {
       return "bg-[#595959] text-white"
     }
     else {
+      if (props.isSelected) {
+        return "bg-[#747474] text-[#DBDBDB]"
+      }
       return "text-[#747474]"
     }
   }

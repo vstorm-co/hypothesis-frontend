@@ -68,7 +68,7 @@ export const ChatBar = props => {
     <div onClick={callSelectChat} className={"flex hover:py-1 pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (ShowOptions.value ? 'py-1' : 'py-2')}>
       <img className={"w-4 mt-1"} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
       <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 1 ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold max-w-[168px] group-hover:max-w-[128px] text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (ShowOptions.value ? 'max-w-[128px]' : '')}>
+        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (ShowOptions.value ? 'max-w-[128px]' : 'max-w-[168px] group-hover:max-w-[128px]')}>
           {props.ChatData.name}
         </div>
         <div className={'flex items-center ' + (usersOnChat.value.length > 1 ? 'mt-1' : 'ml-auto')}>
