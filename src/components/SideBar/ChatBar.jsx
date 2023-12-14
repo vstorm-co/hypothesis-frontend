@@ -64,11 +64,35 @@ export const ChatBar = props => {
     }
   }
 
+  function handleNameClass() {
+    if (usersOnChat.value.length > 1) {
+      return "max-w-[168px] ";
+    } else {
+      if (ShowOptions.value) {
+        return "max-w-[128px] "
+      } else {
+        return "max-w-[168px] group-hover:max-w-[128px] ";
+      }
+    }
+  }
+
+  function handleBoxClass() {
+    if (usersOnChat.value.length > 1) {
+      return "py-2 "
+    } else {
+      if (ShowOptions.value) {
+        return "py-1 "
+      } else {
+        return "py-2 "
+      }
+    }
+  }
+
   return (
-    <div onClick={callSelectChat} className={"flex hover:py-1 pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (ShowOptions.value ? 'py-1' : 'py-2')}>
-      <img className={"w-4 mt-1"} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
+    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (handleBoxClass()) + (usersOnChat.value.length > 1 ? '' : 'hover:py-1')}>
+      <img className={"w-4 mt-1 " + (usersOnChat.value.length > 1 ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
       <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 1 ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (ShowOptions.value ? 'max-w-[128px]' : 'max-w-[168px] group-hover:max-w-[128px]')}>
+        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (handleNameClass())}>
           {props.ChatData.name}
         </div>
         <div className={'flex items-center ' + (usersOnChat.value.length > 1 ? 'mt-1' : 'ml-auto')}>
@@ -82,7 +106,7 @@ export const ChatBar = props => {
           </div>
         </div>
       </div>
-      <div className={'' + (ShowOptions.value ? 'block' : 'group-hover:block hidden')}>
+      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (usersOnChat.value.length > 1 ? 'self-start' : '')}>
         <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={handleToggleOptions} ShowOptions={ShowOptions.value} />
       </div>
     </div>
