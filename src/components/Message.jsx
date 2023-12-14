@@ -9,6 +9,7 @@ import CopyAs from './ToolBars/ChatToolbar/CopyAs';
 import { useRef, useState } from 'preact/hooks';
 import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
+import { PromptInput } from './PromptInput';
 
 
 export function Message(props) {
@@ -33,18 +34,14 @@ export function Message(props) {
     EditEnabled.value = !EditEnabled.value;
   }
 
-  function updateNewMessageValue(event) {
-    newMessage.value = event.target.value;
-  }
+  async function callEditMessage(promptArray) {
+    toggleEdit();
 
-  async function callEditMessage() {
-    toggleEdit()
     let obj = {
       room_id: currentChat.uuid,
       date_from: props.Message.updated_at,
       organization_uuid: user.organization_uuid,
     };
-
 
     const sendRequest = async () => {
       const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/messages`, {
@@ -62,7 +59,7 @@ export function Message(props) {
 
     try {
       const msg = await sendRequest();
-      props.handleUpdateMessage(newMessage.value);
+      props.handleUpdateMessage(promptArray);
     } catch (err) {
       console.log(err);
     }
@@ -76,15 +73,29 @@ export function Message(props) {
             <div className="flex items-start max-w-3xl">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
               <div className={(EditEnabled.value ? 'hidden' : '') + " ml-4 self-center text-[#202020] text-sm"} title={props.Message.content} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
-              <div className={(EditEnabled.value ? '' : 'hidden') + ' ml-4 border p-2 bg-[#FAFAFA] border-[#DBDBDB] rounded w-full flex items-center'}>
-                <input onInput={(e) => updateNewMessageValue(e)} ref={UpdateMessage} value={props.Message.content} className={'text-sm text-[#202020] leading-6 focus:outline-none bg-[#FAFAFA] w-full'} type="text" />
+              <div className={'w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
+                <PromptInput
+                  blockSending={false}
+                  WSsendMessage={() => { }}
+                  SubmitButtonText={'Save & Submit'}
+                  handleSubmitButton={(value) => { callEditMessage(value.promptArray) }}
+                  SecondButton={true}
+                  SecondButtonText={'Cancel'}
+                  handleSecondButton={() => toggleEdit()}
+
+                  InitialInput={props.Message.content_html}
+                  forceFocus={EditEnabled.value}
+                />
               </div>
+              {/* <div className={(EditEnabled.value ? '' : 'hidden') + ' ml-4 border p-2 bg-[#FAFAFA] border-[#DBDBDB] rounded w-full flex items-center'}>
+                <input onInput={(e) => updateNewMessageValue(e)} ref={UpdateMessage} value={props.Message.content} className={'text-sm text-[#202020] leading-6 focus:outline-none bg-[#FAFAFA] w-full'} type="text" />
+              </div> */}
             </div>
           </div>
-          <div className={(EditEnabled.value ? '' : 'hidden') + ' w-full flex justify-end mt-2'}>
+          {/* <div className={(EditEnabled.value ? '' : 'hidden') + ' w-full flex justify-end mt-2'}>
             <button onClick={() => toggleEdit()} type="submit" className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">Cancel</button>
             <button onClick={() => { callEditMessage() }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
-          </div>
+          </div> */}
         </div>
         <div className={'ml-auto hidden group-hover:flex items-start shrink-0'}>
           <EditMessage toggleEdit={toggleEdit} />

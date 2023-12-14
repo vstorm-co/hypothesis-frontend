@@ -4,48 +4,34 @@ import { useSelector, useDispatch } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
 import useWebSocket from 'react-use-websocket';
 import { route } from 'preact-router'
-// import ContentEditable from 'react-contenteditable'
 
-import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
 import { Message } from '../components/Message';
-import { Loading } from '../components/Loading';
 import { Toast } from '../components/Toast';
 
 import { chatsActions, getChatsData, selectChat, updateChat } from '../store/chats-slice';
 import { getUserOrganizationsData } from '../store/user-slice';
 import { getTemplatesData } from '../store/templates-slice';
 
-import send from '../assets/send.svg';
-import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
+import { PromptInput } from '../components/PromptInput';
 
 const msgLoading = signal(false);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const chats = useSelector(state => state.chats.chats);
-	const templates = useSelector(state => state.templates.useTemplates);
 	const user = useSelector(state => state.user.currentUser);
 
-	const useTemplateVisible = useSignal(false);
 	const blockSending = useSignal(false);
 	const activeUsers = useSignal([]);
 	const promptsLeft = useSignal([]);
 	const WhosTyping = useSignal([]);
-	const preview = useSignal('');
-	const caret = useSignal();
-
-	const input = useRef('');
-	const text = useSignal('');
 
 	const [editTitle, setEditTitle] = useState(false);
 	const titleInputRef = useRef(null);
 
-	const [promptMode, setPromptMode] = useState('write');
-
 	const dispatch = useDispatch();
 
 	const chatRef = useRef();
-	const chatInputRef = useRef();
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
@@ -53,16 +39,7 @@ export function Chat(props) {
 		dispatch(getUserOrganizationsData());
 		dispatch(getChatsData(props.matches.id));
 		dispatch(getTemplatesData());
-
-		// get organization-shared chats
 	}, [user])
-
-	useEffect(() => {
-		text.value = '';
-		setTimeout(() => {
-			setRange();
-		}, 100)
-	}, [currentChat.uuid])
 
 	useEffect(() => {
 		if (user.access_token === null) {
@@ -75,49 +52,20 @@ export function Chat(props) {
 		}, 300);
 	}, [currentChat.messages])
 
-	function saveCaret() {
-		let range = window.getSelection().getRangeAt(0);
-
-		caret.value = range;
-	}
-
-	function setRange() {
-		const range = document.createRange();
-		const sel = window.getSelection();
-		range.selectNodeContents(chatInputRef.current);
-		range.collapse(false);
-		sel.removeAllRanges();
-		sel.addRange(range);
-		chatInputRef.current.focus();
-		range.detach();
-
-		saveCaret();
-	}
-
-	function handleKeyDown(event) {
-		sendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
-		if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-			sendMsg();
-		}
-	}
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {
 
 		onOpen: () => {
 			activeUsers.value = [];
 
-			let msgToSend = localStorage.getItem("MsgToSend");
+			let promptsToSend = JSON.parse(localStorage.getItem("ANT_PromptsToSend"));
 
-			if (msgToSend) {
-				setTimeout(() => {
-					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: msgToSend }));
-					sendMessage(JSON.stringify({ type: 'message', content: msgToSend }))
-
-					localStorage.removeItem("MsgToSend");
-					msgLoading.value = false;
-				}, 500)
-			} else {
-				msgLoading.value = false;
+			if (promptsToSend) {
+				sendMsgTwo(promptsToSend);
 			}
+
+			setTimeout(() => {
+				localStorage.removeItem("ANT_PromptsToSend");
+			}, 500);
 		},
 		onClose: (event) => {
 		},
@@ -165,9 +113,6 @@ export function Chat(props) {
 				blockSending.value = false;
 				msgLoading.value = false;
 
-				setRange();
-
-
 				if (promptsLeft.value.length > 0) {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 
@@ -180,130 +125,21 @@ export function Chat(props) {
 		}
 	})
 
-	const generatePreview = () => {
-		const parser = new DOMParser();
-		const htmlText = parser.parseFromString(text.value, 'text/html');
+	function sendMsgTwo(promptArray) {
+		if (promptArray.length > 1) {
+			promptsLeft.value = promptArray;
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-		let currentTemplates = htmlText.querySelectorAll('span');
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
+			promptsLeft.value.shift();
+		} else {
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-		let targetPreview = text.value;
-
-		currentTemplates.forEach(temp => {
-			if (temp.dataset.content) {
-				let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-				targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
-			}
-		});
-
-		preview.value = targetPreview;
-	}
-
-	const sendMsg = () => {
-		if (text.value.length > 0 && !blockSending.value) {
-			const parser = new DOMParser();
-			const htmlText = parser.parseFromString(text.value, 'text/html');
-			let currentTemplates = htmlText.querySelectorAll('span');
-
-			let targetPreview = text.value;
-			let htmlArray = [];
-
-			currentTemplates.forEach(temp => {
-				if (temp.dataset.content) {
-					let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-					let targetHTML = templateTarget.content_html.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-
-					htmlArray = [...htmlArray, ...targetHTML];
-
-					targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content);
-				}
-			});
-
-			let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-
-			promptArray = promptArray.map((p, index) => {
-				if (htmlArray[index] !== undefined) {
-					return {
-						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : text.value,
-					};
-				} else {
-					return {
-						prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-						html: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-					};
-				}
-			});
-
-			if (promptArray.length > 1) {
-				promptsLeft.value = promptArray;
-				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
-
-				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
-				promptsLeft.value.shift();
-			} else {
-				dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
-
-				sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
-			}
-
-			setTimeout(() => {
-				chatRef.current.scrollTop = chatRef.current.scrollHeight
-			}, 100);
-			text.value = '';
-			msgLoading.value = true;
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
 		}
-	}
-
-	function handleUseTemplate(template) {
-		let element = document.createElement('span');
-		element.innerText = `${template.name}`;
-		element.dataset.content = `${template.uuid}`;
-		element.classList.add('pill');
-		element.setAttribute("contenteditable", false);
-
-		caret.value.insertNode(element);
-
-		caret.value.setStartAfter(element);
-		caret.value.setEndAfter(element);
-
-		const space = document.createTextNode(' ');
-		caret.value.insertNode(space);
-
-		caret.value.collapse(false);
-
-		window.getSelection().removeAllRanges();
-		window.getSelection().addRange(caret.value);
-		caret.value.detach();
-
 
 		setTimeout(() => {
-			text.value = `${chatInputRef.current.innerHTML}`;
-			useTemplateVisible.value = false;
-		}, 100);
-	}
-
-	function handleReturnResponse() {
-		let element = document.createElement('div');
-		element.setAttribute("contenteditable", false);
-		element.classList.add('return-box', 'px-1.5', 'rounded');
-
-		caret.value.insertNode(element);
-
-		caret.value.setStartAfter(element);
-		caret.value.setEndAfter(element);
-
-		const space = document.createTextNode(' ');
-		caret.value.insertNode(space);
-
-		caret.value.collapse(false);
-
-		window.getSelection().removeAllRanges();
-		window.getSelection().addRange(caret.value);
-		caret.value.detach();
-
-		setTimeout(() => {
-			text.value = `${chatInputRef.current.innerHTML}`;
-			useTemplateVisible.value = false;
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
 		}, 100);
 	}
 
@@ -323,12 +159,6 @@ export function Chat(props) {
 				titleInputRef.current.focus()
 			}, 100)
 		}
-	}
-
-	function handleOnInput(e) {
-		let currentText = e.currentTarget.innerHTML
-		text.value = currentText;
-		saveCaret();
 	}
 
 	function EditedAt() {
@@ -354,14 +184,6 @@ export function Chat(props) {
 		}
 	}
 
-	function handleToggleVisible(tgl) {
-		if (tgl != undefined) {
-			useTemplateVisible.value = tgl;
-		} else {
-			useTemplateVisible.value = !useTemplateVisible.value;
-		}
-	}
-
 	let MockMessage = {
 		created_by: 'bot',
 		content: chats?.length > 1 ?
@@ -370,10 +192,8 @@ export function Chat(props) {
 			`Welcome ${user.name?.split(" ")[0]}, start your first chat with me by entering a prompt below.`,
 	}
 
-	function handleUpdateMessage(msg) {
-		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: msg, content_html: msg }));
-
-		sendMessage(JSON.stringify({ type: 'message', content: msg, content_html: msg }));
+	function handleUpdateMessage(promptArray) {
+		sendMsgTwo(promptArray);
 	}
 
 	return (
@@ -427,33 +247,22 @@ export function Chat(props) {
 							<Message handleUpdateMessage={handleUpdateMessage} Message={msg} />
 						))}
 					</div>
-					<form onSubmit={() => { sendMsg() }} className="mt-auto shrink-0">
-						{templates?.length > 0 &&
-							<div className={'flex'}>
-								<UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'top'} TemplatePicked={handleUseTemplate} />
-								<ReturnResponse ReturnResponse={handleReturnResponse} />
-								<div className={'ml-auto flex items-center justify-center'}>
-									<div onClick={() => { setPromptMode('write') }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA]' : '')}>
-										Write
-									</div>
-									<div onClick={() => { setPromptMode('preview'); generatePreview(); }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
-										Preview
-									</div>
-								</div>
-							</div>}
-						{promptMode === 'write' &&
-							<div data-placeholder={blockSending.value ? 'Processing...' : 'Enter a prompt...'} spellCheck={false} ref={chatInputRef} contentEditable={true} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleOnInput(e)} dangerouslySetInnerHTML={{ __html: text.value }} className={"msg whitespace-pre-wrap write-box w-full min-h-[72px] max-h-[156px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"}>
-								{text.value}
-							</div>}
-						{promptMode === 'preview' &&
-							<div spellCheck={false} dangerouslySetInnerHTML={{ __html: preview.value }} className="msg w-full min-h-[72px] max-h-[156px] preview-box bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-								{preview.value}
-							</div>
-						}
-					</form>
+					<div className={'relative'}>
+						<PromptInput
+							Icon={'send'}
+							blockSending={blockSending.value}
+							WSsendMessage={() => { }}
+							SubmitButtonText={'Send Message'}
+							handleSubmitButton={(value) => { sendMsgTwo(value.promptArray); }}
+							SecondButton={false}
+							SecondButtonText={''}
+							handleSecondButton={() => { }}
+							WSsendMessage={value => { sendMessage(value) }}
 
-					<div className="flex justify-between items-center mt-2 gap-x-4">
-						<div className={'text-[#747474] text-xs self-start'}>
+							clearInputOnSubmit={true}
+							forceFocus={currentChat.uuid}
+						/>
+						<div className={'absolute bottom-0 text-[#747474] text-xs self-start leading-6 py-2'}>
 							{WhosTyping.value.map(u => (
 								<span>{u.name} </span>
 							))}
@@ -463,9 +272,6 @@ export function Chat(props) {
 									is typing...
 								</span>
 							}
-						</div>
-						<div className={'flex gap-4'}>
-							<button type="submit" disabled={text.value.length === 0 || blockSending.value} onClick={() => { sendMsg(); }} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
 						</div>
 					</div>
 				</div>

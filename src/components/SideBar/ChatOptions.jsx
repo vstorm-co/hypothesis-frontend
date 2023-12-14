@@ -1,10 +1,11 @@
 // @ts-nocheck
-import { signal, useSignal } from "@preact/signals";
+import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { showToast } from "../../store/ui-slice";
 import { cloneChat } from "../../store/chats-slice";
 import { deleteChat } from "../../store/chats-slice";
+import { route } from "preact-router";
 
 
 export function ChatOptions(props) {
@@ -27,7 +28,6 @@ export function ChatOptions(props) {
   const optionsRef = useRef(null);
   outsideClickHanlder(optionsRef);
 
-  const user = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
 
   const confirmDelete = useSignal(false);
@@ -55,6 +55,7 @@ export function ChatOptions(props) {
     dispatch(deleteChat({ chatId: props.ChatData.uuid }));
     confirmDelete.value = false;
     props.toggleOptions();
+    route('/');
   }
 
   function returnClass() {

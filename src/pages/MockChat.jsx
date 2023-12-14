@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { route } from 'preact-router';
 
@@ -8,25 +8,16 @@ import { getTemplatesData } from '../store/templates-slice';
 import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
 
-import send from '../assets/send.svg';
+import { PromptInput } from '../components/PromptInput';
 
 
 export function MockChat(props) {
   const organizationCreated = useSelector(state => state.ui.organizationCreated)
   const user = useSelector(state => state.user.currentUser);
-  const chats = useSelector(state => state.chats.chats);
 
-  const [input, setInput] = useState('');
   const dispatch = useDispatch();
 
   const chatRef = useRef(null);
-  const MockChatRef = useRef(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      MockChatRef.current.focus();
-    }, 100)
-  })
 
   useEffect(() => {
     if (user.access_token === null) {
@@ -38,23 +29,12 @@ export function MockChat(props) {
     dispatch(getChatsData());
   }, [user])
 
-  function handleInputChange(event) {
-    setInput(event.target.value);
+
+  function callCreateChat(value) {
+    localStorage.setItem("ANT_PromptsToSend", JSON.stringify(value));
+    dispatch(createChat("New Chat"));
   }
 
-  function handleKeyDown(event) {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-      event.preventDefault();
-      callCreateChat();
-    }
-  }
-
-  function callCreateChat(e) {
-    if (input.length > 0) {
-      localStorage.setItem("MsgToSend", input);
-      dispatch(createChat("New Chat"));
-    }
-  }
 
   if (organizationCreated && organizationCreated.created) {
     const msgs = [
@@ -77,7 +57,8 @@ export function MockChat(props) {
     ]
     return (
       <div className={'flex w-full mx-4'}>
-        <div>
+        <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
+          <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
         </div>
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
           <div className="h-[100vh] flex flex-col pt-4 pb-2">
@@ -96,13 +77,14 @@ export function MockChat(props) {
               <Message Loading={true} Message={msgs[1]} />
               <Message Loading={true} Message={msgs[2]} />
             </div>
-            <form onSubmit={callCreateChat} className="mt-auto">
-              <textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-            </form>
-            <div className="flex justify-end items-center mt-2 gap-x-4">
-              {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button onClick={callCreateChat} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
-            </div>
+            <PromptInput
+              Icon={'send'}
+              blockSending={false}
+              WSsendMessage={() => { }}
+              SubmitButtonText={'Send Message'}
+              handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
+              SecondButton={true}
+            />
           </div>
         </div>
       </div>
@@ -114,7 +96,8 @@ export function MockChat(props) {
     }
     return (
       <div className={'flex w-full mx-4'}>
-        <div>
+        <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
+          <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
         </div>
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
           <div className="h-[100vh] flex flex-col pt-4 pb-2">
@@ -128,16 +111,16 @@ export function MockChat(props) {
               </div>
             </div>
             <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-
               <Message Loading={true} Message={msg} />
             </div>
-            <form onSubmit={callCreateChat} className="mt-auto">
-              <textarea ref={MockChatRef} onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-            </form>
-            <div className="flex justify-end items-center mt-2 gap-x-4">
-              {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-              <button onClick={callCreateChat} disabled={input.length === 0} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
-            </div>
+            <PromptInput
+              Icon={'send'}
+              blockSending={false}
+              WSsendMessage={() => { }}
+              SubmitButtonText={'Send Message'}
+              handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
+              SecondButton={true}
+            />
           </div>
         </div>
       </div>

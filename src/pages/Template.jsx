@@ -1,121 +1,32 @@
 // @ts-nocheck
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSignal } from '@preact/signals';
+import { PromptInput } from '../components/PromptInput';
 
 import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
 import { selectTemplate, updateTemplate } from '../store/templates-slice';
 import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
-import { UseTemplate } from '../components/ToolBars/ChatToolbar/UseTemplate';
 import { Loading } from '../components/Loading';
-import { ReturnResponse } from '../components/ToolBars/TemplateToolbar/ReturnResponse';
 
 export function Template(props) {
   const dispatch = useDispatch();
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
-  const templates = useSelector(state => state.templates.templates)
-  const user = useSelector(state => state.user.currentUser);
 
-  const [promptSaved, setPromptSaved] = useState(true);
-  const [promptMode, setPromptMode] = useState('write');
-  const [preview, setPreview] = useState('');
-
-  const input = useSignal('');
-
-  const templateRef = useRef();
-
-  const useTemplateVisible = useSignal(false);
-  const caret = useSignal(0);
-
-  function handleInputChange(e) {
-    saveCaret();
-    input.value = e.currentTarget.innerHTML;
-  }
-
-  function setRange() {
-    const range = document.createRange();
-    const sel = window.getSelection();
-    range.selectNodeContents(templateRef.current);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
-    templateRef.current.focus();
-    range.detach();
-
-    saveCaret();
-  }
+  const promptSaved = useSignal(true);
 
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
-    setPromptMode('write');
   }, []);
 
-  useEffect(() => {
-    input.value = currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content;
-    setPreview('');
-    setPromptMode('write');
-
-    setTimeout(() => {
-      setRange();
-      setPreview(currentTemplate.content);
-    }, 100);
-  }, [currentTemplate.uuid])
-
-  function handleKeyDown(event) {
-    setPromptSaved(false);
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-      saveContent()
-    };
-  }
-
-  function handleKeyUp() {
-    if (input.value.lastIndexOf("{{") != -1) {
-      useTemplateVisible.value = true;
-    }
-  }
-
-  const generatePreview = () => {
-    const parser = new DOMParser();
-    const htmlText = parser.parseFromString(input.value, 'text/html');
-
-    let currentTemplates = htmlText.querySelectorAll('span');
-
-    let targetPreview = input.value;
-
-    currentTemplates.forEach(temp => {
-      if (temp.dataset.content) {
-        let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-        console.log(templateTarget);
-        targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
-      }
-    });
-
-    setPreview(targetPreview);
-  }
-
-  function saveContent(ev, title) {
-    const parser = new DOMParser();
-    const htmlText = parser.parseFromString(input.value, 'text/html');
-
-    let currentTemplates = htmlText.querySelectorAll('span');
-
-    let textStripped = input.value;
-
-    let targetPreview = textStripped;
-    currentTemplates.forEach(temp => {
-      if (temp.dataset.content) {
-        let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-        targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content)
-      }
-    });
-
+  function saveContent({ rawInput, rawPreview }) {
     dispatch(updateTemplate({
       uuid: currentTemplate.uuid,
-      name: title ? title : currentTemplate.name,
-      content: targetPreview,
-      content_html: input.value,
+      name: currentTemplate.name,
+      content: rawPreview,
+      content_html: rawInput,
       visibility: currentTemplate.visibility,
     }));
 
@@ -124,76 +35,6 @@ export function Template(props) {
     if (!title) {
       setPromptSaved(true);
     }
-  }
-
-  function handleUseTemplate(template) {
-    let element = document.createElement('span');
-    element.innerText = `${template.name}`;
-    element.dataset.content = `${template.uuid}`;
-    element.classList.add('pill');
-    element.setAttribute("contenteditable", false);
-
-    caret.value.insertNode(element);
-
-    caret.value.setStartAfter(element);
-    caret.value.setEndAfter(element);
-
-    const space = document.createTextNode(' ');
-    caret.value.insertNode(space);
-
-    caret.value.collapse(false);
-
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(caret.value);
-    caret.value.detach();
-
-    setTimeout(() => {
-      input.value = `${templateRef.current.innerHTML}`;
-      useTemplateVisible.value = false;
-    }, 100);
-
-    setPromptSaved(false);
-  }
-
-  function handleReturnResponse() {
-    let element = document.createElement('div');
-    element.setAttribute("contenteditable", false);
-    element.classList.add('return-box', 'px-1.5', 'rounded');
-
-    caret.value.insertNode(element);
-
-    caret.value.setStartAfter(element);
-    caret.value.setEndAfter(element);
-
-    const space = document.createTextNode(' ');
-    caret.value.insertNode(space);
-
-    caret.value.collapse(false);
-
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(caret.value);
-    caret.value.detach();
-
-    setTimeout(() => {
-      input.value = `${templateRef.current.innerHTML}`;
-      useTemplateVisible.value = false;
-    }, 100);
-  }
-
-  function handleToggleVisible(tgl) {
-    if (tgl != undefined) {
-      useTemplateVisible.value = tgl;
-    } else {
-      useTemplateVisible.value = !useTemplateVisible.value;
-    }
-    if (useTemplateVisible) {
-    }
-  }
-
-  function saveCaret() {
-    let range = window.getSelection().getRangeAt(0);
-
-    caret.value = range;
   }
 
   if (!currentTemplate.uuid) {
@@ -226,40 +67,24 @@ export function Template(props) {
               <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
                 Prompt
               </div>
-              <form onSubmit={saveContent} className="">
-                <div className={'flex'}>
-                  <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={(tgl) => handleToggleVisible(tgl)} Position={'bottom'} TemplatePicked={handleUseTemplate} />
-                  <ReturnResponse ReturnResponse={handleReturnResponse} />
-                  <div className={'ml-auto flex items-center justify-end w-full'}>
-                    <div onClick={() => { setPromptMode('write') }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t ' + (promptMode === 'write' ? 'border bg-[#FAFAFA] ' : '')}>
-                      Write
-                    </div>
-                    <div onClick={() => { generatePreview(); setPromptMode('preview'); }} className={'px-4 text-sm leading-6 font-bold cursor-pointer py-1 -mb-[1px] border-[#DBDBDB] border-b-0 rounded-t ' + (promptMode === 'preview' ? 'border bg-white' : '')}>
-                      Preview
-                    </div>
-                  </div>
-                </div>
-                {promptMode === 'write' &&
-                  <div ref={templateRef} contentEditable={true} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown} onClick={() => saveCaret()} onInput={e => handleInputChange(e)} dangerouslySetInnerHTML={{ __html: input.value }} className="msg whitespace-pre-wrap write-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-                    {input.value}
-                  </div>}
-                {promptMode === 'preview' &&
-                  <div dangerouslySetInnerHTML={{ __html: preview }} contentEditable={false} className="msg preview-box w-full min-h-[156px] max-h-[500px] 2xl:max-h-[685px] templatePreview bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6">
-                    {preview}
-                  </div>
-                }
-              </form>
-              <div className="flex justify-end items-center mt-2 gap-x-4">
-                {/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-                <button onClick={saveContent} type="submit" disabled={promptSaved} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                  {promptSaved &&
-                    'Saved'
-                  }
-                  {!promptSaved &&
-                    'Save Prompt'
-                  }
-                </button>
-              </div>
+              <PromptInput
+                Icon={'send'}
+                blockSending={promptSaved.value}
+                WSsendMessage={() => { }}
+                SubmitButtonText={'Send Message'}
+                handleSubmitButton={(value) => { saveContent(value) }}
+                SecondButton={false}
+                SecondButtonText={''}
+                handleSecondButton={() => { }}
+
+                SetBlockOnSubmit={true}
+                unBlockOnEdit={true}
+                clearInputOnSubmit={false}
+                handleSetBlock={(val) => promptSaved.value = val}
+
+                InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
+                forceFocus={currentTemplate.uuid}
+              />
             </div>
           </div>
         </div>
