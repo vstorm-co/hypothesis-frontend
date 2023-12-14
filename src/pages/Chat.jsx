@@ -251,7 +251,6 @@ export function Chat(props) {
 						<PromptInput
 							Icon={'send'}
 							blockSending={blockSending.value}
-							WSsendMessage={() => { }}
 							SubmitButtonText={'Send Message'}
 							handleSubmitButton={(value) => { sendMsgTwo(value.promptArray); }}
 							SecondButton={false}
