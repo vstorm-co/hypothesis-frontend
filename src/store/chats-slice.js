@@ -117,7 +117,6 @@ export const getChatsData = (payload) => {
     }
 
 
-
     const sendRequest = async () => {
       const data = await fetch(url, {
         headers: {

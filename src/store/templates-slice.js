@@ -37,6 +37,21 @@ export default templatesSlice;
 export const getTemplatesData = (payload) => {
   return async (dispatch, getState) => {
 
+    const sendRequestUseTemplate = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
+          'Content-Type': 'application/json'
+        },
+      }).then(res => res.json());
+
+      return data;
+    }
+
+    const useTemplates = await sendRequestUseTemplate();
+
+    dispatch(templatesActions.setUseTemplates(useTemplates));
+
     let state = getState();
     let url = ``;
 
@@ -76,10 +91,6 @@ export const getTemplatesData = (payload) => {
     const templates = await sendRequest();
 
     dispatch(templatesActions.setTemplates(templates));
-
-    if (state.ui.searchFilters.visibility === "all" && !state.ui.searchFilters.searchFor) {
-      dispatch(templatesActions.setUseTemplates(templates));
-    }
   }
 }
 
