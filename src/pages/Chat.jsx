@@ -22,6 +22,10 @@ export function Chat(props) {
 	const user = useSelector(state => state.user.currentUser);
 
 	const blockSending = useSignal(false);
+
+	const previousScroll = useSignal(0);
+	const userScrolledUp = useSignal(false);
+
 	const activeUsers = useSignal([]);
 	const promptsLeft = useSignal([]);
 	const WhosTyping = useSignal([]);
@@ -32,6 +36,23 @@ export function Chat(props) {
 	const dispatch = useDispatch();
 
 	const chatRef = useRef();
+
+	useEffect(() => {
+		// if(previousScroll > )
+		chatRef.current.addEventListener('scroll', (e) => {
+			if (previousScroll.value > chatRef.current.scrollTop) {
+				userScrolledUp.value = true;
+			}
+			previousScroll.value = chatRef.current.scrollTop;
+		})
+
+
+	}, [])
+
+	useEffect(() => {
+		blockSending.value = false;
+		userScrolledUp.value = false;
+	}, [currentChat.uuid])
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
@@ -48,7 +69,9 @@ export function Chat(props) {
 		}
 
 		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
+			if (!userScrolledUp.value) {
+				chatRef.current.scrollTop = chatRef.current.scrollHeight
+			}
 		}, 300);
 	}, [currentChat.messages])
 
@@ -121,26 +144,29 @@ export function Chat(props) {
 				}
 			}
 
-			chatRef.current.scrollTop = chatRef.current.scrollHeight;
+			if (!userScrolledUp.value) {
+				chatRef.current.scrollTop = chatRef.current.scrollHeight
+			}
 		}
 	})
 
 	function sendMsgTwo(promptArray) {
-		if (promptArray.length > 1) {
-			promptsLeft.value = promptArray;
-			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
+		// if (promptArray.length > 1) {
+		// 	promptsLeft.value = promptArray;
+		// 	dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
-			promptsLeft.value.shift();
-		} else {
-			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
+		// 	sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
+		// 	promptsLeft.value.shift();
+		// } else {
+		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
-		}
+		// 	sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
+		// }
 
-		setTimeout(() => {
-			chatRef.current.scrollTop = chatRef.current.scrollHeight
-		}, 100);
+		// setTimeout(() => {
+		// 	chatRef.current.scrollTop = chatRef.current.scrollHeight
+		// 	userScrolledUp.value = false;
+		// }, 100);
 	}
 
 	function callEditChatTitle(event) {
@@ -205,7 +231,7 @@ export function Chat(props) {
 				<img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
 			</div>
 			<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-				<div className="h-[100vh] flex flex-col pt-4 pb-2">
+				<div className="h-[100vh] flex flex-col pt-4 pb-2 relative">
 					<div className={'flex items-center py-3 border-b border-[#DBDBDB] relative'}>
 						<div onClick={() => { handleTitleInputClick() }} class="flex items-center w-full max-w-[570px] cursor-pointer">
 							<div className={'text-lg leading-6 font-bold py-2 max-h-[156px] overflow-hidden text-[#595959] ' + (editTitle ? 'hidden' : '')}>
@@ -237,7 +263,7 @@ export function Chat(props) {
 							<ChatToolBar />
 						</div>
 					</div>
-					<div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
+					<div className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
 						{currentChat.messages?.length === 0 &&
 							<div>
 								<Message Message={MockMessage} />
@@ -247,6 +273,11 @@ export function Chat(props) {
 							<Message handleUpdateMessage={handleUpdateMessage} Message={msg} />
 						))}
 					</div>
+					{/* <div className={'absolute bottom-48 p-1 right-8 z-50 border'}>
+						<svg width="14" height="16" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M5 0C5.51284 0 5.93551 0.38604 5.99327 0.883379L6 1V8.585L8.29289 6.29289C8.65338 5.93241 9.22061 5.90468 9.6129 6.2097L9.70711 6.29289C10.0676 6.65338 10.0953 7.22061 9.7903 7.6129L9.70711 7.70711L5.70711 11.7071C5.34662 12.0676 4.77939 12.0953 4.3871 11.7903L4.29289 11.7071L0.292893 7.70711C-0.0976311 7.31658 -0.0976311 6.68342 0.292893 6.29289C0.653377 5.93241 1.22061 5.90468 1.6129 6.2097L1.70711 6.29289L4 8.585V1C4 0.447715 4.44772 0 5 0Z" fill="#747474" />
+						</svg>
+					</div> */}
 					<div className={'relative'}>
 						<PromptInput
 							Icon={'send'}
