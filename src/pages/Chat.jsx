@@ -151,22 +151,22 @@ export function Chat(props) {
 	})
 
 	function sendMsgTwo(promptArray) {
-		// if (promptArray.length > 1) {
-		// 	promptsLeft.value = promptArray;
-		// 	dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
+		if (promptArray.length > 1) {
+			promptsLeft.value = promptArray;
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-		// 	sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
-		// 	promptsLeft.value.shift();
-		// } else {
-		dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
+			promptsLeft.value.shift();
+		} else {
+			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-		// 	sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
-		// }
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
+		}
 
-		// setTimeout(() => {
-		// 	chatRef.current.scrollTop = chatRef.current.scrollHeight
-		// 	userScrolledUp.value = false;
-		// }, 100);
+		setTimeout(() => {
+			chatRef.current.scrollTop = chatRef.current.scrollHeight
+			userScrolledUp.value = false;
+		}, 100);
 	}
 
 	function callEditChatTitle(event) {
