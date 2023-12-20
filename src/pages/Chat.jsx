@@ -222,6 +222,14 @@ export function Chat(props) {
 		sendMsgTwo(promptArray);
 	}
 
+	function handleSubmitButton(value) {
+		if (blockSending.value) {
+			sendMessage(JSON.stringify({ "type": "stop_generation", "user": user.email }))
+		} else {
+			sendMsgTwo(value.promptArray);
+		}
+	}
+
 	return (
 		<div className={'flex w-full mx-4'}>
 			<div className={'pt-10 pl-4 mr-7 flex flex-col'}>
@@ -280,10 +288,10 @@ export function Chat(props) {
 					</div> */}
 					<div className={'relative'}>
 						<PromptInput
-							Icon={'send'}
+							Icon={(blockSending.value ? 'stop' : 'send')}
 							blockSending={blockSending.value}
-							SubmitButtonText={'Send Message'}
-							handleSubmitButton={(value) => { sendMsgTwo(value.promptArray); }}
+							SubmitButtonText={(blockSending.value ? 'Stop Generating' : 'Send Message')}
+							handleSubmitButton={(value) => { handleSubmitButton(value) }}
 							SecondButton={false}
 							SecondButtonText={''}
 							handleSecondButton={() => { }}

@@ -5,6 +5,7 @@ import { ReturnResponse } from "./ToolBars/TemplateToolbar/ReturnResponse";
 import { useEffect, useRef } from "preact/hooks";
 
 import send from '../assets/send.svg';
+import stop from '../assets/stop.svg';
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
@@ -243,10 +244,13 @@ export function PromptInput(props) {
         {props.SecondButton &&
           <button type="button" onClick={() => props.handleSecondButton()} className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">{props.SecondButtonText}</button>
         }
-        <button type="submit" disabled={input.value.length === 0 || props.blockSending} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+        <button type="submit" disabled={(input.value.length === 0 && !props.blockSending)} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
           {props.SubmitButtonText}
           {props.Icon === 'send' &&
             <img className="ml-2" src={send} alt="" />
+          }
+          {props.Icon === 'stop' &&
+            <img className="ml-2" src={stop} alt="" />
           }
         </button>
       </div>
