@@ -5,7 +5,7 @@ import { useSignal } from '@preact/signals';
 import { PromptInput } from '../components/PromptInput';
 
 import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
-import { selectTemplate, updateTemplate } from '../store/templates-slice';
+import { selectTemplate, updateTemplate, updateTemplateTitle } from '../store/templates-slice';
 import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
@@ -20,6 +20,10 @@ export function Template(props) {
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
   }, []);
+
+  function saveTemplateTitle(title) {
+    dispatch(updateTemplateTitle(title));
+  }
 
   function saveContent({ rawInput, rawPreview }) {
     dispatch(updateTemplate({
@@ -60,7 +64,7 @@ export function Template(props) {
               </div>
 
               <div className={'ml-auto shrink-0'}>
-                <TemplateToolBar callEditTemplate={saveContent} />
+                <TemplateToolBar callEditTemplate={value => saveTemplateTitle(value)} />
               </div>
             </div>
             <div className={'mt-4'}>
@@ -76,12 +80,13 @@ export function Template(props) {
                 SecondButton={false}
                 SecondButtonText={''}
                 handleSecondButton={() => { }}
-
                 SetBlockOnSubmit={true}
                 unBlockOnEdit={true}
                 clearInputOnSubmit={false}
                 handleSetBlock={(val) => promptSaved.value = val}
 
+                DisableProcessing={true}
+                UseTemplatePosition={'left'}
                 InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
                 forceFocus={currentTemplate.uuid}
               />

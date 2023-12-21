@@ -26,6 +26,9 @@ const templatesSlice = createSlice({
     },
     setCurrentTemplate(state, action) {
       state.currentTemplate = action.payload
+    },
+    setCurrentTemplateName(state, action) {
+      state.currentTemplate.name = action.payload
     }
   }
 })
@@ -162,6 +165,28 @@ export const updateTemplate = (payload) => {
 
     const template = await sendRequest();
     dispatch(templatesActions.setCurrentTemplate(template));
+    dispatch(getTemplatesData());
+  }
+}
+
+export const updateTemplateTitle = (payload) => {
+  return async (dispatch) => {
+    let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
+    const sendRequest = async () => {
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/update-name/${payload.uuid}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+          'Content-Type': 'application/json',
+
+        },
+        body: JSON.stringify({ name: payload })
+      }).then(res => res.json());
+
+      return data;
+    };
+
+    dispatch(templatesActions.setCurrentTemplateName(payload));
     dispatch(getTemplatesData());
   }
 }

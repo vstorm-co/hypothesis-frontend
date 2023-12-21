@@ -215,7 +215,7 @@ export function PromptInput(props) {
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
       {templates?.length > 0 &&
         <div className={'flex'}>
-          <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={'top'} TemplatePicked={handleUseTemplate} />
+          <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
@@ -228,7 +228,7 @@ export function PromptInput(props) {
         </div>}
       {promptMode.value === 'write' &&
         <div
-          data-placeholder={props.blockSending ? 'Processing...' : 'Enter a prompt...'}
+          data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
           spellCheck={false}
           ref={InputRef}
           contentEditable={true}

@@ -38,16 +38,17 @@ export function Chat(props) {
 	const chatRef = useRef();
 
 	useEffect(() => {
-		// if(previousScroll > )
 		chatRef.current.addEventListener('scroll', (e) => {
 			if (previousScroll.value > chatRef.current.scrollTop) {
 				userScrolledUp.value = true;
 			}
 			previousScroll.value = chatRef.current.scrollTop;
 		})
-
-
 	}, [])
+
+	useEffect(() => {
+		dispatch(selectChat(props.matches.id));
+	}, [window.location.href])
 
 	useEffect(() => {
 		blockSending.value = false;
