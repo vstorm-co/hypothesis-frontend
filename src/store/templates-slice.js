@@ -180,13 +180,15 @@ export const updateTemplateTitle = (payload) => {
           'Content-Type': 'application/json',
 
         },
-        body: JSON.stringify({ name: payload })
+        body: JSON.stringify({ name: payload.name })
       }).then(res => res.json());
 
       return data;
     };
 
-    dispatch(templatesActions.setCurrentTemplateName(payload));
+    const template = await sendRequest();
+
+    dispatch(templatesActions.setCurrentTemplateName(payload.name));
     dispatch(getTemplatesData());
   }
 }

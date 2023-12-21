@@ -22,7 +22,7 @@ export function Template(props) {
   }, []);
 
   function saveTemplateTitle(title) {
-    dispatch(updateTemplateTitle(title));
+    dispatch(updateTemplateTitle({ uuid: currentTemplate.uuid, name: title }));
   }
 
   function saveContent({ rawInput, rawPreview }) {
