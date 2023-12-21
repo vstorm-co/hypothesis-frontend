@@ -224,7 +224,8 @@ export function Chat(props) {
 
 	function handleSubmitButton(value) {
 		if (blockSending.value) {
-			sendMessage(JSON.stringify({ "type": "stop_generation", "user": user.email }))
+			sendMessage(JSON.stringify({ "type": "stop_generation", "user": user.email }));
+			dispatch(getChatsData(currentChat.uuid));
 		} else {
 			sendMsgTwo(value.promptArray);
 		}

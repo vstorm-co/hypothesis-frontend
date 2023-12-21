@@ -23,11 +23,10 @@ export function PromptInput(props) {
   function setRange() {
     const range = document.createRange();
     const sel = window.getSelection();
-    range.selectNodeContents(InputRef.current);
+    range.setStart(InputRef.current, InputRef.current.childNodes.length);
     range.collapse(false);
     sel.removeAllRanges();
     sel.addRange(range);
-    InputRef.current.focus();
     range.detach();
 
     saveCaret();
@@ -49,7 +48,9 @@ export function PromptInput(props) {
   }, [window.location.href])
 
   useEffect(() => {
-    setRange();
+    setTimeout(() => {
+      setRange();
+    }, 100)
 
     if (props.InitialInput) {
       input.value = props.InitialInput
@@ -65,9 +66,10 @@ export function PromptInput(props) {
   }
 
   function handleReturnResponse() {
-    let element = document.createElement('div');
+    let element = document.createElement('span');
+    element.innerText = `↩`;
     element.setAttribute("contenteditable", 'false');
-    element.classList.add('return-box', 'px-1.5', 'rounded');
+    element.classList.add('return-box-new');
 
     caret.value.insertNode(element);
 
@@ -85,7 +87,6 @@ export function PromptInput(props) {
 
     setTimeout(() => {
       input.value = `${InputRef.current.innerHTML}`;
-      useTemplateVisible.value = false;
     }, 100);
   }
 
@@ -157,6 +158,9 @@ export function PromptInput(props) {
     let rawPreview = targetPreview;
 
     let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+    if (promptArray.length < 2) {
+      promptArray = targetPreview.split(`<span contenteditable="false" class="return-box-new">↩</span>`);
+    }
 
     promptArray = promptArray.map((p, index) => {
       if (htmlArray[index] !== undefined) {
