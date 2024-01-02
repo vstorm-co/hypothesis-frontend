@@ -20,6 +20,7 @@ export function PromptInput(props) {
   const preview = useSignal('');
 
   const showPrePill = useSignal(false);
+  const prePillContent = useSignal('');
 
   const InputRef = useRef();
 
@@ -224,6 +225,13 @@ export function PromptInput(props) {
     if (showPrePill.value && !element) {
       showPrePill.value = false;
     }
+
+
+    if (showPrePill.value) {
+      let target = document.querySelector('.pre-pill');
+      prePillContent.value = target.innerText.trim().toLowerCase();
+
+    }
   }
 
   function insertPrePillSpan() {
@@ -264,9 +272,8 @@ export function PromptInput(props) {
   }
 
   function handleUseInlineTemplate(template) {
-    console.log(input.value);
     input.value = input.value.replace("{{", "");
-    console.log(input.value)
+
     setTimeout(() => {
       let element = InputRef.current.querySelector('.pre-pill');
 
@@ -302,7 +309,7 @@ export function PromptInput(props) {
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
       <div style={returnInlineTemplatePostion()} className={'fixed z-50 border border-[#DBDBDB] rounded ' + (showPrePill.value ? 'block' : 'hidden')}>
         <div className={' bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
-          {templates.map(template => (
+          {templates.filter(temp => temp.name.toLowerCase().trim().includes(prePillContent.value)).map(template => (
             <div onClick={() => handleUseInlineTemplate(template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
               <img className="w-4" src={braces} alt="" />
               <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
