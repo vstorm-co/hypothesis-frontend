@@ -6,6 +6,7 @@ import { useEffect, useRef } from "preact/hooks";
 
 import send from '../assets/send.svg';
 import stop from '../assets/stop.svg';
+import braces from '../assets/braces.svg';
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
@@ -17,6 +18,8 @@ export function PromptInput(props) {
 
   const input = useSignal('');
   const preview = useSignal('');
+
+  const showPrePill = useSignal(false);
 
   const InputRef = useRef();
 
@@ -211,8 +214,104 @@ export function PromptInput(props) {
     saveCaret();
   }
 
+  function handleKeyUp() {
+    if (input.value.indexOf('{{') != -1 && !showPrePill.value) {
+      insertPrePillSpan();
+    }
+
+    let element = document.querySelector('.pre-pill');
+
+    if (showPrePill.value && !element) {
+      showPrePill.value = false;
+    }
+  }
+
+  function insertPrePillSpan() {
+    let element = document.createElement('span');
+    element.innerText = ` `;
+    element.classList.add('pre-pill');
+    element.setAttribute("contenteditable", 'true');
+
+    caret.value.insertNode(element);
+
+    const newRange = document.createRange();
+    newRange.setStart(element, 0);
+    newRange.setEnd(element, element.childNodes.length);
+
+    newRange.collapse(false);
+
+    element.focus();
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(newRange);
+    newRange.detach();
+
+    showPrePill.value = true;
+
+    setTimeout(() => {
+      input.value = `${InputRef.current.innerHTML}`;
+    }, 100);
+  }
+
+  function returnInlineTemplatePostion() {
+    let element = document.querySelector('.pre-pill');
+    if (element) {
+      let rect = element.getBoundingClientRect();
+      return {
+        left: rect.left - 100,
+        top: rect.top - 100,
+      }
+    }
+  }
+
+  function handleUseInlineTemplate(template) {
+    console.log(input.value);
+    input.value = input.value.replace("{{", "");
+    console.log(input.value)
+    setTimeout(() => {
+      let element = InputRef.current.querySelector('.pre-pill');
+
+      element.innerText = `${template.name}`;
+      element.dataset.content = `${template.uuid}`;
+      element.classList.remove('pre-pill');
+      element.classList.add('pill');
+      element.setAttribute("contenteditable", 'false');
+
+      caret.value.setStartAfter(element);
+      caret.value.setEndAfter(element);
+
+      const space = document.createTextNode(' ');
+      caret.value.insertNode(space);
+
+      caret.value.collapse(false);
+
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(caret.value);
+      caret.value.detach();
+
+    }, 100)
+
+    setTimeout(() => {
+      input.value = `${InputRef.current.innerHTML}`;
+
+      showPrePill.value = false;
+    }, 200);
+
+  }
+
   return (
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
+      <div style={returnInlineTemplatePostion()} className={'fixed z-50 border border-[#DBDBDB] rounded ' + (showPrePill.value ? 'block' : 'hidden')}>
+        <div className={' bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
+          {templates.map(template => (
+            <div onClick={() => handleUseInlineTemplate(template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
+              <img className="w-4" src={braces} alt="" />
+              <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
+                {template.name}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       {templates?.length > 0 &&
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
@@ -233,6 +332,7 @@ export function PromptInput(props) {
           ref={InputRef}
           contentEditable={true}
           onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           onClick={() => saveCaret()}
           onInput={e => handleOnInput(e)}
           dangerouslySetInnerHTML={{ __html: input.value }} className={"write-box msg min-h-[72px] max-h-[156px]"}

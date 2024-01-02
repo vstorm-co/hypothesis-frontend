@@ -75,7 +75,7 @@ export function Template(props) {
                 Icon={'send'}
                 blockSending={promptSaved.value}
                 WSsendMessage={() => { }}
-                SubmitButtonText={'Send Message'}
+                SubmitButtonText={'Save Template'}
                 handleSubmitButton={(value) => { saveContent(value) }}
                 SecondButton={false}
                 SecondButtonText={''}
