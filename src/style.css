@@ -195,6 +195,15 @@
 	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
 }
 
+.templates-inline-list:empty:before {
+	@apply text-sm leading-6;
+	content: 'No templates found';
+	color: #747474;
+
+	display: block;
+	text-align: center;
+}
+
 body {
 	font-family: 'SF Pro';
 }

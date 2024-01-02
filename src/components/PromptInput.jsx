@@ -308,7 +308,7 @@ export function PromptInput(props) {
   return (
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
       <div style={returnInlineTemplatePostion()} className={'fixed z-50 border border-[#DBDBDB] rounded ' + (showPrePill.value ? 'block' : 'hidden')}>
-        <div className={' bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
+        <div className={'templates-inline-list bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
           {templates.filter(temp => temp.name.toLowerCase().trim().includes(prePillContent.value)).map(template => (
             <div onClick={() => handleUseInlineTemplate(template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
               <img className="w-4" src={braces} alt="" />
