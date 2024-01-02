@@ -169,12 +169,13 @@
 	@apply w-full bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6
 }
 
-.preview-box .return-box {
+.preview-box .return-box, .preview-box .return-box-new {
 	height: 24px;
 	font-size: 14px;
 	line-height: 24px;
 	color: #747474;
 	display: block;
+	padding: 0 4px;
 
 	border: 1px dotted #DBDBDB;
 	border-radius: 4px;
@@ -183,8 +184,9 @@
 	width: 70%;
 }
 
-.preview-box .return-box:before {
-	content: "Response is returned before proceeding to next prompt";
+.preview-box .return-box:before,
+.preview-box .return-box-new:after {
+	content: " Response is returned before proceeding to next prompt";
 	/* padding: 4px 8px; */
 
 }
