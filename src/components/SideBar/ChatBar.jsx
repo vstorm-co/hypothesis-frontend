@@ -71,7 +71,7 @@ export const ChatBar = props => {
       if (ShowOptions.value) {
         return "max-w-[128px] "
       } else {
-        return "max-w-[168px] group-hover:max-w-[128px] ";
+        return "max-w-[168px] ";
       }
     }
   }
@@ -89,24 +89,24 @@ export const ChatBar = props => {
   }
 
   return (
-    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (handleBoxClass()) + (usersOnChat.value.length > 1 ? '' : 'hover:py-1')}>
-      <img className={"w-4 mt-1 " + (usersOnChat.value.length > 1 ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
-      <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 1 ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 1 ? 'leading-4 ' : 'truncate leading-6 ') + (handleNameClass())}>
+    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (handleBoxClass()) + (usersOnChat.value.length > 0 ? '' : 'hover:py-1')}>
+      <img className={"w-4 mt-0.5 " + (usersOnChat.value.length > 0 ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
+      <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 0 ? 'flex-col' : '')}>
+        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 0 ? 'leading-4 ' : 'truncate leading-6 ') + (handleNameClass())}>
           {props.ChatData.name}
         </div>
-        <div className={'flex items-center ' + (usersOnChat.value.length > 1 ? 'mt-1' : 'ml-auto')}>
+        <div className={'flex items-center ' + (usersOnChat.value.length > 0 ? 'mt-1' : 'ml-auto')}>
           <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
             {EditedAt()}
           </div>
-          <div className={"ml-2 " + (usersOnChat.value.length > 1 ? 'flex gap-[1px]' : 'hidden')}>
+          <div className={"ml-2 " + (usersOnChat.value.length > 0 ? 'flex gap-[1px]' : 'hidden')}>
             {usersOnChat.value.map(u => (
               <img title={u.user_name} src={u.sender_picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
             ))}
           </div>
         </div>
       </div>
-      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (usersOnChat.value.length > 1 ? 'self-start' : '')}>
+      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (usersOnChat.value.length > 0 ? 'self-start' : '')}>
         <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={handleToggleOptions} ShowOptions={ShowOptions.value} />
       </div>
     </div>

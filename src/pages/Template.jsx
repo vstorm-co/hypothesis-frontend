@@ -72,7 +72,6 @@ export function Template(props) {
                 Prompt
               </div>
               <PromptInput
-                Icon={'send'}
                 blockSending={promptSaved.value}
                 WSsendMessage={() => { }}
                 SubmitButtonText={'Save Template'}
