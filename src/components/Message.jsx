@@ -68,14 +68,14 @@ export function Message(props) {
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex my-4 group'}>
-        <div class={'bg-[#F2F2F2] max-w-[85%] mr-4 p-2 pr-3 rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
+        <div class={'bg-[#F2F2F2] max-w-[85%] overflow-hidden mr-4 p-2 pr-3 rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
           <div onMouseLeave={() => setShowSaveAs(false)} className="items-start">
             <div className="flex items-start">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
-              <div className={'truncate self-center py-1'}>
-                <div className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center  text-[#202020] text-sm"} title={props.Message.content} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
+              <div className={'self-center py-1'}>
+                <div className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center inline-block break-all text-[#202020] text-sm"} title={props.Message.content} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
               </div>
-              <div className={'w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
+              <div className={'max-w-[92%] w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
                 <PromptInput
                   blockSending={false}
                   WSsendMessage={() => { }}

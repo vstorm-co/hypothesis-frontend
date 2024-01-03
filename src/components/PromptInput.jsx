@@ -7,6 +7,7 @@ import { useEffect, useRef } from "preact/hooks";
 import send from '../assets/send.svg';
 import stop from '../assets/stop.svg';
 import braces from '../assets/braces.svg';
+import { InlineTemplate } from "./InlineTemplate";
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
@@ -170,12 +171,12 @@ export function PromptInput(props) {
       if (htmlArray[index] !== undefined) {
         return {
           prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-          html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "").replace("<br>", "").replace("\n", "") : input.value,
+          html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "") : input.value,
         };
       } else {
         return {
           prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-          html: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+          html: p.replace("&nbsp;", "").trim(),
         };
       }
     });
@@ -201,6 +202,10 @@ export function PromptInput(props) {
     }
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       handleSubmit();
+    }
+
+    if (showPrePill.value && (event.key === 'Enter' || event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
+      event.preventDefault();
     }
   }
 
@@ -260,17 +265,6 @@ export function PromptInput(props) {
     }, 100);
   }
 
-  function returnInlineTemplatePostion() {
-    let element = document.querySelector('.pre-pill');
-    if (element) {
-      let rect = element.getBoundingClientRect();
-      return {
-        left: rect.left - 100,
-        top: rect.top - 100,
-      }
-    }
-  }
-
   function handleUseInlineTemplate(template) {
     input.value = input.value.replace("{{", "");
 
@@ -307,18 +301,7 @@ export function PromptInput(props) {
 
   return (
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
-      <div style={returnInlineTemplatePostion()} className={'fixed z-50 border border-[#DBDBDB] rounded ' + (showPrePill.value ? 'block' : 'hidden')}>
-        <div className={'templates-inline-list bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
-          {templates.filter(temp => temp.name.toLowerCase().trim().includes(prePillContent.value)).map(template => (
-            <div onClick={() => handleUseInlineTemplate(template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
-              <img className="w-4" src={braces} alt="" />
-              <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
-                {template.name}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <InlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
       {templates?.length > 0 &&
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />

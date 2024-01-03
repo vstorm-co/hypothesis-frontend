@@ -195,6 +195,10 @@
 	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
 }
 
+.box-shadow {
+	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
+}
+
 .templates-inline-list:empty:before {
 	@apply text-sm leading-6;
 	content: 'No templates found';
