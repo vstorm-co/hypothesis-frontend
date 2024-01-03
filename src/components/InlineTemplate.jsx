@@ -29,19 +29,16 @@ export function InlineTemplate(props) {
         let list = document.querySelector(`.block .templates-inline-list`);
         let item = list.querySelector(`.item-${selectedIndex.value}`);
 
-        list.scrollTo({
-          top: item.offsetTop - 50,
-          left: 0,
-          behavior: "smooth",
-        })
+        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
 
       if (e.code === 'ArrowUp' && selectedIndex.value != 0) {
         selectedIndex.value = selectedIndex.value - 1;
 
-        let item = document.querySelector(`.item-${selectedIndex.value}`);
+        let list = document.querySelector(`.block .templates-inline-list`);
+        let item = list.querySelector(`.item-${selectedIndex.value}`);
 
-        item.scrollIntoView();
+        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   }
