@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showToast } from "../../store/ui-slice";
 import { cloneChat } from "../../store/chats-slice";
 import { deleteChat } from "../../store/chats-slice";

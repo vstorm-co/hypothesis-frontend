@@ -8,7 +8,7 @@ import { Loading } from '../Loading';
 
 import arrowDown from '../../assets/arrow-down.svg';
 
-export function Chats() {
+export function Chats(props) {
   const chats = useSelector(state => state.chats.chats);
   const size = useSelector(state => state.chats.size);
   const info = useSelector(state => state.chats.info);
@@ -56,6 +56,10 @@ export function Chats() {
     dispatch(getChatsData());
   }
 
+  function handleToggleScrollBar(tgl) {
+    props.handleToggleScrollBar(tgl);
+  }
+
   return (
     <div className="mt-4">
       <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2">
@@ -68,7 +72,7 @@ export function Chats() {
         <div>
           <div className={''}>
             {chats?.map(chat => (
-              <ChatBar ChatData={chat} />
+              <ChatBar handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} ChatData={chat} />
             ))}
           </div>
           {(loadSize > 0 && chats?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>

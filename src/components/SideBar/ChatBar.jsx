@@ -59,21 +59,15 @@ export const ChatBar = props => {
   function handleToggleOptions(tgl) {
     if (tgl != undefined) {
       ShowOptions.value = false;
+      props.handleToggleScrollBar(false);
     } else {
       ShowOptions.value = !ShowOptions.value;
+      props.handleToggleScrollBar(ShowOptions.value);
     }
   }
 
   function handleNameClass() {
-    if (usersOnChat.value.length > 1) {
-      return "max-w-[168px] ";
-    } else {
-      if (ShowOptions.value) {
-        return "max-w-[128px] "
-      } else {
-        return "max-w-[168px] ";
-      }
-    }
+    return "max-w-[168px]";
   }
 
   function handleBoxClass() {
@@ -81,7 +75,7 @@ export const ChatBar = props => {
       return "py-2 "
     } else {
       if (ShowOptions.value) {
-        return "py-1 "
+        return "py-2 "
       } else {
         return "py-2 "
       }
@@ -107,7 +101,7 @@ export const ChatBar = props => {
         </div>
       </div>
       <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (usersOnChat.value.length > 0 ? 'self-start' : '')}>
-        <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={handleToggleOptions} ShowOptions={ShowOptions.value} />
+        <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} />
       </div>
     </div>
   )

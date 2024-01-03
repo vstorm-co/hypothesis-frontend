@@ -2,18 +2,21 @@ import { SearchBar } from './SearchBar';
 import { Chats } from './Chats';
 import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { SearchBarSkeleton } from '../Skeletons/SearchBarSkeleton';
-import { ChatSkeleton } from '../Skeletons/ChatSkeleton';
-import { FooterSkeleton } from '../Skeletons/FooterSkeleton';
 import { Filters } from './Filters';
-import { useEffect } from 'preact/hooks';
+import { useSignal } from '@preact/signals';
+import { useSelector } from 'react-redux';
 
 
-export function SideBar(props) {
-  const currentUser = useSelector(state => state.user.currentUser);
+export function SideBar() {
   const hideSideBar = useSelector(state => state.ui.hideSideBar);
+
+  const hideScrollBar = useSignal(false);
+
+  function handleToggleScrollBar(tgl) {
+    console.log(tgl);
+    hideScrollBar.value = tgl;
+  }
 
   if (!hideSideBar) {
     return (
@@ -27,8 +30,8 @@ export function SideBar(props) {
               <Filters />
             </div>
           </div>
-          <div className="px-4 overflow-x-visible scrollBar-dark">
-            <Chats />
+          <div className={" scrollBar-dark " + (hideScrollBar.value ? 'overflow-x-visible px-4' : 'overflow-y-auto pl-4 pr-2')}>
+            <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
             <Templates />
           </div>
           <div className={'overflow-y-hidden'}>
