@@ -66,30 +66,28 @@ export const ChatBar = props => {
     }
   }
 
-  function handleNameClass() {
-    return "max-w-[168px]";
-  }
-
-  function handleBoxClass() {
-    if (usersOnChat.value.length > 1) {
-      return "py-2 "
-    } else {
-      if (ShowOptions.value) {
-        return "py-2 "
-      } else {
-        return "py-2 "
-      }
+  function handleClass() {
+    let selected = props.ChatData.uuid === currentChat.uuid;
+    if (!ShowOptions.value && !selected) {
+      return "py-2 hover:py-1"
+    }
+    if (selected) {
+      return "py-2"
+    }
+    if (ShowOptions.value && !selected) {
+      return "py-1"
     }
   }
 
+
   return (
-    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + (handleBoxClass()) + (usersOnChat.value.length > 0 ? '' : 'hover:py-1')}>
+    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
       <img className={"w-4 mt-0.5 " + (usersOnChat.value.length > 0 ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
       <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 0 ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (usersOnChat.value.length > 0 ? 'leading-4 ' : 'truncate leading-6 ') + (handleNameClass())}>
+        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
           {props.ChatData.name}
         </div>
-        <div className={'flex items-center ' + (usersOnChat.value.length > 0 ? 'mt-1' : 'ml-auto')}>
+        <div className={'flex items-center mt-1 ' + (isSelected() ? '' : 'ml-auto')}>
           <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
             {EditedAt()}
           </div>

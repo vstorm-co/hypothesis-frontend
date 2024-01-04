@@ -16,7 +16,7 @@ export function InlineTemplate(props) {
     return () => {
       document.removeEventListener('keydown', handleKeyboard);
     }
-  }, [props.showPrePill]);
+  }, [props.showPrePill, props.prePillContent]);
 
   function handleKeyboard(e) {
     if (props.showPrePill) {

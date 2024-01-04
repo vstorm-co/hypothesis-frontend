@@ -6,6 +6,7 @@ import { Footer } from './Footer/Footer';
 import { Filters } from './Filters';
 import { useSignal } from '@preact/signals';
 import { useSelector } from 'react-redux';
+import { useEffect, useRef } from 'preact/hooks';
 
 
 export function SideBar() {
@@ -13,9 +14,24 @@ export function SideBar() {
 
   const hideScrollBar = useSignal(false);
 
+  const scrollRef = useRef();
+
   function handleToggleScrollBar(tgl) {
-    console.log(tgl);
     hideScrollBar.value = tgl;
+  }
+
+  useEffect(() => {
+    console.dir(scrollRef.current)
+  }, []);
+
+  function handleClass() {
+    if (scrollRef.current) {
+      if (!hideScrollBar.value) {
+        return 'overflow-y-auto pl-4 pr-2'
+      } else {
+        return 'overflow-x-visible px-4'
+      }
+    }
   }
 
   if (!hideSideBar) {
@@ -30,7 +46,7 @@ export function SideBar() {
               <Filters />
             </div>
           </div>
-          <div className={" scrollBar-dark " + (hideScrollBar.value ? 'overflow-x-visible px-4' : 'overflow-y-auto pl-4 pr-2')}>
+          <div ref={scrollRef} className={" scrollBar-dark " + handleClass()}>
             <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
             <Templates />
           </div>

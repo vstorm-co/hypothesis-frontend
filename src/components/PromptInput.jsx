@@ -98,6 +98,7 @@ export function PromptInput(props) {
   function handleUseTemplate(template) {
     let element = document.createElement('span');
     element.innerText = `${template.name}`;
+    element.title = `${template.content}`
     element.dataset.content = `${template.uuid}`;
     element.classList.add('pill');
     element.setAttribute("contenteditable", 'false');
@@ -272,6 +273,7 @@ export function PromptInput(props) {
       let element = InputRef.current.querySelector('.pre-pill');
 
       element.innerText = `${template.name}`;
+      element.title = `${template.content}`
       element.dataset.content = `${template.uuid}`;
       element.classList.remove('pre-pill');
       element.classList.add('pill');
