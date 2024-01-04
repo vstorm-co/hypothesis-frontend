@@ -79,11 +79,15 @@ export const ChatBar = props => {
     }
   }
 
+  function CheckUsersOnChat() {
+    return usersOnChat.value.length > 0 && isSelected()
+  }
+
 
   return (
     <div onClick={callSelectChat} className={"flex pl-2 pr-1 group items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
-      <img className={"w-4 mt-0.5 " + (usersOnChat.value.length > 0 ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
-      <div className={'flex ml-2 w-full ' + (usersOnChat.value.length > 0 ? 'flex-col' : '')}>
+      <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
+      <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
         <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
           {props.ChatData.name}
         </div>
@@ -91,14 +95,14 @@ export const ChatBar = props => {
           <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
             {EditedAt()}
           </div>
-          <div className={"ml-2 " + (usersOnChat.value.length > 0 ? 'flex gap-[1px]' : 'hidden')}>
+          <div className={"ml-2 " + (CheckUsersOnChat() ? 'flex gap-[1px]' : 'hidden')}>
             {usersOnChat.value.map(u => (
               <img title={u.user_name} src={u.sender_picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
             ))}
           </div>
         </div>
       </div>
-      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (usersOnChat.value.length > 0 ? 'self-start' : '')}>
+      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (CheckUsersOnChat() ? 'self-start' : '')}>
         <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} />
       </div>
     </div>

@@ -36,9 +36,7 @@ export function Template(props) {
 
     dispatch(showToast({ content: `Template saved` }))
 
-    if (!title) {
-      setPromptSaved(true);
-    }
+    promptSaved.value = true;
   }
 
   if (!currentTemplate.uuid) {
@@ -72,6 +70,7 @@ export function Template(props) {
                 Prompt
               </div>
               <PromptInput
+                Icon="nostop"
                 blockSending={promptSaved.value}
                 WSsendMessage={() => { }}
                 SubmitButtonText={'Save Template'}

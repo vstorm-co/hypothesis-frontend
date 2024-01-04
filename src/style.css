@@ -242,6 +242,15 @@ button[disabled] {
 	opacity: .5
 }
 
+button {
+	box-shadow: 0 3px white;
+}
+
+button:active:enabled {
+	box-shadow: 0 1.5px #666;
+	transform: translateY(4px);
+}
+
 /* width */
 .scrollBar-dark::-webkit-scrollbar {
 	width: 8px;

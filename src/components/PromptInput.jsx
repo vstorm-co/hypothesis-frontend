@@ -98,7 +98,8 @@ export function PromptInput(props) {
   function handleUseTemplate(template) {
     let element = document.createElement('span');
     element.innerText = `${template.name}`;
-    element.title = `${template.content}`
+    element.title = `${template.content.replace('<div contenteditable="false" class="return-box px-1.5 rounded"></div>', '↩ ')}`
+    element.title = `${template.content.replace('<span contenteditable="false" class="return-box-new">↩</span>', '↩ ')}`
     element.dataset.content = `${template.uuid}`;
     element.classList.add('pill');
     element.setAttribute("contenteditable", 'false');
@@ -154,6 +155,9 @@ export function PromptInput(props) {
       if (temp.dataset.content) {
         let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
         let targetHTML = templateTarget.content_html.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
+        if (targetHTML.length < 2) {
+          targetHTML = templateTarget.content_html.split(`<span contenteditable="false" class="return-box-new">↩</span>`);
+        }
 
         htmlArray = [...htmlArray, ...targetHTML];
 
@@ -273,7 +277,8 @@ export function PromptInput(props) {
       let element = InputRef.current.querySelector('.pre-pill');
 
       element.innerText = `${template.name}`;
-      element.title = `${template.content}`
+      element.title = `${template.content.replace('<div contenteditable="false" class="return-box px-1.5 rounded"></div>', '↩ ')}`;
+      element.title = `${template.content.replace('<span contenteditable="false" class="return-box-new">↩</span>', '↩ ')}`
       element.dataset.content = `${template.uuid}`;
       element.classList.remove('pre-pill');
       element.classList.add('pill');
@@ -340,7 +345,7 @@ export function PromptInput(props) {
         {props.SecondButton &&
           <button type="button" onClick={() => props.handleSecondButton()} className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">{props.SecondButtonText}</button>
         }
-        <button type="submit" disabled={(input.value.length === 0 && !props.blockSending)} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+        <button type="submit" disabled={((input.value.length === 0 || props.blockSending) && props.Icon != 'stop')} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
           {props.SubmitButtonText}
           {props.Icon === 'send' &&
             <img className="ml-2" src={send} alt="" />
