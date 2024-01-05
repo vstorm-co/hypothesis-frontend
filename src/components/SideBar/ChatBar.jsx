@@ -69,7 +69,8 @@ export const ChatBar = props => {
   function handleClass() {
     let selected = props.ChatData.uuid === currentChat.uuid;
     if (!ShowOptions.value && !CheckUsersOnChat()) {
-      return "py-2 hover:py-1"
+      // return "py-2 hover:py-1"
+      return "py-2"
     }
     if (CheckUsersOnChat()) {
       return "py-2"
@@ -102,7 +103,7 @@ export const ChatBar = props => {
           </div>
         </div>
       </div>
-      <div className={'' + (ShowOptions.value ? 'block ' : 'group-hover:block hidden ') + (CheckUsersOnChat() ? 'self-start' : '')}>
+      <div className={'' + (false ? 'block ' : 'hidden ') + (CheckUsersOnChat() ? 'self-start' : '')}>
         <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} />
       </div>
     </div>

@@ -27,7 +27,7 @@ export function SideBar() {
   function handleClass() {
     if (scrollRef.current) {
       if (!hideScrollBar.value) {
-        return 'overflow-y-auto pl-4 pr-2'
+        return 'overflow-y-auto pl-3 pr-3'
       } else {
         return 'overflow-x-visible px-4'
       }
