@@ -21,7 +21,7 @@ export function InlineTemplate(props) {
   function handleKeyboard(e) {
     if (props.showPrePill) {
       if (e.key === 'Enter') {
-        props.handleUseInlineTemplate(templates[selectedIndex.value]);
+        props.handleUseInlineTemplate(templates.filter(temp => temp.name.toLowerCase().trim().includes(props.prePillContent))[selectedIndex.value]);
       }
       if (e.code === 'ArrowDown' && selectedIndex.value != templates.length - 1) {
         selectedIndex.value = selectedIndex.value + 1;
@@ -60,7 +60,7 @@ export function InlineTemplate(props) {
         (Press enter to insert)
       </div>
       <div className={'templates-inline-list bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
-        {templates.filter(temp => temp.name.toLowerCase().trim().includes(props.prePillContent)).map((template, index) => (
+        {templates?.filter(temp => temp.name.toLowerCase().trim().includes(props.prePillContent)).map((template, index) => (
           <div onClick={() => props.handleUseInlineTemplate(template)} className={(`item-${index}`) + ' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (selectedIndex.value === index ? 'box-shadow' : '')}>
             <img className="w-4" src={braces} alt="" />
             <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>

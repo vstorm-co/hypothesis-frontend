@@ -68,19 +68,19 @@ export const ChatBar = props => {
 
   function handleClass() {
     let selected = props.ChatData.uuid === currentChat.uuid;
-    if (!ShowOptions.value && !selected) {
+    if (!ShowOptions.value && !CheckUsersOnChat()) {
       return "py-2 hover:py-1"
     }
-    if (selected) {
+    if (CheckUsersOnChat()) {
       return "py-2"
     }
-    if (ShowOptions.value && !selected) {
+    if (ShowOptions.value && !CheckUsersOnChat()) {
       return "py-1"
     }
   }
 
   function CheckUsersOnChat() {
-    return usersOnChat.value.length > 0 && isSelected()
+    return usersOnChat.value.length;
   }
 
 
@@ -91,7 +91,7 @@ export const ChatBar = props => {
         <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
           {props.ChatData.name}
         </div>
-        <div className={'flex items-center mt-1 ' + (isSelected() ? '' : 'ml-auto')}>
+        <div className={'flex items-center mt-1 ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
           <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
             {EditedAt()}
           </div>
