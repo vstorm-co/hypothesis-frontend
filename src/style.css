@@ -148,7 +148,8 @@
 }
 
 .write-box {
-	@apply whitespace-pre-wrap w-full bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6;
+	@apply whitespace-pre-wrap w-full bg-[#FAFAFA] border overflow-auto rounded-tl-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm;
+	line-height: 1.7rem;
 }
 
 .write-box:empty:before {
