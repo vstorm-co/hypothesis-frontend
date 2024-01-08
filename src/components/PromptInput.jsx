@@ -201,16 +201,21 @@ export function PromptInput(props) {
   }
 
   function handleKeyDown(event) {
-    props.WSsendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
-    if (props.unBlockOnEdit) {
-      props.handleSetBlock(false);
-    }
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-      handleSubmit();
-    }
-
     if (showPrePill.value && (event.key === 'Enter' || event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
       event.preventDefault();
+    } else {
+      props.WSsendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
+      if (props.unBlockOnEdit) {
+        props.handleSetBlock(false);
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        handleReturnResponse()
+      } else if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        handleSubmit();
+      } else {
+
+      }
     }
   }
 

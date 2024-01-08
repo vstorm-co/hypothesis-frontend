@@ -74,6 +74,14 @@ export function Chat(props) {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}
 		}, 300);
+
+		let pills = document.querySelectorAll('.user-message .pill');
+
+		pills.forEach(pill => {
+			pill.addEventListener('click', () => {
+				window.location.href = `/templates/${pill.dataset.content}`
+			})
+		})
 	}, [currentChat.messages])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {
