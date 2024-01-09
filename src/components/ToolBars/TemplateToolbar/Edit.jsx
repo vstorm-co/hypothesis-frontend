@@ -78,16 +78,7 @@ export function Edit(props) {
           <img className="w-4 rotate-90" src={dots} alt="edit" />
         </div>
       </div>
-      <div className={"absolute z-50 border rounded right-0 top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
-        <div className="border-b p-2">
-          <div className="text-xs font-bold text-[#747474] mb-1">
-            Title
-          </div>
-          <input value={currentTemplate.name} onChangeCapture={(event) => { editTemplateTitle(event) }} type="text" className="bg-[#F2F2F2] border border-[#DBDBDB] rounded focus:outline-none p-2" />
-          <div className={'text-[10px] mt-0.5 text-right text-[#747474]'}>
-            press 'Enter' to confirm
-          </div>
-        </div>
+      <div className={"absolute w-[240px] z-50 border rounded right-0 top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
         <div className="border-b p-2">
           <>
             <div className="text-xs font-bold text-[#747474] mb-1">
