@@ -68,7 +68,7 @@ export function Message(props) {
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex my-4 group'}>
-        <div class={'bg-[#F2F2F2] max-w-[85%] overflow-hidden mr-4 p-2 pr-3 rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
+        <div class={'bg-[#F2F2F2] max-w-[85%] mr-4 p-2 pr-3 rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
           <div onMouseLeave={() => setShowSaveAs(false)} className="items-start">
             <div className="flex items-start">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
