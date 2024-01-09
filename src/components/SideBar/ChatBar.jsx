@@ -27,7 +27,7 @@ export const ChatBar = props => {
     usersActive.forEach(u => {
     })
     usersOnChat.value = usersActive.filter(u => u.room_id === props.ChatData.uuid);
-  }, [usersActive])
+  }, [usersActive, currentChat])
 
   function isSelected() {
     return props.ChatData.uuid === currentChat.uuid
