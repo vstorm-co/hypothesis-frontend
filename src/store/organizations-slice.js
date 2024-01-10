@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 import { userActions } from "./user-slice";
+import callApi from "../api";
 
 const organizationsSlice = createSlice({
   name: 'organizations',
@@ -42,19 +43,10 @@ export default organizationsSlice;
 export const getOrganizationsData = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch organizations.');
-      }
-      const organizations = await response.json();
+      const organizations = await callApi(`/organization`);
       dispatch(organizationsActions.setOrganizations(organizations));
-    } catch (error) {
-      // Handle error
+    } catch (err) {
+      console.log(err);
     }
   }
 }
@@ -62,21 +54,13 @@ export const getOrganizationsData = () => {
 export const createNewOrganization = (payload) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organizations`, {
+      const organization = await callApi('/organizations', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to create a new organization.');
-      }
-      const organization = await response.json();
+      })
       dispatch(organizationsActions.createOrganizationSuccess(organization));
-    } catch (error) {
-      // Handle error
+    } catch (err) {
+      console.log(err);
     }
   }
 }
@@ -84,21 +68,13 @@ export const createNewOrganization = (payload) => {
 export const updateCurrentOrganization = (payload) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organizations/${payload.uuid}`, {
+      const updatedOrganization = await callApi(`/organizations/${payload.uuid}`, {
         method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) {
-        throw new Error('Failed to update the organization.');
-      }
-      const updatedOrganization = await response.json();
       dispatch(organizationsActions.updateOrganizationSuccess(updatedOrganization));
-    } catch (error) {
-      // Handle error
+    } catch (err) {
+      console.log(err)
     }
   }
 }
@@ -106,19 +82,12 @@ export const updateCurrentOrganization = (payload) => {
 export const deleteCurrentOrganization = (organizationUuid) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organizations/${organizationUuid}`, {
+      const organization = callApi(`/organizations/${organizationUuid}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser')).access_token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete the organization.');
-      }
+      })
       dispatch(organizationsActions.deleteOrganizationSuccess({ organizationUuid }));
-    } catch (error) {
-      // Handle error
+    } catch (err) {
+      console.log(err);
     }
   }
 }

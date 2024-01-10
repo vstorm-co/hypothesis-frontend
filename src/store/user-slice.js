@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import callApi from "../api";
 
 let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 let users = JSON.parse(localStorage.getItem('ANT_users'));
@@ -15,6 +16,7 @@ const userSlice = createSlice({
       if (action.payload.access_token) {
         state.currentUser.user_id = action.payload.user_id;
         state.currentUser.access_token = action.payload.access_token;
+        state.currentUser.refresh_token = action.payload.refresh_token;
         state.currentUser.email = action.payload.email;
         state.currentUser.name = action.payload.name;
         state.currentUser.picture = action.payload.picture;
@@ -23,6 +25,11 @@ const userSlice = createSlice({
       } else {
         state.currentUser = {}
       }
+    },
+    setUserTokens(state, action) {
+      state.currentUser.access_token = action.payload.access_token;
+      state.currentUser.refresh_token = action.payload.refresh_token;
+      localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
     },
     setCurrentUserOrganization(state, action) {
       state.currentUser.organization_logo = action.payload.picture;
@@ -76,19 +83,8 @@ export default userSlice;
 
 export const getUserOrganizationsData = () => {
   return async (dispatch) => {
-    const user = JSON.parse(localStorage.getItem('ANT_currentUser'))
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/user-organizations`, {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch organizations.');
-      }
-      const organizations = await response.json();
-
+      const organizations = await callApi('/organization/user-organizations')
       if (organizations.length > 0) {
         dispatch(userActions.setCurrentUserOrganization(organizations[0]))
       } else {

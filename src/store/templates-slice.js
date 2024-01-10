@@ -2,6 +2,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { route } from 'preact-router';
 
+import callApi from "../api";
+
 const templatesSlice = createSlice({
   name: 'templates',
   initialState: {
@@ -39,27 +41,18 @@ export default templatesSlice;
 
 export const getTemplatesData = (payload) => {
   return async (dispatch, getState) => {
-
-    const sendRequestUseTemplate = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json'
-        },
-      }).then(res => res.json());
-
-      return data;
+    try {
+      const useTemplates = await callApi(`/template`);
+      dispatch(templatesActions.setUseTemplates(useTemplates));
+    } catch (err) {
+      console.log(err)
     }
-
-    const useTemplates = await sendRequestUseTemplate();
-
-    dispatch(templatesActions.setUseTemplates(useTemplates));
 
     let state = getState();
     let url = ``;
 
     if (state.ui.searchFilters.visibility === 'all') {
-      url = `${import.meta.env.VITE_API_URL}/template?`
+      url = `/template?`
     } else if (state.ui.searchFilters.visibility === 'just_me') {
       url = `${url}/chat/template/?visibility=just_me`
     } else if (state.ui.searchFilters.visibility === 'organization') {
@@ -80,64 +73,36 @@ export const getTemplatesData = (payload) => {
 
     url = `${url}&order_by=visibility,-created_at`;
 
-    const sendRequest = async () => {
-      const data = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json'
-        },
-      }).then(res => res.json());
-
-      return data;
+    try {
+      const templates = await callApi(url);
+      dispatch(templatesActions.setTemplates(templates));
+    } catch (err) {
+      console.log(err)
     }
-
-    const templates = await sendRequest();
-
-    dispatch(templatesActions.setTemplates(templates));
   }
 }
 
 export const createTemplate = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
+    try {
+      const template = await callApi(`/template`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(payload)
-      }).then(res => res.json());
+      });
 
-      return data;
-    };
-
-    const template = await sendRequest();
-
-    route(`/templates/${template.uuid}`);
-    dispatch(selectTemplate(template.uuid));
-    dispatch(getTemplatesData());
+      route(`/templates/${template.uuid}`);
+      dispatch(selectTemplate(template.uuid));
+      dispatch(getTemplatesData());
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 
 export const selectTemplate = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
-      }).then(res => res.json());
-
-      return data;
-    };
-
-
-
     try {
-      const template = await sendRequest();
+      const template = await callApi(`/template/${payload}`);
       dispatch(templatesActions.setCurrentTemplate(template));
     } catch (err) {
       console.log(err);
@@ -148,68 +113,30 @@ export const selectTemplate = (payload) => {
 
 export const updateTemplate = (payload) => {
   return async (dispatch) => {
-    let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload.uuid}`, {
+    try {
+      const template = await callApi(`/template/${payload.uuid}`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
         body: JSON.stringify(payload)
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const template = await sendRequest();
-    dispatch(templatesActions.setCurrentTemplate(template));
-    dispatch(getTemplatesData());
-  }
-}
-
-export const updateTemplateTitle = (payload) => {
-  return async (dispatch) => {
-    let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/update-name/${payload.uuid}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
-        body: JSON.stringify({ name: payload.name })
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const template = await sendRequest();
-
-    dispatch(templatesActions.setCurrentTemplateName(payload.name));
-    dispatch(getTemplatesData());
+      });
+      dispatch(templatesActions.setCurrentTemplate(template));
+      dispatch(getTemplatesData());
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
 export const deleteTemplate = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/template/${payload}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
+    try {
+      const response = await callApi(`/template/${payload}`, {
+        method: 'DELETE'
+      });
+      dispatch(getTemplatesData());
+      dispatch(templatesActions.setCurrentTemplate({}));
+    } catch (err) {
+      console.log(err);
+    }
 
-        },
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const response = await sendRequest();
-    dispatch(getTemplatesData());
-    dispatch(templatesActions.setCurrentTemplate({}));
   }
 }

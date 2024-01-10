@@ -2,6 +2,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { route } from 'preact-router';
 
+import callApi from "../api";
+
 const chatsSlice = createSlice({
   name: 'chats',
   initialState: {
@@ -73,7 +75,7 @@ export const getChatsData = (payload) => {
   return async (dispatch, getState) => {
 
     let state = getState();
-    let url = `${import.meta.env.VITE_API_URL}`;
+    let url = ``;
 
     if (state.ui.searchFilters.visibility === 'all') {
       url = `${url}/chat/rooms?`
@@ -116,153 +118,89 @@ export const getChatsData = (payload) => {
       }
     }
 
+    try {
+      const chats = await callApi(url);
 
-    const sendRequest = async () => {
-      const data = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
-        },
-      }).then(res => res.json());
+      dispatch(chatsActions.setChats(chats))
 
-      return data;
-    };
-
-    const chats = await sendRequest();
-
-    dispatch(chatsActions.setChats(chats))
-
-    if (payload) {
-      dispatch(selectChat(payload));
+      if (payload) {
+        dispatch(selectChat(payload));
+      }
+    } catch (err) {
+      console.log(err);
     }
-    if (state.chats.currentChat.uuid) {
-      // dispatch(selectChat(state.chats.currentChat.uuid));
-    }
+
+
   }
 }
 
 export const createChat = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room`, {
+    try {
+      const chat = await callApi('/chat/room', {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
         body: JSON.stringify({ name: payload })
-      }).then(res => res.json());
+      });
+      route(`/chats/${chat.uuid}`);
+      dispatch(getChatsData(chat.uuid));
+    } catch (err) {
+      console.log(err);
+    }
 
-      return data;
-    };
-
-    const chat = await sendRequest();
-    route(`/chats/${chat.uuid}`);
-    dispatch(getChatsData(chat.uuid));
   }
 }
 
 export const cloneChat = (payload) => {
-  return async (dispatch, getState) => {
-    let state = getState();
-
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/clone-room/${payload.roomId}`, {
+  return async (dispatch) => {
+    try {
+      const chat = await callApi(`/chat/clone-room/${payload.roomId}`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
         body: JSON.stringify({ message_id: payload.messageId ? payload.messageId : "" })
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const chat = await sendRequest();
-    route(`/chats/${chat.chat.uuid}`);
-    dispatch(getChatsData(chat.chat.uuid));
+      });
+      route(`/chats/${chat.chat.uuid}`);
+      dispatch(getChatsData(chat.chat.uuid));
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
 export const selectChat = (payload) => {
-  return async (dispatch, getState) => {
-    let state = getState();
-
-    if (payload != 0) {
-      const sendRequest = async () => {
-        const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload}`, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-            'Content-Type': 'application/json',
-
-          },
-        })
-        if (data.status === 404) {
-          route('/404');
-        } else {
-          return data.json();
-        }
-      };
-
-      try {
-        const chat = await sendRequest();
-        dispatch(chatsActions.setCurrentChat(chat));
-      } catch (err) {
-        console.log(err);
-        route('/404');
-      }
-
-
-    } else {
-      {
-        dispatch(chatsActions.setCurrentChat({ uuid: 0 }));
-      }
+  return async (dispatch) => {
+    try {
+      const chat = await callApi(`/chat/room/${payload}`);
+      dispatch(chatsActions.setCurrentChat(chat));
+    } catch (err) {
+      console.log(err);
+      route('/404');
     }
   }
 }
 
 export const updateChat = (payload) => {
   return async (dispatch) => {
-    let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.uuid}`, {
+    try {
+      const chat = await callApi(`/chat/room/${payload.uuid}`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
         body: JSON.stringify(payload)
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const chat = await sendRequest();
-    dispatch(getChatsData(payload.uuid));
+      });
+      dispatch(getChatsData(payload.uuid));
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 
 export const deleteChat = (payload) => {
   return async (dispatch) => {
-    const sendRequest = async () => {
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/chat/room/${payload.chatId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem('ANT_currentUser'))?.access_token}`,
-          'Content-Type': 'application/json',
-
-        },
-      }).then(res => res.json());
-
-      return data;
-    };
-
-    const response = await sendRequest();
-    dispatch(getChatsData());
-    dispatch(chatsActions.setCurrentChat({}))
+    try {
+      const response = await callApi(`/chat/room/${payload.chatId}`, {
+        method: 'DELETE'
+      });
+      dispatch(getChatsData());
+      dispatch(chatsActions.setCurrentChat({}))
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

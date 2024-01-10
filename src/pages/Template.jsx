@@ -5,7 +5,7 @@ import { useSignal } from '@preact/signals';
 import { PromptInput } from '../components/PromptInput';
 
 import { TemplateToolBar } from '../components/ToolBars/TemplateToolbar/TemplateToolBar';
-import { selectTemplate, updateTemplate, updateTemplateTitle } from '../store/templates-slice';
+import { selectTemplate, updateTemplate } from '../store/templates-slice';
 import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
@@ -26,10 +26,6 @@ export function Template(props) {
 
   function handleToggleEditTitle(tgl) {
     editTitle.value = tgl;
-  }
-
-  function saveTemplateTitle(title) {
-    dispatch(updateTemplateTitle({ uuid: currentTemplate.uuid, name: title }));
   }
 
   function saveContent({ rawInput, rawPreview }) {
@@ -91,7 +87,7 @@ export function Template(props) {
               </div>
 
               <div className={'ml-auto shrink-0'}>
-                <TemplateToolBar callEditTemplate={value => saveTemplateTitle(value)} />
+                <TemplateToolBar />
               </div>
             </div>
             <div className={'mt-4'}>
