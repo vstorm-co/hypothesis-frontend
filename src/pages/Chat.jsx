@@ -11,7 +11,7 @@ import { Toast } from '../components/Toast';
 
 import { chatsActions, getChatsData, selectChat, updateChat } from '../store/chats-slice';
 import { getUserOrganizationsData } from '../store/user-slice';
-import { getTemplatesData } from '../store/templates-slice';
+import { getTemplatesData, templatesActions } from '../store/templates-slice';
 
 import { PromptInput } from '../components/PromptInput';
 
@@ -48,6 +48,7 @@ export function Chat(props) {
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
+		dispatch(templatesActions.setCurrentTemplate({}))
 	}, [window.location.href])
 
 	useEffect(() => {
@@ -74,14 +75,6 @@ export function Chat(props) {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}
 		}, 300);
-
-		let pills = document.querySelectorAll('.user-message .pill');
-
-		pills.forEach(pill => {
-			pill.addEventListener('click', () => {
-				window.location.href = `/templates/${pill.dataset.content}`
-			})
-		})
 	}, [currentChat.messages])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {

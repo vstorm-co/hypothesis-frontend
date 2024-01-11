@@ -10,6 +10,7 @@ import { useRef, useState } from 'preact/hooks';
 import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
 import { PromptInput } from './PromptInput';
+import { route } from 'preact-router';
 
 
 export function Message(props) {
@@ -65,6 +66,19 @@ export function Message(props) {
     }
   }
 
+  function handlePillClick(e) {
+    e.stopPropagation();
+    const target = e.target.closest('.user-message .pill');
+
+    if (target) {
+      if (e.ctrlKey || e.metaKey) {
+        window.open(`/templates/${target.dataset.content}`);
+      } else {
+        route(`/templates/${target.dataset.content}`);
+      }
+    }
+  }
+
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex my-4 group'}>
@@ -73,7 +87,7 @@ export function Message(props) {
             <div className="flex items-start">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
               <div className={'self-center py-1'}>
-                <div className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center inline-block break-all text-[#202020] text-sm user-message"} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
+                <div onClick={e => handlePillClick(e)} className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center inline-block break-all text-[#202020] text-sm user-message"} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
               </div>
               <div className={'max-w-[92%] w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
                 <PromptInput

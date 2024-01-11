@@ -10,6 +10,7 @@ import { showToast } from '../store/ui-slice';
 
 import { Toast } from '../components/Toast';
 import { Loading } from '../components/Loading';
+import { chatsActions } from '../store/chats-slice';
 
 export function Template(props) {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export function Template(props) {
 
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
+    dispatch(chatsActions.setCurrentChat({}));
   }, []);
 
   function handleToggleEditTitle(tgl) {
