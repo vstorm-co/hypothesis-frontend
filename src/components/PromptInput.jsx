@@ -212,7 +212,7 @@ export function PromptInput(props) {
         handleReturnResponse()
       } else if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
-        if (input.value > 0) {
+        if (input.value.length > 0) {
           handleSubmit();
         }
       } else {

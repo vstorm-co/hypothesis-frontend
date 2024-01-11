@@ -22,6 +22,7 @@ export function Chat(props) {
 	const user = useSelector(state => state.user.currentUser);
 
 	const blockSending = useSignal(false);
+	const forceInputFocus = useSignal(0);
 
 	const previousScroll = useSignal(0);
 	const userScrolledUp = useSignal(false);
@@ -44,16 +45,19 @@ export function Chat(props) {
 			}
 			previousScroll.value = chatRef.current.scrollTop;
 		})
+
+		forceInputFocus.value = forceInputFocus.value + 1;
 	}, [])
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
-		dispatch(templatesActions.setCurrentTemplate({}))
+		dispatch(templatesActions.setCurrentTemplate({}));
 	}, [window.location.href])
 
 	useEffect(() => {
 		blockSending.value = false;
 		userScrolledUp.value = false;
+		forceInputFocus.value = forceInputFocus.value + 1;
 	}, [currentChat.uuid])
 
 	useEffect(() => {
@@ -135,14 +139,15 @@ export function Chat(props) {
 					}, 3000)
 				}
 			} else if (json_data.type === 'bot-message-creation-finished') {
-				blockSending.value = false;
-				msgLoading.value = false;
-
 				if (promptsLeft.value.length > 0) {
 					dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 
 					sendMessage(JSON.stringify({ type: 'message', content: promptsLeft.value[0].prompt, content_html: promptsLeft.value[0].html }));
 					promptsLeft.value.shift();
+				} else {
+					blockSending.value = false;
+					msgLoading.value = false;
+					forceInputFocus.value = forceInputFocus.value + 1;
 				}
 			}
 
@@ -296,7 +301,7 @@ export function Chat(props) {
 							WSsendMessage={value => { sendMessage(value) }}
 
 							clearInputOnSubmit={true}
-							forceFocus={currentChat.uuid}
+							forceFocus={forceInputFocus.value}
 						/>
 						<div className={'absolute bottom-0 text-[#747474] text-xs self-start leading-6 py-2'}>
 							{WhosTyping.value.map(u => (
