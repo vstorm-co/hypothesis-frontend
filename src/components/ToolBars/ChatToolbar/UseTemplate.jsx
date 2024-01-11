@@ -53,7 +53,7 @@ export function UseTemplate(props) {
   }
 
   return (
-    <div ref={useTempRef} className={'relative'}>
+    <div title={'Template - Shortcut {{'} ref={useTempRef} className={'relative'}>
       <div onClick={() => props.onToggleVisible()} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <img src={braces} alt="" />

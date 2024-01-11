@@ -1,7 +1,7 @@
 export function ReturnResponse(props) {
 
   return (
-    <div className={'relative'}>
+    <div title={'Send - Shortcut Ctrl + Enter'} className={'relative'}>
       <div className={'border p-1 border-b-0 border-l-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div onClick={() => props.ReturnResponse()} className={'hover:bg-[#F2F2F2]'}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
