@@ -324,7 +324,7 @@ export function PromptInput(props) {
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
             </div>
-            <div onClick={() => { promptMode.value = 'preview'; generatePreview(); }} className={'preview-button ' + (promptMode.value === 'preview' ? 'active' : '')}>
+            <div onClick={() => { promptMode.value = 'preview'; generatePreview() }} className={'preview-button ' + (promptMode.value === 'preview' ? 'active' : '')}>
               Preview
             </div>
           </div>
