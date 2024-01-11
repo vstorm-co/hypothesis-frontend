@@ -25,7 +25,7 @@ export function Message(props) {
 
   const UpdateMessage = useRef(null);
 
-  let hideCopyAsHere = ['/auth', '/']
+  let hideCopyAsHere = ['/auth', '/', '/refresh-token']
 
   function toggleEdit() {
     if (!EditEnabled.value) {
@@ -112,7 +112,7 @@ export function Message(props) {
         <div className="rounded flex p-2 w-full overflow-x-visible">
           <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible cursor-pointer group">
             <img src={papaya} className="w-3" alt="" />
-            <div className={'absolute hidden group-hover:block py-2 px-3 bg-white w-[240px] top-10 z-50 left-0 rounded border text-xs'}>
+            <div className={'absolute hidden py-2 px-3 bg-white w-[240px] top-10 z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
               <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
               <div className={'mt-2'}>
                 <span className={'font-bold text-[#747474]'}>Tokens:</span>

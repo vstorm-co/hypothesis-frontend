@@ -24,6 +24,7 @@ import { getChatsData, chatsActions } from "./store/chats-slice";
 
 import 'prismjs/themes/prism.css'
 import './style.css';
+import { RefreshToken } from './pages/RefreshToken';
 
 export function App() {
 	useEffect(() => {
@@ -69,6 +70,7 @@ export function App() {
 						<Router>
 							<MockChat path="/" />
 							<Authorize path="/auth" />
+							<RefreshToken path="/refresh-token" />
 							<SetUp path="/setup" />
 							<Chat path="/chats/:id" />
 							<Template path="/templates/:id" />

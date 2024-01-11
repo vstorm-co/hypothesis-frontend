@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 import callApi from "../api";
+import { route } from 'preact-router';
+
 
 let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 let users = JSON.parse(localStorage.getItem('ANT_users'));
@@ -29,7 +31,11 @@ const userSlice = createSlice({
     setUserTokens(state, action) {
       state.currentUser.access_token = action.payload.access_token;
       state.currentUser.refresh_token = action.payload.refresh_token;
-      localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
+      localStorage.setItem('ANT_currentUser', JSON.stringify({
+        ...state.currentUser,
+        access_token: action.payload.access_token,
+        refresh_token: action.payload.refresh_token,
+      }));
     },
     setCurrentUserOrganization(state, action) {
       state.currentUser.organization_logo = action.payload.picture;
@@ -90,6 +96,20 @@ export const getUserOrganizationsData = () => {
       } else {
         dispatch(userActions.setCurrentUserOrganization({ picture: null, name: null, uuid: null }))
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+export const refreshUserToken = () => {
+  return async (dispatch, getState) => {
+    let state = getState();
+
+    try {
+      const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
+      dispatch(userActions.setUserTokens(tokens));
+      route('/')
     } catch (error) {
       console.log(error);
     }

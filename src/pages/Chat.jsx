@@ -61,7 +61,7 @@ export function Chat(props) {
 		dispatch(getUserOrganizationsData());
 		dispatch(getChatsData(props.matches.id));
 		dispatch(getTemplatesData());
-	}, [user])
+	}, [user.access_token])
 
 	useEffect(() => {
 		if (user.access_token === null) {

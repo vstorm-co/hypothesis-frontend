@@ -22,14 +22,7 @@ export function Authorize() {
   const user = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
 
-
-  if (user.access_token) {
-    route('/');
-  } else {
-    dispatch(uiActions.setHideSideBar(true));
-
-  }
-
+  dispatch(uiActions.setHideSideBar(true));
 
   const signIn = useGoogleLogin({
     onSuccess: async (response) => {
