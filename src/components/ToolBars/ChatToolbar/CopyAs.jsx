@@ -29,6 +29,9 @@ class CopyAs extends Component {
 
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside);
+    const defaultSaveAs = localStorage.getItem('ANT_defaultSaveAs');
+
+    this.setState({ defaultSaveAs: defaultSaveAs })
   }
 
   componentWillUnmount() {
@@ -122,11 +125,8 @@ class CopyAs extends Component {
     return (
       <div ref={this.CopyAsRef} className={'relative'}>
         <div className={"border border-[#DBDBDB] rounded cursor-pointer flex items-center"}>
-          <div title={'Copy'} onClick={this.handleCopyDefault} className={"p-1 hover:bg-[#F2F2F2] " + (this.props.showCopyAs.value ? 'bg-[#F2F2F2]' : '')}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="24" height="24" rx="4" />
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M19 4C19.5128 4 19.9355 4.38604 19.9933 4.88338L20 5V15C20 15.5128 19.614 15.9355 19.1166 15.9933L19 16H11C10.4872 16 10.0645 15.614 10.0067 15.1166L10 15V5C10 4.48716 10.386 4.06449 10.8834 4.00673L11 4H19ZM8 8C8.55228 8 9 8.44772 9 9C9 9.51284 8.61396 9.93551 8.11662 9.99327L8 10H6V18H13C13.5128 18 13.9355 18.386 13.9933 18.8834L14 19C14 19.5128 13.614 19.9355 13.1166 19.9933L13 20H5C4.48716 20 4.06449 19.614 4.00673 19.1166L4 19V9C4 8.48716 4.38604 8.06449 4.88338 8.00673L5 8H8ZM12 6H18V14H12V6Z" fill="#747474" />
-            </svg>
+          <div title={'Copy'} onClick={this.handleCopyDefault} className={"p-1.5 text-sm hover:bg-[#F2F2F2] " + (this.props.showCopyAs.value ? 'bg-[#F2F2F2]' : '')}>
+            Copy <span class={'uppercase'}>{this.state.defaultSaveAs}</span>
           </div>
           <div onClick={this.toggleShowCopyAs} className={'border-l hover:bg-[#F2F2F2]'}>
             <div className={'px-1 py-2'}>
