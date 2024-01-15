@@ -31,7 +31,9 @@ class CopyAs extends Component {
     document.addEventListener("mousedown", this.handleClickOutside);
     const defaultSaveAs = localStorage.getItem('ANT_defaultSaveAs');
 
-    this.setState({ defaultSaveAs: defaultSaveAs })
+    if (defaultSaveAs) {
+      this.setState({ defaultSaveAs: defaultSaveAs })
+    }
   }
 
   componentWillUnmount() {
