@@ -54,12 +54,12 @@ export const getTemplatesData = (payload) => {
     if (state.ui.searchFilters.visibility === 'all') {
       url = `/template?`
     } else if (state.ui.searchFilters.visibility === 'just_me') {
-      url = `${url}/chat/template/?visibility=just_me`
+      url = `${url}/template/?visibility=just_me`
     } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
-        url = `${url}/chat/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
+        url = `${url}/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
-        url = `${url}/chat/template/?visibility=just_me`
+        url = `${url}/template/?visibility=just_me`
       }
     }
 
@@ -71,7 +71,7 @@ export const getTemplatesData = (payload) => {
       url = `${url}&size=${state.templates.size}`;
     };
 
-    url = `${url}&order_by=visibility,-created_at`;
+    url = `${url}&order_by=visibility,${state.ui.searchFilters.sortBy}`;
 
     try {
       const templates = await callApi(url);

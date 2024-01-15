@@ -35,7 +35,7 @@ export function SearchBar() {
   }
 
   function setTimeSpanToAll() {
-    dispatch(uiActions.setFiltersTimeSpan('all'));
+    dispatch(uiActions.setFiltersSortBy('-updated_at'));
     dispatch(getChatsData());
     dispatch(getTemplatesData());
   }
@@ -56,7 +56,7 @@ export function SearchBar() {
             <img src={plus} alt="" />
           </div>}
       </div>
-      <div className={'flex gap-2 flex-wrap ' + (ui.searchFilters.visibility != 'all' || ui.searchFilters.timeSpan != 'all' ? 'mt-4' : '')}>
+      <div className={'flex gap-2 flex-wrap ' + (ui.searchFilters.visibility != 'all' || ui.searchFilters.sortBy != '-updated_at' ? 'mt-4' : '')}>
         {ui.searchFilters.visibility != 'all' &&
           <div className={'flex'}>
             {ui.searchFilters.visibility === 'just_me' &&
@@ -80,40 +80,29 @@ export function SearchBar() {
               </div>
             }
           </div>}
-        {ui.searchFilters.timeSpan != 'all' &&
-          <div className={'flex'}>
-            {ui.searchFilters.timeSpan === 'last_week' &&
-              <div className={'flex'}>
-                <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
-                  Last Week
-                </div>
-                <div onClick={setTimeSpanToAll} className={'border-[#595959] border-l-0 border cursor-pointer text-[#DBDBDB] rounded-r flex items-center justify-center p-1'}>
-                  <img src={plus} className={'transform rotate-45'} alt="" />
-                </div>
+        <div className={'flex'}>
+          {ui.searchFilters.sortBy === 'updated_at' &&
+            <div className={'flex'}>
+              <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
+                Oldest
               </div>
-            }
-            {ui.searchFilters.timeSpan === 'last_30_days' &&
-              <div className={'flex'}>
-                <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
-                  Last 30 Days
-                </div>
-                <div onClick={setTimeSpanToAll} className={'border-[#595959] border-l-0 border cursor-pointer text-[#DBDBDB] rounded-r flex items-center justify-center p-1'}>
-                  <img src={plus} className={'transform rotate-45'} alt="" />
-                </div>
+              <div onClick={setTimeSpanToAll} className={'border-[#595959] border-l-0 border cursor-pointer text-[#DBDBDB] rounded-r flex items-center justify-center p-1'}>
+                <img src={plus} className={'transform rotate-45'} alt="" />
               </div>
-            }
-            {ui.searchFilters.timeSpan === 'older' &&
-              <div className={'flex'}>
-                <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
-                  Older than 30 days
-                </div>
-                <div onClick={setTimeSpanToAll} className={'border-[#595959] border-l-0 border cursor-pointer text-[#DBDBDB] rounded-r flex items-center justify-center p-1'}>
-                  <img src={plus} className={'transform rotate-45'} alt="" />
-                </div>
+            </div>
+          }
+          {ui.searchFilters.sortBy === 'name' &&
+            <div className={'flex'}>
+              <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
+                Alphabetical
               </div>
-            }
-          </div>}
+              <div onClick={setTimeSpanToAll} className={'border-[#595959] border-l-0 border cursor-pointer text-[#DBDBDB] rounded-r flex items-center justify-center p-1'}>
+                <img src={plus} className={'transform rotate-45'} alt="" />
+              </div>
+            </div>
+          }
+        </div>
       </div>
-    </div>
+    </div >
   )
 }

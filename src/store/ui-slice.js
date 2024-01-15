@@ -16,7 +16,7 @@ const uiSlice = createSlice({
     chatsLoading: false,
     searchFilters: {
       visibility: 'all',
-      timeSpan: 'all',
+      sortBy: '-updated_at',
       searchFor: '',
     },
   },
@@ -33,8 +33,8 @@ const uiSlice = createSlice({
     setFiltersSearch(state, action) {
       state.searchFilters.searchFor = action.payload.searchFor;
     },
-    setFiltersTimeSpan(state, action) {
-      state.searchFilters.timeSpan = action.payload;
+    setFiltersSortBy(state, action) {
+      state.searchFilters.sortBy = action.payload;
     },
     toggleAdminBar(state, action) {
       state.adminBar.active = action.payload.tgl;

@@ -97,26 +97,7 @@ export const getChatsData = (payload) => {
       url = `${url}&size=${state.chats.size}`;
     };
 
-    url = `${url}&order_by=visibility,-created_at`;
-
-    let today = new Date();
-    let priorDate;
-
-    if (state.ui.searchFilters.timeSpan != 'all') {
-      if (state.ui.searchFilters.timeSpan === 'last_week') {
-        priorDate = new Date(new Date().setDate(today.getDate() - 7));
-        url = `${url}&created_at__gte=${priorDate.getFullYear()}-${priorDate.getMonth() < 9 ? `0${priorDate.getMonth() + 1}` : priorDate.getMonth() + 1}-${priorDate.getDate() < 10 ? `0${priorDate.getDate()}` : priorDate.getDate()}T00:00:00`
-
-      } else if (state.ui.searchFilters.timeSpan === 'last_30_days') {
-        priorDate = new Date(new Date().setDate(today.getDate() - 30));
-        url = `${url}&created_at__gte=${priorDate.getFullYear()}-${priorDate.getMonth() < 9 ? `0${priorDate.getMonth() + 1}` : priorDate.getMonth() + 1}-${priorDate.getDate() < 10 ? `0${priorDate.getDate()}` : priorDate.getDate()}T00:00:00`
-
-      } else if (state.ui.searchFilters.timeSpan === 'older') {
-        priorDate = new Date(new Date().setDate(today.getDate() - 30));
-        url = `${url}&created_at__lte=${priorDate.getFullYear()}-${priorDate.getMonth() < 9 ? `0${priorDate.getMonth() + 1}` : priorDate.getMonth() + 1}-${priorDate.getDate() < 10 ? `0${priorDate.getDate()}` : priorDate.getDate()}T00:00:00`
-
-      }
-    }
+    url = `${url}&order_by=visibility,${state.ui.searchFilters.sortBy}`;
 
     try {
       const chats = await callApi(url);

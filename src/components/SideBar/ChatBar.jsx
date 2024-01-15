@@ -13,6 +13,7 @@ export const ChatBar = props => {
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat);
   const usersActive = useSelector(state => state.chats.usersActive);
+  const chats = useSelector(state => state.chats.chats);
 
   const usersOnChat = useSignal([]);
   const ShowOptions = useSignal(false);
@@ -27,7 +28,7 @@ export const ChatBar = props => {
     usersActive.forEach(u => {
     })
     usersOnChat.value = usersActive.filter(u => u.room_id === props.ChatData.uuid);
-  }, [usersActive, currentChat])
+  }, [usersActive, currentChat, chats])
 
   function isSelected() {
     return props.ChatData.uuid === currentChat.uuid
