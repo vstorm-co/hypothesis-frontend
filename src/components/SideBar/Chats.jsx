@@ -10,9 +10,9 @@ import arrowDown from '../../assets/arrow-down.svg';
 
 export function Chats(props) {
   const chats = useSelector(state => state.chats.chats);
+  const usersActive = useSelector(state => state.chats.usersActive);
   const size = useSelector(state => state.chats.size);
   const info = useSelector(state => state.chats.info);
-  const currentChat = useSelector(state => state.chats.currentChat);
   const ui = useSelector(state => state.ui);
 
   const [loadSize, setLoadSize] = useState(0);

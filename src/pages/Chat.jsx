@@ -149,6 +149,10 @@ export function Chat(props) {
 					blockSending.value = false;
 					msgLoading.value = false;
 					forceInputFocus.value = forceInputFocus.value + 1;
+
+					setTimeout(() => {
+						dispatch(getChatsData(currentChat.uuid))
+					}, 500)
 				}
 			}
 
