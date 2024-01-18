@@ -11,6 +11,7 @@ import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
 import { PromptInput } from './PromptInput';
 import { route } from 'preact-router';
+import { MessageData } from './MessageData';
 
 
 export function Message(props) {
@@ -22,6 +23,9 @@ export function Message(props) {
 
   const EditEnabled = useSignal(false);
   const newMessage = useSignal('');
+
+  const MessageDataStyle = useSignal(null)
+  const MessageDataVisible = useSignal(false); 
 
   const UpdateMessage = useRef(null);
 
@@ -78,6 +82,29 @@ export function Message(props) {
     }
   }
 
+  function handleMessageData(e){
+    if(hideCopyAsHere.includes(window.location.pathname)){return}
+    if(MessageDataVisible.value){
+      MessageDataVisible.value = false;
+    } else {
+      let rect = e.target.getBoundingClientRect();
+      console.log(rect)
+      if(rect.top > 470){
+        MessageDataStyle.value = {
+          top: rect.top - 143,
+          left: rect.left,
+        }
+      }else{
+        MessageDataStyle.value = {
+          top: rect.top + 43,
+          left: rect.left,
+        }
+      }
+  
+      MessageDataVisible.value = true;
+    }
+  }
+
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex my-4 group'}>
@@ -123,9 +150,10 @@ export function Message(props) {
     return (
       <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4">
         <div className="rounded flex p-2 w-full overflow-x-visible">
-          <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible cursor-pointer group">
+          <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} className={"w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
             <img src={papaya} className="w-3" alt="" />
-            <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
+            <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
+            {/* <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
               <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
               <div className={'mt-2'}>
                 <span className={'font-bold text-[#747474]'}>Tokens:</span>
@@ -138,7 +166,7 @@ export function Message(props) {
               {props.Message.elapsed_time && 
                 <div className={'mt-2'}><span className={'font-bold text-[#747474]'}>API Time:</span> {props.Message.elapsed_time.toFixed(2)} seconds</div>
               }
-            </div>
+            </div> */}
           </div>
           <div className={'flex group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
