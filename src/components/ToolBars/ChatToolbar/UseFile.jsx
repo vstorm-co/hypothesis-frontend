@@ -41,7 +41,7 @@ export function UseFile(props) {
     openPicker({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
-      viewId: "DOCS",
+      viewId: "DOCUMENTS",
       // token: token, // pass oauth token in case you already have one
       showUploadView: true,
       showUploadFolders: true,
