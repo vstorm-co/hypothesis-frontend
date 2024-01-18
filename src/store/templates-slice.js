@@ -71,7 +71,11 @@ export const getTemplatesData = (payload) => {
       url = `${url}&size=${state.templates.size}`;
     };
 
-    url = `${url}&order_by=visibility,${state.ui.searchFilters.sortBy}`;
+    if(state.ui.searchFilters.sortBy){
+      url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
+    }else{
+      url = `${url}&order_by=visibility`;
+    }
 
     try {
       const templates = await callApi(url);

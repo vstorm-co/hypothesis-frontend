@@ -97,7 +97,12 @@ export const getChatsData = (payload) => {
       url = `${url}&size=${state.chats.size}`;
     };
 
-    url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
+    if(state.ui.searchFilters.sortBy){
+      url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
+    }else{
+      url = `${url}&order_by=visibility`;
+    }
+
 
     try {
       const chats = await callApi(url);

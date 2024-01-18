@@ -16,7 +16,7 @@ const uiSlice = createSlice({
     chatsLoading: false,
     searchFilters: {
       visibility: 'all',
-      sortBy: '-updated_at',
+      sortBy: '',
       searchFor: '',
     },
   },
