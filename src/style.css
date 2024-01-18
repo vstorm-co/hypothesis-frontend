@@ -76,6 +76,10 @@
 	line-height: 24px;
 }
 
+.write-box .pill{
+	cursor: pointer
+}
+
 .write-box .return-box {
 	/* background-image: url('./assets/return.svg'); */
 	/* background-repeat: no-repeat; */

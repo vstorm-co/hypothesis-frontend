@@ -8,6 +8,7 @@ import send from '../assets/send.svg';
 import stop from '../assets/stop.svg';
 import braces from '../assets/braces.svg';
 import { InlineTemplate } from "./InlineTemplate";
+import { route } from "preact-router";
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
@@ -67,6 +68,19 @@ export function PromptInput(props) {
       useTemplateVisible.value = tgl;
     } else {
       useTemplateVisible.value = !useTemplateVisible.value;
+    }
+  }
+
+  function handlePillClick(e) {
+    e.stopPropagation();
+    const target = e.target.closest('.write-box .pill');
+
+    if (target) {
+      if (e.ctrlKey || e.metaKey) {
+        window.open(`/templates/${target.dataset.content}`);
+      } else {
+        route(`/templates/${target.dataset.content}`);
+      }
     }
   }
 
@@ -337,7 +351,7 @@ export function PromptInput(props) {
           contentEditable={true}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
-          onClick={() => saveCaret()}
+          onClick={(e) => {handlePillClick(e); saveCaret()}}
           onInput={e => handleOnInput(e)}
           dangerouslySetInnerHTML={{ __html: input.value }} className={"write-box msg min-h-[72px] max-h-[156px]"}
         >
