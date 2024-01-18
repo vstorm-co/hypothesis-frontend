@@ -125,7 +125,7 @@ export function Message(props) {
         <div className="rounded flex p-2 w-full overflow-x-visible">
           <div className="w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible cursor-pointer group">
             <img src={papaya} className="w-3" alt="" />
-            <div className={(currentChat.messages[currentChat.messages.length - 1].uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
+            <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
               <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
               <div className={'mt-2'}>
                 <span className={'font-bold text-[#747474]'}>Tokens:</span>
