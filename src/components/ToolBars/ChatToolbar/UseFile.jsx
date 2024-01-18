@@ -1,8 +1,11 @@
 import { useSelector } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
+import useDrivePicker from 'react-google-drive-picker'
 
 import fileImport from '../../../assets/file-import.svg';
+import googleDrive from '../../../assets/google-drive.svg';
+import arrow from '../../../assets/arrow.svg';
 
 const isVisible = signal(false);
 
@@ -32,6 +35,28 @@ export function UseFile(props) {
   const useTempRef = useRef(null);
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
 
+  const [openPicker, authResponse] = useDrivePicker();
+
+  const handleOpenPicker = () => {
+    openPicker({
+      clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
+      viewId: "DOCS",
+      // token: token, // pass oauth token in case you already have one
+      showUploadView: true,
+      showUploadFolders: true,
+      supportDrives: true,
+      multiselect: true,
+      // customViews: customViewsArray, // custom view
+      callbackFunction: (data) => {
+        if (data.action === 'cancel') {
+          console.log('User clicked cancel/close button')
+        }
+        console.log(data)
+      },
+    })
+  }
+
   const inputRef = useRef();
 
   useEffect(() => {
@@ -46,7 +71,7 @@ export function UseFile(props) {
 
   return (
     <div title={'Insert File - ++'} ref={useTempRef} className={'relative'}>
-      <div onClick={() => props.onToggleVisible()} className={'border p-1 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
+      <div onClick={() => props.onToggleVisible()} className={'border p-1 border-l-0 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="24" height="24" rx="4" fill="" />
@@ -54,11 +79,18 @@ export function UseFile(props) {
           </svg>
         </div>
       </div>
-      <div className={"absolute w-[240px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+      <div className={"absolute w-[320px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={fileImport} alt="" />
             <input ref={inputRef} onInput={(e) => handleurlUpdate(e)} value={url.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
+          </div>
+        </div>
+        <div>
+          <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer'}>
+            <img src={googleDrive} className={'mx-2'} alt="" />
+            <div>Pick Google Drive file</div>
+            <img className={'ml-auto mr-3'} src={arrow} alt="" />
           </div>
         </div>
       </div>
