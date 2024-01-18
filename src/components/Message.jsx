@@ -90,7 +90,7 @@ export function Message(props) {
       let rect = e.target.getBoundingClientRect();
       if(rect.top > 470){
         MessageDataStyle.value = {
-          top: rect.top - 143,
+          top: rect.top - 123,
           left: rect.left,
         }
       }else{
