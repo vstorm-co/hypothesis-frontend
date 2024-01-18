@@ -88,7 +88,6 @@ export function Message(props) {
       MessageDataVisible.value = false;
     } else {
       let rect = e.target.getBoundingClientRect();
-      console.log(rect)
       if(rect.top > 470){
         MessageDataStyle.value = {
           top: rect.top - 143,

@@ -126,6 +126,9 @@ export function Edit(props) {
               <li>{currentChat?.total_tokens_count} total tokens (${currentChat.total_value?.toFixed(3)})</li>
             </ul>
           </div>
+          {currentChat.elapsed_time &&
+            <div className={'mt-2'}><span className={'text-[#747474]'}>API Time:</span> {currentChat.elapsed_time.toFixed(2)} seconds</div>
+          }
         </div>
         <div className={'p-1.5 border-b'}>
           <div onClick={toggleSaveChatAsTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
