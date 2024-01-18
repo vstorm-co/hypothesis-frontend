@@ -8,6 +8,7 @@ import send from '../assets/send.svg';
 import stop from '../assets/stop.svg';
 import braces from '../assets/braces.svg';
 import { InlineTemplate } from "./InlineTemplate";
+import { UseFile } from "./ToolBars/ChatToolbar/UseFile";
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
@@ -320,6 +321,7 @@ export function PromptInput(props) {
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
+          <UseFile Visible={true} Position={'top'} />
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
