@@ -59,7 +59,7 @@ export function Template(props) {
     )
   } else {
     return (
-      <div className={'flex w-full mx-4'} >
+      <div className={'flex w-full mx-4 page-template'} >
         <div>
         </div>
         <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">

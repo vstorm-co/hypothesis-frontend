@@ -36,7 +36,11 @@ export function PromptInput(props) {
     range.detach();
 
     saveCaret();
-  }
+  };
+
+  useEffect(() => {
+    setRange();
+  }, [promptMode.value])
 
   useEffect(() => {
     setRange();
@@ -343,25 +347,26 @@ export function PromptInput(props) {
             </div>
           </div>
         </div>}
-      {promptMode.value === 'write' &&
         <div
           data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
           spellCheck={false}
           ref={InputRef}
-          contentEditable={true}
-          onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
-          onClick={(e) => {handlePillClick(e); saveCaret()}}
-          onInput={e => handleOnInput(e)}
-          dangerouslySetInnerHTML={{ __html: input.value }} className={"write-box msg min-h-[72px] max-h-[156px]"}
+          contentEditable={promptMode.value === 'write'}
+          onKeyDown={promptMode.value === 'write' ? handleKeyDown : () => {console.log("AAAA")}}
+          onKeyUp={promptMode.value === 'write' ? handleKeyUp : () => {}}
+          onClick={promptMode.value === 'write' ? (e) => {handlePillClick(e); saveCaret()} : () => {}}
+          onInput={promptMode.value === 'write' ? e => handleOnInput(e) : () => {}}
+          dangerouslySetInnerHTML={{ __html: promptMode.value === 'write' ? input.value : preview.value }} className={"msg min-h-[72px] " + (promptMode.value === 'write' ? 'write-box' : 'preview-box')}
         >
-          {input.value}
-        </div>}
-      {promptMode.value === 'preview' &&
+          {promptMode.value === 'write' ? input.value : preview.value}
+        </div>
+      {/* {promptMode.value === 'write' &&
+        } */}
+      {/* {promptMode.value === 'preview' &&
         <div spellCheck={false} dangerouslySetInnerHTML={{ __html: preview.value }} className="msg min-h-[72px] max-h-[156px] preview-box">
           {preview.value}
         </div>
-      }
+      } */}
       <div className={'flex gap-4 mt-2 justify-end'}>
         {props.SecondButton &&
           <button type="button" onClick={() => props.handleSecondButton()} className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">{props.SecondButtonText}</button>

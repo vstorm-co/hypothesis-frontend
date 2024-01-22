@@ -156,6 +156,14 @@
 	line-height: 1.7rem;
 }
 
+.page-template .write-box,.page-template .preview-box {
+	@apply max-h-[70vh];
+}
+
+.page-chat .write-box,.page-chat .preview-box{
+	@apply max-h-[156px];
+}
+
 .write-box:empty:before {
 	content: attr(data-placeholder);
 	display: block;
@@ -175,7 +183,8 @@
 }
 
 .preview-box {
-	@apply w-full bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6
+	@apply w-full bg-white border overflow-auto rounded-t-none rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize text-sm max-w-full min-w-full;
+	line-height: 1.7rem
 }
 
 .preview-box .return-box, .preview-box .return-box-new {

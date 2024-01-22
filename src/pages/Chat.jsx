@@ -251,7 +251,7 @@ export function Chat(props) {
 		)
 	} else {
 		return (
-			<div className={'flex w-full mx-4'}>
+			<div className={'flex w-full mx-4 page-chat'}>
 				<div className={'pt-10 pl-4 mr-7 flex flex-col'}>
 					{activeUsers.value.map(u => (
 						<img title={u.user_name} src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full" />
