@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 
+const copyAs = localStorage.getItem('ANT_defaultSaveAs');
+
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {
@@ -11,6 +13,7 @@ const uiSlice = createSlice({
     adminBar: {
       active: false,
     },
+    copyAs: copyAs ? copyAs : 'md',
     organizationCreated: null,
     hideSideBar: false,
     chatsLoading: false,
@@ -47,6 +50,11 @@ const uiSlice = createSlice({
     },
     toggleChatsLoading(state, action) {
       state.chatsLoading = action.payload;
+    },
+    changeCopyAs(state, action){
+      state.copyAs = action.payload
+
+      localStorage.setItem('ANT_defaultSaveAs', action.payload);
     }
   }
 });
