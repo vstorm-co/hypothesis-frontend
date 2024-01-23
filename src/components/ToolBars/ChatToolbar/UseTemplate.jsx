@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
@@ -36,6 +37,7 @@ export function UseTemplate(props) {
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
 
   const inputRef = useRef();
+  const listPosition = useRef(null);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -52,14 +54,32 @@ export function UseTemplate(props) {
     props.TemplatePicked(template);
   }
 
+  function handleToggle(e){
+    console.log(e);
+    let rect = e.target.getBoundingClientRect();
+    console.log(props.Position);
+    if(props.Position === 'left'){
+      listPosition.value = {
+        top: rect.top - 20,
+        left: rect.left - 260,
+      }
+    } else {
+      listPosition.value = {
+        top: rect.top - 240,
+        left: rect.left - 10,
+      }
+    }
+    props.onToggleVisible()
+  }
+
   return (
     <div title={'Template - Shortcut {{'} ref={useTempRef} className={'relative'}>
-      <div onClick={() => props.onToggleVisible()} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
+      <div onClick={(e) => handleToggle(e)} className={'border p-1 border-b-0 cursor-pointer rounded-tl border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <img src={braces} alt="" />
         </div>
       </div>
-      <div className={"absolute w-[240px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+      <div style={{...listPosition.value}} className={"fixed w-[240px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={loopSvg} alt="" />
