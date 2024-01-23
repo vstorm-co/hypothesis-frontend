@@ -65,7 +65,7 @@ export function UseTemplate(props) {
       }
     } else {
       listPosition.value = {
-        top: rect.top - 240,
+        bottom: 165,
         left: rect.left - 10,
       }
     }
