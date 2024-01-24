@@ -40,12 +40,15 @@ export function Chat(props) {
 	const chatRef = useRef();
 
 	useEffect(() => {
-		chatRef.current?.addEventListener('scroll', (e) => {
-			if (previousScroll.value > chatRef.current.scrollTop) {
-				userScrolledUp.value = true;
-			}
-			previousScroll.value = chatRef.current.scrollTop;
-		})
+		setTimeout(() => {
+			let scroll = document.querySelector('.chat-scroll');
+			scroll.addEventListener('scroll', (e) => {
+				if (previousScroll.value > chatRef.current.scrollTop) {
+					userScrolledUp.value = true;
+				}
+				previousScroll.value = chatRef.current.scrollTop;
+			})
+		}, 500)
 
 		forceInputFocus.value = forceInputFocus.value + 1;
 	}, [])
@@ -119,6 +122,10 @@ export function Chat(props) {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
 				}
+				
+				if (!userScrolledUp.value) {
+					chatRef.current.scrollTop = chatRef.current.scrollHeight
+				}
 			} else if (json_data.type === 'user_joined') {
 				if (!activeUsers.value.find(u => u.user_email === json_data.user_email)) {
 					activeUsers.value.push({
@@ -154,10 +161,6 @@ export function Chat(props) {
 						dispatch(getChatsData(currentChat.uuid))
 					}, 500)
 				}
-			}
-
-			if (!userScrolledUp.value) {
-				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}
 		}
 	})
