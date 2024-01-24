@@ -160,6 +160,10 @@
 	@apply max-h-[70vh];
 }
 
+.page-start .write-box, .page-start .preview-box{
+	@apply max-h-[60vh];
+}
+
 .page-chat .write-box,.page-chat .preview-box{
 	@apply max-h-[156px];
 }

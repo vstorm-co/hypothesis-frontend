@@ -95,7 +95,7 @@ export function MockChat(props) {
       content: 'Go on, to start a new chat just send prompt!'
     }
     return (
-      <div className={'flex w-full mx-4'}>
+      <div className={'flex w-full mx-4 page-start'}>
         <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
           <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
         </div>
