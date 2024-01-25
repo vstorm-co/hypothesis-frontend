@@ -47,7 +47,7 @@ export function App() {
 			let json_data = JSON.parse(e.data)
 
 			if (json_data.type === 'room-changed') {
-				store.dispatch(getChatsData(state.chats.currentChat.uuid));
+				store.dispatch(getChatsData());
 			}
 		}
 	});
