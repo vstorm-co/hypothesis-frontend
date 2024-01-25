@@ -12,10 +12,6 @@ import { ChatOptions } from './ChatOptions';
 export const ChatBar = props => {
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat);
-  const usersActive = useSelector(state => state.chats.usersActive);
-  const chats = useSelector(state => state.chats.chats);
-
-  const usersOnChat = useSignal([]);
   const ShowOptions = useSignal(false);
 
   const callSelectChat = () => {
@@ -23,12 +19,6 @@ export const ChatBar = props => {
     dispatch(selectChat(props.ChatData.uuid));
     dispatch(templatesActions.setCurrentTemplate({}));
   }
-
-  useEffect(() => {
-    usersActive.forEach(u => {
-    })
-    usersOnChat.value = usersActive.filter(u => u.room_id === props.ChatData.uuid);
-  }, [usersActive, currentChat, chats])
 
   function isSelected() {
     return props.ChatData.uuid === currentChat.uuid
@@ -82,7 +72,7 @@ export const ChatBar = props => {
   }
 
   function CheckUsersOnChat() {
-    return usersOnChat.value.length;
+    return props.ChatData.active_users.length;
   }
 
 
@@ -98,8 +88,8 @@ export const ChatBar = props => {
             {EditedAt()}
           </div>
           <div className={"ml-2 " + (CheckUsersOnChat() ? 'flex gap-[1px]' : 'hidden')}>
-            {usersOnChat.value.map(u => (
-              <img title={u.user_name} src={u.sender_picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
+            {props.ChatData.active_users.map(u => (
+              <img title={u.name} src={u.picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
             ))}
           </div>
         </div>
