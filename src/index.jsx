@@ -48,6 +48,8 @@ export function App() {
 
 			if (json_data.type === 'room-changed') {
 				store.dispatch(getChatsData());
+			} else if (json_data.type === 'template-changed') {
+				store.dispatch(getTemplatesData());
 			}
 		}
 	});

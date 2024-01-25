@@ -32,6 +32,7 @@ function outsideClickHanlder(ref, callback) {
 
 export function UseTemplate(props) {
   const templates = useSelector(state => state.templates.useTemplates);
+  const currentTemplate = useSelector(state => state.templates.currentTemplate);
 
   const useTempRef = useRef(null);
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
@@ -87,7 +88,7 @@ export function UseTemplate(props) {
           </div>
         </div>
         <div className={''}>
-          {templates.filter(temp => temp.name.toLowerCase().includes(searchFor.value)).map(template => (
+          {templates.filter(temp => (temp.name.toLowerCase().includes(searchFor.value) && temp.uuid != currentTemplate.uuid)).map(template => (
             <div onClick={(e) => handleClick(e, template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
               <img className="w-4" src={braces} alt="" />
               <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>

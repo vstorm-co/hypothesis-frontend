@@ -6,6 +6,7 @@ import { useSignal } from "@preact/signals";
 
 export function InlineTemplate(props) {
   const templates = useSelector(state => state.templates.useTemplates);
+  const currentTemplate = useSelector(state => state.templates.currentTemplate);
 
   const selectedIndex = useSignal(0);
 
@@ -60,7 +61,7 @@ export function InlineTemplate(props) {
         (Press enter to insert)
       </div>
       <div className={'templates-inline-list bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
-        {templates?.filter(temp => temp.name.toLowerCase().trim().includes(props.prePillContent)).map((template, index) => (
+        {templates?.filter(temp => (temp.name.toLowerCase().trim().includes(props.prePillContent) && temp.uuid != currentTemplate.uuid)).map((template, index) =>  (
           <div onClick={() => props.handleUseInlineTemplate(template)} className={(`item-${index}`) + ' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (selectedIndex.value === index ? 'box-shadow' : '')}>
             <img className="w-4" src={braces} alt="" />
             <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
