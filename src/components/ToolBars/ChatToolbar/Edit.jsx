@@ -100,7 +100,7 @@ export function Edit(props) {
           <img className="w-4 rotate-90" src={dots} alt="edit" />
         </div>
       </div>
-      <div className={"absolute border rounded right-0 w-[240px] top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
+      <div className={"absolute border z-50 rounded right-0 w-[240px] top-10 bg-white " + (showEdit.value ? '' : 'hidden')}>
         {user.user_id === currentChat.owner &&
           <div className="border-b p-2">
             <>
@@ -126,7 +126,7 @@ export function Edit(props) {
               <li>{currentChat?.total_tokens_count} total tokens (${currentChat.total_value?.toFixed(3)})</li>
             </ul>
           </div>
-          {currentChat.elapsed_time &&
+          {currentChat.elapsed_time > 0 &&
             <div className={'mt-2'}><span className={'text-[#747474]'}>API Time:</span> {currentChat.elapsed_time.toFixed(2)} seconds</div>
           }
         </div>
