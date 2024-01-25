@@ -167,63 +167,6 @@ export function PromptInput(props) {
     preview.value = targetPreview;
   }
 
-  // function handleSubmit() {
-  //   const parser = new DOMParser();
-  //   const htmlText = parser.parseFromString(input.value, 'text/html');
-  //   let currentTemplates = htmlText.querySelectorAll('span');
-
-  //   let targetPreview = input.value;
-  //   let htmlArray = [];
-
-  //   currentTemplates.forEach(temp => {
-  //     if (temp.dataset.content) {
-  //       let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-  //       let targetHTML = templateTarget.content_html.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-  //       if (targetHTML.length < 2) {
-  //         targetHTML = templateTarget.content_html.split(`<span contenteditable="false" class="return-box-new">↩</span>`);
-  //       }
-
-  //       htmlArray = [...htmlArray, ...targetHTML];
-
-  //       targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content);
-  //     }
-  //   });
-
-  //   let rawPreview = targetPreview;
-
-  //   let promptArray = targetPreview.split(`<div contenteditable="false" class="return-box px-1.5 rounded"></div>`);
-  //   if (promptArray.length < 2) {
-  //     promptArray = targetPreview.split(`<span contenteditable="false" class="return-box-new">↩</span>`);
-  //   }
-
-  //   promptArray = promptArray.map((p, index) => {
-  //     if (htmlArray[index] !== undefined) {
-  //       return {
-  //         prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-  //         html: promptArray.length > 1 ? htmlArray[index].replace("&nbsp;", "") : input.value,
-  //       };
-  //     } else {
-  //       return {
-  //         prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-  //         html: p.replace("&nbsp;", "").trim(),
-  //       };
-  //     }
-  //   });
-
-  //   props.handleSubmitButton({ promptArray, rawInput: input.value, rawPreview, });
-
-  //   if (props.clearInputOnSubmit) {
-  //     input.value = '';
-  //     preview.value = '';
-  //   }
-
-  //   if (props.setBlockOnSubmit) {
-  //     props.handleSetBlock();
-  //   }
-
-  //   promptMode.value = 'write'
-  // }
-
   function handleSubmit() {
     const parser = new DOMParser();
 
@@ -258,9 +201,6 @@ export function PromptInput(props) {
     let promptArray = targetPreview.split('↩');
     let htmlArray = lastPreview.split('↩');
 
-    console.log(promptArray);
-    console.log(htmlArray);
-
     if(promptArray.length > 1){
       promptArray = promptArray.map((p, index) => {
         return {
@@ -268,7 +208,6 @@ export function PromptInput(props) {
           html: htmlArray[index].replace("&nbsp;", "").trim(),
         };
       });
-      console.log(promptArray);
     } else {
       promptArray = promptArray.map((p, index) => {
         return {
