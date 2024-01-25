@@ -174,7 +174,7 @@ export function PromptInput(props) {
 
     let htmlText = parser.parseFromString(targetPreview, 'text/html');
     let currentTemplates = htmlText.querySelectorAll('span.pill');
-    let lastPreview;
+    let lastPreview = targetPreview;
 
     while(currentTemplates.length > 0){
       lastPreview = targetPreview;
