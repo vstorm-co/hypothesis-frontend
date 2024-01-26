@@ -6,8 +6,6 @@
 	h1 {
 		display: block;
 		font-size: 2em;
-		margin-top: 0.67em;
-		margin-bottom: 0.67em;
 		margin-left: 0;
 		margin-right: 0;
 		font-weight: bold;
@@ -16,8 +14,6 @@
 	h2 {
 		display: block;
 		font-size: 1.5em;
-		margin-top: 0.83em;
-		margin-bottom: 0.83em;
 		margin-left: 0;
 		margin-right: 0;
 		font-weight: bold;
@@ -26,13 +22,38 @@
 	h3 {
 		display: block;
 		font-size: 1.17em;
-		margin-top: 1em;
-		margin-bottom: 1em;
 		margin-left: 0;
 		margin-right: 0;
 		font-weight: bold;
 	}
 
+	h4{
+		display: block;
+		font-size: 1rem;
+		margin-left: 0;
+		margin-right: 0;
+		font-weight: bold;
+	}
+
+	h5{
+		display: block;
+		font-size: .83rem;
+		margin-left: 0;
+		margin-right: 0;
+		font-weight: bold;
+	}
+
+	h6{
+		display: block;
+		font-size: .67rem;
+		margin-left: 0;
+		margin-right: 0;
+		font-weight: bold;
+	}
+
+	h1, h2, h3, h4, h5, h6{
+		margin: 1rem 0;
+	}
 }
 
 @font-face {
@@ -238,13 +259,15 @@ body {
 	background-color: transparent !important
 }
 
-ul {
+ul{
 	list-style-type: disc;
-	padding-left: 20px;
-	padding-top: 20px;
 }
 
-ul li {
+ul, ol {
+	padding-left: 1rem;
+}
+
+ul li, ol li {
 	margin-bottom: 20px;
 }
 

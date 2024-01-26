@@ -50,7 +50,7 @@ export function SearchBar() {
     <div>
       <div className="border-[1px] border-[#747474] rounded-lg flex items-center p-2">
         <img className="w-4" src={loopSvg} alt="" />
-        <input onInput={(e) => handleInput(e)} value={inputValue} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2" placeholder="Search..." />
+        <input onInput={(e) => handleInput(e)} value={inputValue} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 w-full" placeholder="Search..." />
         {ui.searchFilters.searchFor.length > 0 &&
           <div onClick={clearSearchFor} className={'transform rotate-45 cursor-pointer'}>
             <img src={plus} alt="" />
