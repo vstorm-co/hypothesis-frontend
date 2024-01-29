@@ -47,11 +47,12 @@ export function Chat(props) {
 					userScrolledUp.value = true;
 				}
 				previousScroll.value = chatRef.current.scrollTop;
-			})
-		}, 500)
+			});
+			console.log("Registered");
+		}, 500);
 
 		forceInputFocus.value = forceInputFocus.value + 1;
-	}, [])
+	}, [chatRef.current])
 
 	useEffect(() => {
 		dispatch(selectChat(props.matches.id));
