@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { useSelector, useDispatch } from "react-redux";
 import { signal, useSignal } from "@preact/signals";
@@ -8,6 +9,9 @@ import papaya from '../assets/images/papaya.png';
 import { getOrganizationsData } from '../store/organizations-slice.js';
 import { showToast, uiActions } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
+import { getChatsData } from '../store/chats-slice';
+import { getTemplatesData } from '../store/templates-slice';
+import { getUserOrganizationsData } from '../store/user-slice';
 
 const loading = signal(true);
 const editOrganization = signal(false);
@@ -52,6 +56,10 @@ export const SetUp = (props) => {
         route('/');
       }
 
+
+      dispatch(getUserOrganizationsData());
+      dispatch(getChatsData());
+      dispatch(getTemplatesData());
       dispatch(uiActions.setHideSideBar(false));
     }, 200)
 
