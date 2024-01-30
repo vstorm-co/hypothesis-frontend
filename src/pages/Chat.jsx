@@ -66,14 +66,6 @@ export function Chat(props) {
 	}, [currentChat.uuid])
 
 	useEffect(() => {
-		dispatch(selectChat(props.matches.id));
-
-		dispatch(getUserOrganizationsData());
-		dispatch(getChatsData(props.matches.id));
-		dispatch(getTemplatesData());
-	}, [user.access_token])
-
-	useEffect(() => {
 		if (user.access_token === null) {
 			route('/auth');
 			localStorage.setItem("redirect_to_chat", props.matches.id);

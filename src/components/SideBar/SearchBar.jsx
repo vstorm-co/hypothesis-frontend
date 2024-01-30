@@ -16,15 +16,13 @@ export function SearchBar() {
 
   function handleInput(e) {
     clearTimeout(searchTimeout);
-    dispatch(uiActions.toggleChatsLoading(true));
-
     dispatch(uiActions.setFiltersSearch({ searchFor: e.target.value }));
+
+    dispatch(uiActions.toggleChatsLoading(true));
 
     searchTimeout = setTimeout(() => {
       dispatch(getChatsData());
       dispatch(getTemplatesData());
-
-      dispatch(uiActions.toggleChatsLoading(false));
     }, 1000)
   }
 

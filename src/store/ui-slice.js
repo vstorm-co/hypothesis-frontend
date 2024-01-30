@@ -17,6 +17,7 @@ const uiSlice = createSlice({
     organizationCreated: null,
     hideSideBar: false,
     chatsLoading: false,
+    templatesLoading: false,
     searchFilters: {
       visibility: 'all',
       sortBy: '',
@@ -50,6 +51,9 @@ const uiSlice = createSlice({
     },
     toggleChatsLoading(state, action) {
       state.chatsLoading = action.payload;
+    },
+    toggleTemplatesLoading(state, action) {
+      state.templatesLoading = action.payload;
     },
     changeCopyAs(state, action){
       state.copyAs = action.payload

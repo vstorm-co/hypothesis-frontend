@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useEffect } from 'preact/hooks';
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import Router from 'preact-router';
 import { render } from 'preact';
 import "preact/devtools";
@@ -21,6 +21,7 @@ import { Chat } from './pages/Chat.jsx';
 import { getUserOrganizationsData } from "./store/user-slice";
 import { getTemplatesData } from "./store/templates-slice";
 import { getChatsData, chatsActions } from "./store/chats-slice";
+import { uiActions } from './store/ui-slice';
 
 import 'prismjs/themes/prism.css'
 import './style.css';
@@ -28,6 +29,8 @@ import { RefreshToken } from './pages/RefreshToken';
 
 export function App() {
 	useEffect(() => {
+		store.dispatch(uiActions.toggleChatsLoading(true))
+
 		store.dispatch(getUserOrganizationsData());
 		store.dispatch(getChatsData());
 		store.dispatch(getTemplatesData());

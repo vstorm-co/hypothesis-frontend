@@ -16,7 +16,7 @@ export const ChatBar = props => {
 
   const callSelectChat = () => {
     route(`/chats/${props.ChatData.uuid}`);
-    dispatch(selectChat(props.ChatData.uuid));
+    // dispatch(selectChat(props.ChatData.uuid));
     dispatch(templatesActions.setCurrentTemplate({}));
   }
 

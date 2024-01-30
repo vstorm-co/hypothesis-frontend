@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 import { route } from 'preact-router';
+import { uiActions } from "./ui-slice";
 
 import callApi from "../api";
 
@@ -73,7 +74,6 @@ export default chatsSlice;
 
 export const getChatsData = (payload) => {
   return async (dispatch, getState) => {
-
     let state = getState();
     let url = ``;
 
@@ -112,11 +112,11 @@ export const getChatsData = (payload) => {
       if (payload) {
         dispatch(selectChat(payload));
       }
+
+      dispatch(uiActions.toggleChatsLoading(false))
     } catch (err) {
       console.log(err);
     }
-
-
   }
 }
 
