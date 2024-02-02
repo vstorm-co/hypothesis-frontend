@@ -161,7 +161,7 @@
 }
 
 .input-form .write-button.active {
-	@apply border bg-[#FAFAFA];
+	@apply border bg-[#FAFAFA] border-b-0;
 }
 
 .input-form .preview-button {
@@ -169,7 +169,7 @@
 }
 
 .input-form .preview-button.active {
-	@apply border bg-white;
+	@apply border bg-white border-b-0;
 }
 
 .write-box {

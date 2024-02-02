@@ -53,8 +53,10 @@ export function Filters() {
 
   return (
     <div ref={filtersRef} className={'relative'}>
-      <div className={'hover:bg-[#595959] cursor-pointer rounded p-2 ' + (showFilters.value ? 'bg-[#595959]' : '')} onClick={toggleShowFilters}>
-        <img src={filtersIcon} alt="" />
+      <div className={'hover:bg-[#595959] text-[#747474] hover:text-[#DBDBDB] cursor-pointer rounded p-2 ' + (showFilters.value ? 'bg-[#595959] text-[#DBDBDB]' : '')} onClick={toggleShowFilters}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3C16 2.44772 15.5523 2 15 2H1L0.883379 2.00673C0.38604 2.06449 0 2.48716 0 3C0 3.55228 0.447715 4 1 4H15L15.1166 3.99327C15.614 3.93551 16 3.51284 16 3ZM13 7C13.5523 7 14 7.44772 14 8C14 8.51284 13.614 8.93551 13.1166 8.99327L13 9H3C2.44772 9 2 8.55228 2 8C2 7.48716 2.38604 7.06449 2.88338 7.00673L3 7H13ZM11 12C11.5523 12 12 12.4477 12 13C12 13.5128 11.614 13.9355 11.1166 13.9933L11 14H5C4.44772 14 4 13.5523 4 13C4 12.4872 4.38604 12.0645 4.88338 12.0067L5 12H11Z" fill="currentColor"/>
+        </svg>
       </div>
       <div className={"absolute z-50 w-96 border rounded top-0 max-w-[320px] left-12 bg-[#202020] " + (showFilters.value ? '' : 'hidden')}>
         <div className="border-b border-[#747474] pt-4 px-4 pb-2">

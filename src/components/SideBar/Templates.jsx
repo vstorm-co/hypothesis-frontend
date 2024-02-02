@@ -66,7 +66,7 @@ export function Templates() {
               <TemplateBar TemplateData={temp} />
             ))}
           </div>
-          {(loadSize > 0 && templates?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
+          {(loadSize > 0 && templates?.length > 0) && <div onClick={callLoadMore} className={"flex items-center mt-2 py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
             <div className={'py-[2px] px-[3px]'}>
               <img className={"w-[10px] h-[12px]"} src={arrowDown} alt="" />
             </div>

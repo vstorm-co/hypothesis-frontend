@@ -111,6 +111,8 @@ export function PromptInput(props) {
     setTimeout(() => {
       input.value = `${InputRef.current.innerHTML}`;
     }, 100);
+
+    props.handleSetBlock(false);
   }
 
   function handleUseTemplate(template) {
@@ -141,6 +143,8 @@ export function PromptInput(props) {
       input.value = `${InputRef.current.innerHTML}`;
       useTemplateVisible.value = false;
     }, 100);
+
+    props.handleSetBlock(false);
   }
 
   const generatePreview = () => {
@@ -278,7 +282,6 @@ export function PromptInput(props) {
     if (showPrePill.value) {
       let target = document.querySelector('.pre-pill');
       prePillContent.value = target.innerText.trim().toLowerCase();
-
     }
   }
 

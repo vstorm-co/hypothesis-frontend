@@ -11,8 +11,7 @@ import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
 
 import { chatsActions, getChatsData, selectChat, updateChat } from '../store/chats-slice';
-import { getUserOrganizationsData } from '../store/user-slice';
-import { getTemplatesData, templatesActions } from '../store/templates-slice';
+import { templatesActions } from '../store/templates-slice';
 
 import { PromptInput } from '../components/PromptInput';
 
@@ -257,7 +256,7 @@ export function Chat(props) {
 				<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 					<div className="h-[100vh] flex flex-col pt-4 pb-2 relative">
 						<div className={'flex items-center py-3 border-b border-[#DBDBDB] relative'}>
-							<div onClick={() => { handleTitleInputClick() }} class="flex items-center w-full max-w-[570px] cursor-pointer">
+							<div onClick={() => { handleTitleInputClick() }} class="flex items-center w-full cursor-pointer">
 								<div className={'text-lg leading-6 font-bold py-2 max-h-[156px] overflow-hidden text-[#595959] ' + (editTitle ? 'hidden' : '')}>
 									{currentChat.name}
 								</div>
@@ -270,7 +269,7 @@ export function Chat(props) {
 											</svg>
 										</div>
 									</div>
-									<div className={'text-[10px] mt-0.5 -mb-3 text-right text-[#747474]'}>
+									<div className={'text-[10px] mt-0.5 py-2 -mb-2 pr-2 text-right text-[#747474]'}>
 										press 'Enter' to confirm
 									</div>
 								</div>
@@ -280,7 +279,7 @@ export function Chat(props) {
 								<Toast />
 							</div>
 
-							<div className={'ml-auto text-xs text-[#747474] shrink-0'}>
+							<div className={'ml-5 text-xs text-[#747474] shrink-0'}>
 								{EditedAt()}
 							</div>
 							<div className={'ml-5 shrink-0'}>

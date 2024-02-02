@@ -46,7 +46,7 @@ export function SideBar() {
               <Filters />
             </div>
           </div>
-          <div ref={scrollRef} className={" scrollBar-dark px-4 overflow-y-auto"}>
+          <div ref={scrollRef} className={" scrollBar-dark px-3 overflow-y-auto"}>
             <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
             <Templates />
           </div>

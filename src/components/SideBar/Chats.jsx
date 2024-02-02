@@ -75,9 +75,13 @@ export function Chats(props) {
               <ChatBar handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} ChatData={chat} />
             ))}
           </div>
-          {(loadSize > 0 && chats?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
+          {(loadSize > 0 && chats?.length > 0) && <div onClick={callLoadMore} className={"flex items-center py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959] mt-2"}>
             <div className={'py-[2px] px-[3px]'}>
-              <img className={"w-[10px] h-[12px]"} src={arrowDown} alt="" />
+              <div className={"w-[10px] h-[12px] text-[#747474]"}>
+                <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 0C5.51284 0 5.93551 0.38604 5.99327 0.883379L6 1V8.585L8.29289 6.29289C8.65338 5.93241 9.22061 5.90468 9.6129 6.2097L9.70711 6.29289C10.0676 6.65338 10.0953 7.22061 9.7903 7.6129L9.70711 7.70711L5.70711 11.7071C5.34662 12.0676 4.77939 12.0953 4.3871 11.7903L4.29289 11.7071L0.292893 7.70711C-0.0976311 7.31658 -0.0976311 6.68342 0.292893 6.29289C0.653377 5.93241 1.22061 5.90468 1.6129 6.2097L1.70711 6.29289L4 8.585V1C4 0.447715 4.44772 0 5 0Z" fill="currentColor"/>
+                </svg>
+              </div>
             </div>
             <div className="font-normal text-sm leading-6 ml-2">
               Load {loadSize} More
@@ -92,7 +96,6 @@ export function Chats(props) {
         <div className={'flex items-center justify-center'}>
           <Loading />
         </div>}
-
     </div>
   )
 }
