@@ -154,7 +154,7 @@ export const cloneChat = (payload) => {
 export const selectChat = (payload) => {
   return async (dispatch) => {
     try {
-      const chat = await callApi(`/chat/room/${payload}`);
+      const chat = await callApi(`/chat/room/${payload}?user_join=true`);
       dispatch(chatsActions.setCurrentChat(chat));
     } catch (err) {
       console.log(err);
