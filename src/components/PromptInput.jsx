@@ -385,7 +385,7 @@ export function PromptInput(props) {
       } */}
       <div className={'flex gap-1 mt-2 justify-end'}>
         {props.SecondButton &&
-          <button type="button" onClick={() => props.handleSecondButton()} className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">{props.SecondButtonText}</button>
+          <button type="button" onClick={() => props.handleSecondButton()} className="btn-second">{props.SecondButtonText}</button>
         }
         <button type="submit" disabled={((input.value.length === 0 || props.blockSending) && props.Icon != 'stop')} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
           {props.SubmitButtonText}
