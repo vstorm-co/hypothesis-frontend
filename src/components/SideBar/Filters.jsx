@@ -76,7 +76,7 @@ export function Filters() {
           </div>
           <div className={'text-sm leading-6 flex gap-1 flex-wrap text-[#747474] pb-2'}>
             <div onClick={() => { setSortBy('-updated_at') }} className={'cursor-pointer font-bold px-2 py-1 rounded hover:outline hover:outline-[1px] outline-[#747474] hover:text-white  ' + (filters.sortBy === '-updated_at' ? 'outline  outline-[1px] text-white' : '')}>Newest</div>
-            <div onClick={() => { setSortBy('updated_at') }} className={'cursor-pointer font-bold px-2 py-1 ml-1 rounded hover:outline hover:outline-[1px] outline-[#747474] hover:text-white ' + (filters.sortBy === 'created_at' ? 'outline  outline-[1px] text-white' : '')}>Oldest</div>
+            <div onClick={() => { setSortBy('updated_at') }} className={'cursor-pointer font-bold px-2 py-1 ml-1 rounded hover:outline hover:outline-[1px] outline-[#747474] hover:text-white ' + (filters.sortBy === 'updated_at' ? 'outline  outline-[1px] text-white' : '')}>Oldest</div>
             <div onClick={() => { setSortBy('name') }} className={'cursor-pointer font-bold px-2 py-1 rounded hover:outline hover:outline-[1px] outline-[#747474] hover:text-white ' + (filters.sortBy === 'name' ? 'outline  outline-[1px] text-white' : '')}>Alphabetical</div>
           </div>
         </div>

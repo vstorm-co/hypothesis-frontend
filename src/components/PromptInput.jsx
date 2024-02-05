@@ -383,7 +383,7 @@ export function PromptInput(props) {
           {preview.value}
         </div>
       } */}
-      <div className={'flex gap-4 mt-2 justify-end'}>
+      <div className={'flex gap-1 mt-2 justify-end'}>
         {props.SecondButton &&
           <button type="button" onClick={() => props.handleSecondButton()} className="text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded">{props.SecondButtonText}</button>
         }

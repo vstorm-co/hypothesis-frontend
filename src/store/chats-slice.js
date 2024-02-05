@@ -90,7 +90,7 @@ export const getChatsData = (payload) => {
     }
 
     if (state.ui.searchFilters.searchFor) {
-      url = `${url}&name__like=${state.ui.searchFilters.searchFor}`;
+      url = `${url}&name__ilike=${state.ui.searchFilters.searchFor}`;
     }
 
     if (state.chats.size) {

@@ -106,7 +106,7 @@ export function Message(props) {
 
   if (props.Message.created_by === 'user') {
     return (
-      <div className={'flex my-4 group'}>
+      <div className={'flex my-4 group message-box'}>
         <div class={'bg-[#F2F2F2] max-w-[85%] mr-4 p-2 pr-3 relative rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
           <div onMouseLeave={() => setShowSaveAs(false)} className="items-start">
             <div className="flex items-start">

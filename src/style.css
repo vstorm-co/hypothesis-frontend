@@ -181,6 +181,10 @@
 	@apply max-h-[70vh];
 }
 
+.page-chat .message-box .write-box, .page-chat .message-box .preview-box{
+	@apply max-h-full;
+}
+
 .page-start .write-box, .page-start .preview-box{
 	@apply max-h-[60vh];
 }
@@ -287,14 +291,18 @@ button[disabled] {
 	opacity: .5
 }
 
-button {
-	box-shadow: 0 3px white;
+button:active:enabled {
+	transform: translateY(2px) translateX(-2px);
 }
 
-button:active:enabled {
-	box-shadow: 0 1.5px #666;
-	transform: translateY(4px);
+button.btn-second{
+	@apply text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
 }
+button.btn-second:active:enabled{
+	box-shadow: 0 1.5px 4px #666 inset;
+	transform: translateY(2px) translateX(-2px);
+}
+
 
 /* width */
 .scrollBar-dark::-webkit-scrollbar {
