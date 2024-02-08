@@ -22,6 +22,7 @@ const userSlice = createSlice({
         state.currentUser.email = action.payload.email;
         state.currentUser.name = action.payload.name;
         state.currentUser.picture = action.payload.picture;
+        state.currentUser.google_token = action.payload.google_access_token
 
         localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
       } else {

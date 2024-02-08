@@ -33,6 +33,7 @@ function outsideClickHanlder(ref, callback) {
 
 export function UseFile(props) {
   const useTempRef = useRef(null);
+  const currentUser = useSelector(state => state.user.currentUser)
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
 
   const [openPicker, authResponse] = useDrivePicker();
@@ -42,17 +43,44 @@ export function UseFile(props) {
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
       viewId: "DOCUMENTS",
-      // token: token, // pass oauth token in case you already have one
-      showUploadView: true,
-      showUploadFolders: true,
+      token: currentUser.google_token,
       supportDrives: true,
-      multiselect: true,
+      multiselect: false,
       // customViews: customViewsArray, // custom view
-      callbackFunction: (data) => {
+      callbackFunction: async (data) => {
         if (data.action === 'cancel') {
           console.log('User clicked cancel/close button')
         }
-        console.log(data)
+        if (data.docs.length > 0) {
+          console.log(data);
+          try {
+            let response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}/export?mimeType=text/plain`, {
+              headers: {
+                Authorization: `Bearer ${currentUser.google_token}`
+              }
+            })
+            if(response.status === 200){
+              const reader = response.body.getReader();
+              reader.read().then(({done, value}) => {
+                const string = new TextDecoder().decode(value);
+                console.log(string);
+              })
+            } else {
+              response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}?alt=media`, {
+                headers: {
+                  Authorization: `Bearer ${currentUser.google_token}`
+                }
+              });
+              const reader = response.body.getReader();
+              reader.read().then(({done, value}) => {
+                const string = new TextDecoder().decode(value);
+                console.log(string);
+              })
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
       },
     })
   }
@@ -87,7 +115,7 @@ export function UseFile(props) {
           </div>
         </div>
         <div>
-          <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer'}>
+          <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer hover:bg-[#DBDBDB]'}>
             <img src={googleDrive} className={'mx-2'} alt="" />
             <div>Pick Google Drive file</div>
             <img className={'ml-auto mr-3'} src={arrow} alt="" />

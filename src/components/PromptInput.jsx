@@ -24,6 +24,16 @@ export function PromptInput(props) {
   const showPrePill = useSignal(false);
   const prePillContent = useSignal('');
 
+  const showUseFile = useSignal(false);
+
+  function toggleUseFile(tgl){
+    if (tgl != undefined) {
+      showUseFile.value = tgl;
+    } else {
+      showUseFile.value = !showUseFile.value;
+    }
+  }
+
   const InputRef = useRef();
 
   function setRange() {
@@ -321,7 +331,7 @@ export function PromptInput(props) {
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
-          <UseFile Visible={true} Position={'top'} />
+          <UseFile onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={'top'} />
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
