@@ -11,6 +11,8 @@ import { InlineTemplate } from "./InlineTemplate";
 import { UseFile } from "./ToolBars/ChatToolbar/UseFile";
 import { route } from "preact-router";
 
+
+
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
   const templates = useSelector(state => state.templates.useTemplates);
