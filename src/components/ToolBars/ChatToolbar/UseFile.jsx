@@ -115,7 +115,7 @@ export function UseFile(props) {
           </div>
         </div>
         <div>
-          <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer hover:bg-[#DBDBDB]'}>
+          <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer hover:bg-[#FAFAFA]'}>
             <img src={googleDrive} className={'mx-2'} alt="" />
             <div>Pick Google Drive file</div>
             <img className={'ml-auto mr-3'} src={arrow} alt="" />

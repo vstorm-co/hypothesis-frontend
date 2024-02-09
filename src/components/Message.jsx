@@ -170,7 +170,7 @@ export function Message(props) {
           </div>
           <div className={'flex group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
-              <ReactMarkdown rehypePlugins={[rehypePrism]}>{props.Message.content}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[[rehypePrism, {ignoreMissing: true}]]}>{props.Message.content}</ReactMarkdown>
             </div>
             <div className={'ml-auto shrink-0 hidden ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
