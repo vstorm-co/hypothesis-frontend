@@ -16,6 +16,7 @@ import { route } from "preact-router";
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
   const templates = useSelector(state => state.templates.useTemplates);
+  const userFiles = useSelector(state => state.files.files);
 
   const useTemplateVisible = useSignal(false);
   const promptMode = useSignal('write');
@@ -168,6 +169,7 @@ export function PromptInput(props) {
 
     let htmlText = parser.parseFromString(targetPreview, 'text/html');
     let currentTemplates = htmlText.querySelectorAll('span.pill');
+    let currentFiles = htmlText.querySelectorAll('span.file-pill');
 
     while(currentTemplates.length > 0){
       currentTemplates.forEach(temp => {
@@ -180,76 +182,93 @@ export function PromptInput(props) {
       htmlText = parser.parseFromString(targetPreview, 'text/html');
       currentTemplates = htmlText.querySelectorAll('span.pill');
     }
+
+    currentFiles.forEach(file => {
+      let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
+      console.log(fileTarget);
+      targetPreview = targetPreview.replace(file.outerHTML, fileTarget.content);
+    })
 
     preview.value = targetPreview;
   }
 
   function handleSubmit() {
-    const parser = new DOMParser();
-
-    let targetPreview = input.value;
-
-    let htmlText = parser.parseFromString(targetPreview, 'text/html');
-    let currentTemplates = htmlText.querySelectorAll('span.pill');
-    let lastPreview = targetPreview;
-
-    while(currentTemplates.length > 0){
-      lastPreview = targetPreview;
-      currentTemplates.forEach(temp => {
-        if (temp.dataset.content) {
-          let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
-          targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content_html);
-        }
+    if(showPrePill.value || showUseFile.value){
+      console.log("GIT");
+    }else {
+      const parser = new DOMParser();
+  
+      let targetPreview = input.value;
+  
+      let htmlText = parser.parseFromString(targetPreview, 'text/html');
+      let currentTemplates = htmlText.querySelectorAll('span.pill');
+      let currentFiles = htmlText.querySelectorAll('span.file-pill');
+      let lastPreview = targetPreview;
+  
+      while(currentTemplates.length > 0){
+        lastPreview = targetPreview;
+        currentTemplates.forEach(temp => {
+          if (temp.dataset.content) {
+            let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
+            targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content_html);
+          }
+        });
+  
+        htmlText = parser.parseFromString(targetPreview, 'text/html');
+        currentTemplates = htmlText.querySelectorAll('span.pill');
+      }
+  
+      currentFiles.forEach(file => {
+        let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
+        targetPreview = targetPreview.replace(file.outerHTML, fileTarget.optimized_content);
+      })
+  
+      let returnBoxes = htmlText.querySelectorAll('div.return-box, span.return-box-new');
+  
+      returnBoxes.forEach(b => {
+        targetPreview = targetPreview.replace(b.outerHTML, '↩');
+        lastPreview = lastPreview.replace(b.outerHTML, '↩');
       });
+  
+      targetPreview = targetPreview.replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "");
+  
+      let promptArray = targetPreview.split('↩');
+      let htmlArray = lastPreview.split('↩');
+  
+      if(promptArray.length > 1){
+        promptArray = promptArray.map((p, index) => {
+          return {
+            prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+            html: htmlArray[index].replace("&nbsp;", "").trim(),
+          };
+        });
+      } else {
+        promptArray = promptArray.map((p, index) => {
+          return {
+            prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+            html: input.value.replace("&nbsp;", "").trim(),
+          };
+        });
+      }
+  
+      props.handleSubmitButton({ promptArray, rawInput: input.value.replace("&nbsp;", "").trim(), rawPreview: "", });
+  
+      if (props.clearInputOnSubmit) {
+        input.value = '';
+        preview.value = '';
+      }
+  
+      if (props.setBlockOnSubmit) {
+        props.handleSetBlock();
+      }
+  
+      promptMode.value = 'write'
 
-      htmlText = parser.parseFromString(targetPreview, 'text/html');
-      currentTemplates = htmlText.querySelectorAll('span.pill');
     }
-
-    let returnBoxes = htmlText.querySelectorAll('div.return-box, span.return-box-new');
-
-    returnBoxes.forEach(b => {
-      targetPreview = targetPreview.replace(b.outerHTML, '↩');
-      lastPreview = lastPreview.replace(b.outerHTML, '↩');
-    });
-
-    targetPreview = targetPreview.replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "");
-
-    let promptArray = targetPreview.split('↩');
-    let htmlArray = lastPreview.split('↩');
-
-    if(promptArray.length > 1){
-      promptArray = promptArray.map((p, index) => {
-        return {
-          prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-          html: htmlArray[index].replace("&nbsp;", "").trim(),
-        };
-      });
-    } else {
-      promptArray = promptArray.map((p, index) => {
-        return {
-          prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
-          html: input.value.replace("&nbsp;", "").trim(),
-        };
-      });
-    }
-
-    props.handleSubmitButton({ promptArray, rawInput: input.value.replace("&nbsp;", "").trim(), rawPreview: "", });
-
-    if (props.clearInputOnSubmit) {
-      input.value = '';
-      preview.value = '';
-    }
-
-    if (props.setBlockOnSubmit) {
-      props.handleSetBlock();
-    }
-
-    promptMode.value = 'write'
   }
 
   function handleKeyDown(event) {
-    if (showPrePill.value && (event.key === 'Enter' || event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
+    if ((showPrePill.value || showUseFile.value) && (event.key === 'Enter' || event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
       event.preventDefault();
     } else {
       props.WSsendMessage(JSON.stringify({ type: 'user_typing', user: user.email }))
@@ -360,6 +379,37 @@ export function PromptInput(props) {
 
   }
 
+  function handleFilePicked(file){
+    let element = document.createElement('span');
+    element.innerText = `${file.title}`;
+    element.title = `${file.title}`;
+    element.dataset.content = `${file.uuid}`;
+    element.classList.add('file-pill');
+    element.setAttribute("contenteditable", 'false');
+
+    caret.value.insertNode(element);
+
+    caret.value.setStartAfter(element);
+    caret.value.setEndAfter(element);
+
+    const space = document.createTextNode(' ');
+    caret.value.insertNode(space);
+
+    caret.value.collapse(false);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(caret.value);
+    caret.value.detach();
+
+
+    setTimeout(() => {
+      input.value = `${InputRef.current.innerHTML}`;
+      showUseFile.value = false;
+    }, 100);
+
+    props.handleSetBlock(false);
+  }
+
   return (
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
       <InlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
@@ -367,7 +417,7 @@ export function PromptInput(props) {
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
-          <UseFile onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={'top'} />
+          <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={'top'} />
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write

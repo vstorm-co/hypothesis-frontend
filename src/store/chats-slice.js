@@ -4,6 +4,7 @@ import { route } from 'preact-router';
 import { uiActions } from "./ui-slice";
 
 import callApi from "../api";
+import { getFiles } from "./files-slice";
 
 const chatsSlice = createSlice({
   name: 'chats',
@@ -107,7 +108,8 @@ export const getChatsData = (payload) => {
     try {
       const chats = await callApi(url);
 
-      dispatch(chatsActions.setChats(chats))
+      dispatch(chatsActions.setChats(chats));
+      dispatch(getFiles());
 
       if (payload) {
         dispatch(selectChat(payload));

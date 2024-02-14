@@ -93,6 +93,10 @@
 	font-weight: 900;
 }
 
+input:disabled{
+	opacity: .5;
+}
+
 .write-box #text {
 	line-height: 24px;
 }
@@ -141,7 +145,6 @@
 	position: relative;
 	padding-left: 24px;
 }
-
 .pill:before {
 	content: '';
 	display: inline-block;
@@ -155,6 +158,26 @@
 	width: 24px;
 	height: 24px;
 }
+
+.file-pill {
+	@apply py-1 px-2 mx-0.5 bg-[#747474] rounded text-white text-sm;
+	position: relative;
+	padding-left: 24px;
+}
+.file-pill:before {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 0;
+
+	background-image: url('./assets/share-light.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 24px;
+	height: 24px;
+}
+
 
 .input-form .write-button {
 	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;

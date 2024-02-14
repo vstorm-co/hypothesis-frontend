@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signal, useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 import useDrivePicker from 'react-google-drive-picker'
@@ -6,6 +6,9 @@ import useDrivePicker from 'react-google-drive-picker'
 import fileImport from '../../../assets/file-import.svg';
 import googleDrive from '../../../assets/google-drive.svg';
 import arrow from '../../../assets/arrow.svg';
+import plus from '../../../assets/plus.svg';
+import { Loading } from '../../Loading';
+import { uploadFile } from '../../../store/files-slice';
 
 const isVisible = signal(false);
 
@@ -33,7 +36,12 @@ function outsideClickHanlder(ref, callback) {
 
 export function UseFile(props) {
   const useTempRef = useRef(null);
-  const currentUser = useSelector(state => state.user.currentUser)
+  const currentUser = useSelector(state => state.user.currentUser);
+  const userFiles = useSelector(state => state.files.files);
+  const filesLoading = useSelector(state => state.files.loading);
+
+  const dispatch = useDispatch();
+
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
 
   const [openPicker, authResponse] = useDrivePicker();
@@ -97,9 +105,14 @@ export function UseFile(props) {
     console.log(e);
   }
 
+  async function handleUploadFile(e){
+    let file = await dispatch(uploadFile({source_type: 'url', source_value: e.target.value}));
+    props.FilePicked(file);
+  }
+
   return (
     <div title={'Insert File - ++'} ref={useTempRef} className={'relative'}>
-      <div onClick={() => props.onToggleVisible()} className={'border p-1 border-l-0 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
+      <div onClick={(e) => props.onToggleVisible(e)} className={'border p-1 border-l-0 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="24" height="24" rx="4" fill="" />
@@ -107,13 +120,38 @@ export function UseFile(props) {
           </svg>
         </div>
       </div>
-      <div className={"absolute w-[320px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+      <div className={"absolute w-[320px] border rounded bg-white z-50 transform scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={fileImport} alt="" />
-            <input ref={inputRef} onInput={(e) => handleurlUpdate(e)} value={url.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
+            <input onChangeCapture={(e) => {e.preventDefault(); handleUploadFile(e)}} disabled={filesLoading} ref={inputRef} onInput={(e) => handleurlUpdate(e)} value={url.value} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
           </div>
+          {!filesLoading && 
+            <div className={'text-xs text-[#747474] mt-2'}>
+              Press enter to confirm
+            </div>
+          }
+          {filesLoading && 
+            <div className={'flex items-center justify-center mt-2'}>
+              <Loading />
+            </div>
+          }
         </div>
+        {userFiles.length > 0 && 
+          <div className={'overflow-y-auto max-h-[132px]'}>
+            <div className="text-[10px] leading-4 font-bold text-[#747474] px-2 pt-2">
+              Recent Files
+            </div>
+            <div>
+              {userFiles.map(file => (
+                <div onClick={ () => props.FilePicked(file)} className={'text-sm leading-6 pl-2 pr-3 py-1 text-[#202020] border-b border-[#DBDBDB] flex justify-between cursor-pointer hover:bg-[#F2F2F2]'}>
+                  {file.title}
+                  <img src={plus} alt="" />
+                </div>
+              ))}
+            </div>
+          </div>
+        }
         <div>
           <div onClick={handleOpenPicker} className={'py-2 flex cursor-pointer hover:bg-[#FAFAFA]'}>
             <img src={googleDrive} className={'mx-2'} alt="" />
