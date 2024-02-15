@@ -98,6 +98,7 @@ export function UseFile(props) {
   const inputRef = useRef();
 
   useEffect(() => {
+    inputRef.current.value = '';
     inputRef.current.focus();
   }, [props.Visible]);
 
@@ -118,9 +119,13 @@ export function UseFile(props) {
     }
   }
 
+  function handleToggle(){
+    props.onToggleVisible();
+  }
+
   return (
     <div title={'Insert File - ++'} ref={useTempRef} className={'relative'}>
-      <div onClick={(e) => props.onToggleVisible(e)} className={'border p-1 border-l-0 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
+      <div onClick={(e) => handleToggle()} className={'border p-1 border-l-0 border-b-0 cursor-pointer rounded-tr border-[#DBDBDB] w-8 h-8 flex items-center justify-center '}>
         <div className={'p-1 hover:bg-[#F2F2F2] ' + (props.Visible ? 'bg-[#F2F2F2]' : '')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="24" height="24" rx="4" fill="" />
