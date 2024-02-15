@@ -20,7 +20,7 @@ import { Chat } from './pages/Chat.jsx';
 
 import { getUserOrganizationsData } from "./store/user-slice";
 import { getTemplatesData } from "./store/templates-slice";
-import { getChatsData, chatsActions } from "./store/chats-slice";
+import { getChatsData, chatsActions, selectChat } from "./store/chats-slice";
 import { uiActions } from './store/ui-slice';
 
 import 'prismjs/themes/prism.css'
@@ -50,6 +50,9 @@ export function App() {
 			let json_data = JSON.parse(e.data)
 
 			if (json_data.type === 'room-changed') {
+				if(json_data.id === state.chats.currentChat.uuid){
+					store.dispatch(selectChat(json_data.id));
+				}
 				store.dispatch(getChatsData());
 			} else if (json_data.type === 'template-changed') {
 				store.dispatch(getTemplatesData());

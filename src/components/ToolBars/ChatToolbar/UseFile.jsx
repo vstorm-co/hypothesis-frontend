@@ -42,6 +42,8 @@ export function UseFile(props) {
 
   const dispatch = useDispatch();
 
+  const httpsNotFound = useSignal(false);
+
   outsideClickHanlder(useTempRef, () => { props.onToggleVisible(false) });
 
   const [openPicker, authResponse] = useDrivePicker();
@@ -102,6 +104,7 @@ export function UseFile(props) {
   const url = useSignal('');
 
   async function handleUploadFile(e){
+    httpsNotFound.value = false;
     if(e.key === 'Enter'){
       const regex = /^https:\/\/.*/;
       const isHttpsLink = regex.test(e.target.value);
@@ -109,6 +112,8 @@ export function UseFile(props) {
   
         let file = await dispatch(uploadFile({source_type: 'url', source_value: e.target.value}));
         props.FilePicked(file);
+      }else{
+        httpsNotFound.value = true;
       }
     }
   }
@@ -129,6 +134,9 @@ export function UseFile(props) {
             <img className="w-4" src={fileImport} alt="" />
             <input onKeyDown={(e) => {handleUploadFile(e)}} disabled={filesLoading} ref={inputRef} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
           </div>
+          {httpsNotFound.value && 
+            <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5">This doesn't look like a link...</div>
+          }
           {!filesLoading && 
             <div className={'text-xs text-[#747474] mt-2'}>
               Press enter to confirm
