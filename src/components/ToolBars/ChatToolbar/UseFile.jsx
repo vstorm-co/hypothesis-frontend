@@ -101,13 +101,16 @@ export function UseFile(props) {
 
   const url = useSignal('');
 
-  function handleurlUpdate(e) {
-    console.log(e);
-  }
-
   async function handleUploadFile(e){
-    let file = await dispatch(uploadFile({source_type: 'url', source_value: e.target.value}));
-    props.FilePicked(file);
+    if(e.key === 'Enter'){
+      const regex = /^https:\/\/.*/;
+      const isHttpsLink = regex.test(e.target.value);
+      if(e.target.value.length > 0 && isHttpsLink){
+  
+        let file = await dispatch(uploadFile({source_type: 'url', source_value: e.target.value}));
+        props.FilePicked(file);
+      }
+    }
   }
 
   return (
@@ -124,7 +127,7 @@ export function UseFile(props) {
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={fileImport} alt="" />
-            <input onChangeCapture={(e) => {e.preventDefault(); handleUploadFile(e)}} disabled={filesLoading} ref={inputRef} onInput={(e) => handleurlUpdate(e)} value={url.value} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
+            <input onKeyDown={(e) => {handleUploadFile(e)}} disabled={filesLoading} ref={inputRef} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
           </div>
           {!filesLoading && 
             <div className={'text-xs text-[#747474] mt-2'}>
