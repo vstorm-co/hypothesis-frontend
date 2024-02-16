@@ -57,7 +57,12 @@
 		font-weight: bold;
 	}
 
-	h1, h2, h3, h4, h5, h6{
+	.bot-response h1, 
+	.bot-response h2, 
+	.bot-response h3, 
+	.bot-response h4, 
+	.bot-response h5,
+	.bot-response h6{
 		margin: 1rem 0;
 	}
 }
@@ -292,15 +297,20 @@ body {
 	background-color: transparent !important
 }
 
-ul{
+.bot-response ul{
 	list-style-type: disc;
 }
+.bot-response ol{
+	list-style-type:decimal
+}
 
-ul, ol {
+.bot-response ul,
+.bot-response ol {
 	padding-left: 1rem;
 }
 
-ul li, ol li {
+.bot-response ul li,
+.bot-response ol li {
 	margin-bottom: 20px;
 }
 
