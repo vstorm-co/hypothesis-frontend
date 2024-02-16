@@ -169,7 +169,6 @@ export function PromptInput(props) {
 
     let htmlText = parser.parseFromString(targetPreview, 'text/html');
     let currentTemplates = htmlText.querySelectorAll('span.pill');
-    let currentFiles = htmlText.querySelectorAll('span.file-pill');
 
     while(currentTemplates.length > 0){
       currentTemplates.forEach(temp => {
@@ -182,6 +181,9 @@ export function PromptInput(props) {
       htmlText = parser.parseFromString(targetPreview, 'text/html');
       currentTemplates = htmlText.querySelectorAll('span.pill');
     }
+
+    htmlText = parser.parseFromString(targetPreview, 'text/html');
+    let currentFiles = htmlText.querySelectorAll('span.file-pill');
 
     currentFiles.forEach(file => {
       let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
@@ -202,7 +204,6 @@ export function PromptInput(props) {
   
       let htmlText = parser.parseFromString(targetPreview, 'text/html');
       let currentTemplates = htmlText.querySelectorAll('span.pill');
-      let currentFiles = htmlText.querySelectorAll('span.file-pill');
       let lastPreview = targetPreview;
   
       while(currentTemplates.length > 0){
@@ -216,7 +217,10 @@ export function PromptInput(props) {
   
         htmlText = parser.parseFromString(targetPreview, 'text/html');
         currentTemplates = htmlText.querySelectorAll('span.pill');
-      }
+      };
+
+      htmlText = parser.parseFromString(targetPreview, 'text/html');
+      let currentFiles = htmlText.querySelectorAll('span.file-pill');
   
       currentFiles.forEach(file => {
         let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
