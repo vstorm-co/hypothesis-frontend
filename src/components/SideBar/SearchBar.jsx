@@ -33,7 +33,7 @@ export function SearchBar() {
   }
 
   function setTimeSpanToAll() {
-    dispatch(uiActions.setFiltersSortBy(''));
+    dispatch(uiActions.setFiltersSortBy('-updated_at'));
     dispatch(getChatsData());
     dispatch(getTemplatesData());
   }
@@ -54,7 +54,7 @@ export function SearchBar() {
             <img src={plus} alt="" />
           </div>}
       </div>
-      <div className={'flex gap-2 flex-wrap ' + (ui.searchFilters.visibility != 'all' || ui.searchFilters.sortBy != '' ? 'mt-4' : '')}>
+      <div className={'flex gap-2 flex-wrap ' + (ui.searchFilters.visibility != 'all' || ui.searchFilters.sortBy != '-updated_at' ? 'mt-4' : '')}>
         {ui.searchFilters.visibility != 'all' &&
           <div className={'flex'}>
             {ui.searchFilters.visibility === 'just_me' &&
@@ -79,7 +79,7 @@ export function SearchBar() {
             }
           </div>}
         <div className={'flex'}>
-          {ui.searchFilters.sortBy === '-updated_at' &&
+          {/* {ui.searchFilters.sortBy === '-updated_at' &&
             <div className={'flex'}>
               <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>
                 Newest
@@ -88,7 +88,7 @@ export function SearchBar() {
                 <img src={plus} className={'transform rotate-45'} alt="" />
               </div>
             </div>
-          }
+          } */}
           {ui.searchFilters.sortBy === 'updated_at' &&
             <div className={'flex'}>
               <div className={'px-2 font-normal text-sm leading-6 border border-[#595959] rounded-l'}>

@@ -20,7 +20,7 @@ const uiSlice = createSlice({
     templatesLoading: false,
     searchFilters: {
       visibility: 'all',
-      sortBy: '',
+      sortBy: '-updated_at',
       searchFor: '',
     },
   },
