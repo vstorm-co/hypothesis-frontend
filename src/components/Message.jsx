@@ -63,7 +63,7 @@ export function Message(props) {
 
     try {
       const msg = await sendRequest();
-      props.handleUpdateMessage(promptArray);
+      localStorage.setItem("ANT_PromptsToSend", JSON.stringify(promptArray));
     } catch (err) {
       console.log(err);
     }

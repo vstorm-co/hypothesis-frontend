@@ -75,6 +75,12 @@ export function Chat(props) {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
 			}
 		}, 300);
+
+		let promptsToSend = JSON.parse(localStorage.getItem("ANT_PromptsToSend"));
+		if(promptsToSend){
+			localStorage.removeItem("ANT_PromptsToSend");
+			sendMsgTwo(promptsToSend);
+		}
 	}, [currentChat.messages])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_WS_URL}/${props.matches.id}?token=${user.access_token}`, {
@@ -83,14 +89,10 @@ export function Chat(props) {
 			activeUsers.value = [];
 
 			let promptsToSend = JSON.parse(localStorage.getItem("ANT_PromptsToSend"));
-
 			if (promptsToSend) {
+				localStorage.removeItem("ANT_PromptsToSend");
 				sendMsgTwo(promptsToSend);
 			}
-
-			setTimeout(() => {
-				localStorage.removeItem("ANT_PromptsToSend");
-			}, 500);
 		},
 		onClose: (event) => {
 		},
