@@ -183,20 +183,11 @@ export function PromptInput(props) {
     }
 
     htmlText = parser.parseFromString(targetPreview, 'text/html');
-    let currentFiles = htmlText.querySelectorAll('span.file-pill');
-
-    currentFiles.forEach(file => {
-      let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
-      console.log(fileTarget);
-      targetPreview = targetPreview.replace(file.outerHTML, fileTarget.content);
-    })
-
     preview.value = targetPreview;
   }
 
   function handleSubmit() {
     if(showPrePill.value || showUseFile.value){
-      console.log("GIT");
     }else {
       const parser = new DOMParser();
   
@@ -223,8 +214,7 @@ export function PromptInput(props) {
       let currentFiles = htmlText.querySelectorAll('span.file-pill');
   
       currentFiles.forEach(file => {
-        let fileTarget = userFiles.find(f => f.uuid === file.dataset.content);
-        targetPreview = targetPreview.replace(file.outerHTML, fileTarget.optimized_content);
+        targetPreview = targetPreview.replace(file.outerHTML, `<<file:${file.dataset.content}>>`);
       })
   
       let returnBoxes = htmlText.querySelectorAll('div.return-box, span.return-box-new');
@@ -242,14 +232,14 @@ export function PromptInput(props) {
       if(promptArray.length > 1){
         promptArray = promptArray.map((p, index) => {
           return {
-            prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+            prompt: p.replace("&nbsp;", "").replace("<br>", "").trim(),
             html: htmlArray[index].replace("&nbsp;", "").trim(),
           };
         });
       } else {
         promptArray = promptArray.map((p, index) => {
           return {
-            prompt: p.replace("&nbsp;", "").replace("<br>", "").replace(/(<([^>]+)>)/gi, "").trim(),
+            prompt: p.replace("&nbsp;", "").replace("<br>", "").trim(),
             html: input.value.replace("&nbsp;", "").trim(),
           };
         });
