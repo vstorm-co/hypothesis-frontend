@@ -1,0 +1,143 @@
+import { useDispatch } from 'react-redux';
+import papaya from '../assets/papaya.png'
+import { uiActions } from '../store/ui-slice';
+import { route } from 'preact-router';
+
+export function Home(){
+  const dispatch = useDispatch();
+
+  dispatch(uiActions.setHideSideBar(true));
+
+  return (
+    <div className={'w-full min-h-[100vh] bg-[#202020]'}>
+      <div className={'w-[720px] mx-auto'}>
+        <div className={'py-9 flex items-center'}>
+            <img src={papaya} className={'w-6'} alt="" />
+            <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+            <div className={'text-sm leading-6 ml-4 text-[#747474]'}>
+              Your Team and AI Everywhere
+            </div>
+            <div className={'ml-auto mr-2'}>
+              <button onClick={() => {route('/auth')}} className={'text-sm leading-6 text-white font-bold'}>
+                <span className={'font-bold'}>Log in</span>
+              </button>
+            </div>
+        </div>
+        <div className={'px-8 pb-8 bg-white rounded text-[#202020]'}>
+          <div className={'mx-auto'}>
+            <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
+                Welcome to Papaya
+            </div>
+            <div className={'text-sm leading-6 mt-4'}>
+              Our platform is designed to transform how individuals, teams, and communities interact with each other and with AI to accomplish collective tasks more efficiently. Below are the details of how our platform functions and how we handle data responsibly.
+            </div>
+            <div className={'mt-4 text-lg leading-6'}>
+              <h3 className={'text-[#595959]'}>What Papaya Does With User Data</h3>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Individual Use</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Personalized AI Chat: Engage with our AI in one-on-one conversations.</li>
+                  <li>Template Creation: Craft and save your custom prompt templates.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Collaborative Use</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Real-Time Collaboration: Work with teammates in live chat sessions with AI.</li>
+                  <li>Joint Template Construction: Create and refine templates together, in real-time.</li>
+                  <li>Sharing Capability: Share your templates with others for collaborative use.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Team Usage</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Content Management: Store and retrieve reference prompts and templates.</li>
+                  <li>Discoverability: Search and clone existing templates within your organization.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Managerial Use</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Oversight: Monitor team usage and direct template application to meet objectives.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Community Use</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Large-Scale Interaction: Participate in community-wide discussions and template development.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>Enhanced Functionalities</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Google Drive Integration: Securely upload files through authenticated Google Drive sessions.</li>
+                  <li>Output Utility: Easily copy AI-generated content in various formats with one click.</li>
+                </ul>
+              </p>
+              <p className={'mt-4 text-sm leading-6'}>
+                <span className={'font-bold'}>How Papaya Enhances User Functionality</span>
+                <ul className={'list-disc pl-5'}>
+                  <li>Real-Time Interaction: Our platform allows for immediate collaboration, enhancing team synergy and productivity.</li>
+                  <li>Template System: Save time with reusable prompts, creating consistent and efficient workflows.</li>
+                  <li>Search and Discovery: Quickly access past conversations and materials, streamlining learning and task management.</li>
+                </ul>
+              </p>
+            </div>
+            <div className={'mt-4 text-lg leading-6'}>
+              <h3 className={'text-[#595959]'}>Privacy Policy</h3>
+              <div className={'text-sm leading-6 mt-4'}>
+                Your data is your own, and at Papaya, we handle it with the care and respect it deserves. Our Privacy Policy is uncomplicated:
+                <ul className={'list-disc pl-5 mt-4'}>
+                  <li>
+                    Data Collection: We collect only the data necessary to provide you with a fully functional Papaya service.
+                  </li>
+                  <li>Data Usage: We use your data to support platform functionalities such as chat interactions, template creation, and Google Drive integrations.</li>
+                  <li>Data Protection: Using state-of-the-art security measures, we safeguard your data against unauthorized access and data breaches.</li>
+                  <li>User Rights: You have the right to access your data, request a correction or deletion, or restrict its usage as per our policy's guidance.</li>
+                </ul>
+              </div>
+            </div>
+            <div className={'mt-4 text-lg leading-6'}>
+              <h3 className={'text-[#595959]'}>Data Use Transparency</h3>
+              <div className={'text-sm leading-6 mt-4'}>
+                We’re committed to being open about how we use your data:
+                <ul className={'list-disc pl-5 mt-4'}>
+                  <li>
+                  Google Account Access: Access to your Google account is required strictly for identity verification and enabling Google Drive integration.
+                  </li>
+                  <li>Purpose-Specific Use: Your data is accessed and used explicitly for providing you with the services of real-time collaboration, template management, and file handling—as described on our platform.</li>
+                  <li>No Third-Party Selling: Your data is yours; we never sell it to third parties, nor do we use it for advertising.</li>
+                </ul>
+              </div>
+            </div>
+            <div className={'mt-4 text-lg leading-6'}>
+              <h3 className={'text-[#595959]'}>Terms of Use</h3>
+              <div className={'text-sm leading-6 mt-4'}>
+                By accessing or using Papaya, you agree to abide by our Terms of Use:
+                <ul className={'list-disc pl-5 mt-4'}>
+                  <li>
+                  Compliant Usage: You will use Papaya in full compliance with the laws and regulations applicable to you.
+                  </li>
+                  <li>Content Responsibility: You are responsible for the content you generate and share on Papaya, ensuring it does not infringe on any laws or third-party rights.</li>
+                  <li>Acceptable Use: You agree not to misuse Papaya’s services or use them to conduct any unlawful activities.</li>
+                  <li>Modification Rights: We reserve the right to change or update these terms at any time. Continuous use of the platform after changes implies acceptance of the new terms.</li>
+                </ul>
+              </div>
+              <div className={'text-sm leading-6 mt-4'}>
+                Your trust is invaluable to us as we build a platform that fosters open communication and collaboration. Thank you for being a part of Papaya's journey.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={'flex w-full items-center justify-center gap-4 py-2 my-4'}>
+          <div className={'text-sm leading-4 text-[#747474]'}>
+            © 2024 Papaya
+          </div>
+          <div className={'text-sm leading-4 text-[#747474]'}>
+            All Right Reserved
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
