@@ -23,7 +23,7 @@ const uiSlice = createSlice({
       sortBy: '-updated_at',
       searchFor: '',
     },
-    fileUpdating: true,
+    fileUpdating: false,
   },
   reducers: {
     toggleToast(state, action) {
