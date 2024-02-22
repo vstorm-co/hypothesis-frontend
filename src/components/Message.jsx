@@ -125,6 +125,7 @@ export function Message(props) {
                   handleSecondButton={() => toggleEdit()}
 
                   UseTemplatePosition={'left'}
+                  UseFilePosition={'right'}
                   InitialInput={props.Message.content_html}
                   forceFocus={EditEnabled.value}
                 />

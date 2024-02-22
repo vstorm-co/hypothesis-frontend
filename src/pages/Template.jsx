@@ -112,6 +112,7 @@ export function Template(props) {
 
                 DisableProcessing={true}
                 UseTemplatePosition={'left'}
+                UseFilePosition={'right'}
                 InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
                 forceFocus={currentTemplate.uuid}
               />

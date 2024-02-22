@@ -240,6 +240,10 @@ export function Chat(props) {
 		}
 	}
 
+	function handleScroll(e) {
+		console.log(e)
+	}
+
 	if (!currentChat.uuid) {
 		return (
 			<div className={'w-full h-[100vh] flex justify-center pt-20'}>
@@ -288,7 +292,7 @@ export function Chat(props) {
 								<ChatToolBar />
 							</div>
 						</div>
-						<div className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
+						<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
 							{currentChat.messages?.length === 0 &&
 								<div>
 									<Message Message={MockMessage} />

@@ -133,7 +133,7 @@ export function UseFile(props) {
           </svg>
         </div>
       </div>
-      <div className={"absolute w-[320px] border rounded bg-white z-50 transform scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 right-10')}>
+      <div className={"absolute w-[320px] border rounded bg-white z-50 transform scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 left-10')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={fileImport} alt="" />
