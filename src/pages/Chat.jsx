@@ -20,6 +20,7 @@ export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
 	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
+	const fileUpdating = useSelector(state => state.ui.fileUpdating);
 
 	const blockSending = useSignal(false);
 	const forceInputFocus = useSignal(0);
@@ -316,16 +317,23 @@ export function Chat(props) {
 								clearInputOnSubmit={true}
 								forceFocus={forceInputFocus.value}
 							/>
-							<div className={'absolute bottom-0 text-[#747474] text-xs self-start leading-6 py-2'}>
-								{WhosTyping.value.map(u => (
-									<span>{u.name} </span>
-								))}
-								{WhosTyping.value.length > 0 &&
-									<span>
+							<div className={'absolute bottom-0 text-[#747474] text-xs self-start py-2'}>
+                {fileUpdating &&
+                  <div className={'text-[#EF4444]'}>
+                    Papaya is refreshing content of file included in this prompt. It may take some time to complete this proccess
+                  </div>
+                }
+								<div>
+                  {WhosTyping.value.map(u => (
+                    <span>{u.name} </span>
+                  ))}
+                  {WhosTyping.value.length > 0 &&
+                    <span>
 
-										is typing...
-									</span>
-								}
+                      is typing...
+                    </span>
+                  }
+                </div>
 							</div>
 						</div>
 					</div>

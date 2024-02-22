@@ -57,6 +57,14 @@ export function App() {
 				store.dispatch(getChatsData());
 			} else if (json_data.type === 'template-changed') {
 				store.dispatch(getTemplatesData());
+			} else if (json_data.type === 'optimizing-user-file-content') {
+				if(json_data.id === state.chats.currentChat.uuid){
+					store.dispatch(uiActions.toggleFileUpdating(true));
+				}
+			} else if (json_data.type === 'user-file-updated') {
+				if(json_data.id === state.chats.currentChat.uuid){
+					store.dispatch(uiActions.toggleFileUpdating(false));
+				}
 			}
 		}
 	});

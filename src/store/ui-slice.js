@@ -23,6 +23,7 @@ const uiSlice = createSlice({
       sortBy: '-updated_at',
       searchFor: '',
     },
+    fileUpdating: true,
   },
   reducers: {
     toggleToast(state, action) {
@@ -30,6 +31,9 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    toggleFileUpdating(state, action) {
+      state.fileUpdating = action.payload;
     },
     setFiltersVisibility(state, action) {
       state.searchFilters.visibility = action.payload.visibility;
