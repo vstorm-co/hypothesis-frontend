@@ -84,33 +84,6 @@ export function Home(){
               </p>
             </div>
             <div className={'mt-4 text-lg leading-6'}>
-              <h3 className={'text-[#595959]'}>Privacy Policy</h3>
-              <div className={'text-sm leading-6 mt-4'}>
-                Your data is your own, and at Papaya, we handle it with the care and respect it deserves. Our Privacy Policy is uncomplicated:
-                <ul className={'list-disc pl-5 mt-4'}>
-                  <li>
-                    Data Collection: We collect only the data necessary to provide you with a fully functional Papaya service.
-                  </li>
-                  <li>Data Usage: We use your data to support platform functionalities such as chat interactions, template creation, and Google Drive integrations.</li>
-                  <li>Data Protection: Using state-of-the-art security measures, we safeguard your data against unauthorized access and data breaches.</li>
-                  <li>User Rights: You have the right to access your data, request a correction or deletion, or restrict its usage as per our policy's guidance.</li>
-                </ul>
-              </div>
-            </div>
-            <div className={'mt-4 text-lg leading-6'}>
-              <h3 className={'text-[#595959]'}>Data Use Transparency</h3>
-              <div className={'text-sm leading-6 mt-4'}>
-                We’re committed to being open about how we use your data:
-                <ul className={'list-disc pl-5 mt-4'}>
-                  <li>
-                  Google Account Access: Access to your Google account is required strictly for identity verification and enabling Google Drive integration.
-                  </li>
-                  <li>Purpose-Specific Use: Your data is accessed and used explicitly for providing you with the services of real-time collaboration, template management, and file handling—as described on our platform.</li>
-                  <li>No Third-Party Selling: Your data is yours; we never sell it to third parties, nor do we use it for advertising.</li>
-                </ul>
-              </div>
-            </div>
-            <div className={'mt-4 text-lg leading-6'}>
               <h3 className={'text-[#595959]'}>Terms of Use</h3>
               <div className={'text-sm leading-6 mt-4'}>
                 By accessing or using Papaya, you agree to abide by our Terms of Use:
@@ -122,6 +95,9 @@ export function Home(){
                   <li>Acceptable Use: You agree not to misuse Papaya’s services or use them to conduct any unlawful activities.</li>
                   <li>Modification Rights: We reserve the right to change or update these terms at any time. Continuous use of the platform after changes implies acceptance of the new terms.</li>
                 </ul>
+              </div>
+              <div className={'text-sm leading-6 mt-4'}>
+                For additional info go to <a target="#blank" className={'underline'} href="/privacy-policy">Privacy Policy & Data Use Transparency</a>
               </div>
               <div className={'text-sm leading-6 mt-4'}>
                 Your trust is invaluable to us as we build a platform that fosters open communication and collaboration. Thank you for being a part of Papaya's journey.

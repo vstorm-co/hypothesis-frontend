@@ -11,6 +11,7 @@ import useWebSocket from 'react-use-websocket';
 import store from './store/index';
 
 import { Home } from './pages/Home.jsx';
+import { PrivacyPolicy } from './pages/PrivacyPolicy.jsx';
 import { SideBar } from './components/SideBar/SideBar';
 import { Authorize } from "./pages/Authorize";
 import { MockChat } from './pages/MockChat';
@@ -78,6 +79,7 @@ export function App() {
 						<Router>
 							<MockChat path="/" />
 							<Home path="/home" />
+							<PrivacyPolicy path="/privacy-policy" />
 							<Authorize path="/auth" />
 							<RefreshToken path="/refresh-token" />
 							<SetUp path="/setup" />
