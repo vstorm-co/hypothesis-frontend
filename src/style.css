@@ -314,6 +314,11 @@ body {
 	margin-bottom: 5px;
 }
 
+.bot-response ul li p,
+.bot-response ol li p {
+	padding-bottom: 0;
+}
+
 ul.tokens {
 	padding-top: 0px;
 }
