@@ -151,23 +151,25 @@ export function Message(props) {
     return (
       <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4">
         <div className="rounded flex p-2 w-full overflow-x-visible">
-          <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} className={"w-8 h-8 border bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
-            <img src={papaya} className="w-3" alt="" />
-            <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
-            {/* <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
-              <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
-              <div className={'mt-2'}>
-                <span className={'font-bold text-[#747474]'}>Tokens:</span>
-                <ul className={'list-disc tokens mt-0.5'}>
-                  <li>{props.Message.usage?.prompt_tokens_count} prompt tokens (${props.Message.usage?.prompt_value.toFixed(3)})</li>
-                  <li>{props.Message.usage?.completion_tokens_count} completion tokens (${props.Message.usage?.completion_value.toFixed(3)})</li>
-                  <li>{props.Message.usage?.total_tokens_count} total tokens (${props.Message.usage?.total_value.toFixed(3)})</li>
-                </ul>
-              </div>
-              {props.Message.elapsed_time && 
-                <div className={'mt-2'}><span className={'font-bold text-[#747474]'}>API Time:</span> {props.Message.elapsed_time.toFixed(2)} seconds</div>
-              }
-            </div> */}
+          <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
+            <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
+              <img src={papaya} className="w-3" alt="" />
+              <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
+              {/* <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
+                <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
+                <div className={'mt-2'}>
+                  <span className={'font-bold text-[#747474]'}>Tokens:</span>
+                  <ul className={'list-disc tokens mt-0.5'}>
+                    <li>{props.Message.usage?.prompt_tokens_count} prompt tokens (${props.Message.usage?.prompt_value.toFixed(3)})</li>
+                    <li>{props.Message.usage?.completion_tokens_count} completion tokens (${props.Message.usage?.completion_value.toFixed(3)})</li>
+                    <li>{props.Message.usage?.total_tokens_count} total tokens (${props.Message.usage?.total_value.toFixed(3)})</li>
+                  </ul>
+                </div>
+                {props.Message.elapsed_time && 
+                  <div className={'mt-2'}><span className={'font-bold text-[#747474]'}>API Time:</span> {props.Message.elapsed_time.toFixed(2)} seconds</div>
+                }
+              </div> */}
+            </div>
           </div>
           <div className={'flex group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>

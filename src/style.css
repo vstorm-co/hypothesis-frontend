@@ -311,7 +311,7 @@ body {
 
 .bot-response ul li,
 .bot-response ol li {
-	margin-bottom: 20px;
+	margin-bottom: 5px;
 }
 
 ul.tokens {
