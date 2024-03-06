@@ -10,6 +10,7 @@ import braces from '../assets/braces.svg';
 import { InlineTemplate } from "./InlineTemplate";
 import { UseFile } from "./ToolBars/ChatToolbar/UseFile";
 import { route } from "preact-router";
+import { SmartAnnotate } from "./ToolBars/ChatToolbar/SmartAnnotate";
 
 
 
@@ -412,6 +413,7 @@ export function PromptInput(props) {
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
           <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={ props.UseFilePosition ? props.UseFilePosition : 'top'} />
+          <SmartAnnotate />
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
