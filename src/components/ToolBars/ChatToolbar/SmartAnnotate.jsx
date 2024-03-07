@@ -8,7 +8,7 @@ import { getProfileInfo, hSliceActions } from '../../../store/h-slice';
 import { Loading } from '../../Loading';
 
 export function SmartAnnotate(props) {
-  const visible = useSignal(true);
+  const visible = useSignal(false);
   const token = useSignal('');
   const infoLoading = useSignal(false);
 
