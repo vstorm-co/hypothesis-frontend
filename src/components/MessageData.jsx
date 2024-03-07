@@ -1,7 +1,6 @@
 export function MessageData(props) {
     function timestamp(){
         let time = new Date(props.Message.created_at).toUTCString()
-        console.log(time)
         return time;
     }
 

@@ -1,10 +1,19 @@
 import arrow from '../../../assets/arrow.svg';
-import angleDown from '../../../assets/angle-down.svg'
+import angleDown from '../../../assets/angle-down.svg';
+import checkGreen from '../../../assets/check-green.svg';
 import { useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfileInfo, hSliceActions } from '../../../store/h-slice';
+import { Loading } from '../../Loading';
 
 export function SmartAnnotate(props) {
-  const visible = useSignal(false);
+  const visible = useSignal(true);
+  const token = useSignal('');
+  const infoLoading = useSignal(false);
+
+  const dispatch = useDispatch();
+  const profileInfo = useSelector(state => state.h.profileInfo);
 
   function outsideClickHanlder(ref) {
     useEffect(() => {
@@ -21,12 +30,27 @@ export function SmartAnnotate(props) {
     }, [ref])
   }
 
+  const onInput = event => {
+    dispatch(hSliceActions.resetInfo());
+    token.value = event.currentTarget.value
+  };
+
   const FormRef = useRef(null);
   outsideClickHanlder(FormRef);
 
 
   function toggleVisible(){
     visible.value = !visible.value;
+  }
+
+  async function handleSubmit(){
+    if(!profileInfo.userid){
+      infoLoading.value = true;
+      await dispatch(getProfileInfo({token: token.value}));
+      infoLoading.value = false;
+    } else {
+      console.log("oh man");
+    }
   }
 
   return (
@@ -58,67 +82,78 @@ export function SmartAnnotate(props) {
             </div>
             <div className={'mt-4'}>
               <div className={'text-xs text-[#747474] mb-1 flex justify-between'}>
-                <div className="font-bold">
+                <div className="font-bold flex">
                   API Key
+                  <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null  ? '' : 'hidden')} alt="" />
                 </div>
                 <div className={'flex gap-1'}>
-                  <a className={'underline'} href="#">Get Key</a><img src={arrow} alt="" />
+                  <a className={'underline'} target={'_blank'} href="https://hypothes.is/profile/developer">Get Key</a><img src={arrow} alt="" />
                 </div>
               </div>
-              <input className={'inputtext w-full'} placeholder={'Enter your key...'} type="text" />
+              <input value={token.value} onInput={onInput} className={'inputtext w-full'} placeholder={'Enter your key...'} type="text" />
+              <div className={'text-red-500 text-xs pl-1 mt-0.5 ' + (profileInfo.userid === null && profileInfo.groups.length ? '' : 'hidden')}>
+                Wrong api key
+              </div>
             </div>
-            <div className={'mt-4'}>
-              <div className={'flex gap-4'}>
+            <div className={'mt-4 flex justify-center ' + (infoLoading.value ? '' : 'hidden')}>
+              <Loading />
+            </div>
+            <div className={profileInfo.userid ? '' : 'hidden'}>
+              <div className={'mt-4'}>
+                <div className={'flex gap-4'}>
+                  <div className={'w-full'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1">
+                      Group
+                    </div>
+                    <div class="relative">
+                      <select class="">
+                        <option value="" selected disabled>Select group</option>
+                        {profileInfo.groups?.map(g => (
+                          <option value={g.name}>{g.name}</option>
+                        ))}
+                      </select>
+                      <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                    </div>
+                  </div>
+                  <div className={'w-full'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1">
+                      Tags <span className={'font-normal'}>(optional)</span>
+                    </div>
+                    <input className={'inputtext w-full'} placeholder={'Enter tags (comma-separated)...'} type="text" />
+                  </div>
+                </div>
+              </div>
+              <div className={'mt-4'}>
+                <div className="text-xs font-bold text-[#747474] mb-1">
+                  URL to Annotate
+                </div>
+                <input className={'inputtext w-full'} placeholder={'Enter URL to annotate...'} type="text" />
+              </div>
+              <div className={'mt-4'}>
                 <div className={'w-full'}>
                   <div className="text-xs font-bold text-[#747474] mb-1">
-                    Group
+                    Response Template <span className={'font-normal'}>(optional)</span>
                   </div>
                   <div class="relative">
                     <select class="">
                       <option value="" selected disabled>Select group</option>
-                      <option value="Yes">Yes</option>
+                      
                     </select>
                     <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
                   </div>
                 </div>
-                <div className={'w-full'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1">
-                    Tags <span className={'font-normal'}>(optional)</span>
-                  </div>
-                  <input className={'inputtext w-full'} placeholder={'Enter tags (comma-separated)...'} type="text" />
-                </div>
               </div>
-            </div>
-            <div className={'mt-4'}>
-              <div className="text-xs font-bold text-[#747474] mb-1">
-                URL to Annotate
-              </div>
-              <input className={'inputtext w-full'} placeholder={'Enter URL to annotate...'} type="text" />
-            </div>
-            <div className={'mt-4'}>
-              <div className={'w-full'}>
+              <div className={'mt-4'}>
                 <div className="text-xs font-bold text-[#747474] mb-1">
-                  Response Template <span className={'font-normal'}>(optional)</span>
+                  Prompt
                 </div>
-                <div class="relative">
-                  <select class="">
-                    <option value="" selected disabled>Select group</option>
-                    <option value="Yes">Yes</option>
-                  </select>
-                  <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
-                </div>
+                <textarea className={'inputtext w-full'} placeholder={'Enter your prompt...'} type="text" />
               </div>
-            </div>
-            <div className={'mt-4'}>
-              <div className="text-xs font-bold text-[#747474] mb-1">
-                Prompt
-              </div>
-              <textarea className={'inputtext w-full'} placeholder={'Enter your prompt...'} type="text" />
             </div>
             <div className={'mt-4 pb-2'}>
               <div className={'flex gap-1 mt-2 justify-end'}>
-                <button type="button" className="btn-second">Cancel</button>
-                <button type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Create Annotations</button>
+                <button type="button" onClick={() => {visible.value = false}} className="btn-second">Cancel</button>
+                <button onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
               </div>
             </div>
           </div>

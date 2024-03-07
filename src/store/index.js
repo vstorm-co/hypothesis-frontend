@@ -6,6 +6,7 @@ import uiSlice from './ui-slice';
 import organizationsSlice from './organizations-slice';
 import templatesSlice from './templates-slice';
 import filesSlice from './files-slice.js';
+import hSlice from './h-slice';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     organizations: organizationsSlice.reducer,
     templates: templatesSlice.reducer,
     files: filesSlice.reducer,
+    h: hSlice.reducer,
   }
 })
 
