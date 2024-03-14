@@ -203,7 +203,7 @@ export function Message(props) {
                 <div className={'text-sm leading-6 text-[#747474] bg-[#EBEBEB] py-1 px-2 flex items-center rounded'}>
                   Only Visible to You
                 </div>
-                {props.Message.done && <div className={'flex'}>
+                {true && <div className={'flex'}>
                   <button disabled type="button" className="btn-second">Edit</button>
                   <a href={props.Message.content_html ? props.Message.content_html : '#'} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
@@ -212,7 +212,7 @@ export function Message(props) {
                     </svg>
                   </a>
                 </div>}
-                {!props.Message.done && <div className={'flex'}>
+                {false && <div className={'flex'}>
                   <button disabled={true} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     Creating
                     <span className={'ml-2'}>

@@ -28,7 +28,7 @@ export function SmartAnnotate(props) {
   function outsideClickHanlder(ref) {
     useEffect(() => {
       function handleClickOutside(e) {
-        if (ref.current && !ref.current.contains(e.target)) {
+        if (ref.current && !ref.current.contains(e.target) && !annotationLoading.value) {
           visible.value = false;
         }
       }
