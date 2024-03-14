@@ -183,7 +183,7 @@ export function Message(props) {
         </div>
       </div>
     )
-  } else if (props.Message.created_by === 'annotate') {
+  } else if (props.Message.created_by === 'annotation') {
     return (
       <div className="flex my-4 border-[#DBDBDB] border border-dashed rounded-lg">
         <div className="rounded flex p-2 pb-3 w-full overflow-x-visible">
