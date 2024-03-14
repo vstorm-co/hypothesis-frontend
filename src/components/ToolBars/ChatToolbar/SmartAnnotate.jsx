@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAnnotations, getProfileInfo, hSliceActions } from '../../../store/h-slice';
 import { Loading } from '../../Loading';
+import { getChatsData } from '../../../store/chats-slice';
 
 export function SmartAnnotate(props) {
   const currentChat = useSelector(state => state.chats.currentChat)
@@ -93,6 +94,8 @@ export function SmartAnnotate(props) {
       await dispatch(createAnnotations(data));
       annotationLoading.value = false;
       visible.value = false;
+
+      dispatch(getChatsData(currentChat.uuid))
     }
   }
 

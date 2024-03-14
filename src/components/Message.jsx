@@ -13,6 +13,7 @@ import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
 import { PromptInput } from './PromptInput';
 import { route } from 'preact-router';
 import { MessageData } from './MessageData';
+import { Loading } from './Loading';
 
 
 export function Message(props) {
@@ -107,7 +108,7 @@ export function Message(props) {
 
   if (props.Message.created_by === 'user') {
     return (
-      <div className={'flex my-4 group message-box'}>
+      <div className={'flex mt-2 group message-box'}>
         <div class={'bg-[#F2F2F2] max-w-[85%] mr-4 p-2 pr-3 relative rounded-lg ' + (EditEnabled.value ? 'w-full' : '')}>
           <div onMouseLeave={() => setShowSaveAs(false)} className="items-start">
             <div className="flex items-start">
@@ -150,7 +151,7 @@ export function Message(props) {
     )
   } else if (props.Message.created_by === 'bot') {
     return (
-      <div onMouseLeave={() => setShowCopyAs(false)} className="flex my-4">
+      <div onMouseLeave={() => setShowCopyAs(false)} className="flex mt-2">
         <div className="rounded flex p-2 w-full overflow-x-visible">
           <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
             <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
@@ -185,7 +186,7 @@ export function Message(props) {
     )
   } else if (props.Message.created_by === 'annotation') {
     return (
-      <div className="flex my-4 border-[#DBDBDB] border border-dashed rounded-lg">
+      <div className="flex my-2 border-[#DBDBDB] border border-dashed rounded-lg">
         <div className="rounded flex p-2 pb-3 w-full overflow-x-visible">
           <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
             <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
@@ -198,19 +199,27 @@ export function Message(props) {
               <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{props.Message.content}</ReactMarkdown>
             </div>
             <div className={'w-full'}>
-              <div className={'flex gap-1 mt-2 w-full justify-between'}>
+              <div className={'flex gap-1 w-full justify-between'}>
                 <div className={'text-sm leading-6 text-[#747474] bg-[#EBEBEB] py-1 px-2 flex items-center rounded'}>
                   Only Visible to You
                 </div>
-                <div className={'flex'}>
-                  {/* <button type="button" onClick={() => props.handleSecondButton()} className="btn-second">Edit</button> */}
-                  <button type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                {props.Message.done && <div className={'flex'}>
+                  <button disabled type="button" className="btn-second">Edit</button>
+                  <a href={props.Message.content_html ? props.Message.content_html : '#'} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="#FFFFFF" className={'ml-2'} xmlns="http://www.w3.org/2000/svg">
                       <path d="M11 0C11.5128 0 11.9355 0.38604 11.9933 0.883379L12 1V7C12 7.55228 11.5523 8 11 8C10.4872 8 10.0645 7.61396 10.0067 7.11662L10 7V3.414L1.70711 11.7071C1.31658 12.0976 0.683418 12.0976 0.292893 11.7071C-0.0675907 11.3466 -0.0953203 10.7794 0.209705 10.3871L0.292893 10.2929L8.584 2H5C4.48716 2 4.06449 1.61396 4.00673 1.11662L4 1C4 0.487164 4.38604 0.0644928 4.88338 0.00672773L5 0H11Z" fill="#FFFFFF" />
                     </svg>
+                  </a>
+                </div>}
+                {!props.Message.done && <div className={'flex'}>
+                  <button disabled={true} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                    Creating
+                    <span className={'ml-2'}>
+                      <Loading />
+                    </span>
                   </button>
-                </div>
+                </div>}
               </div>
             </div>
           </div>

@@ -294,7 +294,8 @@ export function Chat(props) {
 							</div>
 						</div>
 						<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
-							{/* <Message Message={{created_by: 'annotate', content: 'Created 6 annotations from https://www.npr.org/2024/02/15/1196978636/what-to-do-with-your-childhood-stuff, with the prompt: “Summarize the most important facts about this article”.'}} /> */}
+							{/* <Message Message={{ done: true, created_by: 'annotation', content: 'Created 6 annotations from https://www.npr.org/2024/02/15/1196978636/what-to-do-with-your-childhood-stuff, with the prompt: “Summarize the most important facts about this article”.' }} /> */}
+							{/* <Message Message={{ created_by: 'annotation', content: 'Creating...' }} /> */}
 							{currentChat.messages?.length === 0 &&
 								<div>
 									<Message Message={MockMessage} />
