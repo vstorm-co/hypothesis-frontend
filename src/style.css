@@ -30,7 +30,7 @@
 		font-weight: bold;
 	}
 
-	h4{
+	h4 {
 		display: block;
 		font-size: 1rem;
 		line-height: 1.5rem;
@@ -39,7 +39,7 @@
 		font-weight: bold;
 	}
 
-	h5{
+	h5 {
 		display: block;
 		font-size: .83rem;
 		line-height: 1.33rem;
@@ -48,7 +48,7 @@
 		font-weight: bold;
 	}
 
-	h6{
+	h6 {
 		display: block;
 		font-size: .67rem;
 		line-height: 1.17rem;
@@ -57,12 +57,12 @@
 		font-weight: bold;
 	}
 
-	.bot-response h1, 
-	.bot-response h2, 
-	.bot-response h3, 
-	.bot-response h4, 
+	.bot-response h1,
+	.bot-response h2,
+	.bot-response h3,
+	.bot-response h4,
 	.bot-response h5,
-	.bot-response h6{
+	.bot-response h6 {
 		margin: 1rem 0;
 	}
 }
@@ -104,7 +104,7 @@
 	font-weight: 900;
 }
 
-input:disabled{
+input:disabled {
 	opacity: .5;
 }
 
@@ -112,7 +112,7 @@ input:disabled{
 	line-height: 24px;
 }
 
-.write-box .pill{
+.write-box .pill {
 	cursor: pointer
 }
 
@@ -156,6 +156,7 @@ input:disabled{
 	position: relative;
 	padding-left: 24px;
 }
+
 .pill:before {
 	content: '';
 	display: inline-block;
@@ -175,6 +176,7 @@ input:disabled{
 	position: relative;
 	padding-left: 24px;
 }
+
 .file-pill:before {
 	content: '';
 	display: inline-block;
@@ -211,19 +213,23 @@ input:disabled{
 	line-height: 1.7rem;
 }
 
-.page-template .write-box,.page-template .preview-box {
+.page-template .write-box,
+.page-template .preview-box {
 	@apply max-h-[70vh];
 }
 
-.page-chat .message-box .write-box, .page-chat .message-box .preview-box{
+.page-chat .message-box .write-box,
+.page-chat .message-box .preview-box {
 	@apply max-h-full;
 }
 
-.page-start .write-box, .page-start .preview-box{
+.page-start .write-box,
+.page-start .preview-box {
 	@apply max-h-[60vh];
 }
 
-.page-chat .write-box,.page-chat .preview-box{
+.page-chat .write-box,
+.page-chat .preview-box {
 	@apply max-h-[156px];
 }
 
@@ -250,7 +256,8 @@ input:disabled{
 	line-height: 1.7rem
 }
 
-.preview-box .return-box, .preview-box .return-box-new {
+.preview-box .return-box,
+.preview-box .return-box-new {
 	height: 24px;
 	font-size: 14px;
 	line-height: 24px;
@@ -297,12 +304,13 @@ body {
 	background-color: transparent !important
 }
 
-.bot-response ul{
+.bot-response ul {
 	list-style-type: disc;
 	padding-bottom: 16px
 }
-.bot-response ol{
-	list-style-type:decimal;
+
+.bot-response ol {
+	list-style-type: decimal;
 	padding-bottom: 16px
 }
 
@@ -333,6 +341,10 @@ ul.tokens li {
 	padding-bottom: 16px;
 }
 
+.bot-response a {
+	text-decoration: underline;
+}
+
 button[disabled] {
 	opacity: .5
 }
@@ -341,23 +353,24 @@ button:active:enabled {
 	transform: translateY(2px) translateX(-2px);
 }
 
-button.btn-second{
+button.btn-second {
 	@apply text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
 }
-button.btn-second:active:enabled{
+
+button.btn-second:active:enabled {
 	box-shadow: 0 1.5px 4px #666 inset;
 	transform: translateY(2px) translateX(-2px);
 }
 
-.inputtext{
-	@apply p-2 text-sm leading-6 text-[#202020] border border-[#DBDBDB] rounded-[4px] focus:outline-none placeholder:text-[#747474] 
+.inputtext {
+	@apply p-2 text-sm leading-6 text-[#202020] border border-[#DBDBDB] rounded-[4px] focus:outline-none placeholder:text-[#747474]
 }
 
-select{
+select {
 	@apply p-2 appearance-none w-full text-sm leading-6 border border-[#DBDBDB] rounded-[4px] focus:outline-none
 }
 
-option[value=""]{
+option[value=""] {
 	@apply text-[#747474]
 }
 
