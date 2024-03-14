@@ -78,7 +78,7 @@ export function Chat(props) {
 		}, 300);
 
 		let promptsToSend = JSON.parse(localStorage.getItem("ANT_PromptsToSend"));
-		if(promptsToSend){
+		if (promptsToSend) {
 			localStorage.removeItem("ANT_PromptsToSend");
 			sendMsgTwo(promptsToSend);
 		}
@@ -117,7 +117,7 @@ export function Chat(props) {
 						dispatch(chatsActions.concatDataToMsg({ data: message }))
 					}
 				}
-				
+
 				if (!userScrolledUp.value) {
 					chatRef.current.scrollTop = chatRef.current.scrollHeight
 				}
@@ -294,6 +294,7 @@ export function Chat(props) {
 							</div>
 						</div>
 						<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
+							{/* <Message Message={{created_by: 'annotate', content: 'Created 6 annotations from https://www.npr.org/2024/02/15/1196978636/what-to-do-with-your-childhood-stuff, with the prompt: “Summarize the most important facts about this article”.'}} /> */}
 							{currentChat.messages?.length === 0 &&
 								<div>
 									<Message Message={MockMessage} />
@@ -318,22 +319,22 @@ export function Chat(props) {
 								forceFocus={forceInputFocus.value}
 							/>
 							<div className={'absolute bottom-0 text-[#747474] text-xs self-start py-2'}>
-                {fileUpdating &&
-                  <div className={'text-[#EF4444]'}>
-                    Papaya is refreshing content of file included in this prompt. It may take some time to complete this proccess
-                  </div>
-                }
+								{fileUpdating &&
+									<div className={'text-[#EF4444]'}>
+										Papaya is refreshing content of file included in this prompt. It may take some time to complete this proccess
+									</div>
+								}
 								<div>
-                  {WhosTyping.value.map(u => (
-                    <span>{u.name} </span>
-                  ))}
-                  {WhosTyping.value.length > 0 &&
-                    <span>
+									{WhosTyping.value.map(u => (
+										<span>{u.name} </span>
+									))}
+									{WhosTyping.value.length > 0 &&
+										<span>
 
-                      is typing...
-                    </span>
-                  }
-                </div>
+											is typing...
+										</span>
+									}
+								</div>
 							</div>
 						</div>
 					</div>

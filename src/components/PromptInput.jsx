@@ -16,6 +16,7 @@ import { SmartAnnotate } from "./ToolBars/ChatToolbar/SmartAnnotate";
 
 export function PromptInput(props) {
   const user = useSelector(state => state.user.currentUser);
+  const currentChat = useSelector(state => state.chats.currentChat);
   const templates = useSelector(state => state.templates.useTemplates);
   const userFiles = useSelector(state => state.files.files);
 
@@ -31,7 +32,7 @@ export function PromptInput(props) {
 
   const showUseFile = useSignal(false);
 
-  function toggleUseFile(tgl){
+  function toggleUseFile(tgl) {
     if (tgl != undefined) {
       showUseFile.value = tgl;
     } else {
@@ -171,7 +172,7 @@ export function PromptInput(props) {
     let htmlText = parser.parseFromString(targetPreview, 'text/html');
     let currentTemplates = htmlText.querySelectorAll('span.pill');
 
-    while(currentTemplates.length > 0){
+    while (currentTemplates.length > 0) {
       currentTemplates.forEach(temp => {
         if (temp.dataset.content) {
           let templateTarget = templates.find(t => t.uuid === temp.dataset.content);
@@ -188,17 +189,17 @@ export function PromptInput(props) {
   }
 
   function handleSubmit() {
-    if(showPrePill.value || showUseFile.value){
-    }else {
+    if (showPrePill.value || showUseFile.value) {
+    } else {
       const parser = new DOMParser();
-  
+
       let targetPreview = input.value;
-  
+
       let htmlText = parser.parseFromString(targetPreview, 'text/html');
       let currentTemplates = htmlText.querySelectorAll('span.pill');
       let lastPreview = targetPreview;
-  
-      while(currentTemplates.length > 0){
+
+      while (currentTemplates.length > 0) {
         lastPreview = targetPreview;
         currentTemplates.forEach(temp => {
           if (temp.dataset.content) {
@@ -206,31 +207,31 @@ export function PromptInput(props) {
             targetPreview = targetPreview.replace(temp.outerHTML, templateTarget.content_html);
           }
         });
-  
+
         htmlText = parser.parseFromString(targetPreview, 'text/html');
         currentTemplates = htmlText.querySelectorAll('span.pill');
       };
 
       htmlText = parser.parseFromString(targetPreview, 'text/html');
       let currentFiles = htmlText.querySelectorAll('span.file-pill');
-  
+
       currentFiles.forEach(file => {
         targetPreview = targetPreview.replace(file.outerHTML, `<<file:${file.dataset.content}>>`);
       })
-  
+
       let returnBoxes = htmlText.querySelectorAll('div.return-box, span.return-box-new');
-  
+
       returnBoxes.forEach(b => {
         targetPreview = targetPreview.replace(b.outerHTML, '↩');
         lastPreview = lastPreview.replace(b.outerHTML, '↩');
       });
-  
+
       targetPreview = targetPreview.replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "");
-  
+
       let promptArray = targetPreview.split('↩');
       let htmlArray = lastPreview.split('↩');
-  
-      if(promptArray.length > 1){
+
+      if (promptArray.length > 1) {
         promptArray = promptArray.map((p, index) => {
           return {
             prompt: p.replace("&nbsp;", "").replace("<br>", "").trim(),
@@ -245,18 +246,18 @@ export function PromptInput(props) {
           };
         });
       }
-  
+
       props.handleSubmitButton({ promptArray, rawInput: input.value.replace("&nbsp;", "").trim(), rawPreview: "", });
-  
+
       if (props.clearInputOnSubmit) {
         input.value = '';
         preview.value = '';
       }
-  
+
       if (props.setBlockOnSubmit) {
         props.handleSetBlock();
       }
-  
+
       promptMode.value = 'write'
 
     }
@@ -374,7 +375,7 @@ export function PromptInput(props) {
 
   }
 
-  function handleFilePicked(file){
+  function handleFilePicked(file) {
     let element = document.createElement('span');
     element.innerText = `${file.title}`;
     element.title = `${file.title}`;
@@ -412,8 +413,10 @@ export function PromptInput(props) {
         <div className={'flex'}>
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
-          <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={ props.UseFilePosition ? props.UseFilePosition : 'top'} />
-          <SmartAnnotate />
+          <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />
+          {currentChat.uuid &&
+            <SmartAnnotate />
+          }
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
@@ -423,19 +426,19 @@ export function PromptInput(props) {
             </div>
           </div>
         </div>}
-        <div
-          data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
-          spellCheck={false}
-          ref={InputRef}
-          contentEditable={promptMode.value === 'write'}
-          onKeyDown={promptMode.value === 'write' ? handleKeyDown : () => {console.log("AAAA")}}
-          onKeyUp={promptMode.value === 'write' ? handleKeyUp : () => {}}
-          onClick={promptMode.value === 'write' ? (e) => {handlePillClick(e); saveCaret()} : () => {}}
-          onInput={promptMode.value === 'write' ? e => handleOnInput(e) : () => {}}
-          dangerouslySetInnerHTML={{ __html: promptMode.value === 'write' ? input.value : preview.value }} className={"msg min-h-[72px] " + (promptMode.value === 'write' ? 'write-box' : 'preview-box')}
-        >
-          {promptMode.value === 'write' ? input.value : preview.value}
-        </div>
+      <div
+        data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
+        spellCheck={false}
+        ref={InputRef}
+        contentEditable={promptMode.value === 'write'}
+        onKeyDown={promptMode.value === 'write' ? handleKeyDown : () => { console.log("AAAA") }}
+        onKeyUp={promptMode.value === 'write' ? handleKeyUp : () => { }}
+        onClick={promptMode.value === 'write' ? (e) => { handlePillClick(e); saveCaret() } : () => { }}
+        onInput={promptMode.value === 'write' ? e => handleOnInput(e) : () => { }}
+        dangerouslySetInnerHTML={{ __html: promptMode.value === 'write' ? input.value : preview.value }} className={"msg min-h-[72px] " + (promptMode.value === 'write' ? 'write-box' : 'preview-box')}
+      >
+        {promptMode.value === 'write' ? input.value : preview.value}
+      </div>
       {/* {promptMode.value === 'write' &&
         } */}
       {/* {promptMode.value === 'preview' &&
