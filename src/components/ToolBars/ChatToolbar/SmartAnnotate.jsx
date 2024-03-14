@@ -94,9 +94,18 @@ export function SmartAnnotate(props) {
       await dispatch(createAnnotations(data));
       annotationLoading.value = false;
       visible.value = false;
-
+      resetForm();
       dispatch(getChatsData(currentChat.uuid))
     }
+  }
+
+  function resetForm() {
+    username.value = ''
+    group.value = ''
+    tags.value = ''
+    url.value = ''
+    response_template.value = ''
+    prompt.value = ''
   }
 
   return (
