@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createAnnotations, getProfileInfo, hSliceActions } from '../../../store/h-slice';
 import { Loading } from '../../Loading';
 import { getChatsData } from '../../../store/chats-slice';
+import { ResponseTemplateInput } from './SmartAnnotate/ResponseTemplateInput';
 
 export function SmartAnnotate(props) {
   const currentChat = useSelector(state => state.chats.currentChat)
@@ -88,8 +89,6 @@ export function SmartAnnotate(props) {
         room_id: currentChat.uuid,
       }
 
-      console.log(data);
-
       annotationLoading.value = true;
       await dispatch(createAnnotations(data));
       annotationLoading.value = false;
@@ -106,6 +105,10 @@ export function SmartAnnotate(props) {
     url.value = ''
     response_template.value = ''
     prompt.value = ''
+  }
+
+  function handleResponseTemplateData(data) {
+    response_template.value = data.promptArray[0].prompt;
   }
 
   return (
@@ -184,17 +187,17 @@ export function SmartAnnotate(props) {
                 </div>
                 <input value={url.value} onInput={onUrlInput} className={'inputtext w-full'} placeholder={'Enter URL to annotate...'} type="text" />
               </div>
-              <div className={'mt-4'}>
+              <div className={'mt-6'}>
                 <div className={'w-full'}>
                   <div className="text-xs font-bold text-[#747474] mb-1">
                     Response Template <span className={'font-normal'}>(optional)</span>
                   </div>
-                  <div class="relative">
-                    <select value={response_template.value} onInput={onResponseTemplateInput} class="">
-                      <option value="" selected disabled>Select template</option>
-
-                    </select>
-                    <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                  <div class="relative -mt-[25px]">
+                    <ResponseTemplateInput
+                      WSsendMessage={value => { }}
+                      handleSubmitButton={value => { handleResponseTemplateData(value) }}
+                    // clearInputOnSubmit={true}
+                    />
                   </div>
                 </div>
               </div>

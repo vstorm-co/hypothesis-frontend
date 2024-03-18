@@ -196,14 +196,14 @@ export function Message(props) {
           </div>
           <div className={'flex flex-col group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[99%] text-sm bot-response response-${props.Message.uuid}`}>
-              <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{props.Message.content}</ReactMarkdown>
+              <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{props.Message.content ? props.Message.content : 'Creating...'}</ReactMarkdown>
             </div>
             <div className={'w-full'}>
               <div className={'flex gap-1 w-full justify-between'}>
                 <div className={'text-sm leading-6 text-[#747474] bg-[#EBEBEB] py-1 px-2 flex items-center rounded'}>
                   Only Visible to You
                 </div>
-                {true && <div className={'flex'}>
+                {props.Message.content.length != 0 && <div className={'flex'}>
                   <button disabled type="button" className="btn-second">Edit</button>
                   <a href={props.Message.content_html ? props.Message.content_html : '#'} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
@@ -212,7 +212,7 @@ export function Message(props) {
                     </svg>
                   </a>
                 </div>}
-                {false && <div className={'flex'}>
+                {props.Message.content.length === 0 && <div className={'flex'}>
                   <button disabled={true} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     Creating
                     <span className={'ml-2'}>
