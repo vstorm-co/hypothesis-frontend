@@ -186,7 +186,7 @@ export function Message(props) {
     )
   } else if (props.Message.created_by === 'annotation') {
     return (
-      <div className="flex my-2 border-[#DBDBDB] border border-dashed rounded-lg">
+      <div className="flex my-2 border-[#DBDBDB] border border-dashed rounded-lg mr-4">
         <div className="rounded flex p-2 pb-3 w-full overflow-x-visible">
           <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
             <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
