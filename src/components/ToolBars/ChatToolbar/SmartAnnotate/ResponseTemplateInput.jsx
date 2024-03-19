@@ -1,9 +1,8 @@
 import { useSignal } from "@preact/signals";
 import { useSelector } from "react-redux";
-import { UseTemplate } from "../UseTemplate";
 import { useEffect, useRef } from "preact/hooks";
-import { InlineTemplate } from "../../../InlineTemplate";
 import { route } from "preact-router";
+import { SmartInlineTemplate } from "./SmartInlineTemplate";
 
 
 
@@ -351,7 +350,7 @@ export function ResponseTemplateInput(props) {
 
   return (
     <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 response-template-input-form relative">
-      <InlineTemplate SmartAnnotation={true} handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
+      <SmartInlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
       {templates?.length > 0 &&
         <div className={'flex justify-end'}>
           {/* <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} /> */}
