@@ -45,11 +45,9 @@ export function SmartInlineTemplate(props) {
   }
 
   return (
-    <div className={'absolute top-0 transform -translate-y-24 left-1/2 -translate-x-1/2 z-50 border border-[#DBDBDB] rounded ' + (props.showPrePill ? 'block' : 'hidden')}>
-      <div className={'text-xs bg-white max-h-[93px] w-[240px] overflow-auto text-[#747474] rounded py-2 text-center'}>
-        (Press enter to insert)
-      </div>
-      <div className={'templates-inline-list bg-white max-h-[93px] w-[240px] overflow-auto rounded'}>
+    <div className={'absolute shadow-2xl-smart-inline -top-[8.9rem] left-1/2 -translate-x-1/2 z-50 border border-b-0 border-[#DBDBDB] rounded-t ' + (props.showPrePill ? 'block' : 'hidden')}>
+
+      <div className={'templates-inline-list bg-white max-h-[140px] w-[240px] overflow-auto'}>
         {templates?.filter(temp => (temp.name.toLowerCase().trim().includes(props.prePillContent) && temp.uuid != currentTemplate.uuid)).map((template, index) => (
           <div onClick={() => props.handleUseInlineTemplate(template)} className={(`item-${index}`) + ' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (selectedIndex.value === index ? 'box-shadow' : '')}>
             <img className="w-4" src={braces} alt="" />
@@ -58,6 +56,9 @@ export function SmartInlineTemplate(props) {
             </div>
           </div>
         ))}
+      </div>
+      <div className={'text-xs bg-white max-h-[93px] border-t w-[240px] overflow-auto text-[#747474] rounded py-2 text-center'}>
+        (Press enter to insert)
       </div>
     </div>
   )
