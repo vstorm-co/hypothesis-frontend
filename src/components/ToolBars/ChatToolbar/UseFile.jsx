@@ -53,7 +53,7 @@ export function UseFile(props) {
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
       viewId: "DOCUMENTS",
-      // token: currentUser.google_token,
+      token: currentUser.google_token,
       supportDrives: true,
       multiselect: false,
       // customViews: customViewsArray, // custom view
