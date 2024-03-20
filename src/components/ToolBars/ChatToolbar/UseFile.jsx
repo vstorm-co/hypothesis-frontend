@@ -82,9 +82,10 @@ export function UseFile(props) {
                 }
               });
               const reader = response.body.getReader();
-              reader.read().then(({ done, value }) => {
+              reader.read().then(async ({ done, value }) => {
                 const string = new TextDecoder().decode(value);
-                console.log(string);
+                let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
+                props.FilePicked(file);
               })
             }
           } catch (err) {
