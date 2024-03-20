@@ -53,7 +53,7 @@ export function UseFile(props) {
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
       viewId: "DOCUMENTS",
-      token: currentUser.google_token,
+      // token: currentUser.google_token,
       supportDrives: true,
       multiselect: false,
       // customViews: customViewsArray, // custom view
@@ -69,9 +69,9 @@ export function UseFile(props) {
                 Authorization: `Bearer ${currentUser.google_token}`
               }
             })
-            if(response.status === 200){
+            if (response.status === 200) {
               const reader = response.body.getReader();
-              reader.read().then(({done, value}) => {
+              reader.read().then(({ done, value }) => {
                 const string = new TextDecoder().decode(value);
                 console.log(string);
               })
@@ -82,7 +82,7 @@ export function UseFile(props) {
                 }
               });
               const reader = response.body.getReader();
-              reader.read().then(({done, value}) => {
+              reader.read().then(({ done, value }) => {
                 const string = new TextDecoder().decode(value);
                 console.log(string);
               })
@@ -104,22 +104,22 @@ export function UseFile(props) {
 
   const url = useSignal('');
 
-  async function handleUploadFile(e){
+  async function handleUploadFile(e) {
     httpsNotFound.value = false;
-    if(e.key === 'Enter'){
+    if (e.key === 'Enter') {
       const regex = /^https:\/\/.*/;
       const isHttpsLink = regex.test(e.target.value);
-      if(e.target.value.length > 0 && isHttpsLink){
-  
-        let file = await dispatch(uploadFile({source_type: 'url', source_value: e.target.value}));
+      if (e.target.value.length > 0 && isHttpsLink) {
+
+        let file = await dispatch(uploadFile({ source_type: 'url', source_value: e.target.value }));
         props.FilePicked(file);
-      }else{
+      } else {
         httpsNotFound.value = true;
       }
     }
   }
 
-  function handleToggle(){
+  function handleToggle() {
     props.onToggleVisible();
   }
 
@@ -137,30 +137,30 @@ export function UseFile(props) {
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={fileImport} alt="" />
-            <input onKeyDown={(e) => {handleUploadFile(e)}} disabled={filesLoading} ref={inputRef} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
+            <input onKeyDown={(e) => { handleUploadFile(e) }} disabled={filesLoading} ref={inputRef} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
           </div>
-          {httpsNotFound.value && 
+          {httpsNotFound.value &&
             <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5">This doesn't look like a link...</div>
           }
-          {!filesLoading && 
+          {!filesLoading &&
             <div className={'text-xs text-[#747474] mt-2'}>
               Press enter to confirm
             </div>
           }
-          {filesLoading && 
+          {filesLoading &&
             <div className={'flex items-center justify-center mt-2'}>
               <Loading />
             </div>
           }
         </div>
-        {userFiles.length > 0 && 
+        {userFiles.length > 0 &&
           <div className={'overflow-y-auto max-h-[132px]'}>
             <div className="text-[10px] leading-4 font-bold text-[#747474] px-2 pt-2">
               Recent Files
             </div>
             <div>
               {userFiles.map(file => (
-                <div onClick={ () => props.FilePicked(file)} className={'text-sm leading-6 pl-2 pr-3 py-1 text-[#202020] border-b border-[#DBDBDB] flex justify-between cursor-pointer hover:bg-[#F2F2F2]'}>
+                <div onClick={() => props.FilePicked(file)} className={'text-sm leading-6 pl-2 pr-3 py-1 text-[#202020] border-b border-[#DBDBDB] flex justify-between cursor-pointer hover:bg-[#F2F2F2]'}>
                   {file.title}
                   <img src={plus} alt="" />
                 </div>
