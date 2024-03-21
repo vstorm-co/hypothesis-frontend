@@ -2,6 +2,7 @@ import { route } from "preact-router";
 import { useDispatch } from "react-redux";
 import { userActions } from "../../../store/user-slice";
 import bin from '../../../assets/bin.svg';
+import { hSliceActions } from "../../../store/h-slice";
 
 
 export function ClearStorage(props) {
@@ -11,6 +12,7 @@ export function ClearStorage(props) {
     dispatch(userActions.setUser({}));
     localStorage.clear();
     dispatch(userActions.setUsers([]));
+    dispatch(hSliceActions.setInfo({}))
     props.toggle();
 
     setTimeout(() => {
@@ -21,9 +23,9 @@ export function ClearStorage(props) {
   return (
     <div onClick={runClearStorage} className={'flex px-3 py-2 border border-dashed rounded hover:bg-[#0F0F0F] border-[#595959] mt-3 cursor-pointer group'}>
       <div className={'flex items-center text-[#747474] group-hover:text-[#DBDBDB]'}>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M16 1C16 0.447715 15.5523 0 15 0H1C0.447715 0 0 0.447715 0 1C0 1.55228 0.447715 2 1 2H15C15.5523 2 16 1.55228 16 1ZM14 4H2C1.36895 4 0.895661 4.57732 1.01942 5.19612L3.01942 15.1961C3.1129 15.6635 3.52332 16 4 16H12C12.4767 16 12.8871 15.6635 12.9806 15.1961L14.9806 5.19612C15.1043 4.57732 14.631 4 14 4ZM12.78 6L11.18 14H4.819L3.219 6H12.78Z" fill="currentColor"/>
-      </svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M16 1C16 0.447715 15.5523 0 15 0H1C0.447715 0 0 0.447715 0 1C0 1.55228 0.447715 2 1 2H15C15.5523 2 16 1.55228 16 1ZM14 4H2C1.36895 4 0.895661 4.57732 1.01942 5.19612L3.01942 15.1961C3.1129 15.6635 3.52332 16 4 16H12C12.4767 16 12.8871 15.6635 12.9806 15.1961L14.9806 5.19612C15.1043 4.57732 14.631 4 14 4ZM12.78 6L11.18 14H4.819L3.219 6H12.78Z" fill="currentColor" />
+        </svg>
       </div>
       <div className={'ml-4 text-sm leading-6'}>Clear Local Storage</div>
     </div>

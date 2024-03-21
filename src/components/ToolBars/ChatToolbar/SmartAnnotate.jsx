@@ -68,14 +68,28 @@ export function SmartAnnotate(props) {
   outsideClickHanlder(FormRef);
 
 
-  function toggleVisible() {
-    visible.value = !visible.value;
+  async function toggleVisible() {
+    let data = JSON.parse(localStorage.getItem("ANT_hProfile"));
+
+    if (data) {
+      username.value = data.username;
+      token.value = data.token;
+      visible.value = !visible.value;
+      if (!profileInfo.userid) {
+        infoLoading.value = true;
+        await dispatch(getProfileInfo({ username: username.value, token: token.value }));
+        infoLoading.value = false;
+      }
+    }
+    else {
+      visible.value = !visible.value;
+    }
   }
 
   async function handleSubmit() {
     if (!profileInfo.userid) {
       infoLoading.value = true;
-      await dispatch(getProfileInfo({ token: token.value }));
+      await dispatch(getProfileInfo({ username: username.value, token: token.value }));
       infoLoading.value = false;
     } else {
       let data = {
@@ -167,7 +181,7 @@ export function SmartAnnotate(props) {
                       <select onChange={onGroupInput} value={group.value} class="">
                         <option value="" selected disabled>Select group</option>
                         {profileInfo.groups?.map(g => (
-                          <option value={g.name}>{g.name}</option>
+                          <option value={g.id}>{g.name}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>

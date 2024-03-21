@@ -27,6 +27,8 @@ export const getProfileInfo = (data) => {
   return async (dispatch) => {
     try {
       const info = await callhApi(`/profile`, {}, data.token);
+      localStorage.setItem("ANT_hProfile", JSON.stringify(data));
+
       dispatch(hSliceActions.setInfo(info));
     } catch (err) {
       console.log(err);
