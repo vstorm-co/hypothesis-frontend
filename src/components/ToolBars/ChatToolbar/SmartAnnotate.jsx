@@ -15,7 +15,7 @@ export function SmartAnnotate(props) {
   const visible = useSignal(false);
   const token = useSignal('');
   const username = useSignal('');
-  const group = useSignal('');
+  const group = useSignal('__world__');
   const tags = useSignal('');
   const url = useSignal('');
   const response_template = useSignal('');
@@ -179,7 +179,6 @@ export function SmartAnnotate(props) {
                     </div>
                     <div class="relative">
                       <select onChange={onGroupInput} value={group.value} class="">
-                        <option value="" selected disabled>Select group</option>
                         {profileInfo.groups?.map(g => (
                           <option value={g.id}>{g.name}</option>
                         ))}
