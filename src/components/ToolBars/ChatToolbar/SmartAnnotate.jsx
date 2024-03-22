@@ -50,6 +50,12 @@ export function SmartAnnotate(props) {
   };
   const onGroupInput = event => {
     group.value = event.currentTarget.value
+    let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
+
+    if (ProfileData) {
+      ProfileData = { ...ProfileData, group: group.value };
+      localStorage.setItem("ANT_hProfile", JSON.stringify(ProfileData));
+    }
   };
   const onTagsInput = event => {
     tags.value = event.currentTarget.value
@@ -69,15 +75,16 @@ export function SmartAnnotate(props) {
 
 
   async function toggleVisible() {
-    let data = JSON.parse(localStorage.getItem("ANT_hProfile"));
+    let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
 
-    if (data) {
-      username.value = data.username;
-      token.value = data.token;
+    if (ProfileData) {
+      username.value = ProfileData.username;
+      token.value = ProfileData.token;
+      group.value = ProfileData.group
       visible.value = !visible.value;
       if (!profileInfo.userid) {
         infoLoading.value = true;
-        await dispatch(getProfileInfo({ username: username.value, token: token.value }));
+        await dispatch(getProfileInfo({ username: username.value, token: token.value, group: group.value }));
         infoLoading.value = false;
       }
     }
@@ -147,16 +154,13 @@ export function SmartAnnotate(props) {
               <p className={'text-[#595959] mt-2'}>Already using Hypothesis and want to add some annotations to spark a conversation? Get started by configuring your account below:</p>
             </div>
             <div className={''}>
-              <div className="text-xs font-bold text-[#747474] mb-1">
-                Username
-              </div>
-              <input value={username.value} onInput={onUsernameInput} className={'inputtext w-full'} placeholder={'Enter your username'} type="text" />
-            </div>
-            <div className={'mt-4'}>
               <div className={'text-xs text-[#747474] mb-1 flex justify-between'}>
                 <div className="font-bold flex">
                   API Key
                   <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
+                  {profileInfo.userid &&
+                    <span class="ml-0.5 font-normal"> ({profileInfo.userid.split(":")[1].split("@")[0]})</span>
+                  }
                 </div>
                 <div className={'flex gap-1'}>
                   <a className={'underline'} target={'_blank'} href="https://hypothes.is/profile/developer">Get Key</a><img src={arrow} alt="" />
