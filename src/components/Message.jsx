@@ -204,7 +204,6 @@ export function Message(props) {
                   Only Visible to You
                 </div>
                 {props.Message.content.length != 0 && <div className={'flex'}>
-                  <button disabled type="button" className="btn-second">Edit</button>
                   <a href={props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}` : '#'} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="#FFFFFF" className={'ml-2'} xmlns="http://www.w3.org/2000/svg">
