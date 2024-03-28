@@ -1,38 +1,30 @@
 import ReactJson from 'react-json-view';
+import { useSelector } from 'react-redux';
 
 export function SmartAnnotateLogs() {
-  let arr = [
-    {
-      date: `2024-03-26 12:11:2`,
-      api: 'h',
-      type: 'Sent',
-      bytes: Math.floor(Math.random() * 32),
-    },
-    {
-      date: `2024-03-26 12:11:2`,
-      api: 'h',
-      type: 'Sent',
-      bytes: Math.floor(Math.random() * 32),
-    },
-    {
-      date: `2024-03-26 12:11:2`,
-      api: 'o',
-      type: 'Sent',
-      bytes: Math.floor(Math.random() * 32),
-    },
-    {
-      date: `2024-03-26 12:11:2`,
-      api: 'o',
-      type: 'Sent',
-      bytes: Math.floor(Math.random() * 32),
-    },
-  ];
+  const logs = useSelector(state => state.h.logs)
 
-  const requestList = arr.map(request =>
+  function generateDate(dateString) {
+    let date = new Date(dateString);
+
+    let year = date.getUTCFullYear();
+    let month = date.getUTCMonth();
+    let day = date.getUTCDate();
+
+    let hour = date.getUTCHours();
+    let minutes = date.getUTCMinutes();
+    let seconds = date.getUTCSeconds();
+
+    let target = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day < 10 ? `0${day}` : `${day}`} ${hour < 10 ? `0${hour}` : `${hour}`} ${minutes < 10 ? `0${minutes}` : `${minutes}`} ${seconds < 10 ? `0${seconds}` : `${seconds}`}`
+
+    return target;
+  }
+
+  const requestList = logs.map(request =>
     <div>
       <span className={'text-xs cursor-pointer'}></span>
       <div className={'p-0.5 text-xs'}>
-        <ReactJson enableClipboard={false} collapsed={true} displayDataTypes={false} displayObjectSize={false} name={`${request.date} ${request.api === 'h' ? 'Hypothesis ' : 'OpenAI '} API-${request.type} ${request.bytes} bytes`} src={request} />
+        <ReactJson enableClipboard={false} collapsed={true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request.date)} ${request.api} ${request.type}`} src={request} />
       </div>
     </div>
   );

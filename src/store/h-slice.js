@@ -8,6 +8,7 @@ const hSlice = createSlice({
   name: 'ui',
   initialState: {
     profileInfo: {},
+    logs: [],
   },
   reducers: {
     setInfo(state, action) {
@@ -15,6 +16,9 @@ const hSlice = createSlice({
     },
     resetInfo(state, action) {
       state.profileInfo = {}
+    },
+    addLogs(state, action) {
+      state.logs = state.logs.push(action.payload);
     }
   }
 });

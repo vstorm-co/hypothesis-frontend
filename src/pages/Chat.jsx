@@ -15,6 +15,7 @@ import { templatesActions } from '../store/templates-slice';
 
 import { PromptInput } from '../components/PromptInput';
 import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
+import { hSliceActions } from '../store/h-slice';
 
 const msgLoading = signal(false);
 export function Chat(props) {
@@ -158,6 +159,8 @@ export function Chat(props) {
 						dispatch(getChatsData(currentChat.uuid))
 					}, 500)
 				}
+			} else if (json_data.type === 'sent' || json_data.type === 'recd') {
+				dispatch(hSliceActions.addLogs(json_data));
 			}
 		}
 	})
