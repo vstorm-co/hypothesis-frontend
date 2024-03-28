@@ -355,7 +355,7 @@ export function Chat(props) {
 					</svg>
 					Logs
 				</div>
-				<div className={'w-[460px] bg-[#FAFAFA] absolute h-[100vh] right-0 top-0 border-l p-2 shadow-2xl ' + (showAnnotateLogs.value ? 'block' : 'hidden')}>
+				<div className={'w-[460px] bg-[#FAFAFA] absolute h-[100vh] overflow-auto right-0 top-0 border-l p-2 shadow-2xl ' + (showAnnotateLogs.value ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full'}>
 						<SmartAnnotateLogs />
 						<span onClick={() => tglAnnotateLogs(false)} className={'underline ml-auto mt-auto mr-6 mb-2 cursor-pointer text-[#595959]'}>Hide</span>
