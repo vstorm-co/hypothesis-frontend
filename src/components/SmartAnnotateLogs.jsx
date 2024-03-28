@@ -22,7 +22,6 @@ export function SmartAnnotateLogs() {
 
   const requestList = logs.map(request =>
     <div>
-      <span className={'text-xs cursor-pointer'}></span>
       <div className={'p-0.5 text-xs'}>
         <ReactJson enableClipboard={false} collapsed={true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request.date)} ${request.api} ${request.type}`} src={request} />
       </div>
