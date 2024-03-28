@@ -18,7 +18,7 @@ const hSlice = createSlice({
       state.profileInfo = {}
     },
     addLogs(state, action) {
-      state.logs = state.logs.push(action.payload);
+      state.logs.push(action.payload);
     }
   }
 });
