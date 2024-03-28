@@ -8,14 +8,14 @@ export function SmartAnnotateLogs() {
     let date = new Date(dateString);
 
     let year = date.getUTCFullYear();
-    let month = date.getUTCMonth();
+    let month = date.getUTCMonth() + 1;
     let day = date.getUTCDate();
 
     let hour = date.getUTCHours();
     let minutes = date.getUTCMinutes();
     let seconds = date.getUTCSeconds();
 
-    let target = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day < 10 ? `0${day}` : `${day}`} ${hour < 10 ? `0${hour}` : `${hour}`} ${minutes < 10 ? `0${minutes}` : `${minutes}`} ${seconds < 10 ? `0${seconds}` : `${seconds}`}`
+    let target = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day < 10 ? `0${day}` : `${day}`} ${hour < 10 ? `0${hour}` : `${hour}`}:${minutes < 10 ? `0${minutes}` : `${minutes}`}:${seconds < 10 ? `0${seconds}` : `${seconds}`}`
 
     return target;
   }
