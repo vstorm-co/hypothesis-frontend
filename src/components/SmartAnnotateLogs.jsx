@@ -2,7 +2,7 @@ import ReactJson from 'react-json-view';
 import { useSelector } from 'react-redux';
 
 export function SmartAnnotateLogs() {
-  const logs = useSelector(state => state.h.logs)
+  const logs = useSelector(state => state.h.logs);
 
   function generateDate(dateString) {
     let date = new Date(dateString);

@@ -153,8 +153,8 @@ export function Message(props) {
     return (
       <div onMouseLeave={() => setShowCopyAs(false)} className="flex mt-2">
         <div className="rounded flex p-2 w-full overflow-x-visible">
-          <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
-            <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
+          <div class={''}>
+            <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
               <img src={papaya} className="w-3" alt="" />
               <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
               {/* <div className={(currentChat.messages[currentChat.messages.length - 1]?.uuid === props.Message.uuid ? 'bottom-10' : 'top-10') + ' absolute hidden py-2 px-3 bg-white w-[240px] z-50 left-0 rounded border text-xs ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
@@ -204,7 +204,7 @@ export function Message(props) {
                   Only Visible to You
                 </div>
                 {props.Message.content.length != 0 && <div className={'flex'}>
-                  <a href={props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}` : '#'} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  <a href={props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}&group=${props.Message.content_dict.group_id}` : '#'} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="#FFFFFF" className={'ml-2'} xmlns="http://www.w3.org/2000/svg">
                       <path d="M11 0C11.5128 0 11.9355 0.38604 11.9933 0.883379L12 1V7C12 7.55228 11.5523 8 11 8C10.4872 8 10.0645 7.61396 10.0067 7.11662L10 7V3.414L1.70711 11.7071C1.31658 12.0976 0.683418 12.0976 0.292893 11.7071C-0.0675907 11.3466 -0.0953203 10.7794 0.209705 10.3871L0.292893 10.2929L8.584 2H5C4.48716 2 4.06449 1.61396 4.00673 1.11662L4 1C4 0.487164 4.38604 0.0644928 4.88338 0.00672773L5 0H11Z" fill="#FFFFFF" />

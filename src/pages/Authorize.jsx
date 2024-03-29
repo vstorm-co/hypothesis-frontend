@@ -84,7 +84,7 @@ export function Authorize() {
             <div className={(loading.value ? 'hidden' : '')}>
               <Message Message={messages[0]} />
               <Message Message={messages[1]} />
-              <div className={'w-[240px] ml-14 -mt-6 border border-[#DBDBDB] rounded-lg ' + (loading.value ? 'hidden' : '')}>
+              <div className={'w-[240px] ml-14 -mt-4 border border-[#DBDBDB] rounded-lg ' + (loading.value ? 'hidden' : '')}>
                 <div onClick={runLogin} className={'pl-2 py-2 flex items-center cursor-pointer'}>
                   <img src={google} alt="" />
                   <div className={'mx-4'}>

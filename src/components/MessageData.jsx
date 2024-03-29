@@ -1,13 +1,13 @@
 export function MessageData(props) {
-    function timestamp(){
+    function timestamp() {
         let time = new Date(props.Message.created_at).toUTCString()
         return time;
     }
 
     return (
-        <div style={{...props.Position}} className={'fixed py-2 px-3 bg-white w-[240px] z-50 rounded border text-xs ' + (props.Visible ? 'block' : 'hidden')}>
+        <div style={{ ...props.Position }} className={'fixed py-2 px-3 bg-white w-[240px] z-50 rounded border text-xs ' + (props.Visible ? 'block' : 'hidden')}>
             <div className={''}><span className={'font-bold text-[#747474]'}>Model:</span> GPT-4</div>
-            <div title={timestamp()} className={'mt-0.5'}><span className={'font-bold text-[#747474]'}>Timestamp:</span> {timestamp().slice(0, 16)}</div>
+            <div title={timestamp()} className={'mt-0.5'}><span className={'font-bold text-[#747474]'}>Timestamp:</span> {timestamp()}</div>
             <div className={'mt-2'}>
                 <span className={'font-bold text-[#747474]'}>Tokens:</span>
                 <ul className={'list-disc tokens mt-0.5 pl-5'}>
