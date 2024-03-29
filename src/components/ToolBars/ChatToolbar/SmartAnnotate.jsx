@@ -78,9 +78,9 @@ export function SmartAnnotate(props) {
     let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
 
     if (ProfileData) {
-      username.value = ProfileData.username;
+      username.value = ProfileData.username ? ProfileData.username : '';
       token.value = ProfileData.token;
-      group.value = ProfileData.group
+      group.value = ProfileData.group ? ProfileData.group : '__world__';
       visible.value = !visible.value;
       if (!profileInfo.userid) {
         infoLoading.value = true;
