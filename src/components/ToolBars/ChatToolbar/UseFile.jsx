@@ -138,7 +138,7 @@ export function UseFile(props) {
       </div>
       <div className={"absolute w-[320px] border rounded bg-white z-50 transform scrollBar-dark " + (props.Visible ? '' : 'hidden ') + (props.Position === 'top' ? 'bottom-10 left-0' : '-top-2 left-10')}>
         <div className={'p-2 border-b'}>
-          <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
+          <div className={"border rounded-lg flex items-center p-2 " + (httpsNotFound.value ? 'border-[#EF4444]' : 'border-[#DBDBDB]')}>
             <img className="w-4" src={fileImport} alt="" />
             <input onKeyDown={(e) => { handleUploadFile(e) }} disabled={filesLoading} ref={inputRef} type="text" className="bg-transparent w-full placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="URL of text…" />
           </div>

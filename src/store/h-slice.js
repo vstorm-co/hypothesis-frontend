@@ -9,6 +9,7 @@ const hSlice = createSlice({
   initialState: {
     profileInfo: {},
     logs: [],
+    formVisible: false,
   },
   reducers: {
     setInfo(state, action) {
@@ -19,6 +20,9 @@ const hSlice = createSlice({
     },
     addLogs(state, action) {
       state.logs.push(action.payload);
+    },
+    toggleFormVisible(state, action) {
+      state.formVisible = action.payload;
     }
   }
 });

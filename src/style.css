@@ -386,6 +386,10 @@ button.btn-second:active:enabled {
 	@apply p-2 text-sm leading-6 text-[#202020] border border-[#DBDBDB] rounded-[4px] focus:outline-none placeholder:text-[#747474]
 }
 
+.inputtext.wrong {
+	@apply border-[#EF4444]
+}
+
 select {
 	@apply p-2 appearance-none w-full text-sm leading-6 border border-[#DBDBDB] rounded-[4px] focus:outline-none
 }
