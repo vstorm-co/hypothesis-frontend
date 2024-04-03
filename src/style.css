@@ -398,6 +398,17 @@ option[value=""] {
 	@apply text-[#747474]
 }
 
+.truncate-custom {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.truncate-custom:hover {
+	overflow: visible;
+	white-space: normal;
+}
+
 
 /* width */
 .scrollBar-dark::-webkit-scrollbar {

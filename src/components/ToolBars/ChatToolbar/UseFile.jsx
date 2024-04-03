@@ -157,14 +157,14 @@ export function UseFile(props) {
           }
         </div>
         {userFiles.length > 0 &&
-          <div className={'overflow-y-auto max-h-[132px]'}>
+          <div className={''}>
             <div className="text-[10px] leading-4 font-bold text-[#747474] px-2 pt-2">
               Recent Files
             </div>
-            <div>
+            <div className={'overflow-y-auto max-h-[160px]'}>
               {userFiles.map(file => (
-                <div onClick={() => props.FilePicked(file)} className={'text-sm leading-6 pl-2 pr-3 py-1 text-[#202020] border-b border-[#DBDBDB] flex justify-between cursor-pointer hover:bg-[#F2F2F2]'}>
-                  {file.title}
+                <div onClick={() => props.FilePicked(file)} className={'group text-sm leading-6 pl-2 pr-3 py-1 text-[#202020] border-b border-[#DBDBDB] flex justify-between cursor-pointer hover:bg-[#F2F2F2]'}>
+                  <div className={''}>{file.title}</div>
                   <img src={plus} alt="" />
                 </div>
               ))}
