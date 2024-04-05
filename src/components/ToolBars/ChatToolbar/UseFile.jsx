@@ -73,9 +73,9 @@ export function UseFile(props) {
               const reader = response.body.getReader();
               reader.read().then(({ done, value }) => {
                 const string = new TextDecoder().decode(value);
-                // const string = new TextDecoder().decode(value);
-                // let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
-                // props.FilePicked(file);
+                const string = new TextDecoder().decode(value);
+                let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
+                props.FilePicked(file);
               })
             } else {
               response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}?alt=media`, {
@@ -85,9 +85,9 @@ export function UseFile(props) {
               });
               const reader = response.body.getReader();
               reader.read().then(async ({ done, value }) => {
-                // const string = new TextDecoder().decode(value);
-                // let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
-                // props.FilePicked(file);
+                const string = new TextDecoder().decode(value);
+                let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
+                props.FilePicked(file);
               })
             }
           } catch (err) {
