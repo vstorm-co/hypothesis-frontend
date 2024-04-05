@@ -71,8 +71,7 @@ export function UseFile(props) {
             })
             if (response.status === 200) {
               const reader = response.body.getReader();
-              reader.read().then(({ done, value }) => {
-                const string = new TextDecoder().decode(value);
+              reader.read().then(async ({ done, value }) => {
                 const string = new TextDecoder().decode(value);
                 let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
                 props.FilePicked(file);
