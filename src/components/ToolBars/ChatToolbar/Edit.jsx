@@ -114,7 +114,7 @@ export function Edit(props) {
         </div>
         {/* {user.user_id === currentChat.owner &&
         } */}
-        <div className={'py-2 px-3 bg-white w-[240px] top-10 z-50 left-0 text-xs'}>
+        <div className={'py-2 px-3 w-[240px] text-xs'}>
           <div className={''}><span className={'text-[#747474]'}>Model:</span> {currentChat?.model_name}</div>
           <div className={'mt-2'}>
             <span className={'text-[#747474]'}>Tokens:</span>
