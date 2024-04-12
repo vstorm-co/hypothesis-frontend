@@ -430,7 +430,7 @@ export function PromptInput(props) {
         data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
         spellCheck={false}
         ref={InputRef}
-        contentEditable={promptMode.value === 'write'}
+        contentEditable={promptMode.value === 'write' && !props.blockSending}
         onKeyDown={promptMode.value === 'write' ? handleKeyDown : () => { console.log("AAAA") }}
         onKeyUp={promptMode.value === 'write' ? handleKeyUp : () => { }}
         onClick={promptMode.value === 'write' ? (e) => { handlePillClick(e); saveCaret() } : () => { }}
