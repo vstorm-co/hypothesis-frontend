@@ -130,6 +130,7 @@ export function Message(props) {
                   UseFilePosition={'right'}
                   InitialInput={props.Message.content_html}
                   forceFocus={EditEnabled.value}
+                  hideAnnotate={true}
                 />
               </div>
               {/* <div className={(EditEnabled.value ? '' : 'hidden') + ' ml-4 border p-2 bg-[#FAFAFA] border-[#DBDBDB] rounded w-full flex items-center'}>

@@ -414,7 +414,9 @@ export function PromptInput(props) {
           <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
           <ReturnResponse ReturnResponse={handleReturnResponse} />
           <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />
-          <SmartAnnotate />
+          {!props.hideAnnotate &&
+            <SmartAnnotate />
+          }
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
