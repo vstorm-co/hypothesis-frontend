@@ -356,7 +356,7 @@ export function Chat(props) {
 					</div>
 
 				</div >
-				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
+				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full'}>
 						<SmartAnnotateLogs />
 					</div>
