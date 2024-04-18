@@ -49,14 +49,16 @@ export function UseFile(props) {
   const [openPicker, authResponse] = useDrivePicker();
 
   const handleOpenPicker = () => {
+    const customViewsArray = [new google.picker.DocsView(google.picker.ViewId.PDFS)];
+
     openPicker({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
-      viewId: "DOCUMENTS, PDFS",
+      viewId: "DOCUMENTS",
       token: currentUser.google_token,
-      supportDrives: true,
+      supportDrives: false,
       multiselect: false,
-      // customViews: customViewsArray, // custom view
+      customViews: customViewsArray, // custom view
       callbackFunction: async (data) => {
         if (data.action === 'cancel') {
           console.log('User clicked cancel/close button')
