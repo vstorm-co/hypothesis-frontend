@@ -65,34 +65,40 @@ export function UseFile(props) {
         }
         if (data.docs.length > 0) {
           console.log(data);
-          try {
-            let response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}/export?mimeType=text/plain`, {
-              headers: {
-                Authorization: `Bearer ${currentUser.google_token}`
-              }
-            })
-            if (response.status === 200) {
-              const reader = response.body.getReader();
-              reader.read().then(async ({ done, value }) => {
-                const string = new TextDecoder().decode(value);
-                let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
-                props.FilePicked(file);
-              })
-            } else {
-              response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}?alt=media`, {
+
+          if (data.docs[0].mimeType === "application/pdf") {
+            let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: "", id: data.docs[0].id, mime_type: data.docs[0].mimeType }));
+            props.FilePicked(file);
+          } else {
+            try {
+              let response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}/export?mimeType=text/plain`, {
                 headers: {
                   Authorization: `Bearer ${currentUser.google_token}`
                 }
-              });
-              const reader = response.body.getReader();
-              reader.read().then(async ({ done, value }) => {
-                const string = new TextDecoder().decode(value);
-                let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
-                props.FilePicked(file);
               })
+              if (response.status === 200) {
+                const reader = response.body.getReader();
+                reader.read().then(async ({ done, value }) => {
+                  const string = new TextDecoder().decode(value);
+                  let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
+                  props.FilePicked(file);
+                })
+              } else {
+                response = await fetch(`https://www.googleapis.com/drive/v3/files/${data.docs[0].id}?alt=media`, {
+                  headers: {
+                    Authorization: `Bearer ${currentUser.google_token}`
+                  }
+                });
+                const reader = response.body.getReader();
+                reader.read().then(async ({ done, value }) => {
+                  const string = new TextDecoder().decode(value);
+                  let file = await dispatch(uploadFile({ source_type: 'google-drive', source_value: string }));
+                  props.FilePicked(file);
+                })
+              }
+            } catch (err) {
+              console.log(err);
             }
-          } catch (err) {
-            console.log(err);
           }
         }
       },
