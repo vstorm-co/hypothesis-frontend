@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UseTemplate } from "./ToolBars/ChatToolbar/UseTemplate";
 import { ReturnResponse } from "./ToolBars/TemplateToolbar/ReturnResponse";
 import { useEffect, useRef } from "preact/hooks";
@@ -11,6 +11,7 @@ import { InlineTemplate } from "./InlineTemplate";
 import { UseFile } from "./ToolBars/ChatToolbar/UseFile";
 import { route } from "preact-router";
 import { SmartAnnotate } from "./ToolBars/ChatToolbar/SmartAnnotate";
+import { hSliceActions } from "../store/h-slice";
 
 
 
@@ -19,6 +20,9 @@ export function PromptInput(props) {
   const currentChat = useSelector(state => state.chats.currentChat);
   const templates = useSelector(state => state.templates.useTemplates);
   const userFiles = useSelector(state => state.files.files);
+  const showAnnotateLogs = useSelector(state => state.h.showLogs);
+
+  const dispatch = useDispatch();
 
   const useTemplateVisible = useSignal(false);
   const promptMode = useSignal('write');
@@ -415,7 +419,15 @@ export function PromptInput(props) {
           <ReturnResponse ReturnResponse={handleReturnResponse} />
           <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />
           {!props.hideAnnotate &&
-            <SmartAnnotate />
+            <div className={'flex'}>
+              <SmartAnnotate />
+              <div onClick={() => { dispatch(hSliceActions.toggleShowLogs(!showAnnotateLogs)) }} className={'text-sm ml-2 flex cursor-pointer text-[#595959] items-center gap-2'}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C3.10457 0 4 0.89543 4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0ZM2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM4 14C4 12.8954 3.10457 12 2 12C0.89543 12 0 12.8954 0 14C0 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14ZM16 14C16 13.4477 15.5523 13 15 13H7L6.88338 13.0067C6.38604 13.0645 6 13.4872 6 14C6 14.5523 6.44772 15 7 15H15L15.1166 14.9933C15.614 14.9355 16 14.5128 16 14ZM16 8C16 7.44772 15.5523 7 15 7H7L6.88338 7.00673C6.38604 7.06449 6 7.48716 6 8C6 8.55229 6.44772 9 7 9H15L15.1166 8.99327C15.614 8.93551 16 8.51284 16 8ZM16 2C16 1.44772 15.5523 1 15 1H7L6.88338 1.00673C6.38604 1.06449 6 1.48716 6 2C6 2.55228 6.44772 3 7 3H15L15.1166 2.99327C15.614 2.93551 16 2.51284 16 2Z" fill="currentColor" />
+                </svg>
+                {showAnnotateLogs ? 'Hide' : 'Show'} Logs
+              </div>
+            </div>
           }
           <div className={'ml-auto flex items-center justify-center'}>
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>

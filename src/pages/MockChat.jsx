@@ -9,11 +9,14 @@ import { Message } from '../components/Message';
 import { Toast } from '../components/Toast';
 
 import { PromptInput } from '../components/PromptInput';
+import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 
 
 export function MockChat(props) {
   const organizationCreated = useSelector(state => state.ui.organizationCreated)
   const user = useSelector(state => state.user.currentUser);
+  const showAnnotateLogs = useSelector(state => state.h.showLogs);
+
 
   const dispatch = useDispatch();
 
@@ -91,32 +94,39 @@ export function MockChat(props) {
       content: 'Go on, to start a new chat just send prompt!'
     }
     return (
-      <div className={'flex w-full mx-4 page-start'}>
-        <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
-          <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
-        </div>
-        <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-          <div className="h-[100vh] flex flex-col pt-4 pb-2">
-            <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
-              <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-                Welcome back!
-              </div>
+      <div className={'flex w-full page-start'}>
+        <div className={'flex w-full mx-4'}>
+          <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
+            <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
+          </div>
+          <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
+            <div className="h-[100vh] flex flex-col pt-4 pb-2">
+              <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
+                <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
+                  Welcome back!
+                </div>
 
-              <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-                <Toast />
+                <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
+                  <Toast />
+                </div>
               </div>
+              <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
+                <Message Loading={true} Message={msg} />
+              </div>
+              <PromptInput
+                Icon={'send'}
+                blockSending={false}
+                WSsendMessage={() => { }}
+                SubmitButtonText={'Send Message'}
+                handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
+                SecondButton={true}
+              />
             </div>
-            <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-              <Message Loading={true} Message={msg} />
-            </div>
-            <PromptInput
-              Icon={'send'}
-              blockSending={false}
-              WSsendMessage={() => { }}
-              SubmitButtonText={'Send Message'}
-              handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
-              SecondButton={true}
-            />
+          </div>
+        </div>
+        <div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
+          <div className={'flex flex-col h-full'}>
+            <SmartAnnotateLogs />
           </div>
         </div>
       </div>

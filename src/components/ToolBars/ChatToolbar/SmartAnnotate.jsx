@@ -8,9 +8,14 @@ import { createAnnotations, getProfileInfo, hSliceActions } from '../../../store
 import { Loading } from '../../Loading';
 import { chatsActions, createChat, getChatsData } from '../../../store/chats-slice';
 import { ResponseTemplateInput } from './SmartAnnotate/ResponseTemplateInput';
+import googleDrive from '../../../assets/google-drive.svg';
+import useDrivePicker from 'react-google-drive-picker'
+import share from '../../../assets/share.svg';
 
 export function SmartAnnotate(props) {
   const currentChat = useSelector(state => state.chats.currentChat);
+  const currentUser = useSelector(state => state.user.currentUser);
+
   const visible = useSelector(state => state.h.formVisible);
 
   const token = useSignal('');
@@ -19,6 +24,8 @@ export function SmartAnnotate(props) {
   const tags = useSignal('');
 
   const url = useSignal('');
+  const urlType = useSignal('url');
+  const fileId = useSignal('');
   const urlValid = useSignal(true);
 
   const response_template = useSignal('');
@@ -45,6 +52,42 @@ export function SmartAnnotate(props) {
       return () => {
       }
     }, [ref])
+  }
+
+  const [openPicker, authResponse] = useDrivePicker();
+
+  const handleOpenPicker = () => {
+    // const customViewsArray = [new google.picker.DocsView(google.picker.ViewId.PDFS)];
+
+    openPicker({
+      clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      developerKey: import.meta.env.VITE_GOOGLE_DEV_KEY,
+      viewId: "PDFS",
+      token: currentUser.google_token,
+      supportDrives: false,
+      multiselect: false,
+      // customViews: customViewsArray, // custom view
+      callbackFunction: async (data) => {
+        if (data.action === 'cancel') {
+          urlType.value = 'url';
+        } else if (data.docs.length > 0) {
+          const file = data.docs[0];
+
+          url.value = file.name;
+          fileId.value = file.id;
+        }
+      },
+    })
+  }
+
+  function handleInputType() {
+    if (urlType.value === 'url') {
+      urlType.value = 'google-drive';
+      handleOpenPicker();
+    } else {
+      urlType.value = 'url';
+      url.value = '';
+    }
   }
 
   const onInput = event => {
@@ -121,14 +164,15 @@ export function SmartAnnotate(props) {
         api_key: token.value,
         group: group.value,
         tags: tags.value.split(","),
-        url: url.value,
+        url: urlType.value === 'url' ? url.value : fileId.value,
+        input_type: urlType.value,
         response_template: response_template.value,
         prompt: prompt.value,
         room_id: currentChat.uuid ? currentChat.uuid : false,
       }
 
       const regex = /^https:\/\/.*/;
-      urlValid.value = regex.test(formData.url);
+      urlValid.value = regex.test(formData.url) || urlType.value === 'google-drive';
       promptValid.value = prompt.value.length > 0;
 
       if (!urlValid.value || !promptValid.value) {
@@ -136,17 +180,18 @@ export function SmartAnnotate(props) {
       }
 
       if (currentChat.uuid) {
-        annotationLoading.value = true;
+        console.log(formData)
+        // annotationLoading.value = true;
 
-        await dispatch(createAnnotations(formData));
+        // await dispatch(createAnnotations(formData));
 
-        annotationLoading.value = false;
-        dispatch(hSliceActions.toggleFormVisible(false));
+        // annotationLoading.value = false;
+        // dispatch(hSliceActions.toggleFormVisible(false));
 
 
-        resetForm();
+        // resetForm();
 
-        dispatch(getChatsData(currentChat.uuid))
+        // dispatch(getChatsData(currentChat.uuid))
       } else {
         annotationLoading.value = true;
         localStorage.setItem("ANT_annotateToCreate", JSON.stringify(formData));
@@ -187,7 +232,7 @@ export function SmartAnnotate(props) {
         <div className={'mx-auto'}>
           <div className={'px-8'}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
-              Smart Annotations
+              AI Annotations
             </div>
           </div>
           <div className={'max-h-[82vh] overflow-y-scroll pl-8 pr-4 mr-4 mt'}>
@@ -242,9 +287,17 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-4'}>
                 <div className="text-xs font-bold text-[#747474] mb-1">
-                  URL to Annotate
+                  URL or File to Annotate
                 </div>
-                <input value={url.value} onInput={onUrlInput} className={'inputtext w-full ' + (urlValid.value ? '' : 'wrong')} placeholder={'Enter URL to annotate...'} type="text" />
+                <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (urlValid.value ? '' : 'border-[#EF4444]')}>
+                  <div className={'px-2 shrink-0'}>
+                    <img src={urlType.value === 'url' ? share : googleDrive} className={'w-[16px] h-[16px]'} alt="" />
+                  </div>
+                  <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter URL to annotate...'} type="text" />
+                  <div onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
+                    <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
+                  </div>
+                </div>
                 {!urlValid.value &&
                   <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5">This doesn't look like a link...</div>
                 }
