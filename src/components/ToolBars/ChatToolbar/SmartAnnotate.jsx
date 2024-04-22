@@ -180,18 +180,17 @@ export function SmartAnnotate(props) {
       }
 
       if (currentChat.uuid) {
-        console.log(formData)
-        // annotationLoading.value = true;
+        annotationLoading.value = true;
 
-        // await dispatch(createAnnotations(formData));
+        await dispatch(createAnnotations(formData));
 
-        // annotationLoading.value = false;
-        // dispatch(hSliceActions.toggleFormVisible(false));
+        annotationLoading.value = false;
+        dispatch(hSliceActions.toggleFormVisible(false));
 
 
-        // resetForm();
+        resetForm();
 
-        // dispatch(getChatsData(currentChat.uuid))
+        dispatch(getChatsData(currentChat.uuid))
       } else {
         annotationLoading.value = true;
         localStorage.setItem("ANT_annotateToCreate", JSON.stringify(formData));
