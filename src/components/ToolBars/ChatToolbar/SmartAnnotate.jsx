@@ -159,6 +159,7 @@ export function SmartAnnotate(props) {
       await dispatch(getProfileInfo({ token: token.value }));
       infoLoading.value = false;
     } else {
+
       let formData = {
         username: profileInfo.userid.split(":")[1].split("@")[0],
         api_key: token.value,
