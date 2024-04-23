@@ -191,6 +191,24 @@ input:disabled {
 	height: 24px;
 }
 
+.file-pill.google-pill:before {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	left: 4px;
+	top: 4px;
+
+	background-color: white;
+	border-radius: 4px;
+
+	background-image: url('./assets/google-drive.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 12px 12px;
+	width: 16px;
+	height: 16px;
+}
+
 
 .input-form .write-button {
 	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;

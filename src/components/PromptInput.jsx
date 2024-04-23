@@ -384,7 +384,12 @@ export function PromptInput(props) {
     element.innerText = `${file.title}`;
     element.title = `${file.title}`;
     element.dataset.content = `${file.uuid}`;
+
     element.classList.add('file-pill');
+    if (file.source_type === 'google-drive') {
+      element.classList.add('google-pill');
+    }
+
     element.setAttribute("contenteditable", 'false');
 
     caret.value.insertNode(element);
