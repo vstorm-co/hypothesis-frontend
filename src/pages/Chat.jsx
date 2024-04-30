@@ -30,6 +30,8 @@ export function Chat(props) {
 	const blockSending = useSignal(false);
 	const forceInputFocus = useSignal(0);
 
+	const expandLogs = useSignal(false);
+
 	const previousScroll = useSignal(0);
 	const userScrolledUp = useSignal(false);
 
@@ -352,7 +354,25 @@ export function Chat(props) {
 				</div >
 				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full'}>
-						<SmartAnnotateLogs />
+						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer'}>
+							{expandLogs.value &&
+								<div className={'flex items-center gap-1 text-sm'}>
+									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M15.7903 1.6129C16.0953 1.22061 16.0676 0.653377 15.7071 0.292893C15.3166 -0.0976311 14.6834 -0.0976311 14.2929 0.292893L11 3.584V2L10.9933 1.88338C10.9355 1.38604 10.5128 1 10 1C9.44771 1 9 1.44772 9 2V6L9.00673 6.11662C9.06449 6.61396 9.48716 7 10 7H14L14.1166 6.99327C14.614 6.93551 15 6.51284 15 6L14.9933 5.88338C14.9355 5.38604 14.5128 5 14 5H12.414L15.7071 1.70711L15.7903 1.6129ZM6.99327 9.88338C6.93551 9.38604 6.51284 9 6 9H2L1.88338 9.00673C1.38604 9.06449 1 9.48716 1 10L1.00673 10.1166C1.06449 10.614 1.48716 11 2 11H3.584L0.292893 14.2929L0.209705 14.3871C-0.0953203 14.7794 -0.0675907 15.3466 0.292893 15.7071C0.683418 16.0976 1.31658 16.0976 1.70711 15.7071L5 12.414V14L5.00673 14.1166C5.06449 14.614 5.48716 15 6 15C6.55228 15 7 14.5523 7 14V10L6.99327 9.88338Z" fill="currentColor" />
+									</svg>
+									Collapse
+								</div>
+							}
+							{expandLogs.value &&
+								<div className={'flex items-center gap-1 text-sm'}>
+									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M15.9933 0.883379C15.9355 0.38604 15.5128 0 15 0H11L10.8834 0.00672773C10.386 0.0644928 10 0.487164 10 1L10.0067 1.11662C10.0645 1.61396 10.4872 2 11 2H12.584L9.29289 5.29289L9.2097 5.3871C8.90468 5.77939 8.93241 6.34662 9.29289 6.70711C9.68342 7.09763 10.3166 7.09763 10.7071 6.70711L14 3.414V5L14.0067 5.11662C14.0645 5.61396 14.4872 6 15 6C15.5523 6 16 5.55228 16 5V1L15.9933 0.883379ZM6.7903 10.6129C7.09532 10.2206 7.06759 9.65338 6.70711 9.29289C6.31658 8.90237 5.68342 8.90237 5.29289 9.29289L2 12.584V11L1.99327 10.8834C1.93551 10.386 1.51284 10 1 10C0.447715 10 0 10.4477 0 11V15L0.00672773 15.1166C0.0644928 15.614 0.487164 16 1 16H5L5.11662 15.9933C5.61396 15.9355 6 15.5128 6 15L5.99327 14.8834C5.93551 14.386 5.51284 14 5 14H3.414L6.70711 10.7071L6.7903 10.6129Z" fill="currentColor" />
+									</svg>
+									Expand
+								</div>
+							}
+						</div>
+						<SmartAnnotateLogs expandLogs={expandLogs.value} />
 					</div>
 				</div>
 			</div>
