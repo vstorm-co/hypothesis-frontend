@@ -353,7 +353,7 @@ export function Chat(props) {
 
 				</div >
 				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-y-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
-					<div className={'flex flex-col h-full'}>
+					<div className={'flex flex-col h-full pt-8'}>
 						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50'}>
 							{expandLogs.value &&
 								<div className={'flex items-center gap-1 text-sm'}>
