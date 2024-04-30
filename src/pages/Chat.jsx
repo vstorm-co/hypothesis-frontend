@@ -354,7 +354,7 @@ export function Chat(props) {
 				</div >
 				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-y-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full'}>
-						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer'}>
+						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50'}>
 							{expandLogs.value &&
 								<div className={'flex items-center gap-1 text-sm'}>
 									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -363,7 +363,7 @@ export function Chat(props) {
 									Collapse
 								</div>
 							}
-							{expandLogs.value &&
+							{!expandLogs.value &&
 								<div className={'flex items-center gap-1 text-sm'}>
 									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path fill-rule="evenodd" clip-rule="evenodd" d="M15.9933 0.883379C15.9355 0.38604 15.5128 0 15 0H11L10.8834 0.00672773C10.386 0.0644928 10 0.487164 10 1L10.0067 1.11662C10.0645 1.61396 10.4872 2 11 2H12.584L9.29289 5.29289L9.2097 5.3871C8.90468 5.77939 8.93241 6.34662 9.29289 6.70711C9.68342 7.09763 10.3166 7.09763 10.7071 6.70711L14 3.414V5L14.0067 5.11662C14.0645 5.61396 14.4872 6 15 6C15.5523 6 16 5.55228 16 5V1L15.9933 0.883379ZM6.7903 10.6129C7.09532 10.2206 7.06759 9.65338 6.70711 9.29289C6.31658 8.90237 5.68342 8.90237 5.29289 9.29289L2 12.584V11L1.99327 10.8834C1.93551 10.386 1.51284 10 1 10C0.447715 10 0 10.4477 0 11V15L0.00672773 15.1166C0.0644928 15.614 0.487164 16 1 16H5L5.11662 15.9933C5.61396 15.9355 6 15.5128 6 15L5.99327 14.8834C5.93551 14.386 5.51284 14 5 14H3.414L6.70711 10.7071L6.7903 10.6129Z" fill="currentColor" />
