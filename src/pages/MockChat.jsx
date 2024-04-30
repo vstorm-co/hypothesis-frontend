@@ -124,7 +124,7 @@ export function MockChat(props) {
             </div>
           </div>
         </div>
-        <div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l relative p-1' + (showAnnotateLogs ? 'block' : 'hidden')}>
+        <div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
           <div className={'flex flex-col h-full'}>
             {/* <div className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer'}>
               {true &&
