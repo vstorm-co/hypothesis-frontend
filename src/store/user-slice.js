@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import { filesActions } from "./files-slice";
 import callApi from "../api";
 import { route } from 'preact-router';
 
@@ -65,11 +66,11 @@ const userSlice = createSlice({
       }
     },
     setGoogleToken(state, action) {
-        state.currentUser.google_token = action.payload.google_access_token;
-        localStorage.setItem('ANT_currentUser', JSON.stringify({
-            ...state.currentUser,
-            google_token: action.payload.google_access_token,
-        }));
+      state.currentUser.google_token = action.payload.google_access_token;
+      localStorage.setItem('ANT_currentUser', JSON.stringify({
+        ...state.currentUser,
+        google_token: action.payload.google_access_token,
+      }));
     },
     logoutUser(state, action) {
       let users = state.users;
@@ -131,8 +132,8 @@ export const refreshGoogleToken = () => {
     let state = getState();
 
     try {
-        const tokens = await callApi(`/auth/refresh-google-token?refresh_token=${state.user.currentUser.google_refresh_token}`, { method: 'PUT' })
-        dispatch(userActions.setGoogleToken(tokens));
+      const tokens = await callApi(`/auth/refresh-google-token?refresh_token=${state.user.currentUser.google_refresh_token}`, { method: 'PUT' })
+      dispatch(userActions.setGoogleToken(tokens));
     } catch (error) {
       console.log(error);
     }

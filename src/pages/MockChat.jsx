@@ -10,6 +10,7 @@ import { Toast } from '../components/Toast';
 
 import { PromptInput } from '../components/PromptInput';
 import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
+import { useSignal } from '@preact/signals';
 
 
 export function MockChat(props) {
@@ -17,6 +18,8 @@ export function MockChat(props) {
   const user = useSelector(state => state.user.currentUser);
   const showAnnotateLogs = useSelector(state => state.h.showLogs);
 
+  const mousePreviousPosition = useSignal(0);
+  const logsWidth = useSignal(420);
 
   const dispatch = useDispatch();
 
@@ -32,6 +35,29 @@ export function MockChat(props) {
   function callCreateChat(value) {
     localStorage.setItem("ANT_PromptsToSend", JSON.stringify(value));
     dispatch(createChat("New Chat"));
+  }
+
+  function handleAddEventToResize() {
+    window.addEventListener('mousemove', handleResize);
+    window.addEventListener('mouseup', removeEventToResize);
+
+    document.querySelector('body').classList.add('select-none', 'cursor-col-resize');
+    console.log("ADD");
+  }
+
+  function removeEventToResize() {
+    window.removeEventListener('mousemove', handleResize);
+    document.querySelector('body').classList.remove('select-none', 'cursor-col-resize');
+    mousePreviousPosition.value = 0;
+
+    console.log("REMOVE");
+  }
+
+  function handleResize(e) {
+    let body = document.querySelector('body');
+
+    console.log(body.clientWidth - e.clientX);
+    logsWidth.value = body.clientWidth - e.clientX;
   }
 
 
@@ -124,18 +150,9 @@ export function MockChat(props) {
             </div>
           </div>
         </div>
-        <div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
+        <div style={{ width: `${logsWidth.value}px` }} className={'bg-[#EBEBEB] h-[100vh] max-w-[600px] min-w-[320px] shrink-0 overflow-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
           <div className={'flex flex-col h-full'}>
-            {/* <div className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer'}>
-              {true &&
-                <div className={'flex items-center gap-1 text-sm'}>
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7903 1.6129C16.0953 1.22061 16.0676 0.653377 15.7071 0.292893C15.3166 -0.0976311 14.6834 -0.0976311 14.2929 0.292893L11 3.584V2L10.9933 1.88338C10.9355 1.38604 10.5128 1 10 1C9.44771 1 9 1.44772 9 2V6L9.00673 6.11662C9.06449 6.61396 9.48716 7 10 7H14L14.1166 6.99327C14.614 6.93551 15 6.51284 15 6L14.9933 5.88338C14.9355 5.38604 14.5128 5 14 5H12.414L15.7071 1.70711L15.7903 1.6129ZM6.99327 9.88338C6.93551 9.38604 6.51284 9 6 9H2L1.88338 9.00673C1.38604 9.06449 1 9.48716 1 10L1.00673 10.1166C1.06449 10.614 1.48716 11 2 11H3.584L0.292893 14.2929L0.209705 14.3871C-0.0953203 14.7794 -0.0675907 15.3466 0.292893 15.7071C0.683418 16.0976 1.31658 16.0976 1.70711 15.7071L5 12.414V14L5.00673 14.1166C5.06449 14.614 5.48716 15 6 15C6.55228 15 7 14.5523 7 14V10L6.99327 9.88338Z" fill="currentColor" />
-                  </svg>
-                  Collapse
-                </div>
-              }
-            </div> */}
+            <span onMouseDown={handleAddEventToResize} className={'block absolute top-0 -left-2 w-3 h-full bg-[#595959] opacity-20 hover:opacity-75 z-51 cursor-col-resize'}></span>
             <SmartAnnotateLogs />
           </div>
         </div>

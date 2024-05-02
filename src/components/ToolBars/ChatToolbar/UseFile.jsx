@@ -9,7 +9,7 @@ import arrow from '../../../assets/arrow.svg';
 import plus from '../../../assets/plus.svg';
 import { Loading } from '../../Loading';
 import { uploadFile } from '../../../store/files-slice';
-import {refreshGoogleToken} from "../../../store/user-slice.js";
+import { refreshGoogleToken } from "../../../store/user-slice.js";
 
 const isVisible = signal(false);
 
@@ -51,7 +51,6 @@ export function UseFile(props) {
 
   const handleOpenPicker = async () => {
     const customViewsArray = [new google.picker.DocsView(google.picker.ViewId.PDFS)];
-    await dispatch(refreshGoogleToken());
 
     openPicker({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
@@ -109,9 +108,12 @@ export function UseFile(props) {
 
   const inputRef = useRef();
 
-  useEffect(() => {
+  useEffect(async () => {
     inputRef.current.value = '';
     inputRef.current.focus();
+
+    await dispatch(refreshGoogleToken());
+
   }, [props.Visible]);
 
   const url = useSignal('');

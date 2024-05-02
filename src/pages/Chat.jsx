@@ -30,6 +30,9 @@ export function Chat(props) {
 	const blockSending = useSignal(false);
 	const forceInputFocus = useSignal(0);
 
+	const mousePreviousPosition = useSignal(0);
+	const logsWidth = useSignal(420);
+
 	const expandLogs = useSignal(false);
 
 	const previousScroll = useSignal(0);
@@ -254,6 +257,29 @@ export function Chat(props) {
 		console.log(e)
 	}
 
+	function handleAddEventToResize() {
+		window.addEventListener('mousemove', handleResize);
+		window.addEventListener('mouseup', removeEventToResize);
+
+		document.querySelector('body').classList.add('select-none', 'cursor-col-resize');
+		console.log("ADD");
+	}
+
+	function removeEventToResize() {
+		window.removeEventListener('mousemove', handleResize);
+		document.querySelector('body').classList.remove('select-none', 'cursor-col-resize');
+		mousePreviousPosition.value = 0;
+
+		console.log("REMOVE");
+	}
+
+	function handleResize(e) {
+		let body = document.querySelector('body');
+
+		console.log(body.clientWidth - e.clientX);
+		logsWidth.value = body.clientWidth - e.clientX;
+	}
+
 	if (!currentChat.uuid) {
 		return (
 			<div className={'w-full h-[100vh] flex justify-center pt-20'}>
@@ -352,7 +378,7 @@ export function Chat(props) {
 					</div>
 
 				</div >
-				<div className={'w-[460px] bg-[#EBEBEB] h-[100vh] overflow-y-auto border-l p-2 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
+				<div style={{ width: `${logsWidth.value}px` }} className={'bg-[#EBEBEB] h-[100vh] max-w-[600px] min-w-[320px] shrink-0 overflow-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full pt-8'}>
 						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50'}>
 							{expandLogs.value &&
@@ -372,6 +398,7 @@ export function Chat(props) {
 								</div>
 							}
 						</div>
+						<span onMouseDown={handleAddEventToResize} className={'block absolute top-0 -left-2 w-3 h-full bg-[#595959] opacity-20 hover:opacity-75 z-51 cursor-col-resize'}></span>
 						<SmartAnnotateLogs expandLogs={expandLogs.value} />
 					</div>
 				</div>
