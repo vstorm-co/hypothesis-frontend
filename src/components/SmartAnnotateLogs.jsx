@@ -28,9 +28,18 @@ export function SmartAnnotateLogs(props) {
     </div>
   );
 
-  return (
-    <div>
-      {requestList}
-    </div>
-  )
+  if (logs.length > 0) {
+    return (
+      <div>
+        {requestList}
+      </div>
+    )
+  } else {
+    return (
+      <div className={'text-[#747474] italic text-sm text-center pt-2'}>
+        No logs yet try to start a coversation!
+      </div>
+    )
+  }
+
 }

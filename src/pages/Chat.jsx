@@ -31,7 +31,7 @@ export function Chat(props) {
 	const forceInputFocus = useSignal(0);
 
 	const mousePreviousPosition = useSignal(0);
-	const logsWidth = useSignal(420);
+	const logsWidth = useSignal(320);
 
 	const expandLogs = useSignal(false);
 
@@ -379,8 +379,8 @@ export function Chat(props) {
 
 				</div >
 				<div style={{ width: `${logsWidth.value}px` }} className={'bg-[#EBEBEB] h-[100vh] max-w-[600px] min-w-[320px] shrink-0 overflow-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
-					<div className={'flex flex-col h-full pt-8'}>
-						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50'}>
+					<div className={'flex flex-col h-full ' + (logs.length > 0 ? 'pt-8' : '')}>
+						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50 ' + (logs.length > 0 ? 'block' : 'hidden')}>
 							{expandLogs.value &&
 								<div className={'flex items-center gap-1 text-sm'}>
 									<svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
