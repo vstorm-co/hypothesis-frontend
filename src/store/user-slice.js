@@ -132,6 +132,9 @@ export const refreshGoogleToken = () => {
     let state = getState();
 
     try {
+      if (state.user.currentUser.google_refresh_token === undefined) {
+        return
+      }
       const tokens = await callApi(`/auth/refresh-google-token?refresh_token=${state.user.currentUser.google_refresh_token}`, { method: 'PUT' })
       dispatch(userActions.setGoogleToken(tokens));
     } catch (error) {
