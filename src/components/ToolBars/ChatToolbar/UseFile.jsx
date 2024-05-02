@@ -49,9 +49,9 @@ export function UseFile(props) {
 
   const [openPicker, authResponse] = useDrivePicker();
 
-  const handleOpenPicker = () => {
+  const handleOpenPicker = async () => {
     const customViewsArray = [new google.picker.DocsView(google.picker.ViewId.PDFS)];
-    dispatch(refreshGoogleToken());
+    await dispatch(refreshGoogleToken());
 
     openPicker({
       clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
