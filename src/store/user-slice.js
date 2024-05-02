@@ -23,6 +23,7 @@ const userSlice = createSlice({
         state.currentUser.name = action.payload.name;
         state.currentUser.picture = action.payload.picture;
         state.currentUser.google_token = action.payload.google_access_token
+        state.currentUser.google_refresh_token = action.payload.google_refresh_token
 
         localStorage.setItem('ANT_currentUser', JSON.stringify({ ...state.currentUser }));
       } else {
@@ -62,6 +63,13 @@ const userSlice = createSlice({
         state.users = usersTable;
         localStorage.setItem('ANT_users', JSON.stringify(usersTable));
       }
+    },
+    setGoogleToken(state, action) {
+        state.currentUser.google_token = action.payload.google_access_token;
+        localStorage.setItem('ANT_currentUser', JSON.stringify({
+            ...state.currentUser,
+            google_token: action.payload.google_access_token,
+        }));
     },
     logoutUser(state, action) {
       let users = state.users;
@@ -111,6 +119,20 @@ export const refreshUserToken = () => {
       const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
       dispatch(userActions.setUserTokens(tokens));
       route('/')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+
+export const refreshGoogleToken = () => {
+  return async (dispatch, getState) => {
+    let state = getState();
+
+    try {
+        const tokens = await callApi(`/auth/refresh-google-token?refresh_token=${state.user.currentUser.google_refresh_token}`, { method: 'PUT' })
+        dispatch(userActions.setGoogleToken(tokens));
     } catch (error) {
       console.log(error);
     }
