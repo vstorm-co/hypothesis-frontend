@@ -143,7 +143,7 @@ export function Message(props) {
             <button onClick={() => { callEditMessage() }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
           </div> */}
         </div>
-        <div className={'ml-auto hidden group-hover:flex items-start shrink-0'}>
+        <div className={'ml-auto invisible group-hover:visible flex items-start shrink-0'}>
           <EditMessage toggleEdit={toggleEdit} />
           <SaveAsTemplate toggleShowSaveAs={tgl => setShowSaveAs(tgl)} showSaveAs={showSaveAs} msg={props.Message} />
           <CloneChatFromHere msg={props.Message} />
@@ -178,7 +178,7 @@ export function Message(props) {
             <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
               <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{props.Message.content}</ReactMarkdown>
             </div>
-            <div className={'ml-auto shrink-0 hidden ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:block')}>
+            <div className={'ml-auto shrink-0 invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:visible')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
             </div>
           </div>
