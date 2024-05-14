@@ -1,11 +1,14 @@
+import { useSignal } from '@preact/signals';
 import ReactJson from 'react-json-view';
 import { useSelector } from 'react-redux';
 
 export function SmartAnnotateLogs(props) {
   const logs = useSelector(state => state.h.logs);
 
-  function generateDate(dateString) {
-    let date = new Date(dateString);
+  const lastTimeStamp = useSignal(0);
+
+  function generateDate(request) {
+    let date = new Date(request.date);
 
     let year = date.getUTCFullYear();
     let month = date.getUTCMonth() + 1;
@@ -20,10 +23,35 @@ export function SmartAnnotateLogs(props) {
     return target;
   }
 
-  const requestList = logs.map(request =>
-    <div>
-      <div className={'p-0.5 text-xs'}>
-        <ReactJson enableClipboard={false} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request.date)} ${request.api} ${request.type}`} src={request} />
+  function getTimeSpent(request, index) {
+    if (index === 0) {
+      return ""
+    }
+
+    if (request.type === 'sent') {
+      return ""
+    }
+
+    let s = new Date(logs[index - 1].date);
+    let r = new Date(request.date)
+
+    var difference = r.getTime() - s.getTime();
+
+    var seconds = difference / 1000;
+
+    var minutes = Math.floor(seconds / 60);
+    var remainingSeconds = seconds % 60;
+
+    var formattedTime = minutes + "m " + remainingSeconds.toFixed(1) + "s";
+
+    return ` (${formattedTime})`;
+  }
+
+
+  const requestList = logs.map((request, i) =>
+    <div className={'max-w-full break-words'}>
+      <div className={'p-0.5 text-xs break-words max-w-full'}>
+        <ReactJson enableClipboard={false} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
       </div>
     </div>
   );
