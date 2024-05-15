@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 export function SmartAnnotateLogs(props) {
   const logs = useSelector(state => state.h.logs);
+  const currentChat = useSelector(state => state.chats.currentChat);
 
   const lastTimeStamp = useSignal(0);
 
@@ -19,6 +20,7 @@ export function SmartAnnotateLogs(props) {
     let seconds = date.getUTCSeconds();
 
     let target = `${year}-${month < 10 ? `0${month}` : `${month}`}-${day < 10 ? `0${day}` : `${day}`} ${hour < 10 ? `0${hour}` : `${hour}`}:${minutes < 10 ? `0${minutes}` : `${minutes}`}:${seconds < 10 ? `0${seconds}` : `${seconds}`}`
+    // let target = `${hour < 10 ? `0${hour}` : `${hour}`}:${minutes < 10 ? `0${minutes}` : `${minutes}`}:${seconds < 10 ? `0${seconds}` : `${seconds}`}`
 
     return target;
   }
@@ -47,8 +49,9 @@ export function SmartAnnotateLogs(props) {
     return ` (${formattedTime})`;
   }
 
+  let filteredLogs = logs.filter(l => l.room_id === currentChat.uuid);
 
-  const requestList = logs.map((request, i) =>
+  const requestList = filteredLogs.map((request, i) =>
     <div className={'max-w-full break-words'}>
       <div className={'p-0.5 text-xs break-words max-w-full'}>
         <ReactJson enableClipboard={false} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
