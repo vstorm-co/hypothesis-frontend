@@ -7,6 +7,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Papaya</title>
 	<script async defer src="https://apis.google.com/js/api.js"></script>
+	<script src="https://hypothes.is/embed.js" async>
+	</script>
+	<script>
+		window.hypothesisConfig = () => ({
+			onLayoutChange: (obj) => {
+				console.log(obj);
+				let body = document.querySelector('body');
+				if (body) {
+					if (obj.expanded) {
+						body.classList.add('pr-[390px]', '2xl:pr-[461px]');
+					} else if (!obj.expanded) {
+						body.classList.remove('pr-[390px]', '2xl:pr-[461px]');
+					}
+				}
+			}
+		});
+	</script>
 </head>
 
 <body>
