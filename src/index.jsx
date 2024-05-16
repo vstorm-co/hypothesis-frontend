@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useEffect } from 'preact/hooks';
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import Router from 'preact-router';
 import { render } from 'preact';
 import "preact/devtools";
@@ -52,18 +52,18 @@ export function App() {
 			let json_data = JSON.parse(e.data)
 
 			if (json_data.type === 'room-changed') {
-				if(json_data.id === state.chats.currentChat.uuid){
+				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(selectChat(json_data.id));
 				}
 				store.dispatch(getChatsData());
 			} else if (json_data.type === 'template-changed') {
 				store.dispatch(getTemplatesData());
 			} else if (json_data.type === 'optimizing-user-file-content') {
-				if(json_data.id === state.chats.currentChat.uuid){
+				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(uiActions.toggleFileUpdating(true));
 				}
 			} else if (json_data.type === 'user-file-updated') {
-				if(json_data.id === state.chats.currentChat.uuid){
+				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(uiActions.toggleFileUpdating(false));
 				}
 			}
@@ -76,17 +76,19 @@ export function App() {
 				<main>
 					<div className="flex overflow-hidden">
 						<SideBar />
-						<Router>
-							<MockChat path="/" />
-							<Home path="/home" />
-							<PrivacyPolicy path="/privacy-policy" />
-							<Authorize path="/auth" />
-							<RefreshToken path="/refresh-token" />
-							<SetUp path="/setup" />
-							<Chat path="/chats/:id" />
-							<Template path="/templates/:id" />
-							<NotFound default />
-						</Router>
+						<div class="chatbox flex w-full">
+							<Router>
+								<MockChat path="/" />
+								<Home path="/home" />
+								<PrivacyPolicy path="/privacy-policy" />
+								<Authorize path="/auth" />
+								<RefreshToken path="/refresh-token" />
+								<SetUp path="/setup" />
+								<Chat path="/chats/:id" />
+								<Template path="/templates/:id" />
+								<NotFound default />
+							</Router>
+						</div>
 					</div>
 				</main>
 			</Provider>

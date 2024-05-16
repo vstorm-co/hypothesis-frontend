@@ -7,34 +7,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Papaya</title>
 	<script async defer src="https://apis.google.com/js/api.js"></script>
-	<script src="https://hypothes.is/embed.js" async>
+	<script src="https://hypothes.is/embed.js">
 	</script>
 	<script>
 		window.hypothesisConfig = () => ({
 			onLayoutChange: (obj) => {
-				console.log(obj);
-				let chatbox = document.querySelector('.page-chat');
-				let pageStart = document.querySelector('.page-start');
-				let tempalatePage = document.querySelector('.page-template');
+				let chatbox = document.querySelector('.chatbox');
+
 				if (chatbox) {
+					let location = window.location.pathname.split("/")[1];
+					let pValue = location === 'templates' ? '460' : '390'
 					if (obj.expanded) {
-						chatbox.classList.add('pr-[390px]', '2xl:pr-[461px]');
+						chatbox.classList.add(`pr-[${pValue}px]`, '2xl:pr-[461px]');
 					} else if (!obj.expanded) {
-						chatbox.classList.remove('pr-[390px]', '2xl:pr-[461px]');
-					}
-				}
-				else if (pageStart) {
-					if (obj.expanded) {
-						pageStart.classList.add('pr-[390px]', '2xl:pr-[461px]');
-					} else if (!obj.expanded) {
-						pageStart.classList.remove('pr-[390px]', '2xl:pr-[461px]');
-					}
-				}
-				else if (tempalatePage) {
-					if (obj.expanded) {
-						tempalatePage.classList.add('pr-[460px]', '2xl:pr-[461px]');
-					} else if (!obj.expanded) {
-						tempalatePage.classList.remove('pr-[460px]', '2xl:pr-[461px]');
+						chatbox.classList.remove(`pr-[${pValue}px]`, '2xl:pr-[461px]');
 					}
 				}
 			}
