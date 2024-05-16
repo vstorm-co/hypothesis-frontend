@@ -209,6 +209,14 @@ input:disabled {
 	height: 16px;
 }
 
+.pr-\[390px\] {
+	padding-right: 390px;
+}
+
+.pr-\[460px\] {
+	padding-right: 460px;
+}
+
 
 .input-form .write-button {
 	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
