@@ -13,12 +13,28 @@
 		window.hypothesisConfig = () => ({
 			onLayoutChange: (obj) => {
 				console.log(obj);
-				let body = document.querySelector('body');
-				if (body) {
+				let chatbox = document.querySelector('.page-chat');
+				let pageStart = document.querySelector('.page-start');
+				let tempalatePage = document.querySelector('.page-template');
+				if (chatbox) {
 					if (obj.expanded) {
-						body.classList.add('pr-[390px]', '2xl:pr-[461px]');
+						chatbox.classList.add('pr-[390px]', '2xl:pr-[461px]');
 					} else if (!obj.expanded) {
-						body.classList.remove('pr-[390px]', '2xl:pr-[461px]');
+						chatbox.classList.remove('pr-[390px]', '2xl:pr-[461px]');
+					}
+				}
+				else if (pageStart) {
+					if (obj.expanded) {
+						pageStart.classList.add('pr-[390px]', '2xl:pr-[461px]');
+					} else if (!obj.expanded) {
+						pageStart.classList.remove('pr-[390px]', '2xl:pr-[461px]');
+					}
+				}
+				else if (tempalatePage) {
+					if (obj.expanded) {
+						tempalatePage.classList.add('pr-[460px]', '2xl:pr-[461px]');
+					} else if (!obj.expanded) {
+						tempalatePage.classList.remove('pr-[460px]', '2xl:pr-[461px]');
 					}
 				}
 			}
