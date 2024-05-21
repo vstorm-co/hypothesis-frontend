@@ -23,9 +23,11 @@
 		"react-contenteditable": "^3.3.7",
 		"react-google-drive-picker": "^1.2.2",
 		"react-json-view": "^1.21.3",
-		"react-markdown": "^8.0.7",
+		"react-markdown": "^9.0.1",
 		"react-redux": "^8.1.2",
-		"react-use-websocket": "^3.0.0"
+		"react-use-websocket": "^3.0.0",
+		"rehype-raw": "^7.0.0",
+		"remark-gfm": "^4.0.0"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.5.0",

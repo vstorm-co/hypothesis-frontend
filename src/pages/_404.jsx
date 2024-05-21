@@ -1,69 +1,54 @@
-import { useState, useEffect, useRef } from 'preact/hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { route } from 'preact-router';
+import { signal } from '@preact/signals';
+import { Loading } from '../components/Loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '../store/ui-slice';
+import { refreshUserToken } from '../store/user-slice';
+
+import papaya from '../assets/images/papaya.png';
+
+const loading = signal(false);
+
+function toggleLoading() {
+	loading.value = !loading.value;
+}
 
 import { Message } from '../components/Message';
-import { Toast } from '../components/Toast';
+import { useEffect } from 'preact/hooks';
 
-import send from '../assets/send.svg';
+export function NotFound() {
+	const dispatch = useDispatch();
 
-
-export function NotFound(props) {
-	const user = useSelector(state => state.user.currentUser);
-
-	const [input, setInput] = useState('');
-
-	const chatRef = useRef(null);
+	dispatch(uiActions.setHideSideBar(true));
 
 	useEffect(() => {
-		if (user.access_token === null) {
-			route('/auth')
-		}
+
 	}, [])
 
-	function handleInputChange(event) {
-		setInput(event.target.value);
-	}
+	let messages = [
+		{
+			created_by: 'bot',
+			content: `Looks like page you are looking for **was not found**. [Go here](${window.location.origin}/) `,
+		},
+	]
 
-	function handleKeyDown(event) {
-		if (event.key === 'Enter') {
-			if (event.shiftKey) {
-
-			} else {
-				event.preventDefault();
-			}
-		}
-	}
-
-	const msg = {
-		created_by: 'bot',
-		content: 'Unfortunately, we cant find page you are looking for.'
-	}
 	return (
-		<div className={'flex w-full mx-4'}>
-			<div>
-			</div>
-			<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-				<div className="h-[100vh] flex flex-col pt-4 pb-2">
-					<div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
-						<div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-							404
-						</div>
-
-						<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-							<Toast />
-						</div>
+		<div className={'w-full h-[100vh] bg-[#202020]'}>
+			<div className={'w-[720px] mx-auto'}>
+				<div className={'py-9 flex items-center'}>
+					<img src={papaya} className={'w-6'} alt="" />
+					<h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+					<div className={'text-sm leading-6 ml-4 text-[#747474]'}>
+						Your Team and AI Everywhere
 					</div>
-					<div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
-
-						<Message Loading={true} Message={msg} />
-					</div>
-					<form className="mt-auto">
-						<textarea onKeyDown={handleKeyDown} onChange={handleInputChange} value={input} className=" w-full h-[156px] bg-[#F2F2F2] border rounded border-[#DBDBDB] focus:outline-none px-4 py-3 resize-none text-sm leading-6"></textarea>
-					</form>
-					<div className="flex justify-end items-center mt-2 gap-x-4">
-						{/* <button className="text-[#747474] text-sm leading-6 font-bold">Save As Template</button> */}
-						<button type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Send Message<img className="ml-2" src={send} alt="" /></button>
+				</div>
+				<div className={'px-8 pb-8 bg-white rounded'}>
+					<div className={'mx-auto'}>
+						<div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
+							Oops!
+						</div>
+						<div className={(loading.value ? 'hidden' : '')}>
+							<Message Message={messages[0]} />
+						</div>
 					</div>
 				</div>
 			</div>

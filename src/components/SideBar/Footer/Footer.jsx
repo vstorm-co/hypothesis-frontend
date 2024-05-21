@@ -7,11 +7,12 @@ import AccountOptions from './AccountOptions';
 import { route } from 'preact-router';
 
 import { userActions } from '../../../store/user-slice';
-import { chatsActions } from '../../../store/chats-slice';
+import { chatsActions, getChatsData } from '../../../store/chats-slice';
 
 import { AddNewAccount } from './AddNewAccount';
 import { ClearStorage } from './ClearStorage';
 import { Detonate } from './Detonate';
+import { getTemplatesData } from '../../../store/templates-slice';
 
 const switchUserActive = signal(false);
 
@@ -47,6 +48,8 @@ export function Footer() {
   function setUser(user) {
     dispatch(userActions.setUser(user));
     dispatch(chatsActions.setCurrentChat({}))
+    dispatch(getChatsData());
+    dispatch(getTemplatesData());
     route('/');
     switchUserActive.value = false;
   }

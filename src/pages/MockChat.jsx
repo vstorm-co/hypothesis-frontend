@@ -29,6 +29,9 @@ export function MockChat(props) {
     if (user.access_token === null) {
       route('/auth')
     }
+
+    dispatch(getChatsData());
+    dispatch(getTemplatesData());
   }, [user])
 
 

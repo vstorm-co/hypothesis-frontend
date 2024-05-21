@@ -21,10 +21,11 @@ const callApi = async (url, options = {}) => {
   const response = await fetch(mergedUrl, mergedOptions);
 
   if (!response.ok) {
-    if (user.refresh_token) {
-      route('/refresh-token')
-    } else {
-      route('/auth');
+    switch (response.status) {
+      case 401:
+        route(user.refresh_token ? '/refresh-token' : '/auth'); break;
+      case 404:
+        route('/_404'); break;
     }
   }
 

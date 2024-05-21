@@ -217,7 +217,6 @@ input:disabled {
 	padding-right: 460px;
 }
 
-
 .input-form .write-button {
 	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
 }
@@ -344,10 +343,42 @@ input:disabled {
 
 body {
 	font-family: 'SF Pro';
+	@apply mr-9
 }
 
 .templatePreview span {
 	background-color: transparent !important
+}
+
+.bot-response table {
+	@apply border border-[#DBDBDB] rounded-lg border-collapse border-spacing-3 w-full mb-4
+}
+
+.bot-response table td {
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+
+	@apply p-1.5;
+}
+
+.bot-response table thead tr {
+	@apply bg-[#DBDBDB]
+}
+
+.bot-response table tr {
+	@apply bg-[#FAFAFA]
+}
+
+.bot-response table th {
+	border-left-width: 1px;
+	border-left-color: #FAFAFA;
+	@apply text-left p-1.5
+}
+
+.bot-response table th:first-child {
+	border-left-width: 1px;
+	border-left-color: #DBDBDB;
+	@apply text-left p-1.5
 }
 
 .bot-response ul {

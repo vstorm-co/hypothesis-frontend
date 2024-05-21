@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
 import rehypePrism from '@mapbox/rehype-prism';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import SaveAsTemplate from './ToolBars/ChatToolbar/SaveAsTemplate';
 import { useSignal } from '@preact/signals';
 
@@ -31,7 +33,7 @@ export function Message(props) {
 
   const UpdateMessage = useRef(null);
 
-  let hideCopyAsHere = ['/auth', '/', '/refresh-token']
+  let hideCopyAsHere = ['/auth', '/', '/refresh-token', '/_404']
 
   function toggleEdit() {
     if (!EditEnabled.value) {
@@ -176,7 +178,7 @@ export function Message(props) {
           </div>
           <div className={'flex group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
-              <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{props.Message.content}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{props.Message.content}</ReactMarkdown>
             </div>
             <div className={'ml-auto shrink-0 invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:visible')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
