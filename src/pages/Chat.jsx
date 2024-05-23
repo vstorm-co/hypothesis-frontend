@@ -262,21 +262,16 @@ export function Chat(props) {
 		window.addEventListener('mouseup', removeEventToResize);
 
 		document.querySelector('body').classList.add('select-none', 'cursor-col-resize');
-		console.log("ADD");
 	}
 
 	function removeEventToResize() {
 		window.removeEventListener('mousemove', handleResize);
 		document.querySelector('body').classList.remove('select-none', 'cursor-col-resize');
 		mousePreviousPosition.value = 0;
-
-		console.log("REMOVE");
 	}
 
 	function handleResize(e) {
 		let body = document.querySelector('body');
-
-		console.log(body.clientWidth - e.clientX);
 		logsWidth.value = body.clientWidth - e.clientX;
 	}
 
@@ -345,7 +340,7 @@ export function Chat(props) {
 								<PromptInput
 									Icon={(blockSending.value ? 'stop' : 'send')}
 									blockSending={blockSending.value}
-									SubmitButtonText={(blockSending.value ? 'Stop Generating' : 'Send Message')}
+									SubmitButtonText={(blockSending.value ? 'Stop Generating' : 'Send Prompt')}
 									handleSubmitButton={(value) => { handleSubmitButton(value) }}
 									SecondButton={false}
 									SecondButtonText={''}

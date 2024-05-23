@@ -219,6 +219,10 @@ export function SmartAnnotate(props) {
     response_template.value = data.promptArray[0].prompt;
   }
 
+  function handlePromptData(data) {
+    prompt.value = data.promptArray[0].prompt;
+  }
+
   return (
     <div className={'relative'}>
       <div onClick={() => toggleFormVisible()} className={'border p-1 border-b-0 border-l-0 cursor-pointer border-[#DBDBDB] w-8 h-8 flex items-center justify-center rounded-tr'}>
@@ -316,7 +320,25 @@ export function SmartAnnotate(props) {
                   </div>
                 </div>
               </div>
-              <div className={'mt-4'}>
+              <div className={'mt-6'}>
+                <div className={'w-full'}>
+                  <div className="text-xs font-bold text-[#747474] mb-1">
+                    Prompt
+                  </div>
+                  <div class="relative -mt-[25px]">
+                    <ResponseTemplateInput
+                      WSsendMessage={value => { }}
+                      handleSubmitButton={value => { handlePromptData(value) }}
+                    // clearInputOnSubmit={true}
+                    />
+                  </div>
+                  {!promptValid.value &&
+                    <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
+                  }
+                </div>
+              </div>
+
+              {/* <div className={'mt-4'}>
                 <div className="text-xs font-bold text-[#747474] mb-1">
                   Prompt
                 </div>
@@ -324,7 +346,7 @@ export function SmartAnnotate(props) {
                 {!promptValid.value &&
                   <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
                 }
-              </div>
+              </div> */}
             </div>
             <div className={'mt-4 flex justify-center ' + (annotationLoading.value ? '' : 'hidden')}>
               <Loading />

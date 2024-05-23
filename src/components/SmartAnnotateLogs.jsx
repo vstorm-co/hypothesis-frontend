@@ -35,7 +35,10 @@ export function SmartAnnotateLogs(props) {
     }
 
     let s = new Date(logs[index - 1].date);
-    let r = new Date(request.date)
+    let r = new Date(request.date);
+
+    console.log(logs[index - 1]);
+    console.log(logs[index]);
 
     var difference = r.getTime() - s.getTime();
 

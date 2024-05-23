@@ -200,7 +200,7 @@ export function ResponseTemplateInput(props) {
       let currentFiles = htmlText.querySelectorAll('span.file-pill');
 
       currentFiles.forEach(file => {
-        targetPreview = targetPreview.replace(file.outerHTML, `<<file:${file.dataset.content}>>`);
+        targetPreview = targetPreview.replace(file.outerHTML, ``);
       })
 
       let returnBoxes = htmlText.querySelectorAll('div.return-box, span.return-box-new');
