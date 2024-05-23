@@ -146,7 +146,7 @@ export function MockChat(props) {
                 Icon={'send'}
                 blockSending={false}
                 WSsendMessage={() => { }}
-                SubmitButtonText={'Send Message'}
+                SubmitButtonText={'Send Prompt'}
                 handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
                 SecondButton={true}
               />
