@@ -5,75 +5,82 @@ import plus from '../../assets/plus.svg';
 import arrowDown from '../../assets/arrow-down.svg';
 import { useEffect, useState } from 'preact/hooks';
 import { Loading } from '../Loading';
+import { Virtuoso } from 'react-virtuoso';
+import { useSignal } from '@preact/signals';
+import caretDown from '../../assets/caret-down.svg';
 
 export function Templates() {
   const templates = useSelector(state => state.templates.templates);
   const user = useSelector(state => state.user.currentUser);
-  const size = useSelector(state => state.templates.size);
   const info = useSelector(state => state.templates.info);
   const ui = useSelector(state => state.ui);
   const dispatch = useDispatch();
 
-  const [loadSize, setLoadSize] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  const showFadeBottom = useSignal(true);
+  const showFadeTop = useSignal(false);
+
+  const isFirstRender = useSignal(true);
+
+  const expanded = useSignal(false);
+
+  function handleExpand(val) {
+    expanded.value = val;
+  }
+
 
   function callCreateTemplate() {
     dispatch(createTemplate({ name: 'New Template', content: '' }));
   }
 
   useEffect(() => {
-    if (info.total > 5) {
-      setLoadSize(5);
-    }
-    if (info.total < 5) {
-      setLoadSize(0);
-    }
+    let virtuosoScroll = document.querySelector('.templates div[data-testid="virtuoso-scroller"]');
 
-    if ((info.total - size) < 5) {
-      setLoadSize(info.total - size);
-    }
-  }, [info.total]);
-
-  function callLoadMore() {
-    dispatch(templatesActions.setSize(size + loadSize));
-
-    if (info.total > 20) {
-      setLoadSize(10);
+    if (!isFirstRender.value) {
+      if (virtuosoScroll.scrollTop + virtuosoScroll.clientHeight >= virtuosoScroll.scrollHeight - 10) {
+        showFadeBottom.value = false;
+      } else {
+        showFadeBottom.value = true;
+      }
+    } else {
+      isFirstRender.value = false
     }
 
-    if (info.total < 5) {
-      setLoadSize(0);
+    if (virtuosoScroll.scrollTop < 80) {
+      showFadeTop.value = false
+    } else {
+      showFadeTop.value = true;
     }
-
-    if ((info.total - (size + loadSize)) < 5) {
-      setLoadSize(info.total - (size + loadSize));
-    }
-
-    dispatch(getTemplatesData());
-  }
+  }, [isScrolling])
 
   return (
-    <div className="mt-4">
-      <div className="text-xs leading-6 font-bold mb-2 flex items-center pl-2">
-        <div>Templates</div> <div className={"ml-2 w-6 h-6 border border-[#595959] flex justify-center items-center rounded-[4px] " + ((info?.total > 0 && templates?.length > 0) ? '' : 'hidden')}>{info?.total}</div>
+    <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-0 pb-12')}>
+      <div className="text-xs leading-6 font-bold flex items-center pl-2 pt-4 pb-2">
+        <div onClick={() => handleExpand(!expanded.value)} className={'flex cursor-pointer'}>
+          <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (expanded.value ? '' : '-rotate-90')} />
+          <div>TEMPLATES</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + ((info?.total > 0 && templates?.length > 0) ? '' : 'hidden')}>{info?.total}</div>
+        </div>
         <div onClick={callCreateTemplate} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
       {!ui.chatsLoading &&
-        <div>
-          <div className={''}>
-            {templates?.map(temp => (
-              <TemplateBar TemplateData={temp} />
-            ))}
-          </div>
-          {(loadSize > 0 && templates?.length > 0) && <div onClick={callLoadMore} className={"flex items-center mt-2 py-2 px-2 rounded cursor-pointer border-dashed border border-[#595959]"}>
-            <div className={'py-[2px] px-[3px]'}>
-              <img className={"w-[10px] h-[12px]"} src={arrowDown} alt="" />
-            </div>
-            <div className="font-normal text-sm leading-6 ml-2">
-              Load {loadSize} More
-            </div>
-          </div>}
+        <div className={'flex flex-col overflow-y-auto relative templates'}>
+          {/* {templates?.map(temp => (
+            <TemplateBar TemplateData={temp} />
+          ))} */}
+          <Virtuoso
+            style={{ height: '400px', scrollbarWidth: 'none' }}
+            data={templates}
+            topItemCount={1}
+            isScrolling={setIsScrolling}
+            itemContent={(_, template) => (
+              <TemplateBar TemplateData={template} />
+            )}
+          />
+          <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
+          <div className={"fadeTop mt-6 " + (showFadeTop.value ? '' : 'hid')}></div>
           <div className={'text-[#747474] px-2 text-sm mt-2 ' + (templates?.length === 0 ? '' : 'hidden')}>
             No templates
           </div>

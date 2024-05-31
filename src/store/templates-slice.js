@@ -10,7 +10,7 @@ const templatesSlice = createSlice({
     templates: [],
     useTemplates: [],
     currentTemplate: {},
-    size: 5,
+    size: 100,
     info: {
       total: 6,
     }
@@ -71,9 +71,9 @@ export const getTemplatesData = (payload) => {
       url = `${url}&size=${state.templates.size}`;
     };
 
-    if(state.ui.searchFilters.sortBy){
+    if (state.ui.searchFilters.sortBy) {
       url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
-    }else{
+    } else {
       url = `${url}&order_by=visibility`;
     }
 
