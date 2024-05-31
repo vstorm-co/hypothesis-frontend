@@ -51,13 +51,13 @@ export function Chats(props) {
       isFirstRender.value = false
     }
 
-    if (virtuosoScroll.scrollTop < 80) {
+    if (virtuosoScroll.scrollTop < 95) {
       showFadeTop.value = false
     } else {
       showFadeTop.value = true;
     }
 
-    console.log(Math.ceil(virtuosoScroll.scrollTop + virtuosoScroll.clientHeight), virtuosoScroll.scrollHeight);
+    console.log(virtuosoScroll.scrollTop);
   }, [isScrolling])
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export function Chats(props) {
 
   return (
     <div className={"px-3 flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-14 pb-8')} >
-      <div className="text-xs leading-6 font-bold flex items-center pt-4 pb-2 pl-2">
+      <div className="text-xs leading-6 font-bold flex items-center py-4 pl-2">
         <div onClick={() => handleExpanded(!expanded.value)} className={'flex cursor-pointer'}>
           <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (expanded.value ? '' : '-rotate-90')} />
           <div>CHATS</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + (info?.total > 0 && chats?.length > 0 ? '' : 'hidden')}>{info?.total}</div>

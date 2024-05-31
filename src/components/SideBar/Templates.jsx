@@ -11,6 +11,7 @@ import caretDown from '../../assets/caret-down.svg';
 
 export function Templates() {
   const templates = useSelector(state => state.templates.templates);
+  const currentTemplate = useSelector(state => state.templates.currentTemplate);
   const user = useSelector(state => state.user.currentUser);
   const info = useSelector(state => state.templates.info);
   const ui = useSelector(state => state.ui);
@@ -56,7 +57,7 @@ export function Templates() {
 
   return (
     <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-0 pb-12')}>
-      <div className="text-xs leading-6 font-bold flex items-center pl-2 pt-4 pb-2">
+      <div className="text-xs leading-6 font-bold flex items-center pl-2 py-4">
         <div onClick={() => handleExpand(!expanded.value)} className={'flex cursor-pointer'}>
           <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (expanded.value ? '' : '-rotate-90')} />
           <div>TEMPLATES</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + ((info?.total > 0 && templates?.length > 0) ? '' : 'hidden')}>{info?.total}</div>
@@ -73,14 +74,14 @@ export function Templates() {
           <Virtuoso
             style={{ height: '400px', scrollbarWidth: 'none' }}
             data={templates}
-            topItemCount={1}
+            topItemCount={currentTemplate.uuid ? 1 : 0}
             isScrolling={setIsScrolling}
             itemContent={(_, template) => (
               <TemplateBar TemplateData={template} />
             )}
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
-          <div className={"fadeTop mt-6 " + (showFadeTop.value ? '' : 'hid')}></div>
+          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentTemplate.uuid ? 'mt-6' : '')}></div>
           <div className={'text-[#747474] px-2 text-sm mt-2 ' + (templates?.length === 0 ? '' : 'hidden')}>
             No templates
           </div>
