@@ -515,6 +515,67 @@ option[value=""] {
 	/* background: #555; */
 }
 
+.custom-grid {
+	align-content: start;
+	inline-size: 320px;
+	block-size: 100dvh;
+	display: grid;
+	overflow: hidden;
+}
+
+.no-scrollbar {
+	scrollbar-width: none;
+	/* For Firefox */
+	-ms-overflow-style: none;
+	/* For Internet Explorer and Edge */
+}
+
+.fadeBottom {
+	pointer-events: none;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 128px;
+	transition: opacity 200ms, width 1ms;
+
+	/* border: 1px solid red; */
+	background: linear-gradient(180deg, rgba(32, 32, 32, 0) 0%, #202020 100%);
+}
+
+.fadeBottom.hid {
+	transition: opacity 200ms, width 1ms 300ms;
+	opacity: 0;
+	width: 0;
+}
+
+.fadeTop {
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100px;
+	opacity: 1;
+	transition: opacity 200ms, width 1ms;
+
+	/* border: 1px solid red; */
+	background-image: linear-gradient(180deg, #202020, rgba(32, 32, 32, 0) 100%);
+}
+
+.fadeTop.hid {
+	transition: opacity 200ms, width 1ms 300ms;
+	opacity: 0;
+	width: 0;
+}
+
+[data-testid="virtuoso-item-list"]>div:first-child>div {
+	/* border: 1px solid red; */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	/* For Chrome, Safari, and Opera */
+	display: none;
+}
+
 pre,
 code {
 	white-space: pre-wrap !important;
