@@ -1,10 +1,9 @@
-// @ts-nocheck
 import { cloneChat, getChatsData, updateChat } from '../../../store/chats-slice';
 import { deleteChat } from '../../../store/chats-slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useEffect } from 'preact/hooks';
 import { createTemplate } from '../../../store/templates-slice';
-import { signal } from '@preact/signals';
+import { signal, useSignal } from '@preact/signals';
 import { route } from 'preact-router';
 
 
@@ -12,6 +11,7 @@ import dots from '../../../assets/dots.svg';
 import bin from '../../../assets/bin.svg';
 import braces from '../../../assets/braces.svg'
 import duplicate from '../../../assets/duplicate.svg';
+import { showToast } from '../../../store/ui-slice';
 
 const confirmDelete = signal(false);
 const showEdit = signal(false);
@@ -47,6 +47,12 @@ export function Edit(props) {
 
   const editRef = useRef(null);
   outsideClickHanlder(editRef);
+
+  const shareEnabled = useSignal(false);
+
+  useEffect(() => {
+    shareEnabled.value = currentChat.share
+  }, [currentChat])
 
   function callDeleteChat() {
     dispatch(deleteChat({ chatId: currentChat.uuid }));
@@ -93,6 +99,20 @@ export function Edit(props) {
     }
   }
 
+  function disableShareByLink() {
+    dispatch(showToast({ content: `Sharing by link ${currentChat.share ? 'disabled' : 'enabled'}` }));
+
+    shareEnabled.value = !shareEnabled.value
+
+    dispatch(updateChat({
+      uuid: currentChat.uuid,
+      organization_uuid: currentChat.organization_uuid,
+      visibility: currentChat.visibility,
+      share: !currentChat.share
+    }));
+
+  }
+
   return (
     <div ref={editRef} className="relative">
       <div onClick={toggleEdit} className={"p-1 border border-[#DBDBDB] rounded-r cursor-pointer"}>
@@ -105,11 +125,20 @@ export function Edit(props) {
           <div className="text-xs font-bold text-[#747474] mb-1">
             Visibility
           </div>
+
           <div className={'text-sm leading-6 flex ' + (user.user_id === currentChat.owner ? '' : 'opacity-50')}>
             {/*<div onClick={() => { editChatShare("just_me") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? '' : 'bg-[#747474] text-white')}>Just Me</div>*/}
             <div onClick={() => { editChatShare("just_me") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? '' : 'bg-[#747474] text-white')}>Just Me</div>
             {/*<div onClick={() => { editChatShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>*/}
             <div onClick={() => { editChatShare("organization") }} className={'cursor-pointer px-2 py-1 rounded ' + (currentChat.visibility === "organization" ? 'bg-[#747474] text-white' : '')}> Organization</div>
+          </div>
+
+          <div className={'mt-1.5 flex items-center ' + (user.user_id === currentChat.owner ? '' : 'pointer-events-none opacity-50')}>
+            <label class="switch">
+              <input onChange={disableShareByLink} checked={shareEnabled.value} type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+            <div className="text-sm leading-6 ml-2">Anyone with the link</div>
           </div>
         </div>
         {/* {user.user_id === currentChat.owner &&
