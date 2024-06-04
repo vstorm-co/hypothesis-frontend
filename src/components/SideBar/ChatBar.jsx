@@ -36,6 +36,7 @@ export const ChatBar = props => {
       return 'Just now';
     }
 
+
     if (hours < 24) {
       return `${hours} ${hours > 1 ? 'hours' : 'hour'} ago`
     } else if (hours >= 24 && hours < 7 * 24) {
