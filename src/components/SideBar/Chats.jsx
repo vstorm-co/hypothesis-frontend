@@ -51,7 +51,7 @@ export function Chats(props) {
       isFirstRender.value = false
     }
 
-    if (virtuosoScroll.scrollTop < 95) {
+    if (virtuosoScroll.scrollTop < 50) {
       showFadeTop.value = false
     } else {
       showFadeTop.value = true;
@@ -122,7 +122,7 @@ export function Chats(props) {
             )}
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
-          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentChat.uuid ? 'mt-6' : '')}></div>
+          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentChat.uuid ? 'mt-16' : '')}></div>
           <div className={'text-[#747474] px-2 text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
             No chats
           </div>

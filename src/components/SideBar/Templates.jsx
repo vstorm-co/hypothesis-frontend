@@ -53,7 +53,7 @@ export function Templates() {
     } else {
       showFadeTop.value = true;
     }
-  }, [isScrolling])
+  }, [isScrolling, expanded.value])
 
   return (
     <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-0 pb-12')}>
@@ -74,14 +74,14 @@ export function Templates() {
           <Virtuoso
             style={{ height: '400px', scrollbarWidth: 'none' }}
             data={templates}
-            topItemCount={currentTemplate.uuid ? 1 : 0}
+            topItemCount={0}
             isScrolling={setIsScrolling}
             itemContent={(_, template) => (
               <TemplateBar TemplateData={template} />
             )}
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
-          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentTemplate.uuid ? 'mt-6' : '')}></div>
+          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ')}></div>
           <div className={'text-[#747474] px-2 text-sm mt-2 ' + (templates?.length === 0 ? '' : 'hidden')}>
             No templates
           </div>
