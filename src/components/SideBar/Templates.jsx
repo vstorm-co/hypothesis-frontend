@@ -3,7 +3,7 @@ import { createTemplate, getTemplatesData, templatesActions } from '../../store/
 import { TemplateBar } from './TemplateBar';
 import plus from '../../assets/plus.svg';
 import arrowDown from '../../assets/arrow-down.svg';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { Loading } from '../Loading';
 import { Virtuoso } from 'react-virtuoso';
 import { useSignal } from '@preact/signals';
@@ -16,6 +16,8 @@ export function Templates() {
   const info = useSelector(state => state.templates.info);
   const ui = useSelector(state => state.ui);
   const dispatch = useDispatch();
+
+  const virtuoso = useRef(null);
 
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -55,6 +57,19 @@ export function Templates() {
     }
   }, [isScrolling, expanded.value])
 
+  useEffect(() => {
+    if (currentTemplate.uuid != '') {
+      let target = templates.find(t => t.uuid === currentTemplate.uuid);
+      let targetIndex = templates.indexOf(target);
+
+      virtuoso.current.scrollToIndex({
+        index: targetIndex,
+        align: 'start',
+        behavior: 'smooth'
+      })
+    }
+  }, [currentTemplate.uuid])
+
   return (
     <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-0 pb-12')}>
       <div className="text-xs leading-6 font-bold flex items-center pl-2 py-4">
@@ -72,6 +87,7 @@ export function Templates() {
             <TemplateBar TemplateData={temp} />
           ))} */}
           <Virtuoso
+            ref={virtuoso}
             style={{ height: '400px', scrollbarWidth: 'none' }}
             data={templates}
             topItemCount={0}

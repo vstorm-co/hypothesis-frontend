@@ -535,7 +535,7 @@ option[value=""] {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	height: 128px;
+	height: 50px;
 	transition: opacity 200ms, width 1ms;
 
 	/* border: 1px solid red; */
@@ -553,7 +553,7 @@ option[value=""] {
 	position: absolute;
 	top: 0;
 	width: 100%;
-	height: 100px;
+	height: 50px;
 	opacity: 1;
 	transition: opacity 200ms, width 1ms;
 
