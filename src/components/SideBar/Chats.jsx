@@ -122,7 +122,7 @@ export function Chats(props) {
             )}
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
-          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentChat.uuid ? 'mt-16' : '')}></div>
+          <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentChat.uuid ? 'mt-14' : '')}></div>
           <div className={'text-[#747474] px-2 text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
             No chats
           </div>
