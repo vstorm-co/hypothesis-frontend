@@ -194,7 +194,7 @@ export function Message(props) {
           <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} class={''}>
             <div className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
               <img src={papaya} className="w-3" alt="" />
-              {/* <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} /> */}
+              <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
             </div>
           </div>
           <div className={'flex flex-col group w-full'}>
