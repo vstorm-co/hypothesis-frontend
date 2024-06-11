@@ -151,6 +151,15 @@ export function SmartAnnotate(props) {
 
       localStorage.removeItem("ANT_annotateToCreate");
     }
+
+    let messages = currentChat.messages;
+    let annotates = messages.filter(m => m.created_by === 'annotation');
+
+    if (annotates.length > 0) {
+      let target = annotates[annotates.length - 1];
+      url.value = target.content_dict.url;
+      prompt.value = target.content_dict.prompt;
+    }
   }, [currentChat.uuid])
 
   async function handleSubmit() {
