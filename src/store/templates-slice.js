@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { route } from 'preact-router';
 
 import callApi from "../api";
+import { uiActions } from "./ui-slice";
 
 const templatesSlice = createSlice({
   name: 'templates',
@@ -108,6 +109,7 @@ export const selectTemplate = (payload) => {
     try {
       const template = await callApi(`/template/${payload}`);
       dispatch(templatesActions.setCurrentTemplate(template));
+      dispatch(uiActions.setTemplatesExpanded(true));
     } catch (err) {
       console.log(err);
       route('/404')

@@ -11,6 +11,7 @@ import { Transition } from 'react-transition-group';
 import caretDown from '../../assets/caret-down.svg';
 
 import { useSignal } from '@preact/signals';
+import { uiActions } from '../../store/ui-slice';
 
 export function Chats(props) {
   const chats = useSelector(state => state.chats.chats);
@@ -19,6 +20,8 @@ export function Chats(props) {
   const size = useSelector(state => state.chats.size);
   const info = useSelector(state => state.chats.info);
   const ui = useSelector(state => state.ui);
+
+  const dispatch = useDispatch();
 
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -29,14 +32,13 @@ export function Chats(props) {
 
   const isFirstRender = useSignal(true);
 
-  const expanded = useSignal(true);
-  function handleExpanded(val) {
-    expanded.value = val
+  // const expanded = useSignal(true);
+  function handleExpanded() {
+    dispatch(uiActions.setChatsExpanded(!ui.chatsExpanded))
   }
 
   const organizationChats = useSelector(state => state.chats.organizationChats);
 
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let virtuosoScroll = document.querySelector('.chats div[data-testid="virtuoso-scroller"]');
@@ -51,14 +53,14 @@ export function Chats(props) {
       isFirstRender.value = false
     }
 
-    if (virtuosoScroll.scrollTop < 50) {
+    if (virtuosoScroll.scrollTop < 30) {
       showFadeTop.value = false
     } else {
       showFadeTop.value = true;
     }
 
     console.log(virtuosoScroll.scrollTop);
-  }, [isScrolling])
+  }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
   useEffect(() => {
     if (info.total > 5) {
@@ -100,10 +102,10 @@ export function Chats(props) {
   }
 
   return (
-    <div className={"px-3 flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-14 pb-8')} >
+    <div className={"px-3 flex flex-col overflow-hidden " + (ui.chatsExpanded ? 'flex-1' : 'h-14 pb-8')} >
       <div className="text-xs leading-6 font-bold flex items-center py-4 pl-2">
-        <div onClick={() => handleExpanded(!expanded.value)} className={'flex cursor-pointer'}>
-          <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (expanded.value ? '' : '-rotate-90')} />
+        <div onClick={() => handleExpanded()} className={'flex cursor-pointer'}>
+          <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (ui.chatsExpanded ? '' : '-rotate-90')} />
           <div>CHATS</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + (info?.total > 0 && chats?.length > 0 ? '' : 'hidden')}>{info?.total}</div>
         </div>
         <div onClick={callCreateChat} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">

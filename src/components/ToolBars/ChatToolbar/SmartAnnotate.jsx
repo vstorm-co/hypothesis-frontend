@@ -157,7 +157,14 @@ export function SmartAnnotate(props) {
 
     if (annotates.length > 0) {
       let target = annotates[annotates.length - 1];
-      url.value = target.content_dict.url;
+
+      const regex = /^https:\/\/.*/;
+      if (regex.test(formData.url)) {
+        url.value = target.content_dict.url;
+      } else {
+        urlType.value = 'google-drive';
+        //
+      }
       prompt.value = target.content_dict.prompt;
     }
   }, [currentChat.uuid])

@@ -8,6 +8,7 @@ import { Loading } from '../Loading';
 import { Virtuoso } from 'react-virtuoso';
 import { useSignal } from '@preact/signals';
 import caretDown from '../../assets/caret-down.svg';
+import { uiActions } from '../../store/ui-slice';
 
 export function Templates() {
   const templates = useSelector(state => state.templates.templates);
@@ -26,10 +27,10 @@ export function Templates() {
 
   const isFirstRender = useSignal(true);
 
-  const expanded = useSignal(false);
+  // const expanded = useSignal(false);
 
-  function handleExpand(val) {
-    expanded.value = val;
+  function handleExpand() {
+    dispatch(uiActions.setTemplatesExpanded(!ui.templatesExpanded))
   }
 
 
@@ -55,7 +56,7 @@ export function Templates() {
     } else {
       showFadeTop.value = true;
     }
-  }, [isScrolling, expanded.value])
+  }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
   useEffect(() => {
     if (currentTemplate.uuid != '') {
@@ -71,10 +72,10 @@ export function Templates() {
   }, [currentTemplate.uuid])
 
   return (
-    <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (expanded.value ? 'flex-1' : 'h-0 pb-12')}>
+    <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (ui.templatesExpanded ? 'flex-1' : 'h-0 pb-12')}>
       <div className="text-xs leading-6 font-bold flex items-center pl-2 py-4">
-        <div onClick={() => handleExpand(!expanded.value)} className={'flex cursor-pointer'}>
-          <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (expanded.value ? '' : '-rotate-90')} />
+        <div onClick={() => handleExpand()} className={'flex cursor-pointer'}>
+          <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (ui.templatesExpanded ? '' : '-rotate-90')} />
           <div>TEMPLATES</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + ((info?.total > 0 && templates?.length > 0) ? '' : 'hidden')}>{info?.total}</div>
         </div>
         <div onClick={callCreateTemplate} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">

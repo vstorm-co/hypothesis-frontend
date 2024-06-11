@@ -16,6 +16,8 @@ const uiSlice = createSlice({
     copyAs: copyAs ? copyAs : 'md',
     organizationCreated: null,
     hideSideBar: false,
+    chatsExpanded: true,
+    templatesExpanded: false,
     chatsLoading: false,
     templatesLoading: false,
     searchFilters: {
@@ -44,6 +46,12 @@ const uiSlice = createSlice({
     setFiltersSortBy(state, action) {
       state.searchFilters.sortBy = action.payload;
     },
+    setChatsExpanded(state, action) {
+      state.chatsExpanded = action.payload;
+    },
+    setTemplatesExpanded(state, action) {
+      state.templatesExpanded = action.payload;
+    },
     toggleAdminBar(state, action) {
       state.adminBar.active = action.payload.tgl;
     },
@@ -59,7 +67,7 @@ const uiSlice = createSlice({
     toggleTemplatesLoading(state, action) {
       state.templatesLoading = action.payload;
     },
-    changeCopyAs(state, action){
+    changeCopyAs(state, action) {
       state.copyAs = action.payload
 
       localStorage.setItem('ANT_defaultSaveAs', action.payload);
