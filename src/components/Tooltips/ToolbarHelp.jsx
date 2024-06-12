@@ -49,7 +49,7 @@ export function ToolbarHelp(props) {
           </div>
           <div className={'max-h-[84vh] overflow-y-auto pl-8 pr-4 mr-4 mt '}>
             <div className={'text-sm leading-6'}>
-              <p className={'text-[#595959] mt-4'}>The following actions are available to add additional functionality to the prompt input. When applicable, you can enable the functionality by typing the shortcut instead of clicking the button.</p>
+              <p className={'text-[#595959] mt-4'}>The following actions are available. When applicable, you can enable the functionality by typing the shortcut instead of clicking the button.</p>
             </div>
 
             <div className={'mt-2 pr-3 pl-2 py-2 flex border border-[#DBDBDB] rounded-lg'}>
@@ -59,7 +59,7 @@ export function ToolbarHelp(props) {
                 </div>
               </div>
               <div className={'leading-6 text-sm ml-2 text-[#202020]'}>
-                Inserts a <span className={'font-semibold'}>template</span> into the prompt input, allowing you to reuse text between different chats.
+                Inserts a <span className={'font-semibold'}>template</span> into the prompt input, allowing you to reuse and build chained and nested prompts.
                 <div className={'font-semibold mt-2'}>
                   Shortcut: <span className={'mono font-light leading-6 px-1 bg-[#EBEBEB] rounded-[4px] text-sm'}>{'{{'}</span>
                 </div>
@@ -73,7 +73,7 @@ export function ToolbarHelp(props) {
                 </div>
               </div>
               <div className={'leading-6 text-sm ml-2 text-[#202020]'}>
-                Inserts a <span className={'font-semibold'}>return</span> into the prompt input, allowing Papaya to complete a request, return the value, and then process the next command following the return.
+                Inserts a <span className={'font-semibold'}>return</span> into the prompt input. This sends the preceding text and templates to the AI API and waits for the response before proceeding with the next prompt.
                 <div className={'font-semibold'}>
                   Shortcut: <span className={'mono text-sm font-light leading-6 px-1 bg-[#EBEBEB] rounded-[4px]'}>ctrl + enter</span>
                 </div>
@@ -87,7 +87,7 @@ export function ToolbarHelp(props) {
                 </div>
               </div>
               <div className={'leading-6 text-sm ml-2 text-[#202020]'}>
-                Inserts a <span className={'font-semibold'}>file</span> into the prompt input, allowing Papaya to have context about the content of the file. For example, using a template file to scaffold a response where Papaya fills in the variables.
+                Inserts a <span className={'font-semibold'}>file</span> into the prompt input at the indicated location. That file can either have relevant content, or even additional prompts.
                 <div className={'font-semibold mt-2'}>
                   Shortcut: <span className={'mono font-light leading-6 px-1 bg-[#EBEBEB] rounded-[4px] text-sm'}>++</span>
                 </div>
@@ -103,7 +103,7 @@ export function ToolbarHelp(props) {
                     </div>
                   </div>
                   <div className={'leading-6 text-sm ml-2 text-[#202020]'}>
-                    Opens a modal to create <span className={'font-bold'}>AI Annotations,</span> where Papaya when given a URL can create Hypothesis annotations on the referenced URL. This is very useful as a starting place for conversations around a topic, where the prompts Papaya provides are insightful.
+                    Opens an interface for creating <span className={'font-bold'}>AI Annotations</span> over a page or file using Hypothesis using a prompt.
                   </div>
                 </div>
 
@@ -114,7 +114,7 @@ export function ToolbarHelp(props) {
                     </div>
                   </div>
                   <div className={'leading-6 text-sm ml-2 text-[#202020]'}>
-                    Shows the logs related to generated content from Papaya. This is very helpful to debug the return and is primarily used by our development team.
+                    Shows the logs of interactions with various APIs. This is very helpful to debug the return and understand how prompts are being sent and responses interpreted.
                   </div>
                 </div>
               </div>

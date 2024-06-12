@@ -319,7 +319,7 @@ export function SmartAnnotate(props) {
               <div className={'text-xs text-[#747474] mb-1 flex justify-between'}>
                 <div className="font-bold flex">
                   API Key
-                  <HelpToolTip content={'Provide an API key to interact with Hypothesis'} />
+                  <HelpToolTip content={'Provide your Hypothesis API key to automatically create annotations'} />
                   <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
                   {profileInfo.userid &&
                     <span class="ml-0.5 font-normal"> ({profileInfo.userid.split(":")[1].split("@")[0]})</span>
@@ -342,7 +342,7 @@ export function SmartAnnotate(props) {
                 <div className={'flex gap-4'}>
                   <div className={'w-full'}>
                     <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                      Group <HelpToolTip content={'Select a group to add annotations to'} />
+                      Group <HelpToolTip content={'Select a Hypothesis group to add annotations to'} />
                     </div>
 
                     <div class="relative">
@@ -356,7 +356,7 @@ export function SmartAnnotate(props) {
                   </div>
                   <div className={'w-full'}>
                     <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                      <div>Tags <span className={'font-normal'}>(optional)</span> </div> <HelpToolTip content={'Organize annotations with tags'} />
+                      <div>Tags <span className={'font-normal'}>(optional)</span> </div> <HelpToolTip content={'A tag to add to your annotations. Multiple tags can be separated by commas.'} />
                     </div>
                     <input value={tags.value} onInput={onTagsInput} className={'inputtext w-full'} placeholder={'Enter tags (comma-separated)...'} type="text" />
                   </div>
@@ -364,14 +364,14 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-4'}>
                 <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                  URL or File to Annotate <HelpToolTip content={'Where Papaya pulls annotations from'} />
+                  URL or File to Annotate <HelpToolTip content={'The page or file to annotate'} />
                 </div>
                 <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (urlValid.value ? '' : 'border-[#EF4444]')}>
                   <div className={'px-2 shrink-0'}>
                     <img src={urlType.value === 'url' ? share : googleDrive} className={'w-[16px] h-[16px]'} alt="" />
                   </div>
                   <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter URL to annotate...'} type="text" />
-                  <div title={urlType.value === 'url' ? 'Click to select file' : 'Click to insert Url'} onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
+                  <div title={urlType.value === 'url' ? 'Click to select a file in google drive' : 'Click to insert Url'} onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
                     <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export function SmartAnnotate(props) {
               <div className={'mt-6'}>
                 <div className={'w-full'}>
                   <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
-                    Response Template <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'Additional data processing before running prompt (formatting, etc.)'} />
+                    Response Template <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'The base template of instructions for running your prompt and creating the JSON file of annotations'} />
                   </div>
                   <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
@@ -397,7 +397,7 @@ export function SmartAnnotate(props) {
               <div className={'mt-6'}>
                 <div className={'w-full'}>
                   <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
-                    Prompt <HelpToolTip content={'How you want each annotation to be interpreted '} />
+                    Prompt <HelpToolTip content={'The specific prompt that will create the annotations you’re interested in.'} />
                   </div>
                   <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
