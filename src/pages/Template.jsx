@@ -115,6 +115,7 @@ export function Template(props) {
                 UseFilePosition={'right'}
                 InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
                 forceFocus={currentTemplate.uuid}
+                hideAnnotate={true}
               />
             </div>
           </div>
