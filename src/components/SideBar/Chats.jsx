@@ -43,7 +43,7 @@ export function Chats(props) {
   useEffect(() => {
     let virtuosoScroll = document.querySelector('.chats div[data-testid="virtuoso-scroller"]');
 
-    if (!isFirstRender.value) {
+    if (!isFirstRender.value && virtuosoScroll) {
       if (Math.ceil(virtuosoScroll.scrollTop + virtuosoScroll.clientHeight) >= virtuosoScroll.scrollHeight - 10) {
         showFadeBottom.value = false;
       } else {
@@ -53,13 +53,14 @@ export function Chats(props) {
       isFirstRender.value = false
     }
 
-    if (virtuosoScroll.scrollTop < 30) {
-      showFadeTop.value = false
-    } else {
-      showFadeTop.value = true;
+    if (virtuosoScroll) {
+      if (virtuosoScroll.scrollTop < 30) {
+        showFadeTop.value = false
+      } else {
+        showFadeTop.value = true;
+      }
     }
 
-    console.log(virtuosoScroll.scrollTop);
   }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
   useEffect(() => {
