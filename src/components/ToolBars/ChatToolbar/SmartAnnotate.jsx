@@ -108,6 +108,25 @@ export function SmartAnnotate(props) {
     } else {
       urlType.value = 'url';
       url.value = '';
+
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+      if (hChats) {
+        let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
+        if (index != -1) {
+          hChats[index].url.content = url.value;
+          hChats[index].url.type = urlType.value;
+        } else {
+          let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
+          hChats = [...hChats, data];
+        }
+
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      } else {
+        let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
+        hChats = [data];
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      }
     }
   }
 
