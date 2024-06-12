@@ -58,6 +58,22 @@ export function ResponseTemplateInput(props) {
   }, [window.location.href])
 
   useEffect(() => {
+    if (props.loadPrompt) {
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+      if (hChats) {
+        let target = hChats.find(c => c.uuid === currentChat.uuid);
+        // console.log(target.uuid, currentChat.uuid)
+        if (target) {
+          input.value = target.prompt
+        } else {
+          input.value = ''
+        }
+      }
+    }
+  }, [props.visible])
+
+  useEffect(() => {
     setTimeout(() => {
       setRange();
     }, 100)
@@ -86,65 +102,6 @@ export function ResponseTemplateInput(props) {
         route(`/templates/${target.dataset.content}`);
       }
     }
-  }
-
-  function handleReturnResponse() {
-    let element = document.createElement('span');
-    element.innerText = `↩`;
-    element.setAttribute("contenteditable", 'false');
-    element.classList.add('return-box-new');
-
-    caret.value.insertNode(element);
-
-    caret.value.setStartAfter(element);
-    caret.value.setEndAfter(element);
-
-    const space = document.createTextNode(' ');
-    caret.value.insertNode(space);
-
-    caret.value.collapse(false);
-
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(caret.value);
-    caret.value.detach();
-
-    setTimeout(() => {
-      input.value = `${InputRef.current.innerHTML}`;
-    }, 100);
-
-    props.handleSetBlock(false);
-  }
-
-  function handleUseTemplate(template) {
-    let element = document.createElement('span');
-    element.innerText = `${template.name}`;
-    element.title = `${template.content.replace('<div contenteditable="false" class="return-box px-1.5 rounded"></div>', '↩ ')}`
-    element.title = `${template.content.replace('<span contenteditable="false" class="return-box-new">↩</span>', '↩ ')}`
-    element.dataset.content = `${template.uuid}`;
-    element.classList.add('pill');
-    element.setAttribute("contenteditable", 'false');
-
-    caret.value.insertNode(element);
-
-    caret.value.setStartAfter(element);
-    caret.value.setEndAfter(element);
-
-    const space = document.createTextNode(' ');
-    caret.value.insertNode(space);
-
-    caret.value.collapse(false);
-
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(caret.value);
-    caret.value.detach();
-
-
-    setTimeout(() => {
-      input.value = `${InputRef.current.innerHTML}`;
-      useTemplateVisible.value = false;
-    }, 100);
-
-    props.handleSetBlock(false);
   }
 
   const generatePreview = () => {
@@ -264,6 +221,24 @@ export function ResponseTemplateInput(props) {
     let currentText = e.currentTarget.innerHTML
     input.value = currentText;
     saveCaret();
+
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+    if (hChats) {
+      let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
+      if (index != -1) {
+        hChats[index].prompt = input.value;
+      } else {
+        let data = { uuid: currentChat.uuid, prompt: input.value };
+        hChats = [...hChats, data];
+      }
+
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    } else {
+      let data = { uuid: currentChat.uuid, prompt: input.value };
+      hChats = [data];
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    }
   }
 
   function handleKeyUp() {

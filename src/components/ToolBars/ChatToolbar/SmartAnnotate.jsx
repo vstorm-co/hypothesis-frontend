@@ -76,6 +76,26 @@ export function SmartAnnotate(props) {
 
           url.value = file.name;
           fileId.value = file.id;
+
+          let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+          if (hChats) {
+            let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
+            if (index != -1) {
+              hChats[index].url.content = url.value;
+              hChats[index].url.type = urlType.value;
+              hChats[index].url.fileId = fileId.value;
+            } else {
+              let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value, fileId: fileId.value } };
+              hChats = [...hChats, data];
+            }
+
+            localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+          } else {
+            let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value, fileId: fileId.value } };
+            hChats = [data];
+            localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+          }
         }
       },
     })
@@ -113,13 +133,24 @@ export function SmartAnnotate(props) {
   const onUrlInput = event => {
     url.value = event.currentTarget.value
     urlValid.value = true;
-  };
-  const onResponseTemplateInput = event => {
-    response_template.value = event.currentTarget.value
-  };
-  const onPromptInput = event => {
-    prompt.value = event.currentTarget.value;
-    promptValid.value = true;
+
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+    if (hChats) {
+      let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
+      if (index != -1) {
+        hChats[index].url.content = url.value;
+      } else {
+        let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
+        hChats = [...hChats, data];
+      }
+
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    } else {
+      let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
+      hChats = [data];
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    }
   };
 
   const FormRef = useRef(null);
@@ -138,6 +169,23 @@ export function SmartAnnotate(props) {
         infoLoading.value = false;
       }
     }
+
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+    if (hChats) {
+      let target = hChats.find(c => c.uuid === currentChat.uuid);
+      if (target) {
+        url.value = target.url.content;
+
+        if (target.url.type != 'url') {
+          fileId.value = target.url.fileId;
+          urlType.value = target.url.type;
+        }
+
+      } else {
+        url.value = '';
+      }
+    }
   }, [visible])
 
   useEffect(async function () {
@@ -151,22 +199,6 @@ export function SmartAnnotate(props) {
       dispatch(getChatsData(currentChat.uuid))
 
       localStorage.removeItem("ANT_annotateToCreate");
-    }
-
-    let messages = currentChat.messages;
-    let annotates = messages.filter(m => m.created_by === 'annotation');
-
-    if (annotates.length > 0) {
-      let target = annotates[annotates.length - 1];
-
-      const regex = /^https:\/\/.*/;
-      if (regex.test(formData.url)) {
-        url.value = target.content_dict.url;
-      } else {
-        urlType.value = 'google-drive';
-        //
-      }
-      prompt.value = target.content_dict.prompt;
     }
   }, [currentChat.uuid])
 
@@ -327,13 +359,14 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-6'}>
                 <div className={'w-full'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                  <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
                     Response Template <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'Additional data processing before running prompt (formatting, etc.)'} />
                   </div>
-                  <div class="relative z-[-1] -mt-[25px]">
+                  <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
                       WSsendMessage={value => { }}
                       handleSubmitButton={value => { handleResponseTemplateData(value) }}
+                      visible={visible}
                     // clearInputOnSubmit={true}
                     />
                   </div>
@@ -341,12 +374,14 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-6'}>
                 <div className={'w-full'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                  <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
                     Prompt <HelpToolTip content={'How you want each annotation to be interpreted '} />
                   </div>
-                  <div class="relative z-[-1] -mt-[25px]">
+                  <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
+                      loadPrompt={true}
                       WSsendMessage={value => { }}
+                      visible={visible}
                       handleSubmitButton={value => { handlePromptData(value) }}
                     // clearInputOnSubmit={true}
                     />
