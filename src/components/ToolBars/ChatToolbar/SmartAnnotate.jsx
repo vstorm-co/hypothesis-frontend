@@ -180,6 +180,9 @@ export function SmartAnnotate(props) {
         if (target.url.type != 'url') {
           fileId.value = target.url.fileId;
           urlType.value = target.url.type;
+        } else {
+          urlType.value = target.url.type;
+          fileId.value = '';
         }
 
       } else {
