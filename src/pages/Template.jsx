@@ -11,6 +11,7 @@ import { showToast } from '../store/ui-slice';
 import { Toast } from '../components/Toast';
 import { Loading } from '../components/Loading';
 import { chatsActions } from '../store/chats-slice';
+import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
 
 export function Template(props) {
   const dispatch = useDispatch();
@@ -96,27 +97,32 @@ export function Template(props) {
               <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>
                 Prompt
               </div>
-              <PromptInput
-                Icon="nostop"
-                blockSending={false}
-                WSsendMessage={() => { }}
-                SubmitButtonText={'Save Template'}
-                handleSubmitButton={(value) => { saveContent(value) }}
-                SecondButton={false}
-                SecondButtonText={''}
-                handleSecondButton={() => { }}
-                SetBlockOnSubmit={true}
-                unBlockOnEdit={true}
-                clearInputOnSubmit={false}
-                handleSetBlock={(val) => promptSaved.value = val}
+              <div className={'relative'}>
+                <PromptInput
+                  Icon="nostop"
+                  blockSending={false}
+                  WSsendMessage={() => { }}
+                  SubmitButtonText={'Save Template'}
+                  handleSubmitButton={(value) => { saveContent(value) }}
+                  SecondButton={false}
+                  SecondButtonText={''}
+                  handleSecondButton={() => { }}
+                  SetBlockOnSubmit={true}
+                  unBlockOnEdit={true}
+                  clearInputOnSubmit={false}
+                  handleSetBlock={(val) => promptSaved.value = val}
 
-                DisableProcessing={true}
-                UseTemplatePosition={'left'}
-                UseFilePosition={'right'}
-                InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
-                forceFocus={currentTemplate.uuid}
-                hideAnnotate={true}
-              />
+                  DisableProcessing={true}
+                  UseTemplatePosition={'left'}
+                  UseFilePosition={'right'}
+                  InitialInput={currentTemplate.content_html ? currentTemplate.content_html : currentTemplate.content}
+                  forceFocus={currentTemplate.uuid}
+                  hideAnnotate={true}
+                />
+                <div className={'absolute bottom-0 text-[#747474] text-xs self-start py-2'}>
+                  <ToolbarHelp />
+                </div>
+              </div>
             </div>
           </div>
         </div>

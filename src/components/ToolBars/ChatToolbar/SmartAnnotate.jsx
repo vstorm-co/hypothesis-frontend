@@ -11,6 +11,7 @@ import { ResponseTemplateInput } from './SmartAnnotate/ResponseTemplateInput';
 import googleDrive from '../../../assets/google-drive.svg';
 import useDrivePicker from 'react-google-drive-picker'
 import share from '../../../assets/share.svg';
+import { HelpToolTip } from '../../Tooltips/HelpToolTip';
 
 export function SmartAnnotate(props) {
   const currentChat = useSelector(state => state.chats.currentChat);
@@ -248,14 +249,14 @@ export function SmartAnnotate(props) {
           </svg>
         </div>
       </div>
-      <div ref={FormRef} className={'pb-8 bg-white rounded z-50 top-4 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (visible ? 'fixed' : 'hidden')}>
+      <div ref={FormRef} className={'pb-8 bg-white rounded z-50 top-2 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (visible ? 'fixed' : 'hidden')}>
         <div className={'mx-auto'}>
           <div className={'px-8'}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
               AI Annotations
             </div>
           </div>
-          <div className={'max-h-[82vh] overflow-y-scroll pl-8 pr-4 mr-4 mt'}>
+          <div className={'max-h-[84vh] pl-8 pr-4 mr-4 mt '}>
             <div className={'py-4 text-sm leading-6'}>
               <div className={'font-bold text-[#202020]'}>Create smart annotations from any URL</div>
               <p className={'text-[#595959] mt-2'}>Already using Hypothesis and want to add some annotations to spark a conversation? Get started by configuring your account below:</p>
@@ -264,7 +265,8 @@ export function SmartAnnotate(props) {
               <div className={'text-xs text-[#747474] mb-1 flex justify-between'}>
                 <div className="font-bold flex">
                   API Key
-                  <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
+                  <HelpToolTip content={'Provide an API key to interact with Hypothesis'} />
+                  <img src={checkGreen} className={'ml-1' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
                   {profileInfo.userid &&
                     <span class="ml-0.5 font-normal"> ({profileInfo.userid.split(":")[1].split("@")[0]})</span>
                   }
@@ -285,9 +287,10 @@ export function SmartAnnotate(props) {
               <div className={'mt-4'}>
                 <div className={'flex gap-4'}>
                   <div className={'w-full'}>
-                    <div className="text-xs font-bold text-[#747474] mb-1">
-                      Group
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      Group <HelpToolTip content={'Select a group to add annotations to'} />
                     </div>
+
                     <div class="relative">
                       <select onChange={onGroupInput} value={group.value} class="">
                         {profileInfo.groups?.map(g => (
@@ -298,23 +301,23 @@ export function SmartAnnotate(props) {
                     </div>
                   </div>
                   <div className={'w-full'}>
-                    <div className="text-xs font-bold text-[#747474] mb-1">
-                      Tags <span className={'font-normal'}>(optional)</span>
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      <div>Tags <span className={'font-normal'}>(optional)</span> </div> <HelpToolTip content={'Organize annotations with tags'} />
                     </div>
                     <input value={tags.value} onInput={onTagsInput} className={'inputtext w-full'} placeholder={'Enter tags (comma-separated)...'} type="text" />
                   </div>
                 </div>
               </div>
               <div className={'mt-4'}>
-                <div className="text-xs font-bold text-[#747474] mb-1">
-                  URL or File to Annotate
+                <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                  URL or File to Annotate <HelpToolTip content={'Where Papaya pulls annotations from'} />
                 </div>
                 <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (urlValid.value ? '' : 'border-[#EF4444]')}>
                   <div className={'px-2 shrink-0'}>
                     <img src={urlType.value === 'url' ? share : googleDrive} className={'w-[16px] h-[16px]'} alt="" />
                   </div>
                   <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter URL to annotate...'} type="text" />
-                  <div onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
+                  <div title={urlType.value === 'url' ? 'Click to select file' : 'Click to insert Url'} onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
                     <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
                   </div>
                 </div>
@@ -324,10 +327,10 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-6'}>
                 <div className={'w-full'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1">
-                    Response Template <span className={'font-normal'}>(optional)</span>
+                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                    Response Template <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'Additional data processing before running prompt (formatting, etc.)'} />
                   </div>
-                  <div class="relative -mt-[25px]">
+                  <div class="relative z-[-1] -mt-[25px]">
                     <ResponseTemplateInput
                       WSsendMessage={value => { }}
                       handleSubmitButton={value => { handleResponseTemplateData(value) }}
@@ -338,10 +341,10 @@ export function SmartAnnotate(props) {
               </div>
               <div className={'mt-6'}>
                 <div className={'w-full'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1">
-                    Prompt
+                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                    Prompt <HelpToolTip content={'How you want each annotation to be interpreted '} />
                   </div>
-                  <div class="relative -mt-[25px]">
+                  <div class="relative z-[-1] -mt-[25px]">
                     <ResponseTemplateInput
                       WSsendMessage={value => { }}
                       handleSubmitButton={value => { handlePromptData(value) }}

@@ -16,6 +16,7 @@ const uiSlice = createSlice({
     copyAs: copyAs ? copyAs : 'md',
     organizationCreated: null,
     hideSideBar: false,
+    showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,
     chatsLoading: false,
@@ -39,6 +40,9 @@ const uiSlice = createSlice({
     },
     setFiltersVisibility(state, action) {
       state.searchFilters.visibility = action.payload.visibility;
+    },
+    setShowToolbarHelp(state, action) {
+      state.showToolbarHelp = action.payload
     },
     setFiltersSearch(state, action) {
       state.searchFilters.searchFor = action.payload.searchFor;

@@ -5,6 +5,7 @@ import { signal, useSignal } from '@preact/signals';
 import useWebSocket from 'react-use-websocket';
 import { route } from 'preact-router'
 import { Loading } from '../components/Loading';
+import Help from '../assets/help.svg';
 
 import { ChatToolBar } from '../components/ToolBars/ChatToolbar/ChatToolBar';
 import { Message } from '../components/Message';
@@ -16,6 +17,8 @@ import { templatesActions } from '../store/templates-slice';
 import { PromptInput } from '../components/PromptInput';
 import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 import { hSliceActions } from '../store/h-slice';
+import { HelpToolTip } from '../components/Tooltips/HelpToolTip';
+import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
 
 const msgLoading = signal(false);
 export function Chat(props) {
@@ -351,6 +354,7 @@ export function Chat(props) {
 									forceFocus={forceInputFocus.value}
 								/>
 								<div className={'absolute bottom-0 text-[#747474] text-xs self-start py-2'}>
+									<ToolbarHelp onChat={true} />
 									{fileUpdating &&
 										<div className={'text-[#EF4444]'}>
 											Papaya is refreshing content of file included in this prompt. It may take some time to complete this process

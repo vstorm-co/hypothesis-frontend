@@ -104,6 +104,47 @@
 	font-weight: 900;
 }
 
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/SFMonoLight.otf');
+	font-weight: 300;
+}
+
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/SFMonoRegular.otf');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/SFMonoMedium.otf');
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/SFMonoSemibold.otf');
+	font-weight: 600;
+}
+
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/SFMonoBold.otf');
+	font-weight: 700;
+}
+
+
+@font-face {
+	font-family: 'SF Mono';
+	src: url('./fonts/');
+	font-weight: 900;
+}
+
+.mono {
+	font-family: "SF Mono" !important;
+}
+
 input:disabled {
 	opacity: .5;
 }
@@ -345,6 +386,7 @@ body {
 	font-family: 'SF Pro';
 	@apply mr-9
 }
+
 
 .templatePreview span {
 	background-color: transparent !important
@@ -656,4 +698,31 @@ input:checked+.slider:before {
 
 .slider.round:before {
 	border-radius: 50%;
+}
+
+.tooltip {
+	position: relative;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+
+	max-width: 700px;
+
+	padding: 4px 8px;
+	bottom: 120%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #202020;
+	color: white;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	border-radius: 4px;
+	position: absolute;
+	z-index: 99;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
 }
