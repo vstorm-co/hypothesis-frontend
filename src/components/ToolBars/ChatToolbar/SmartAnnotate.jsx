@@ -266,7 +266,7 @@ export function SmartAnnotate(props) {
                 <div className="font-bold flex">
                   API Key
                   <HelpToolTip content={'Provide an API key to interact with Hypothesis'} />
-                  <img src={checkGreen} className={'ml-1' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
+                  <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
                   {profileInfo.userid &&
                     <span class="ml-0.5 font-normal"> ({profileInfo.userid.split(":")[1].split("@")[0]})</span>
                   }
