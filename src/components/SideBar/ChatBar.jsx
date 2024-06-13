@@ -62,8 +62,13 @@ export const ChatBar = props => {
   }
 
   function handleClass() {
-    let chatOptionsVisible = chatOptions.show && (chatOptions.data.uuid === props.ChatData.uuid);
-    return `${(chatOptionsVisible && !isSelected()) ? 'py-1 bg-[#0f0f0f]' : 'py-2'} ${(chatOptionsVisible || isSelected()) ? '' : 'hover:py-1'}`
+    if (chatOptions.data) {
+      let isCurrentChatOptions = chatOptions.data.uuid === props.ChatData.uuid
+      let chatOptionsVisible = chatOptions.show && isCurrentChatOptions;
+      return `${(chatOptions.show && isCurrentChatOptions) ? 'bg-[#0f0f0f]' : 'bg-[#202020]'} ${(chatOptionsVisible && !isSelected()) ? 'py-1 ' : 'py-2'} ${(chatOptionsVisible || isSelected()) ? '' : 'hover:py-1'}`
+    } else {
+      return `py-2 ${isSelected() ? '' : 'hover:py-1'}`
+    }
   }
 
   function CheckUsersOnChat() {
@@ -94,14 +99,14 @@ export const ChatBar = props => {
 
 
   return (
-    <div className={"flex w-full pl-2 pr-1 group bg-[#202020] items-center rounded " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
+    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
       <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
-          <div title={props.ChatData.name} className={"font-bold max-w-[120px] mr-1 text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
+          <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
             {props.ChatData.name}
           </div>
-          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
+          <div className={'flex items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
