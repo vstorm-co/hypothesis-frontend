@@ -94,7 +94,9 @@ export const ChatBar = props => {
   }
 
   function handleBoxClass() {
-    return `${isSelected() ? 'hover:bg-[#595959]' : 'hover:bg-[#202020]'} ${chatOptions.show ? 'text-white' : ''}`
+    let isCurrentChatOptions = chatOptions.data?.uuid === props.ChatData.uuid
+
+    return `${isSelected() ? 'hover:bg-[#595959]' : 'hover:bg-[#202020]'} ${chatOptions.show ? 'text-white' : ''} + ${(isSelected() && chatOptions.show && isCurrentChatOptions) ? 'bg-[#595959]' : ''} + ${(!isSelected() && chatOptions.show && isCurrentChatOptions) ? 'bg-[#202020]' : ''}`
   }
 
 
@@ -106,7 +108,7 @@ export const ChatBar = props => {
           <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>
             {props.ChatData.name}
           </div>
-          <div className={'flex shrink-0 mt-2 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto mr-1')}>
+          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? 'mt-2' : 'ml-auto')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
