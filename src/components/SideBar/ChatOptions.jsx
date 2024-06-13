@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
-import { useDispatch } from "react-redux";
-import { showToast } from "../../store/ui-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { showToast, uiActions } from "../../store/ui-slice";
 import { cloneChat } from "../../store/chats-slice";
 import { deleteChat } from "../../store/chats-slice";
 import { route } from "preact-router";
@@ -13,7 +13,7 @@ export function ChatOptions(props) {
     useEffect(() => {
       function handleClickOutside(e) {
         if (ref.current && !ref.current.contains(e.target)) {
-          props.toggleOptions(false);
+          dispatch(uiActions.setChatsOptions({ show: false }))
           confirmDelete.value = false;
         }
       }
@@ -28,22 +28,20 @@ export function ChatOptions(props) {
   const optionsRef = useRef(null);
   outsideClickHanlder(optionsRef);
 
+  const chatOptions = useSelector(state => state.ui.chatOptions);
+
   const dispatch = useDispatch();
 
   const confirmDelete = useSignal(false);
 
-  function toggleOptions() {
-    props.toggleOptions();
-  }
-
   function callCopyLink(e) {
-    navigator.clipboard.writeText(`${window.location.origin}/chats/${props.ChatData.uuid}`);
+    navigator.clipboard.writeText(`${window.location.origin}/chats/${chatOptions.data.uuid}`);
     dispatch(showToast({ content: `Link copied to clipboard` }));
     props.toggleOptions(false);
   }
 
   function toggleDuplicateChat() {
-    dispatch(cloneChat({ roomId: props.ChatData.uuid }));
+    dispatch(cloneChat({ roomId: chatOptions.data.uuid }));
     props.toggleOptions();
   }
 
@@ -52,35 +50,15 @@ export function ChatOptions(props) {
   }
 
   function callDeleteChat() {
-    dispatch(deleteChat({ chatId: props.ChatData.uuid }));
+    dispatch(deleteChat({ chatId: chatOptions.data.uuid }));
     confirmDelete.value = false;
-    props.toggleOptions();
+    dispatch(uiActions.setChatsOptions({ show: false }))
     route('/');
-  }
-
-  function returnClass() {
-    if (props.ShowOptions) {
-      if (props.isSelected) {
-        return "bg-[#595959] text-white"
-      }
-      return "bg-[#595959] text-white"
-    }
-    else {
-      if (props.isSelected) {
-        return "bg-[#747474] text-[#DBDBDB]"
-      }
-      return "text-[#747474]"
-    }
   }
 
   return (
     <div ref={optionsRef} className="ml-2 relative">
-      <div onClick={(e) => { toggleOptions(); e.stopPropagation(); }} className={"cursor-pointer p-2 transform rotate-90 hover:bg-[#595959] hover:text-white relative rounded " + (returnClass())}>
-        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8C6 6.89543 6.89543 6 8 6ZM16 8C16 6.89543 15.1046 6 14 6C12.8954 6 12 6.89543 12 8C12 9.10457 12.8954 10 14 10C15.1046 10 16 9.10457 16 8Z" />
-        </svg>
-      </div>
-      <div className={"absolute z-50 border border-[#595959] rounded w-[240px] top-0 left-16 bg-[#0F0F0F] " + (props.ShowOptions ? '' : 'hidden')}>
+      <div style={chatOptions.position} className={"fixed z-50 border border-[#595959] rounded w-[240px] left-[328px] bg-[#0F0F0F] " + (chatOptions.show ? '' : 'hidden')}>
         <div className="text-sm leading-6">
           <div onClick={e => { callCopyLink(); e.stopPropagation(); }} className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
             <div>
@@ -119,10 +97,10 @@ export function ChatOptions(props) {
             <div className={''}><span className={'text-[#747474]'}>Model:</span> GPT-4</div>
             <div className={'mt-2'}>
               <span className={'text-[#747474]'}>Tokens:</span>
-              <ul className={'list-disc tokens mt-0.5'}>
-                <li>{props.ChatData?.prompt_tokens_count} prompt tokens (${props.ChatData.prompt_value?.toFixed(3)})</li>
-                <li>{props.ChatData?.completion_tokens_count} completion tokens (${props.ChatData.completion_value?.toFixed(3)})</li>
-                <li>{props.ChatData?.total_tokens_count} total tokens (${props.ChatData.total_value?.toFixed(3)})</li>
+              <ul className={'list-disc tokens mt-0.5 pl-6 font-light'}>
+                <li>{chatOptions.data?.prompt_tokens_count} prompt tokens (${chatOptions.data?.prompt_value?.toFixed(3)})</li>
+                <li>{chatOptions.data?.completion_tokens_count} completion tokens (${chatOptions.data?.completion_value?.toFixed(3)})</li>
+                <li>{chatOptions.data?.total_tokens_count} total tokens (${chatOptions.data?.total_value?.toFixed(3)})</li>
               </ul>
             </div>
           </div>

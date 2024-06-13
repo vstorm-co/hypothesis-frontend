@@ -257,7 +257,7 @@ export function Chat(props) {
 	}
 
 	function handleScroll(e) {
-		console.log(e)
+		// console.log(e)
 	}
 
 	function handleAddEventToResize() {

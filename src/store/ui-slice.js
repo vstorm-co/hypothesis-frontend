@@ -6,6 +6,11 @@ const copyAs = localStorage.getItem('ANT_defaultSaveAs');
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {
+    chatOptions: {
+      show: false,
+      position: null,
+      data: null,
+    },
     toast: {
       active: false,
       content: '',
@@ -34,6 +39,9 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    setChatsOptions(state, action) {
+      state.chatOptions = { ...action.payload }
     },
     toggleFileUpdating(state, action) {
       state.fileUpdating = action.payload;
