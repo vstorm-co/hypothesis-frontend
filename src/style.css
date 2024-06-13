@@ -476,6 +476,10 @@ button.btn-second {
 	@apply text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
 }
 
+button.btn-second.light-gray {
+	@apply text-[#DBDBDB] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
+}
+
 button.btn-second:active:enabled {
 	box-shadow: 0 1.5px 4px #666 inset;
 	transform: translateY(2px) translateX(-2px);
@@ -660,6 +664,8 @@ code {
 	transition: .4s;
 }
 
+.slider.gray {}
+
 .slider:before {
 	position: absolute;
 	content: "";
@@ -681,11 +687,30 @@ input:focus+.slider {
 }
 
 input:checked+.slider:before {
-	-webkit-transform: translateX(11.5px);
-	-ms-transform: translateX(11.5px);
-	transform: translateX(11.5px);
+	-webkit-transform: translateX(12px);
+	-ms-transform: translateX(12px);
+	transform: translateX(12px);
 
 	background-image: url("./assets/check-green.svg");
+	background-position: center center;
+	background-size: 12px 12px;
+	background-repeat: no-repeat;
+}
+
+input:checked+.slider.gray {
+	background-color: #595959;
+}
+
+input:focus+.slider.gray {
+	box-shadow: 0 0 1px #595959;
+}
+
+input:checked+.slider.gray:before {
+	-webkit-transform: translateX(12.5px);
+	-ms-transform: translateX(12.5px);
+	transform: translateX(12.5px);
+
+	background-image: url("./assets/check.svg");
 	background-position: center center;
 	background-size: 12px 12px;
 	background-repeat: no-repeat;
