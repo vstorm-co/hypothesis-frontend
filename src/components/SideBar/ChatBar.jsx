@@ -94,7 +94,7 @@ export const ChatBar = props => {
   }
 
   function handleBoxClass() {
-    return `${isSelected() ? 'hover:bg-[#595959]' : 'bg-[#202020]'} ${chatOptions.show ? 'text-white' : ''} ${isSelected() ? 'bg-[#595959]' : 'bg-[#202020]'}`
+    return `${isSelected() ? 'hover:bg-[#595959]' : 'hover:bg-[#202020]'} ${chatOptions.show ? 'text-white' : ''}`
   }
 
 
@@ -103,10 +103,10 @@ export const ChatBar = props => {
       <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
-          <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
+          <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>
             {props.ChatData.name}
           </div>
-          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto mr-1')}>
+          <div className={'flex shrink-0 mt-2 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto mr-1')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
