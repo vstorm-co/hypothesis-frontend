@@ -98,10 +98,10 @@ export const ChatBar = props => {
       <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
-          <div title={props.ChatData.name} className={"font-bold max-w-[120px] text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
+          <div title={props.ChatData.name} className={"font-bold max-w-[120px] mr-1 text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
             {props.ChatData.name}
           </div>
-          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? '' : 'ml-2')}>
+          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
