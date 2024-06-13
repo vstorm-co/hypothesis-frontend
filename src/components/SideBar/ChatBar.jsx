@@ -106,7 +106,7 @@ export const ChatBar = props => {
           <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
             {props.ChatData.name}
           </div>
-          <div className={'flex items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
+          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? '' : 'ml-auto mr-1')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
