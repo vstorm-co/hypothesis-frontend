@@ -12,6 +12,7 @@ import caretDown from '../../assets/caret-down.svg';
 
 import { useSignal } from '@preact/signals';
 import { uiActions } from '../../store/ui-slice';
+import { ChatOptions } from './ChatOptions';
 
 export function Chats(props) {
   const chats = useSelector(state => state.chats.chats);
@@ -104,6 +105,7 @@ export function Chats(props) {
 
   return (
     <div className={"px-3 flex flex-col overflow-hidden " + (ui.chatsExpanded ? 'flex-1' : 'h-14 pb-8')} >
+      <ChatOptions />
       <div className="text-xs leading-6 font-bold flex items-center py-4 pl-2">
         <div onClick={() => handleExpanded()} className={'flex cursor-pointer'}>
           <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (ui.chatsExpanded ? '' : '-rotate-90')} />

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import chatIcon from '../../assets/chat.svg';
 import meChat from '../../assets/me-chat.svg';
+import elipsisVert from '../../assets/ellipsis-vertical.svg';
 import { route } from 'preact-router'
 import { selectChat } from '../../store/chats-slice';
 import { templatesActions } from '../../store/templates-slice';
@@ -8,10 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals';
 import { ChatOptions } from './ChatOptions';
+import { uiActions } from '../../store/ui-slice';
 
 export const ChatBar = props => {
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat);
+  const chatOptions = useSelector(state => state.ui.chatOptions);
   const ShowOptions = useSignal(false);
 
   const callSelectChat = () => {
@@ -59,16 +62,12 @@ export const ChatBar = props => {
   }
 
   function handleClass() {
-    let selected = props.ChatData.uuid === currentChat.uuid;
-    if (!ShowOptions.value && !CheckUsersOnChat()) {
-      // return "py-2 hover:py-1"
-      return "py-2"
-    }
-    if (CheckUsersOnChat()) {
-      return "py-2"
-    }
-    if (ShowOptions.value && !CheckUsersOnChat()) {
-      return "py-1"
+    if (chatOptions.data) {
+      let isCurrentChatOptions = chatOptions.data.uuid === props.ChatData.uuid
+      let chatOptionsVisible = chatOptions.show && isCurrentChatOptions;
+      return `${(chatOptions.show && isCurrentChatOptions) ? 'bg-[#0f0f0f]' : 'bg-[#202020]'} ${(chatOptionsVisible && !isSelected()) ? 'py-1 ' : 'py-2'} ${(chatOptionsVisible || isSelected()) ? '' : 'hover:py-1'}`
+    } else {
+      return `py-2 ${isSelected() ? '' : 'hover:py-1'}`
     }
   }
 
@@ -76,28 +75,59 @@ export const ChatBar = props => {
     return props.ChatData.active_users.length;
   }
 
+  function handleChatOptions(e) {
+    let rect = e.target.getBoundingClientRect();
+    let windowH = document.body.parentNode.offsetHeight
+    let position = {}
+    let diff = windowH - Math.ceil(rect.top);
+    if (diff < 271) {
+      position = {
+        top: Math.ceil(rect.top - diff + 50)
+      }
+    } else {
+      position = {
+        top: Math.ceil(rect.top)
+      }
+    }
+    console.log();
+    dispatch(uiActions.setChatsOptions({ show: true, position, data: props.ChatData }))
+  }
+
+  function handleBoxClass() {
+    let isCurrentChatOptions = chatOptions.data?.uuid === props.ChatData.uuid
+
+    return `${isSelected() ? 'hover:bg-[#595959]' : 'hover:bg-[#202020]'} ${chatOptions.show ? 'text-white' : ''} + ${(isSelected() && chatOptions.show && isCurrentChatOptions) ? 'bg-[#595959]' : ''} + ${(!isSelected() && chatOptions.show && isCurrentChatOptions) ? 'bg-[#202020]' : ''}`
+  }
+
 
   return (
-    <div onClick={callSelectChat} className={"flex pl-2 pr-1 group bg-[#202020] items-center rounded cursor-pointer " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
-      <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
-      <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
-        <div title={props.ChatData.name} className={"font-bold text-sm break-words " + (isSelected() ? 'leading-4 ' : 'truncate leading-6 max-w-[168px]')}>
-          {props.ChatData.name}
-        </div>
-        <div className={'flex items-center mt-1 ' + (CheckUsersOnChat() ? '' : 'ml-auto')}>
-          <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
-            {EditedAt()}
+    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
+      <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
+        <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
+        <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
+          <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>
+            {props.ChatData.name}
           </div>
-          <div className={"ml-2 " + (CheckUsersOnChat() ? 'flex gap-[1px]' : 'hidden')}>
-            {props.ChatData.active_users.map(u => (
-              <img title={u.name} src={u.picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
-            ))}
+          <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? 'mt-2' : 'ml-auto')}>
+            <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
+              {EditedAt()}
+            </div>
+            <div className={"ml-2 " + (CheckUsersOnChat() ? 'flex gap-[1px]' : 'hidden')}>
+              {props.ChatData.active_users.map(u => (
+                <img title={u.name} src={u.picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <div className={'' + (false ? 'block ' : 'hidden ') + (CheckUsersOnChat() ? 'self-start' : '')}>
-        <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} />
+      <div onClick={handleChatOptions} className={(chatOptions.show && (chatOptions.data.uuid === props.ChatData.uuid) ? 'block' : 'hidden group-hover:block') + ' ml-2 cursor-pointer hover:text-white rounded p-2 shrink-0 ' + (CheckUsersOnChat() ? 'self-start ' : '') + (isSelected() ? 'text-[#DBDBDB] ' : 'text-[#747474] ') + handleBoxClass()}>
+        {/* <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} /> */}
+        <div class="">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M10 2C10 3.10457 9.10457 4 8 4C6.89543 4 6 3.10457 6 2C6 0.89543 6.89543 -4.82823e-08 8 0C9.10457 4.82823e-08 10 0.89543 10 2ZM10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8C6 6.89543 6.89543 6 8 6C9.10457 6 10 6.89543 10 8ZM8 16C9.10457 16 10 15.1046 10 14C10 12.8954 9.10457 12 8 12C6.89543 12 6 12.8954 6 14C6 15.1046 6.89543 16 8 16Z" />
+          </svg>
+        </div>
       </div>
-    </div>
+    </div >
   )
 }
