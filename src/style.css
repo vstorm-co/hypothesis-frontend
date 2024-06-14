@@ -476,6 +476,10 @@ button.btn-second {
 	@apply text-[#595959] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
 }
 
+button.btn-second.light-gray {
+	@apply text-[#DBDBDB] text-sm leading-6 font-bold bg-transparent py-2 px-4 rounded;
+}
+
 button.btn-second:active:enabled {
 	box-shadow: 0 1.5px 4px #666 inset;
 	transform: translateY(2px) translateX(-2px);
