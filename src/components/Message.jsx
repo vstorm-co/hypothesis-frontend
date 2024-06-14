@@ -9,7 +9,7 @@ import { useSignal } from '@preact/signals';
 import papaya from '../assets/images/papaya.png';
 import CopyAs from './ToolBars/ChatToolbar/CopyAs';
 import arrow from '../assets/arrow.svg';
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { CloneChatFromHere } from './ToolBars/ChatToolbar/CloneChatFromHere';
 import { EditMessage } from './ToolBars/ChatToolbar/EditMessage';
 import { PromptInput } from './PromptInput';
@@ -27,6 +27,26 @@ export function Message(props) {
 
   const EditEnabled = useSignal(false);
   const newMessage = useSignal('');
+
+  const showDeleteAnnotations = useSignal(true);
+  const DeleteAnnotationsModal = useRef(null);
+
+  function outsideClickHanlder(ref) {
+    useEffect(() => {
+      function handleClickOutside(e) {
+        if (ref.current && !ref.current.contains(e.target)) {
+          showDeleteAnnotations.value = false;
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+      }
+    }, [ref])
+  }
+
+  outsideClickHanlder(DeleteAnnotationsModal);
 
   const MessageDataStyle = useSignal(null)
   const MessageDataVisible = useSignal(false);
@@ -106,6 +126,15 @@ export function Message(props) {
 
       MessageDataVisible.value = true;
     }
+  }
+
+  function goToAnnotations() {
+    let where = props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}&group=${props.Message.content_dict.group_id}` : '#';
+    window.open(where, "_blank");
+  }
+
+  function callDeleteAnnotations() {
+    console.log(props.Message.content_dict);
   }
 
   if (props.Message.created_by === 'user') {
@@ -207,12 +236,18 @@ export function Message(props) {
                   Only Visible to You
                 </div>
                 {props.Message.content != 'Creating...' && <div className={'flex'}>
-                  <a href={props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}&group=${props.Message.content_dict.group_id}` : '#'} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  <button onClick={() => { showDeleteAnnotations.value = true }} className={'flex items-center text-[#747474] cursor-pointer btn-second'}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M16 1C16 0.447715 15.5523 0 15 0H1C0.447715 0 0 0.447715 0 1C0 1.55228 0.447715 2 1 2H15C15.5523 2 16 1.55228 16 1ZM14 4H2C1.36895 4 0.895661 4.57732 1.01942 5.19612L3.01942 15.1961C3.1129 15.6635 3.52332 16 4 16H12C12.4767 16 12.8871 15.6635 12.9806 15.1961L14.9806 5.19612C15.1043 4.57732 14.631 4 14 4ZM12.78 6L11.18 14H4.819L3.219 6H12.78Z" fill="currentColor" />
+                    </svg>
+                    <span className={'font-semibold ml-2'}>Delete</span>
+                  </button>
+                  <button onClick={() => goToAnnotations()} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="#FFFFFF" className={'ml-2'} xmlns="http://www.w3.org/2000/svg">
                       <path d="M11 0C11.5128 0 11.9355 0.38604 11.9933 0.883379L12 1V7C12 7.55228 11.5523 8 11 8C10.4872 8 10.0645 7.61396 10.0067 7.11662L10 7V3.414L1.70711 11.7071C1.31658 12.0976 0.683418 12.0976 0.292893 11.7071C-0.0675907 11.3466 -0.0953203 10.7794 0.209705 10.3871L0.292893 10.2929L8.584 2H5C4.48716 2 4.06449 1.61396 4.00673 1.11662L4 1C4 0.487164 4.38604 0.0644928 4.88338 0.00672773L5 0H11Z" fill="#FFFFFF" />
                     </svg>
-                  </a>
+                  </button>
                 </div>}
                 {props.Message.content.length === 0 && <div className={'flex'}>
                   <button disabled={true} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
@@ -226,6 +261,20 @@ export function Message(props) {
             </div>
           </div>
         </div>
+
+        {/* DELETE ANNOTATION MODAL  */}
+
+        {props.Message.content_dict &&
+          <div ref={DeleteAnnotationsModal} className={'fixed z-20 top-1/4 left-1/2 transform -translate-1/2 w-[320px] bg-[#202020] border border-[#595959] text-sm leading-6 rounded ' + (showDeleteAnnotations.value ? '' : 'hidden')}>
+            <div className={'p-4 text-white text-center'}>
+              Are you sure you want to delete <br /> {props.Message.content_dict.annotations.length > 1 ? props.Message.content_dict.annotations.length + ' annotations' : props.Message.content_dict.annotations.length + ' annotation'} generated by Papaya?
+            </div>
+            <div className={'flex gap-1 justify-center py-2 border-t border-[#595959]'}>
+              <button onClick={() => { showDeleteAnnotations.value = false }} type="button" className="btn-second light-gray">Cancel</button>
+              <button onClick={() => callDeleteAnnotations()} type="button" className="bg-[#EF4444] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center">Delete</button>
+            </div>
+          </div>
+        }
       </div>
     )
   }
