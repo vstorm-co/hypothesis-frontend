@@ -192,6 +192,10 @@ input:disabled {
 	cursor: pointer;
 }
 
+.user-message div {
+	position: relative !important;
+}
+
 .pill {
 	@apply py-1 px-2 mx-0.5 bg-[#747474] rounded text-white text-sm;
 	position: relative;
