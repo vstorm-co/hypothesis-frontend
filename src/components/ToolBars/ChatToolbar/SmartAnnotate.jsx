@@ -356,7 +356,7 @@ export function SmartAnnotate(props) {
 
                     <div class="relative">
                       <select onChange={onGroupInput} value={group.value} className={"overflow-hidden pr-6 " + (group.value === 'placeholder' ? 'text-[#747474]' : '')} >
-                        <option disabled selected value="placeholder" className={'text-[#747474]'}>{profileInfo.groups?.filter(g => g.id != "__world__").length < 1 ? 'No group avilable' : 'Choose Group'}</option>
+                        <option disabled selected value="placeholder" className={'text-[#747474]'}>{profileInfo.groups?.filter(g => g.id != "__world__").length < 1 ? 'No group available' : 'Choose Group'}</option>
                         {profileInfo.groups?.filter(g => g.id != "__world__").map(g => (
                           <option value={g.id}>{g.name}</option>
                         ))}
