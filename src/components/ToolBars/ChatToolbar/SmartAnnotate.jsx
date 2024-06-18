@@ -32,6 +32,7 @@ export function SmartAnnotate(props) {
   const urlValid = useSignal(true);
 
   const response_template = useSignal('');
+  const showResponseTemplate = useSignal(false);
 
   const prompt = useSignal('');
   const promptValid = useSignal(true);
@@ -386,7 +387,7 @@ export function SmartAnnotate(props) {
                   <div className={'px-2 shrink-0'}>
                     <img src={urlType.value === 'url' ? share : googleDrive} className={'w-[16px] h-[16px]'} alt="" />
                   </div>
-                  <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter URL to annotate...'} type="text" />
+                  <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter HTML, PDF, YouTube URL or choose file from Google →'} type="text" />
                   <div title={urlType.value === 'url' ? 'Click to select a file in google drive' : 'Click to insert Url'} onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
                     <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
                   </div>
@@ -395,21 +396,7 @@ export function SmartAnnotate(props) {
                   <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5">This doesn't look like a link...</div>
                 }
               </div>
-              <div className={'mt-6'}>
-                <div className={'w-full'}>
-                  <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
-                    Response Template <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'The base template of instructions for running your prompt and creating the JSON file of annotations'} />
-                  </div>
-                  <div class="relative -mt-[25px]">
-                    <ResponseTemplateInput
-                      WSsendMessage={value => { }}
-                      handleSubmitButton={value => { handleResponseTemplateData(value) }}
-                      visible={visible}
-                    // clearInputOnSubmit={true}
-                    />
-                  </div>
-                </div>
-              </div>
+
               <div className={'mt-6'}>
                 <div className={'w-full'}>
                   <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
@@ -430,25 +417,39 @@ export function SmartAnnotate(props) {
                 </div>
               </div>
 
-              {/* <div className={'mt-4'}>
-                <div className="text-xs font-bold text-[#747474] mb-1">
-                  Prompt
+              <div className={'mt-6'}>
+                <div className={'w-full'}>
+                  <div onClick={() => showResponseTemplate.value = !showResponseTemplate.value} className={"text-xs relative z-[10] font-bold text-[#747474] border-[#747474] mb-1 flex cursor-pointer " + (showResponseTemplate.value ? '' : 'border-b pb-1')}>
+                    Scaffolding Prompt <span className={'font-normal ml-1'}>(optional)</span>  <HelpToolTip content={'The base template of instructions for running your prompt and creating the JSON file of annotations'} />
+                    <img src={angleDown} className={"pointer-events-none duration-300 ml-auto transform " + (showResponseTemplate.value ? 'rotate-180' : '')}></img>
+                  </div>
+                  <div className={'overflow-hidden ' + (showResponseTemplate.value ? 'max-h-[700px]' : 'max-h-0')}>
+                    <a href="/default-scafold-prompt" target="_blank" className="text-xs relative z-[10] underline text-[#747474] mt-3 flex">
+                      Default Scaffold Prompt
+                    </a>
+                    <div class="relative -mt-[28px]">
+                      <ResponseTemplateInput
+                        WSsendMessage={value => { }}
+                        handleSubmitButton={value => { handleResponseTemplateData(value) }}
+                        visible={visible}
+                      // clearInputOnSubmit={true}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <textarea value={prompt.value} onInput={onPromptInput} className={'inputtext w-full ' + (promptValid.value ? '' : 'wrong')} placeholder={'Enter your prompt...'} type="text" />
-                {!promptValid.value &&
-                  <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
-                }
-              </div> */}
+              </div>
             </div>
             <div className={'mt-4 flex justify-center ' + (annotationLoading.value ? '' : 'hidden')}>
               <Loading />
             </div>
+
             <div className={'mt-4 pb-2'}>
               <div className={'flex gap-1 mt-2 justify-end'}>
                 <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
                 <button disabled={annotationLoading.value} onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
