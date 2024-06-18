@@ -21,7 +21,9 @@ export function SmartAnnotate(props) {
 
   const token = useSignal('');
   const username = useSignal('');
-  const group = useSignal('__world__');
+
+  const group = useSignal('placeholder');
+  const groupValid = useSignal(true);
   const tags = useSignal('');
 
   const url = useSignal('');
@@ -138,6 +140,7 @@ export function SmartAnnotate(props) {
     username.value = event.currentTarget.value
   };
   const onGroupInput = event => {
+    groupValid.value = true;
     group.value = event.currentTarget.value
     let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
 
@@ -176,12 +179,16 @@ export function SmartAnnotate(props) {
   outsideClickHanlder(FormRef);
 
   useEffect(async function () {
+    urlValid.value = true
+    promptValid.value = true;
+    groupValid.value = true;
+
     let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
 
     if (ProfileData) {
       username.value = ProfileData.username ? ProfileData.username : '';
       token.value = ProfileData.token;
-      group.value = ProfileData.group ? ProfileData.group : '__world__';
+      group.value = ProfileData.group ? ProfileData.group : 'placeholder';
       if (!profileInfo.userid) {
         infoLoading.value = true;
         await dispatch(getProfileInfo({ username: username.value, token: token.value, group: group.value }));
@@ -247,7 +254,9 @@ export function SmartAnnotate(props) {
       urlValid.value = regex.test(formData.url) || urlType.value === 'google-drive';
       promptValid.value = prompt.value.length > 0;
 
-      if (!urlValid.value || !promptValid.value) {
+      groupValid.value = formData.group != 'placeholder'
+
+      if (!urlValid.value || !promptValid.value || formData.group === 'placeholder') {
         return;
       }
 
@@ -346,12 +355,19 @@ export function SmartAnnotate(props) {
                     </div>
 
                     <div class="relative">
-                      <select onChange={onGroupInput} value={group.value} class="">
-                        {profileInfo.groups?.map(g => (
+                      <select onChange={onGroupInput} value={group.value} className={"overflow-hidden pr-6 " + (group.value === 'placeholder' ? 'text-[#747474]' : '')} >
+                        <option disabled selected value="placeholder" className={'text-[#747474]'}>{profileInfo.groups?.filter(g => g.id != "__world__").length < 1 ? 'No group avilable' : 'Choose Group'}</option>
+                        {profileInfo.groups?.filter(g => g.id != "__world__").map(g => (
                           <option value={g.id}>{g.name}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                    </div>
+                    <div className={'text-red-500 text-center text-[10px] pl-1 mt-0.5 ' + (profileInfo.groups?.filter(g => g.id != "__world__").length < 1 ? '' : 'hidden')}>
+                      Create a group in order to make annotations
+                    </div>
+                    <div className={'text-red-500 text-center text-[10px] pl-1 mt-0.5 ' + (groupValid.value ? 'hidden' : '')}>
+                      You need to choose a group
                     </div>
                   </div>
                   <div className={'w-full'}>
