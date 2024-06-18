@@ -28,6 +28,7 @@ import { uiActions } from './store/ui-slice';
 import 'prismjs/themes/prism.css'
 import './style.css';
 import { RefreshToken } from './pages/RefreshToken';
+import { ScafoldPrompt } from './pages/ScafoldPrompt';
 
 export function App() {
 	useEffect(() => {
@@ -86,6 +87,7 @@ export function App() {
 								<SetUp path="/setup" />
 								<Chat path="/chats/:id" />
 								<Template path="/templates/:id" />
+								<ScafoldPrompt path="/default-scafold-prompt" />
 								<NotFound default />
 							</Router>
 						</div>

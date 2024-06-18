@@ -11,10 +11,14 @@ const hSlice = createSlice({
     logs: [],
     showLogs: false,
     formVisible: false,
+    defaultScafoldPrompt: '',
   },
   reducers: {
     setInfo(state, action) {
       state.profileInfo = action.payload;
+    },
+    setDefaultScafoldPrompt(state, action) {
+      state.defaultScafoldPrompt = action.payload
     },
     resetInfo(state, action) {
       state.profileInfo = {}
@@ -57,6 +61,21 @@ export const createAnnotations = (data) => {
       });
 
       console.log(done);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const getDefaultScafoldPrompt = (data) => {
+  return async (dispatch) => {
+    try {
+      const prompt = await callApi(`/template/annotations-default-template`, {
+        method: 'GET',
+      });
+
+      console.log(prompt);
+      dispatch(hSliceActions.setDefaultScafoldPrompt(prompt.content));
     } catch (err) {
       console.log(err);
     }
