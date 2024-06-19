@@ -21,7 +21,7 @@ jobs:
       - name: Install NPM dependencies
         run: |
           npm install --legacy-peer-deps
-          cp .env.production .env
+          cp .env.docdrop .env
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
 
