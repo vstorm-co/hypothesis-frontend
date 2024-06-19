@@ -28,15 +28,8 @@ jobs:
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
 
-      - name: Debug .env file
-        run: cat .env
-
       - name: Compile assets
         run: npm run build
-
-      - name: Verify environment variables after build
-        run: |
-          cat .env
 
       - name: Deploy files
         uses: easingthemes/ssh-deploy@main
