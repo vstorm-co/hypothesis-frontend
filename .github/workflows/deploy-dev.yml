@@ -18,6 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Clear NPM cache
+        run: npm cache clean --force
+
+      - name: Clean build directory
+        run: rm -rf ./dist
+
       - name: Install NPM dependencies
         run: |
           npm install --legacy-peer-deps
