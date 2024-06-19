@@ -11,6 +11,7 @@ import { Toast } from '../components/Toast';
 import { PromptInput } from '../components/PromptInput';
 import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 import { useSignal } from '@preact/signals';
+import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
 
 
 export function MockChat(props) {
@@ -150,6 +151,9 @@ export function MockChat(props) {
                 handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
                 SecondButton={true}
               />
+              <div className={'absolute bottom-2 text-[#747474] text-xs self-start py-2'}>
+                <ToolbarHelp onChat={true} />
+              </div>
             </div>
           </div>
         </div>
