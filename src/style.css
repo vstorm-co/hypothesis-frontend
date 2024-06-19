@@ -736,6 +736,21 @@ input:checked+.slider:before {
 	z-index: 99;
 }
 
+.freetooltip {
+	/* visibility: hidden; */
+
+	padding: 4px 8px;
+	transform: translateX(-50%);
+	background-color: #202020;
+	color: white;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	border-radius: 4px;
+	position: fixed;
+	z-index: 99;
+}
+
 .tooltip:hover .tooltiptext {
 	visibility: visible;
 }

@@ -42,16 +42,16 @@ jobs:
           SCRIPT_AFTER: |
             nginx -s reload
 
-      - name: Send Mattermost Success Notification
+      - name: Send Mattermost Success Notification - Docdrop
         if: ${{ success() }}
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":white_check_mark: [Papaya] Production has been deployed by GitHub user ${{ github.actor }}!\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":white_check_mark: [Papaya] Docdrop has been deployed by GitHub user ${{ github.actor }}!\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
 
-      - name: Send Mattermost Failure Notification
+      - name: Send Mattermost Failure Notification - Docdrop
         if: ${{ failure() }}
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":exclamation: [Papaya] Failed to deploy Production!\nUser: ${{ github.actor }}\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":exclamation: [Papaya] Failed to deploy docdrop!\nUser: ${{ github.actor }}\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
