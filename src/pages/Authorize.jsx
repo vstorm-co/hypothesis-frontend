@@ -38,7 +38,7 @@ export function Authorize() {
       route('/setup')
     },
     flow: 'auth-code',
-    redirect_uri: `${window.location.origin}`,
+    redirect_uri: 'postmessage',
     onError: err => {
       toggleLoading();
     },
