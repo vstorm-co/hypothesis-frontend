@@ -22,9 +22,9 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           cp .env.staging .env
-          cat .env.staging
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
+          cat .env
 
       - name: Compile assets
         run: npm run build
