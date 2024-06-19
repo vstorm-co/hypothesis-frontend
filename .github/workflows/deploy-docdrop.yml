@@ -21,7 +21,7 @@ jobs:
       - name: Install NPM dependencies
         run: |
           npm install --legacy-peer-deps
-          cp .env.production .env
+          cp .env.docdrop .env
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
 
@@ -47,11 +47,11 @@ jobs:
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":white_check_mark: [Papaya] Staging has been deployed by GitHub user ${{ github.actor }}!\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":white_check_mark: [Papaya] Production has been deployed by GitHub user ${{ github.actor }}!\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
 
       - name: Send Mattermost Failure Notification
         if: ${{ failure() }}
         uses: jasongitmail/fast-webhook@v1
         with:
           url: ${{ secrets.NOTIFY_WEBHOOK }}
-          json: '{"text": ":exclamation: [Papaya] Failed to deploy staging!\nUser: ${{ github.actor }}\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+          json: '{"text": ":exclamation: [Papaya] Failed to deploy Production!\nUser: ${{ github.actor }}\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
