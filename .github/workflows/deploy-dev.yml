@@ -31,22 +31,12 @@ jobs:
       - name: Debug .env file
         run: cat .env
 
-      - name: Verify environment variables before build
-        run: |
-          echo "VITE_API_URL=${VITE_API_URL}"
-          echo "VITE_WS_URL=${VITE_WS_URL}"
-          echo "VITE_LISTENER_WS_URL=${VITE_LISTENER_WS_URL}"
-          npm run env # Log the environment variables as seen by npm
-
       - name: Compile assets
         run: npm run build
 
       - name: Verify environment variables after build
         run: |
-          echo "VITE_API_URL=${VITE_API_URL}"
-          echo "VITE_WS_URL=${VITE_WS_URL}"
-          echo "VITE_LISTENER_WS_URL=${VITE_LISTENER_WS_URL}"
-          npm run env # Log the environment variables after the build
+          cat .env
 
       - name: Deploy files
         uses: easingthemes/ssh-deploy@main
