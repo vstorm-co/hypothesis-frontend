@@ -70,7 +70,7 @@ export const createAnnotations = (data) => {
 export const getDefaultScafoldPrompt = (data) => {
   return async (dispatch) => {
     try {
-      const prompt = await callApi(`/template/annotations-default-template`, {
+      const prompt = await callApi(`/template/annotations-default-template/`, {
         method: 'GET',
       });
 
