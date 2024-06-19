@@ -5,16 +5,11 @@ on:
     branches:
       - master
 
-
-# It is important to specify "concurrency" for the workflow,
-# to prevent concurrency between different deploys.
 concurrency: staging_environment
 
 jobs:
   building:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: read
     steps:
       - uses: actions/checkout@v2
 
@@ -25,17 +20,33 @@ jobs:
         run: rm -rf ./dist
 
       - name: Install NPM dependencies
-        run: |
-          npm install --legacy-peer-deps
+        run: npm ci
 
-      - name: Compile assets
+      - name: Apply environment configuration
         run: |
-          echo "VITE_API_URL=${{secrets.STAGING_VITE_API_URL}}" >> .env
-          echo "VITE_WS_URL=${{secrets.STAGING_VITE_WS_URL}}" >> .env
-          echo "VITE_LISTENER_WS_URL=${{secrets.STAGING_VITE_LISTENER_WS_URL}}" >> .env
+          cp .env.staging .env
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
-          npm run build
+
+      - name: Debug .env file
+        run: cat .env
+
+      - name: Verify environment variables before build
+        run: |
+          echo "VITE_API_URL=${VITE_API_URL}"
+          echo "VITE_WS_URL=${VITE_WS_URL}"
+          echo "VITE_LISTENER_WS_URL=${VITE_LISTENER_WS_URL}"
+          npm run env # Log the environment variables as seen by npm
+
+      - name: Compile assets
+        run: npm run build
+
+      - name: Verify environment variables after build
+        run: |
+          echo "VITE_API_URL=${VITE_API_URL}"
+          echo "VITE_WS_URL=${VITE_WS_URL}"
+          echo "VITE_LISTENER_WS_URL=${VITE_LISTENER_WS_URL}"
+          npm run env # Log the environment variables after the build
 
       - name: Deploy files
         uses: easingthemes/ssh-deploy@main
