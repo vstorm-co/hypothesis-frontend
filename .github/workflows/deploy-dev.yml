@@ -25,7 +25,7 @@ jobs:
       - name: Apply environment configuration
         run: |
           cp .env.staging .env
-          echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
+          echo "VITE_GOOGLE_CLIENT_ID=${{secrets.DEV_GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
 
       - name: Compile assets
