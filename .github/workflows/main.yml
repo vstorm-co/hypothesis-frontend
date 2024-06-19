@@ -27,7 +27,6 @@ jobs:
           cp .env.staging .env
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
-          cat .env
           npm run build
 
       - name: Deploy files
