@@ -24,7 +24,6 @@ jobs:
 
       - name: Compile assets
         run: |
-#          cp .env.staging .env
           echo "VITE_API_URL=${{secrets.STAGING_VITE_API_URL}}" >> .env
           echo "VITE_WS_URL=${{secrets.STAGING_VITE_WS_URL}}" >> .env
           echo "VITE_LISTENER_WS_URL=${{secrets.STAGING_VITE_LISTENER_WS_URL}}" >> .env
