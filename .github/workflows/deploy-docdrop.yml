@@ -41,8 +41,7 @@ jobs:
           TARGET: ${{secrets.PROD_FRONTEND_DIR}}/
           EXCLUDE: ".git, .github"
           SCRIPT_AFTER: |
-            find ${{secrets.PROD_FRONTEND_DIR}} -type f -exec chmod 644 {} \;
-            find ${{secrets.PROD_FRONTEND_DIR}} -type d -exec chmod 755 {} \;
+            nginx -s reload
 
       - name: Send Mattermost Success Notification
         if: ${{ success() }}
