@@ -304,6 +304,7 @@ export function SmartAnnotate(props) {
     prompt.value = data.promptArray[0].prompt;
   }
 
+
   return (
     <div className={'relative'}>
       <div onClick={() => toggleFormVisible()} className={'border p-1 border-b-0 border-l-0 cursor-pointer border-[#DBDBDB] w-8 h-8 flex items-center justify-center rounded-tr'}>
@@ -320,7 +321,7 @@ export function SmartAnnotate(props) {
               AI Annotations
             </div>
           </div>
-          <div className={'max-h-[84vh] pl-8 pr-4 mr-4 mt '}>
+          <div className={'max-h-[76vh] overflow-y-auto pl-8 pr-4 mr-4'}>
             <div className={'py-4 text-sm leading-6'}>
               <div className={'font-bold text-[#202020]'}>Create smart annotations from any URL</div>
               <p className={'text-[#595959] mt-2'}>Already using Hypothesis and want to add some annotations to spark a conversation? Get started by configuring your account below:</p>
@@ -329,7 +330,9 @@ export function SmartAnnotate(props) {
               <div className={'text-xs text-[#747474] mb-1 flex justify-between'}>
                 <div className="font-bold flex">
                   API Key
-                  <HelpToolTip content={'Provide your Hypothesis API key to automatically create annotations'} />
+                  <span>
+                    <HelpToolTip content={'Provide your Hypothesis API key to automatically create annotations'} />
+                  </span>
                   <img src={checkGreen} className={'ml-1 ' + (profileInfo.userid != null ? '' : 'hidden')} alt="" />
                   {profileInfo.userid &&
                     <span class="ml-0.5 font-normal"> ({profileInfo.userid.split(":")[1].split("@")[0]})</span>
@@ -399,7 +402,7 @@ export function SmartAnnotate(props) {
 
               <div className={'mt-6'}>
                 <div className={'w-full'}>
-                  <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex">
+                  <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex w-[100px]">
                     Prompt <HelpToolTip content={'The specific prompt that will create the annotations you’re interested in.'} />
                   </div>
                   <div class="relative -mt-[25px]">
@@ -424,10 +427,10 @@ export function SmartAnnotate(props) {
                     <img src={angleDown} className={"pointer-events-none duration-300 ml-auto transform " + (showResponseTemplate.value ? 'rotate-180' : '')}></img>
                   </div>
                   <div className={'overflow-hidden ' + (showResponseTemplate.value ? 'max-h-[700px]' : 'max-h-0')}>
-                    <a href="/default-scafold-prompt" target="_blank" className="text-xs relative z-[10] underline text-[#747474] mt-3 flex">
+                    <a href="/default-scafold-prompt" target="_blank" className="text-xs relative z-[10] underline text-[#747474] mt-3 w-[200px] flex">
                       Default Scaffold Prompt
                     </a>
-                    <div class="relative -mt-[28px]">
+                    <div class="relative -mt-[26px]">
                       <ResponseTemplateInput
                         WSsendMessage={value => { }}
                         handleSubmitButton={value => { handleResponseTemplateData(value) }}
@@ -443,13 +446,13 @@ export function SmartAnnotate(props) {
               <Loading />
             </div>
 
-            <div className={'mt-4 pb-2'}>
-              <div className={'flex gap-1 mt-2 justify-end'}>
-                <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
-                <button disabled={annotationLoading.value} onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
-              </div>
-            </div>
 
+          </div>
+          <div className={'mt-4 pb-2 mx-8'}>
+            <div className={'flex gap-1 mt-2 justify-end'}>
+              <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
+              <button disabled={annotationLoading.value} onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
+            </div>
           </div>
         </div>
       </div>
