@@ -24,7 +24,6 @@ jobs:
           cp .env.production .env
           echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
           echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
-          
 
       - name: Compile assets
         run: npm run build
