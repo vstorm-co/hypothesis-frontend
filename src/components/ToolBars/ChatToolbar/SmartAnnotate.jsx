@@ -238,9 +238,10 @@ export function SmartAnnotate(props) {
 
     if (hChats) {
       let index = hChats.findIndex(c => c.uuid == null);
-      console.log(hChats);
-      hChats[index] = { ...hChats[index], uuid: currentChat.uuid };
-      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      if (index != -1) {
+        hChats[index] = { ...hChats[index], uuid: currentChat.uuid };
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      }
     }
   }, [currentChat.uuid])
 
