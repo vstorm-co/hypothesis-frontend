@@ -113,25 +113,23 @@ export function SmartAnnotate(props) {
       urlType.value = 'url';
       url.value = '';
 
-      if (currentChat.uuid != null) {
-        let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-        if (hChats) {
-          let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
-          if (index != -1) {
-            hChats[index].url.content = url.value;
-            hChats[index].url.type = urlType.value;
-          } else {
-            let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
-            hChats = [...hChats, data];
-          }
-
-          localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      if (hChats) {
+        let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
+        if (index != -1) {
+          hChats[index].url.content = url.value;
+          hChats[index].url.type = urlType.value;
         } else {
           let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
-          hChats = [data];
-          localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+          hChats = [...hChats, data];
         }
+
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      } else {
+        let data = { uuid: currentChat.uuid, url: { type: urlType.value, content: url.value } };
+        hChats = [data];
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
       }
     }
   }
@@ -200,23 +198,25 @@ export function SmartAnnotate(props) {
       }
     }
 
-    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+    if (currentChat.uuid != null) {
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-    if (hChats) {
-      let target = hChats.find(c => c.uuid === currentChat.uuid);
-      if (target) {
-        url.value = target.url.content;
+      if (hChats) {
+        let target = hChats.find(c => c.uuid === currentChat.uuid);
+        if (target) {
+          url.value = target.url.content;
 
-        if (target.url.type != 'url') {
-          fileId.value = target.url.fileId;
-          urlType.value = target.url.type;
+          if (target.url.type != 'url') {
+            fileId.value = target.url.fileId;
+            urlType.value = target.url.type;
+          } else {
+            urlType.value = target.url.type;
+            fileId.value = '';
+          }
+
         } else {
-          urlType.value = target.url.type;
-          fileId.value = '';
+          url.value = '';
         }
-
-      } else {
-        url.value = '';
       }
     }
   }, [visible])
@@ -232,6 +232,15 @@ export function SmartAnnotate(props) {
       dispatch(getChatsData(currentChat.uuid))
 
       localStorage.removeItem("ANT_annotateToCreate");
+    }
+
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+    if (hChats) {
+      let index = hChats.findIndex(c => c.uuid == null);
+      console.log(hChats);
+      hChats[index] = { ...hChats[index], uuid: currentChat.uuid };
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
     }
   }, [currentChat.uuid])
 

@@ -59,15 +59,17 @@ export function ResponseTemplateInput(props) {
 
   useEffect(() => {
     if (props.loadPrompt) {
-      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+      if (currentChat.uuid != null) {
+        let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-      if (hChats) {
-        let target = hChats.find(c => c.uuid === currentChat.uuid);
-        // console.log(target.uuid, currentChat.uuid)
-        if (target) {
-          input.value = target.prompt
-        } else {
-          input.value = ''
+        if (hChats) {
+          let target = hChats.find(c => c.uuid === currentChat.uuid);
+          // console.log(target.uuid, currentChat.uuid)
+          if (target) {
+            input.value = target.prompt
+          } else {
+            input.value = ''
+          }
         }
       }
     }
@@ -222,24 +224,22 @@ export function ResponseTemplateInput(props) {
     input.value = currentText;
     saveCaret();
 
-    if (currentChat.uuid != null) {
-      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-      if (hChats) {
-        let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
-        if (index != -1) {
-          hChats[index].prompt = input.value;
-        } else {
-          let data = { uuid: currentChat.uuid, prompt: input.value };
-          hChats = [...hChats, data];
-        }
-
-        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    if (hChats) {
+      let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
+      if (index != -1) {
+        hChats[index].prompt = input.value;
       } else {
         let data = { uuid: currentChat.uuid, prompt: input.value };
-        hChats = [data];
-        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+        hChats = [...hChats, data];
       }
+
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+    } else {
+      let data = { uuid: currentChat.uuid, prompt: input.value };
+      hChats = [data];
+      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
     }
   }
 

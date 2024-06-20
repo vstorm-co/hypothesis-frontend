@@ -186,7 +186,11 @@ export const deleteChat = (payload) => {
         method: 'DELETE'
       });
       dispatch(getChatsData());
-      dispatch(chatsActions.setCurrentChat({}))
+      dispatch(chatsActions.setCurrentChat({
+        name: null,
+        uuid: null,
+        messages: [],
+      }))
     } catch (err) {
       console.log(err);
     }
