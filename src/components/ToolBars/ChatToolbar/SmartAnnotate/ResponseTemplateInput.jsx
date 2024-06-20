@@ -59,15 +59,17 @@ export function ResponseTemplateInput(props) {
 
   useEffect(() => {
     if (props.loadPrompt) {
-      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+      if (currentChat.uuid != null) {
+        let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-      if (hChats) {
-        let target = hChats.find(c => c.uuid === currentChat.uuid);
-        // console.log(target.uuid, currentChat.uuid)
-        if (target) {
-          input.value = target.prompt
-        } else {
-          input.value = ''
+        if (hChats) {
+          let target = hChats.find(c => c.uuid === currentChat.uuid);
+          // console.log(target.uuid, currentChat.uuid)
+          if (target) {
+            input.value = target.prompt
+          } else {
+            input.value = ''
+          }
         }
       }
     }

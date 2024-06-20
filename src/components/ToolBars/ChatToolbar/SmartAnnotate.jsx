@@ -198,23 +198,25 @@ export function SmartAnnotate(props) {
       }
     }
 
-    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+    if (currentChat.uuid != null) {
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-    if (hChats) {
-      let target = hChats.find(c => c.uuid === currentChat.uuid);
-      if (target) {
-        url.value = target.url.content;
+      if (hChats) {
+        let target = hChats.find(c => c.uuid === currentChat.uuid);
+        if (target) {
+          url.value = target.url.content;
 
-        if (target.url.type != 'url') {
-          fileId.value = target.url.fileId;
-          urlType.value = target.url.type;
+          if (target.url.type != 'url') {
+            fileId.value = target.url.fileId;
+            urlType.value = target.url.type;
+          } else {
+            urlType.value = target.url.type;
+            fileId.value = '';
+          }
+
         } else {
-          urlType.value = target.url.type;
-          fileId.value = '';
+          url.value = '';
         }
-
-      } else {
-        url.value = '';
       }
     }
   }, [visible])
@@ -230,6 +232,16 @@ export function SmartAnnotate(props) {
       dispatch(getChatsData(currentChat.uuid))
 
       localStorage.removeItem("ANT_annotateToCreate");
+    }
+
+    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+
+    if (hChats) {
+      let index = hChats.findIndex(c => c.uuid == null);
+      if (index != -1) {
+        hChats[index] = { ...hChats[index], uuid: currentChat.uuid };
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
+      }
     }
   }, [currentChat.uuid])
 
