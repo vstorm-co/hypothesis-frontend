@@ -222,22 +222,24 @@ export function ResponseTemplateInput(props) {
     input.value = currentText;
     saveCaret();
 
-    let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
+    if (currentChat.uuid != null) {
+      let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
-    if (hChats) {
-      let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
-      if (index != -1) {
-        hChats[index].prompt = input.value;
+      if (hChats) {
+        let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
+        if (index != -1) {
+          hChats[index].prompt = input.value;
+        } else {
+          let data = { uuid: currentChat.uuid, prompt: input.value };
+          hChats = [...hChats, data];
+        }
+
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
       } else {
         let data = { uuid: currentChat.uuid, prompt: input.value };
-        hChats = [...hChats, data];
+        hChats = [data];
+        localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
       }
-
-      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
-    } else {
-      let data = { uuid: currentChat.uuid, prompt: input.value };
-      hChats = [data];
-      localStorage.setItem("ANT_hChats", JSON.stringify(hChats))
     }
   }
 
