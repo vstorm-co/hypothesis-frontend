@@ -6,7 +6,8 @@ export function MessageData(props) {
         return time;
     }
 
-    const currentChat = useSelector(state => state.chats.currentChat)
+    const currentChat = useSelector(state => state.chats.currentChat);
+    console.log(props);
 
     return (
         <div style={{ ...props.Position }} className={'fixed py-2 px-3 bg-white w-[240px] z-50 rounded border text-xs ' + (props.Visible ? 'block' : 'hidden')}>
