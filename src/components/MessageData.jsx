@@ -15,9 +15,9 @@ export function MessageData(props) {
             <div className={'mt-2'}>
                 <span className={'font-bold text-[#747474]'}>Tokens:</span>
                 <ul className={'list-disc tokens mt-0.5 pl-5'}>
-                    <li>{props.Message.usage?.prompt_tokens_count} prompt tokens (${props.Message.usage?.prompt_value.toFixed(3)})</li>
-                    <li>{props.Message.usage?.completion_tokens_count} completion tokens (${props.Message.usage?.completion_value.toFixed(3)})</li>
-                    <li>{props.Message.usage?.total_tokens_count} total tokens (${props.Message.usage?.total_value.toFixed(3)})</li>
+                    <li>{props.Message.usage?.prompt_tokens_count} prompt tokens (${props.Message.usage?.prompt_value?.toFixed(3)})</li>
+                    <li>{props.Message.usage?.completion_tokens_count} completion tokens (${props.Message.usage?.completion_value?.toFixed(3)})</li>
+                    <li>{props.Message.usage?.total_tokens_count} total tokens (${props.Message.usage?.total_value?.toFixed(3)})</li>
                 </ul>
             </div>
             {props.Message.elapsed_time &&
