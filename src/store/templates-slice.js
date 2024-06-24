@@ -55,12 +55,12 @@ export const getTemplatesData = (payload) => {
     if (state.ui.searchFilters.visibility === 'all') {
       url = `/template?`
     } else if (state.ui.searchFilters.visibility === 'just_me') {
-      url = `${url}/template/?visibility=just_me`
+      url = `${url}/template?visibility=just_me`
     } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
-        url = `${url}/template/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
+        url = `${url}/template?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
-        url = `${url}/template/?visibility=just_me`
+        url = `${url}/template?visibility=just_me`
       }
     }
 

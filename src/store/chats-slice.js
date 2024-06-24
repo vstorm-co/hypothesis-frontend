@@ -81,12 +81,12 @@ export const getChatsData = (payload) => {
     if (state.ui.searchFilters.visibility === 'all') {
       url = `${url}/chat/rooms?`
     } else if (state.ui.searchFilters.visibility === 'just_me') {
-      url = `${url}/chat/rooms/?visibility=just_me`
+      url = `${url}/chat/rooms?visibility=just_me`
     } else if (state.ui.searchFilters.visibility === 'organization') {
       if (state.user.currentUser.organization_uuid) {
-        url = `${url}/chat/rooms/?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
+        url = `${url}/chat/rooms?visibility=organization&organization_uuid=${state.user.currentUser.organization_uuid}`
       } else {
-        url = `${url}/chat/rooms/?visibility=just_me`
+        url = `${url}/chat/rooms?visibility=just_me`
       }
     }
 
