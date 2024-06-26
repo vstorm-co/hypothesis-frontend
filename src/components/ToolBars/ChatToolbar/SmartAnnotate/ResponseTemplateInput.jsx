@@ -70,6 +70,8 @@ export function ResponseTemplateInput(props) {
           } else {
             input.value = ''
           }
+
+          handleSubmit()
         }
       }
     }

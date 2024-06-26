@@ -84,7 +84,7 @@ export function SmartAnnotate(props) {
           let hChats = JSON.parse(localStorage.getItem("ANT_hChats"));
 
           if (hChats) {
-            let index = hChats.findIndex(c => c.uuid == currentChat.uuid);
+            let index = hChats.findIndex(c => c.uuid === currentChat.uuid);
             if (index != -1) {
               hChats[index].url.content = url.value;
               hChats[index].url.type = urlType.value;
@@ -184,6 +184,8 @@ export function SmartAnnotate(props) {
     urlValid.value = true
     promptValid.value = true;
     groupValid.value = true;
+
+    url.value = '';
 
     let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
 
