@@ -1,11 +1,11 @@
-name: Project deploy staging
+name: Project deploy dev
 
 on:
   push:
     branches:
       - master
 
-concurrency: staging_environment
+concurrency: dev_environment
 
 
 jobs:
@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Clear NPM cache
-        run: npm cache clean --force
 
       - name: Clean build directory
         run: rm -rf ./dist
