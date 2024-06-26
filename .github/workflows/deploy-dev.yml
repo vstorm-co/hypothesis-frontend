@@ -41,6 +41,7 @@ jobs:
           TARGET: ${{secrets.FRONTEND_DIR}}/
           EXCLUDE: ".git, .github"
           SCRIPT_AFTER: |
+            dcrestart
             find ${{secrets.FRONTEND_DIR}} -type f -exec chmod 644 {} \;
             find ${{secrets.FRONTEND_DIR}} -type d -exec chmod 755 {} \;
 
