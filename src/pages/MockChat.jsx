@@ -133,7 +133,7 @@ export function MockChat(props) {
             <div className="h-[100vh] flex flex-col pt-4 pb-2">
               <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
                 <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-                  Welcome back!
+                  Welcome back!!!
                 </div>
 
                 <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
