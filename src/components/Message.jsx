@@ -16,6 +16,7 @@ import { PromptInput } from './PromptInput';
 import { route } from 'preact-router';
 import { MessageData } from './MessageData';
 import { Loading } from './Loading';
+import { deleteMessageAnnotations } from '../store/h-slice';
 
 
 export function Message(props) {
@@ -28,7 +29,9 @@ export function Message(props) {
   const EditEnabled = useSignal(false);
   const newMessage = useSignal('');
 
-  const showDeleteAnnotations = useSignal(true);
+  const dispatch = useDispatch();
+
+  const showDeleteAnnotations = useSignal(false);
   const DeleteAnnotationsModal = useRef(null);
 
   function outsideClickHanlder(ref) {
@@ -128,13 +131,19 @@ export function Message(props) {
     }
   }
 
-  function goToAnnotations() {
-    let where = props.Message.content_dict && props.Message.content_dict.url ? `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.url)}&group=${props.Message.content_dict.group_id}` : '#';
-    window.open(where, "_blank");
-  }
-
   function callDeleteAnnotations() {
-    console.log(props.Message.content_dict);
+    let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
+
+    let obj = {
+      room_id: currentChat.uuid,
+      api_key: ProfileData.token,
+      url: props.Message.content_dict.source_url ? props.Message.content_dict.source_url : '#',
+      annotation_ids: props.Message.content_dict.annotations.map(a => a.id),
+      message_uuid: props.Message.uuid,
+    };
+
+    dispatch(deleteMessageAnnotations(obj));
+    showDeleteAnnotations.value = false;
   }
 
   function generateAntLink() {

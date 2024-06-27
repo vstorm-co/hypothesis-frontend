@@ -265,6 +265,7 @@ export function SmartAnnotate(props) {
         response_template: response_template.value,
         prompt: prompt.value,
         room_id: currentChat.uuid ? currentChat.uuid : false,
+        delete_annotations: confirmDeleteAnnotations.value
       }
 
       const regex = /^https:\/\/.*/;
@@ -481,7 +482,7 @@ export function SmartAnnotate(props) {
               <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
                 <label class="switch">
                   <input type="checkbox" onChange={() => handleConfirmDeleteAnt()} checked={confirmDeleteAnnotations.value} />
-                  <span class="slider gray round"></span>
+                  <span class="slider round"></span>
                 </label>
                 <span>Delete existing annotations</span>
               </div>
