@@ -1,0 +1,57 @@
+name: Project deploy production
+
+on:
+  push:
+    branches:
+      - production
+
+
+# It is important to specify "concurrency" for the workflow,
+# to prevent concurrency between different deploys.
+concurrency: production_environment
+
+jobs:
+  building:
+    runs-on: ubuntu-latest
+    # permissions:
+    #   contents: read
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install NPM dependencies
+        run: |
+          npm install --legacy-peer-deps
+          cp .env.docdrop .env
+          echo "VITE_GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}}" >> .env
+          echo "VITE_GOOGLE_DEV_KEY=${{secrets.GOOGLE_DEV_KEY}}" >> .env
+
+      - name: Compile assets
+        run: npm run build
+
+      - name: Deploy files
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "./dist/"
+          REMOTE_HOST: ${{ secrets.PROD_REMOTE_HOST }}
+          REMOTE_PORT: ${{ secrets.PROD_REMOTE_PORT }}
+          REMOTE_USER: ${{ secrets.PROD_REMOTE_USER }}
+          TARGET: ${{secrets.PROD_FRONTEND_DIR}}/
+          EXCLUDE: ".git, .github"
+          SCRIPT_AFTER: |
+            nginx -s reload
+
+      - name: Send Mattermost Success Notification - Docdrop
+        if: ${{ success() }}
+        uses: jasongitmail/fast-webhook@v1
+        with:
+          url: ${{ secrets.NOTIFY_WEBHOOK }}
+          json: '{"text": ":white_check_mark: [Papaya] Docdrop has been deployed by GitHub user ${{ github.actor }}!\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'
+
+      - name: Send Mattermost Failure Notification - Docdrop
+        if: ${{ failure() }}
+        uses: jasongitmail/fast-webhook@v1
+        with:
+          url: ${{ secrets.NOTIFY_WEBHOOK }}
+          json: '{"text": ":exclamation: [Papaya] Failed to deploy docdrop!\nUser: ${{ github.actor }}\nChanges: ${{ github.event.head_commit.message }}", "username": "XXXX", "icon_url": "https://avatars.githubusercontent.com/u/8882318?s=200&v=4"}'

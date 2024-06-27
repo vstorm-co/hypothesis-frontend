@@ -137,6 +137,19 @@ export function Message(props) {
     console.log(props.Message.content_dict);
   }
 
+  function generateAntLink() {
+    props.Message.content_dict && props.Message.content_dict.source_url ? `` : '#'
+    if (props.Message.content_dict) {
+      if (props.Message.content_dict.source_url) {
+        return `https://hyp.is/go?url=${encodeURIComponent(props.Message.content_dict.source_url)}&group=${props.Message.content_dict.group_id}`
+      } else {
+        return '#'
+      }
+    } else {
+      return '#'
+    }
+  }
+
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex mt-2 group message-box'}>
@@ -145,7 +158,7 @@ export function Message(props) {
             <div className="flex items-start">
               <img src={props.Message.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
               <div className={'self-center py-1'}>
-                <div onClick={e => handlePillClick(e)} className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center inline-block break-all text-[#202020] text-sm user-message"} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
+                <div onClick={e => handlePillClick(e)} className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center overflow-hidden inline-block break-all text-[#202020] text-sm user-message"} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
               </div>
               <div className={'max-w-[92%] w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
                 <PromptInput
@@ -242,12 +255,12 @@ export function Message(props) {
                     </svg>
                     <span className={'font-semibold ml-2'}>Delete</span>
                   </button>
-                  <button onClick={() => goToAnnotations()} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  <a href={generateAntLink()} target="_blank" type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                     View Annotations
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="#FFFFFF" className={'ml-2'} xmlns="http://www.w3.org/2000/svg">
                       <path d="M11 0C11.5128 0 11.9355 0.38604 11.9933 0.883379L12 1V7C12 7.55228 11.5523 8 11 8C10.4872 8 10.0645 7.61396 10.0067 7.11662L10 7V3.414L1.70711 11.7071C1.31658 12.0976 0.683418 12.0976 0.292893 11.7071C-0.0675907 11.3466 -0.0953203 10.7794 0.209705 10.3871L0.292893 10.2929L8.584 2H5C4.48716 2 4.06449 1.61396 4.00673 1.11662L4 1C4 0.487164 4.38604 0.0644928 4.88338 0.00672773L5 0H11Z" fill="#FFFFFF" />
                     </svg>
-                  </button>
+                  </a>
                 </div>}
                 {props.Message.content.length === 0 && <div className={'flex'}>
                   <button disabled={true} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">

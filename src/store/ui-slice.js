@@ -18,6 +18,11 @@ const uiSlice = createSlice({
     adminBar: {
       active: false,
     },
+    helpToolTipPosition: {
+      top: '0px',
+      left: '0px'
+    },
+    ToolTipContent: '',
     copyAs: copyAs ? copyAs : 'md',
     organizationCreated: null,
     hideSideBar: false,
@@ -39,6 +44,12 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    setHelpToolTipPosition(state, action) {
+      state.helpToolTipPosition = { ...action.payload };
+    },
+    setToolTipContent(state, action) {
+      state.ToolTipContent = action.payload;
     },
     setChatsOptions(state, action) {
       state.chatOptions = { ...action.payload }

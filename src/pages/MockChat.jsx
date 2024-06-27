@@ -11,6 +11,7 @@ import { Toast } from '../components/Toast';
 import { PromptInput } from '../components/PromptInput';
 import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 import { useSignal } from '@preact/signals';
+import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
 
 
 export function MockChat(props) {
@@ -132,7 +133,7 @@ export function MockChat(props) {
             <div className="h-[100vh] flex flex-col pt-4 pb-2">
               <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
                 <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-                  Welcome back!
+                  Welcome back!!!
                 </div>
 
                 <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
@@ -150,6 +151,9 @@ export function MockChat(props) {
                 handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
                 SecondButton={true}
               />
+              <div className={'absolute bottom-2 text-[#747474] text-xs self-start py-2'}>
+                <ToolbarHelp onChat={true} />
+              </div>
             </div>
           </div>
         </div>

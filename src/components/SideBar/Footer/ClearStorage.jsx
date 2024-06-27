@@ -29,16 +29,16 @@ export function ClearStorage(props) {
 
   outsideClickHanlder(modal);
 
-  function runClearStorage() {
-    dispatch(userActions.setUser({}));
+  async function runClearStorage() {
+    await dispatch(userActions.setUser({}));
     localStorage.clear();
-    dispatch(userActions.setUsers([]));
-    dispatch(hSliceActions.setInfo({}))
+    await dispatch(userActions.setUsers([]));
+    await dispatch(hSliceActions.setInfo({}))
     props.toggle();
+    route('/auth');
 
-    setTimeout(() => {
-      route('/auth');
-    }, 100)
+    // setTimeout(() => {
+    // }, 100)
   }
 
   return (

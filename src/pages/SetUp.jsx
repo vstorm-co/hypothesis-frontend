@@ -47,22 +47,19 @@ export const SetUp = (props) => {
     if (DomainOrgs.value[0]) {
       handleUpdateOrganization()
     }
-    setTimeout(() => {
-      let redirectToChat = localStorage.getItem("redirect_to_chat");
-      if (redirectToChat?.length > 0) {
-        route(`/chats/${redirectToChat}`);
-        localStorage.removeItem("redirect_to_chat");
-      } else {
-        route('/');
-      }
 
+    await dispatch(getUserOrganizationsData());
+    await dispatch(getChatsData());
+    await dispatch(getTemplatesData());
+    await dispatch(uiActions.setHideSideBar(false));
 
-      dispatch(getUserOrganizationsData());
-      dispatch(getChatsData());
-      dispatch(getTemplatesData());
-      dispatch(uiActions.setHideSideBar(false));
-    }, 200)
-
+    let redirectToChat = localStorage.getItem("redirect_to_chat");
+    if (redirectToChat?.length > 0) {
+      route(`/chats/${redirectToChat}`);
+      localStorage.removeItem("redirect_to_chat");
+    } else {
+      route('/');
+    }
   }
 
   const handleUpdateOrganization = async () => {

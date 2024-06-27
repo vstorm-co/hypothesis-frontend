@@ -192,6 +192,10 @@ input:disabled {
 	cursor: pointer;
 }
 
+.user-message div {
+	position: relative !important;
+}
+
 .pill {
 	@apply py-1 px-2 mx-0.5 bg-[#747474] rounded text-white text-sm;
 	position: relative;
@@ -729,6 +733,21 @@ input:checked+.slider:before {
 	line-height: 16px;
 	border-radius: 4px;
 	position: absolute;
+	z-index: 99;
+}
+
+.freetooltip {
+	/* visibility: hidden; */
+
+	padding: 4px 8px;
+	transform: translateX(-50%);
+	background-color: #202020;
+	color: white;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	border-radius: 4px;
+	position: fixed;
 	z-index: 99;
 }
 
