@@ -328,7 +328,234 @@ export function Chat(props) {
 								</div>
 							</div>
 							<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
-								{/* <Message Message={{ created_by: 'annotation', content: 'Created 6 annotations from https://www.npr.org/2024/02/15/1196978636/what-to-do-with-your-childhood-stuff, with the prompt: “Summarize the most important facts about this article”.' }} /> */}
+								<Message Message={
+									{
+										created_by: 'annotation',
+										content: 'Created **4 annotations** from [urn:x-pdf:dfcbcf206097512065716973265877fc](urn:x-pdf:dfcbcf206097512065716973265877fc), with the prompt: mark random 4 rows',
+										content_dict: {
+											api_key: '6879-01DzgijfF60WonFSIuAuB59f5OLfL0JdhNMB0mhGLmU',
+											annotations: [
+												{
+													id: '9Il7KifIEe-YrLO8aqlbcw',
+													created: '2024-06-11T08:02:32.112991+00:00',
+													updated: '2024-06-11T08:02:32.112991+00:00',
+													user: 'acct:maciejaroslaw@hypothes.is',
+													uri: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+													text: 'Randomly selected row.',
+													tags: [],
+													group: '__world__',
+													permissions: {
+														read: [
+															'group:__world__'
+														],
+														admin: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														update: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														'delete': [
+															'acct:maciejaroslaw@hypothes.is'
+														]
+													},
+													target: [
+														{
+															source: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+															selector: [
+																{
+																	exact: '38-11-03   1A- 0  MAY.01/99',
+																	prefix: 'FEB.01/07        ',
+																	suffix: '38-12-01   1F- 0  AUG.01/05',
+																	type: 'TextQuoteSelector'
+																}
+															]
+														}
+													],
+													consumer: '',
+													references: [],
+													user_info: {
+														display_name: null
+													},
+													links: {
+														html: 'https://hypothes.is/a/9Il7KifIEe-YrLO8aqlbcw',
+														incontext: 'https://hyp.is/9Il7KifIEe-YrLO8aqlbcw',
+														json: 'https://hypothes.is/api/annotations/9Il7KifIEe-YrLO8aqlbcw'
+													}
+												},
+												{
+													id: '9Q3g9CfIEe-SKtMqXnQoUg',
+													created: '2024-06-11T08:02:32.990948+00:00',
+													updated: '2024-06-11T08:02:32.990948+00:00',
+													user: 'acct:maciejaroslaw@hypothes.is',
+													uri: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+													text: 'Randomly selected row.',
+													tags: [],
+													group: '__world__',
+													permissions: {
+														read: [
+															'group:__world__'
+														],
+														admin: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														update: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														'delete': [
+															'acct:maciejaroslaw@hypothes.is'
+														]
+													},
+													target: [
+														{
+															source: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+															selector: [
+																{
+																	exact: '38-12-01   1F- 1  FEB.01/07',
+																	prefix: '38-12-01   1F- 0  AUG.01/05',
+																	suffix: '38-12-01   1F- 2  FEB.01/07',
+																	type: 'TextQuoteSelector'
+																}
+															]
+														}
+													],
+													consumer: '',
+													references: [],
+													user_info: {
+														display_name: null
+													},
+													links: {
+														html: 'https://hypothes.is/a/9Q3g9CfIEe-SKtMqXnQoUg',
+														incontext: 'https://hyp.is/9Q3g9CfIEe-SKtMqXnQoUg',
+														json: 'https://hypothes.is/api/annotations/9Q3g9CfIEe-SKtMqXnQoUg'
+													}
+												},
+												{
+													id: '9Y9uTifIEe-rIyeg8YUIqw',
+													created: '2024-06-11T08:02:33.833745+00:00',
+													updated: '2024-06-11T08:02:33.833745+00:00',
+													user: 'acct:maciejaroslaw@hypothes.is',
+													uri: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+													text: 'Randomly selected row.',
+													tags: [],
+													group: '__world__',
+													permissions: {
+														read: [
+															'group:__world__'
+														],
+														admin: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														update: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														'delete': [
+															'acct:maciejaroslaw@hypothes.is'
+														]
+													},
+													target: [
+														{
+															source: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+															selector: [
+																{
+																	exact: '38-12-01   1K- 0  AUG.01/05',
+																	prefix: '38-12-01   1F- 4  FEB.01/07',
+																	suffix: '38-12-01   1K- 1  FEB.01/07',
+																	type: 'TextQuoteSelector'
+																}
+															]
+														}
+													],
+													consumer: '',
+													references: [],
+													user_info: {
+														display_name: null
+													},
+													links: {
+														html: 'https://hypothes.is/a/9Y9uTifIEe-rIyeg8YUIqw',
+														incontext: 'https://hyp.is/9Y9uTifIEe-rIyeg8YUIqw',
+														json: 'https://hypothes.is/api/annotations/9Y9uTifIEe-rIyeg8YUIqw'
+													}
+												},
+												{
+													id: '9hijRCfIEe-9zFts-H4g3Q',
+													created: '2024-06-11T08:02:34.739403+00:00',
+													updated: '2024-06-11T08:02:34.739403+00:00',
+													user: 'acct:maciejaroslaw@hypothes.is',
+													uri: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+													text: 'Randomly selected row.',
+													tags: [],
+													group: '__world__',
+													permissions: {
+														read: [
+															'group:__world__'
+														],
+														admin: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														update: [
+															'acct:maciejaroslaw@hypothes.is'
+														],
+														'delete': [
+															'acct:maciejaroslaw@hypothes.is'
+														]
+													},
+													target: [
+														{
+															source: 'urn:x-pdf:dfcbcf206097512065716973265877fc',
+															selector: [
+																{
+																	exact: '38-12-01   1K- 2  FEB.01/07',
+																	prefix: '38-12-01   1K- 1  FEB.01/07',
+																	suffix: '38-12-01   1K- 3  FEB.01/07',
+																	type: 'TextQuoteSelector'
+																}
+															]
+														}
+													],
+													consumer: '',
+													references: [],
+													user_info: {
+														display_name: null
+													},
+													links: {
+														html: 'https://hypothes.is/a/9hijRCfIEe-9zFts-H4g3Q',
+														incontext: 'https://hyp.is/9hijRCfIEe-9zFts-H4g3Q',
+														json: 'https://hypothes.is/api/annotations/9hijRCfIEe-9zFts-H4g3Q'
+													}
+												}
+											],
+											url: 'https://hyp.is/9hijRCfIEe-9zFts-H4g3Q',
+											prompt: 'mark random 4 rows',
+											group_id: '__world__',
+											selectors: [
+												{
+													exact: '38-11-03   1A- 0  MAY.01/99',
+													prefix: 'FEB.01/07        ',
+													suffix: '38-12-01   1F- 0  AUG.01/05',
+													annotation: 'Randomly selected row.'
+												},
+												{
+													exact: '38-12-01   1F- 1  FEB.01/07',
+													prefix: '38-12-01   1F- 0  AUG.01/05',
+													suffix: '38-12-01   1F- 2  FEB.01/07',
+													annotation: 'Randomly selected row.'
+												},
+												{
+													exact: '38-12-01   1K- 0  AUG.01/05',
+													prefix: '38-12-01   1F- 4  FEB.01/07',
+													suffix: '38-12-01   1K- 1  FEB.01/07',
+													annotation: 'Randomly selected row.'
+												},
+												{
+													exact: '38-12-01   1K- 2  FEB.01/07',
+													prefix: '38-12-01   1K- 1  FEB.01/07',
+													suffix: '38-12-01   1K- 3  FEB.01/07',
+													annotation: 'Randomly selected row.'
+												}
+											]
+										}
+									}
+								} />
 								{/* <Message Message={{ created_by: 'annotation', content: '' }} /> */}
 								{currentChat.messages?.length === 0 &&
 									<div>

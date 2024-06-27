@@ -79,3 +79,18 @@ export const getDefaultScafoldPrompt = (data) => {
     }
   }
 }
+
+export const deleteMessageAnnotations = (data) => {
+  return async (dispatch) => {
+    try {
+      const response = await callApi(`/annotations`, {
+        method: 'DELETE',
+        body: JSON.stringify(data)
+      });
+
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}

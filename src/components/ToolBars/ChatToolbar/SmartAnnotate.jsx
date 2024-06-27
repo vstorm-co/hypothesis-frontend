@@ -38,6 +38,9 @@ export function SmartAnnotate(props) {
   const prompt = useSignal('');
   const promptValid = useSignal(true);
 
+  const confirmDeleteAnnotations = useSignal(false);
+  const showConfirmDeleteAnnotations = useSignal(false);
+
   const infoLoading = useSignal(false);
   const annotationLoading = useSignal(false);
 
@@ -138,9 +141,7 @@ export function SmartAnnotate(props) {
     dispatch(hSliceActions.resetInfo());
     token.value = event.currentTarget.value
   };
-  const onUsernameInput = event => {
-    username.value = event.currentTarget.value
-  };
+
   const onGroupInput = event => {
     groupValid.value = true;
     group.value = event.currentTarget.value
@@ -184,6 +185,10 @@ export function SmartAnnotate(props) {
     urlValid.value = true
     promptValid.value = true;
     groupValid.value = true;
+
+    confirmDeleteAnnotations.value = false;
+    showConfirmDeleteAnnotations.value = false;
+
 
     url.value = '';
 
@@ -264,6 +269,7 @@ export function SmartAnnotate(props) {
         response_template: response_template.value,
         prompt: prompt.value,
         room_id: currentChat.uuid ? currentChat.uuid : false,
+        delete_annotations: confirmDeleteAnnotations.value
       }
 
       const regex = /^https:\/\/.*/;
@@ -296,6 +302,18 @@ export function SmartAnnotate(props) {
         dispatch(hSliceActions.toggleFormVisible(false));
       }
     }
+  }
+
+  function tryHandleSubmit() {
+    if (confirmDeleteAnnotations.value) {
+      showConfirmDeleteAnnotations.value = true;
+    } else {
+      handleSubmit();
+    }
+  }
+
+  function handleConfirmDeleteAnt() {
+    confirmDeleteAnnotations.value = !confirmDeleteAnnotations.value;
   }
 
   function toggleFormVisible() {
@@ -402,6 +420,9 @@ export function SmartAnnotate(props) {
               <div className={'mt-4'}>
                 <div className="text-xs font-bold text-[#747474] mb-1 flex">
                   URL or File to Annotate <HelpToolTip content={'The page or file to annotate'} />
+                  {!urlValid.value &&
+                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
+                  }
                 </div>
                 <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (urlValid.value ? '' : 'border-[#EF4444]')}>
                   <div className={'px-2 shrink-0'}>
@@ -412,15 +433,16 @@ export function SmartAnnotate(props) {
                     <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
                   </div>
                 </div>
-                {!urlValid.value &&
-                  <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5">This doesn't look like a link...</div>
-                }
+
               </div>
 
               <div className={'mt-6'}>
                 <div className={'w-full'}>
                   <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex w-[100px]">
                     Prompt <HelpToolTip content={'The specific prompt that will create the annotations you’re interested in.'} />
+                    {!promptValid.value &&
+                      <div class="text-[#EF4444] text-[10px] leading-4 text-center ml-24">You have to add a prompt...</div>
+                    }
                   </div>
                   <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
@@ -431,9 +453,7 @@ export function SmartAnnotate(props) {
                     // clearInputOnSubmit={true}
                     />
                   </div>
-                  {!promptValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
-                  }
+
                 </div>
               </div>
 
@@ -462,14 +482,28 @@ export function SmartAnnotate(props) {
             <div className={'mt-4 flex justify-center ' + (annotationLoading.value ? '' : 'hidden')}>
               <Loading />
             </div>
-
-
-          </div>
-          <div className={'mt-4 pb-2 mx-8'}>
-            <div className={'flex gap-1 mt-2 justify-end'}>
-              <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
-              <button disabled={annotationLoading.value} onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
+            <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
+              <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
+                <label class="switch">
+                  <input type="checkbox" onChange={() => handleConfirmDeleteAnt()} checked={confirmDeleteAnnotations.value} />
+                  <span class="slider round"></span>
+                </label>
+                <span>Delete existing annotations</span>
+              </div>
+              <div className={'flex gap-1 justify-end'}>
+                <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
+                <button disabled={annotationLoading.value} onClick={() => tryHandleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
+              </div>
             </div>
+          </div>
+        </div>
+        <div className={'absolute z-20 top-72 left-1/2 transform -translate-x-1/2 w-[320px] bg-[#202020] border border-[#595959] text-sm leading-6 rounded ' + (showConfirmDeleteAnnotations.value ? '' : 'hidden')}>
+          <div className={'p-4 text-white text-center'}>
+            You are about to delete all existing annotations attached to this URL before generating new annotations.
+          </div>
+          <div className={'flex gap-1 justify-center py-2 border-t border-[#595959]'}>
+            <button onClick={() => showConfirmDeleteAnnotations.value = false} type="button" className="btn-second light-gray">Cancel</button>
+            <button onClick={() => handleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white px-2 py-1 rounded flex items-center">I Understand</button>
           </div>
         </div>
       </div>

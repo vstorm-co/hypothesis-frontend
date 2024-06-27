@@ -56,6 +56,9 @@ export function App() {
 				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(selectChat(json_data.id));
 				}
+				if (json_data.source === 'delete-annotations') {
+					store.dispatch(selectChat(state.chats.currentChat.uuid));
+				}
 				store.dispatch(getChatsData());
 			} else if (json_data.type === 'template-changed') {
 				store.dispatch(getTemplatesData());
