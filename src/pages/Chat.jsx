@@ -328,7 +328,7 @@ export function Chat(props) {
 								</div>
 							</div>
 							<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
-								<Message Message={
+								{/* <Message Message={
 									{
 										created_by: 'annotation',
 										content: 'Created **4 annotations** from [urn:x-pdf:dfcbcf206097512065716973265877fc](urn:x-pdf:dfcbcf206097512065716973265877fc), with the prompt: mark random 4 rows',
@@ -555,7 +555,7 @@ export function Chat(props) {
 											]
 										}
 									}
-								} />
+								} /> */}
 								{/* <Message Message={{ created_by: 'annotation', content: '' }} /> */}
 								{currentChat.messages?.length === 0 &&
 									<div>
