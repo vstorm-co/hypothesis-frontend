@@ -186,6 +186,10 @@ export function SmartAnnotate(props) {
     promptValid.value = true;
     groupValid.value = true;
 
+    confirmDeleteAnnotations.value = false;
+    showConfirmDeleteAnnotations.value = false;
+
+
     url.value = '';
 
     let ProfileData = JSON.parse(localStorage.getItem("ANT_hProfile"));
