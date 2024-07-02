@@ -3,7 +3,7 @@ import logoutIcon from '../../../assets/logout.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/compat';
-import { route } from 'preact-router';
+import { Link, route } from 'preact-router';
 
 import { chatsActions } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
@@ -74,15 +74,15 @@ export function Options(props) {
       }
       <div className={"absolute border border-[#595959] rounded w-[240px] bottom-0 left-12 bg-[#0F0F0F] " + (showOptions.value ? '' : 'hidden')}>
         <div className="text-sm leading-6">
-          <div className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
-            <div>
+          <Link href="/organization-settings" className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
+            <span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0C13.6569 0 15 1.34315 15 3C15 4.65685 13.6569 6 12 6C10.3431 6 9 4.65685 9 3C9 1.34315 10.3431 0 12 0ZM4 4C5.65685 4 7 5.34315 7 7C7 8.65685 5.65685 10 4 10C2.34315 10 1 8.65685 1 7C1 5.34315 2.34315 4 4 4ZM16 11C16 8.79086 14.2091 7 12 7C9.79086 7 8 8.79086 8 11C8 11.5523 8.44771 12 9 12C9.55229 12 10 11.5523 10 11C10 9.89543 10.8954 9 12 9C13.1046 9 14 9.89543 14 11L14.0067 11.1166C14.0645 11.614 14.4872 12 15 12C15.5523 12 16 11.5523 16 11ZM8 15C8 12.7909 6.20914 11 4 11C1.79086 11 0 12.7909 0 15C0 15.5523 0.447715 16 1 16C1.55228 16 2 15.5523 2 15C2 13.8954 2.89543 13 4 13C5.10457 13 6 13.8954 6 15L6.00673 15.1166C6.06449 15.614 6.48716 16 7 16C7.55228 16 8 15.5523 8 15ZM3 7C3 6.44772 3.44772 6 4 6C4.55228 6 5 6.44772 5 7C5 7.55228 4.55228 8 4 8C3.44772 8 3 7.55228 3 7ZM11 3C11 2.44772 11.4477 2 12 2C12.5523 2 13 2.44772 13 3C13 3.55228 12.5523 4 12 4C11.4477 4 11 3.55228 11 3Z" fill="#747474" />
               </svg>
-            </div>
+            </span>
 
             <div className="ml-2">Organization settings</div>
-          </div>
+          </Link>
           <div onClick={callLogout} className={"cursor-pointer flex py-3 px-4 hover:bg-[#595959]"}>
             <img className="w-4" src={logoutIcon} alt="" /> <div className="ml-2">Logout</div>
           </div>

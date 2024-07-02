@@ -689,9 +689,9 @@ input:focus+.slider {
 }
 
 input:checked+.slider:before {
-	-webkit-transform: translateX(11.5px);
-	-ms-transform: translateX(11.5px);
-	transform: translateX(11.5px);
+	-webkit-transform: translateX(12px);
+	-ms-transform: translateX(12px);
+	transform: translateX(12px);
 
 	height: 18px;
 	width: 18px;
