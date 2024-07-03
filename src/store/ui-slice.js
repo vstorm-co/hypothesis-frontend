@@ -37,6 +37,64 @@ const uiSlice = createSlice({
       searchFor: '',
     },
     fileUpdating: false,
+
+    availableProviders: [
+      {
+        provider: 'OpenAI',
+        models: [
+          'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+        ],
+      },
+      {
+        provider: 'Claude',
+        models: [
+          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+        ],
+      },
+      {
+        provider: 'Groq',
+        models: [
+          'Llama 3',
+        ],
+      },
+    ],
+
+    models: [
+      {
+        provider: 'OpenAI',
+        models: [
+          'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+        ],
+        defaultSelected: 'GPT-4 Turbo',
+        key: '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',
+        default: true,
+      },
+      {
+        provider: 'Claude',
+        models: [
+          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+        ],
+        defaultSelected: '3.5 Sonnet',
+        key: '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',
+        default: false,
+      },
+      {
+        provider: 'Groq',
+        models: [
+          'Llama 3',
+        ],
+        defaultSelected: 'Llama 3',
+        key: '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',
+        default: false,
+      },
+    ],
+    currentModel: {
+      provider: 'OpenAI',
+      models: [
+        'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+      ],
+      selectedModel: 'GPT-4o',
+    },
   },
   reducers: {
     toggleToast(state, action) {
@@ -47,6 +105,12 @@ const uiSlice = createSlice({
     },
     setHelpToolTipPosition(state, action) {
       state.helpToolTipPosition = { ...action.payload };
+    },
+    setCurrentModelSelected(state, action) {
+      state.currentModel.selectedModel = action.payload;
+    },
+    setCurrentModel(state, action) {
+      state.currentModel = { ...action.payload, selectedModel: action.payload.models[0] };
     },
     setToolTipContent(state, action) {
       state.ToolTipContent = action.payload;

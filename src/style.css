@@ -370,11 +370,11 @@ input:disabled {
 }
 
 .hover\:box-shadow:hover {
-	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
+	box-shadow: 2px 0px 0px 0px #747474 inset;
 }
 
 .box-shadow {
-	box-shadow: 4px 0px 0px 0px #DBDBDB inset;
+	box-shadow: 2px 0px 0px 0px #747474 inset;
 }
 
 .templates-inline-list:empty:before {
@@ -753,4 +753,8 @@ input:checked+.slider:before {
 
 .tooltip:hover .tooltiptext {
 	visibility: visible;
+}
+
+.provider-drop-shadow {
+	box-shadow: 0px 0px 4px 0px #FAFAFA;
 }
