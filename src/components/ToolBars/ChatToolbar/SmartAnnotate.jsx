@@ -447,6 +447,7 @@ export function SmartAnnotate(props) {
                   <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
                       loadPrompt={true}
+                      showModels={true}
                       WSsendMessage={value => { }}
                       visible={visible}
                       handleSubmitButton={value => { handlePromptData(value) }}
