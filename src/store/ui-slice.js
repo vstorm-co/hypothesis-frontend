@@ -93,7 +93,7 @@ const uiSlice = createSlice({
       models: [
         'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
       ],
-      selectedModel: 'GPT-4o',
+      defaultSelected: 'GPT-4o',
     },
   },
   reducers: {
@@ -110,10 +110,10 @@ const uiSlice = createSlice({
       state.helpToolTipPosition = { ...action.payload };
     },
     setCurrentModelSelected(state, action) {
-      state.currentModel.selectedModel = action.payload;
+      state.currentModel.defaultSelected = action.payload;
     },
     setCurrentModel(state, action) {
-      state.currentModel = { ...action.payload, selectedModel: action.payload.models[0] };
+      state.currentModel = { ...action.payload };
     },
     setToolTipContent(state, action) {
       state.ToolTipContent = action.payload;

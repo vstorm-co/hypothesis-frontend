@@ -28,7 +28,7 @@ export function OrgSettings() {
   }, [])
 
   function addModel() {
-    let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length < 0 ? defaultModelToSelect.value : selectAddProvider.value.models[0], key: apikey.value };
+    let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length === 0 ? selectAddProvider.value.models[0] : defaultModelToSelect.value, key: apikey.value };
     let modelsArr = JSON.parse(JSON.stringify(models));
 
     if (selectNewAsDefault.value) {
@@ -40,6 +40,13 @@ export function OrgSettings() {
     dispatch(uiActions.setModels(modelsArr));
     showAddModel.value = false;
     selectNewAsDefault.value = false;
+  }
+
+  function changeProviderDefaultSelected(provider, defaultSelected) {
+    let modelsArr = JSON.parse(JSON.stringify(models));
+
+    modelsArr[modelsArr.indexOf(modelsArr.find(m => m.provider === provider))].defaultSelected = defaultSelected;
+    dispatch(uiActions.setModels(modelsArr));
   }
 
   return (
@@ -113,9 +120,9 @@ export function OrgSettings() {
                             </div>
 
                             <div class="relative">
-                              <select className={"overflow-hidden pr-6 "} >
+                              <select onChange={(e) => changeProviderDefaultSelected(model.provider, e.currentTarget.value)} className={"overflow-hidden pr-6 "} >
                                 {model.models.map(m => (
-                                  <option selected={m === model.defaultSelected}>{m}</option>
+                                  <option value={m} selected={m === model.defaultSelected}>{m}</option>
                                 ))}
                               </select>
                               <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
@@ -241,9 +248,9 @@ export function OrgSettings() {
                     </div>
 
                     <div class="relative">
-                      <select className={"overflow-hidden pr-6 "} >
+                      <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
                         {selectAddProvider.value.models.map(m => (
-                          <option onClick={() => defaultModelToSelect.value = m}>{m}</option>
+                          <option value={m}>{m}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>

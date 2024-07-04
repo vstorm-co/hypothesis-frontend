@@ -15,6 +15,10 @@ export function SelectModel() {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const defaultModel = models.find(m => m.default === true);
+    dispatch(uiActions.setCurrentModel(defaultModel));
+  }, [models])
 
   function outsideClickHanlder(ref) {
     useEffect(() => {
@@ -77,13 +81,13 @@ export function SelectModel() {
       </div>
       <div ref={modelListRef} className={'relative models'}>
         <div onClick={() => { modelsVisible.value = true }} className={'flex border border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-          {currentModel.selectedModel}
+          {currentModel.defaultSelected}
           <img src={angleDown} className={'ml-1'} alt="" />
         </div>
 
         <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] w-[140px] ' + (modelsVisible.value ? '' : 'hidden')}>
           {currentModel.models.map(model => (
-            <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.selectedModel === model ? 'box-shadow' : '')}>
+            <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.defaultSelected === model ? 'box-shadow' : '')}>
               <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
                 {model}
               </div>
