@@ -54,7 +54,7 @@ export function SelectModel() {
   return (
     <div className={'mr-2 flex'}>
       <div ref={providersListRef} className={'relative providers'}>
-        <div onClick={() => { providersVisible.value = true }} className={'flex gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
+        <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
           <img src={OpenAi} className={'w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
           <img src={Claude} className={'w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
           <img src={Groq} className={'w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />

@@ -646,6 +646,9 @@ code {
 	display: inline-block;
 	width: 32px;
 	height: 20px;
+
+	border: 1px solid #747474;
+	border-radius: 16px;
 }
 
 /* Hide default HTML checkbox */
@@ -663,7 +666,7 @@ code {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #ccc;
+	background-color: white;
 	-webkit-transition: .4s;
 	transition: .4s;
 }
@@ -673,9 +676,9 @@ code {
 	content: "";
 	height: 14px;
 	width: 14px;
-	top: 3px;
-	left: 3px;
-	background-color: white;
+	top: 2px;
+	left: 2px;
+	background-color: #747474;
 	-webkit-transition: .4s;
 	transition: transform .4s;
 }
@@ -689,13 +692,15 @@ input:focus+.slider {
 }
 
 input:checked+.slider:before {
-	-webkit-transform: translateX(12px);
-	-ms-transform: translateX(12px);
-	transform: translateX(12px);
+	-webkit-transform: translateX(11.5px);
+	-ms-transform: translateX(11.5px);
+	transform: translateX(11.5px);
+
+	background-color: white;
 
 	height: 18px;
 	width: 18px;
-	top: 1px;
+	top: 0px;
 	left: 1px;
 
 	background-image: url("./assets/check.svg");

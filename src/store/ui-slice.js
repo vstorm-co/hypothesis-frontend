@@ -69,24 +69,24 @@ const uiSlice = createSlice({
         key: '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',
         default: true,
       },
-      {
-        provider: 'Claude',
-        models: [
-          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
-        ],
-        defaultSelected: '3.5 Sonnet',
-        key: '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',
-        default: false,
-      },
-      {
-        provider: 'Groq',
-        models: [
-          'Llama 3',
-        ],
-        defaultSelected: 'Llama 3',
-        key: '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',
-        default: false,
-      },
+      // {
+      //   provider: 'Claude',
+      //   models: [
+      //     '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+      //   ],
+      //   defaultSelected: '3.5 Sonnet',
+      //   key: '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',
+      //   default: false,
+      // },
+      // {
+      //   provider: 'Groq',
+      //   models: [
+      //     'Llama 3',
+      //   ],
+      //   defaultSelected: 'Llama 3',
+      //   key: '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',
+      //   default: false,
+      // },
     ],
     currentModel: {
       provider: 'OpenAI',
@@ -102,6 +102,9 @@ const uiSlice = createSlice({
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
+    },
+    setModels(state, action) {
+      state.models = action.payload
     },
     setHelpToolTipPosition(state, action) {
       state.helpToolTipPosition = { ...action.payload };

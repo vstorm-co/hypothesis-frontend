@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
+import { uiActions } from "../store/ui-slice";
 
 export function OrgSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
@@ -15,12 +16,31 @@ export function OrgSettings() {
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const dispatch = useDispatch();
 
-  const selectAddProvider = useSignal('');
+  const selectAddProvider = useSignal({ models: [] });
+  const defaultModelToSelect = useSignal('');
+  const showAddModel = useSignal(false);
+  const selectNewAsDefault = useSignal(false);
+  const apikey = useSignal('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');
 
   useEffect(() => {
     dispatch(templatesActions.setCurrentTemplate({}));
     dispatch(chatsActions.setCurrentChat({}));
   }, [])
+
+  function addModel() {
+    let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length < 0 ? defaultModelToSelect.value : selectAddProvider.value.models[0], key: apikey.value };
+    let modelsArr = JSON.parse(JSON.stringify(models));
+
+    if (selectNewAsDefault.value) {
+      modelsArr.map(m => m.default = false);
+    }
+
+    modelsArr.push(model);
+
+    dispatch(uiActions.setModels(modelsArr));
+    showAddModel.value = false;
+    selectNewAsDefault.value = false;
+  }
 
   return (
     <div className={'relative w-full'}>
@@ -115,7 +135,7 @@ export function OrgSettings() {
                     </div>
                   ))}
                 </div>
-                <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                <button onClick={() => showAddModel.value = true} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
                 </button>
               </div>
@@ -192,7 +212,7 @@ export function OrgSettings() {
             </div>
           </div>
         </div>
-        <div className={'pb-8 bg-white rounded z-50 top-2 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (false ? 'fixed' : 'hidden')}>
+        <div className={'pb-8 bg-white rounded z-50 top-12 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (showAddModel.value ? 'fixed' : 'hidden')}>
           <div className={'mx-auto'}>
             <div className={'px-8'}>
               <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
@@ -205,13 +225,53 @@ export function OrgSettings() {
                   </div>
                   <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
                     {availableProviders.map(model => (
-                      <div onClick={() => selectAddProvider.value = model.provider} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                      <div onClick={() => selectAddProvider.value = model} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
                         <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
                         <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
                         <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
                         {model.provider}
                       </div>
                     ))}
+                  </div>
+                </div>
+                <div className={'overflow-hidden'}>
+                  <div className={'mt-4'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      Model
+                    </div>
+
+                    <div class="relative">
+                      <select className={"overflow-hidden pr-6 "} >
+                        {selectAddProvider.value.models.map(m => (
+                          <option onClick={() => defaultModelToSelect.value = m}>{m}</option>
+                        ))}
+                      </select>
+                      <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                    </div>
+                  </div>
+                  <div className={'mt-4'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      API Key
+                      {/* {!urlValid.value &&
+                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
+                  } */}
+                    </div>
+                    <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
+                      <input value={apikey.value} onInput={(e) => apikey.value = e.currentTarget.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r p-2 bg-[#FAFAFA]'} placeholder={'Enter API Key'} type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
+                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
+                    <label class="switch">
+                      <input onChange={() => selectNewAsDefault.value = !selectNewAsDefault.value} type="checkbox" checked={selectNewAsDefault.value} />
+                      <span class="slider round"></span>
+                    </label>
+                    <span>Make Default</span>
+                  </div>
+                  <div className={'flex gap-1 justify-end'}>
+                    <button type="button" onClick={() => { showAddModel.value = false }} className="btn-second">Cancel</button>
+                    <button onClick={() => addModel()} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Add Model</button>
                   </div>
                 </div>
               </div>
