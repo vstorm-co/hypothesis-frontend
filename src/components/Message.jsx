@@ -242,7 +242,7 @@ export function Message(props) {
     )
   } else if (props.Message.created_by === 'annotation') {
     if (props.Message.content_dict) {
-      if (props.Message.content_dict.status) {
+      if (props.Message.content_dict?.status) {
         return (
           <div className="flex my-2 border-[#DBDBDB] border border-dashed rounded-lg mr-4">
             <div className="rounded flex p-2 pb-3 w-full overflow-x-visible">
