@@ -17,6 +17,7 @@ import { HelpToolTipContent } from '../../Tooltips/HelpToolTipContent';
 export function SmartAnnotate(props) {
   const currentChat = useSelector(state => state.chats.currentChat);
   const currentUser = useSelector(state => state.user.currentUser);
+  const currentModel = useSelector(state => state.ui.currentModel);
 
   const visible = useSelector(state => state.h.formVisible);
 
@@ -269,7 +270,9 @@ export function SmartAnnotate(props) {
         response_template: response_template.value,
         prompt: prompt.value,
         room_id: currentChat.uuid ? currentChat.uuid : false,
-        delete_annotations: confirmDeleteAnnotations.value
+        delete_annotations: confirmDeleteAnnotations.value,
+        provider: currentModel.provider,
+        model: currentModel.defaultSelected,
       }
 
       const regex = /^https:\/\/.*/;

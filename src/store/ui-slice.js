@@ -51,12 +51,12 @@ const uiSlice = createSlice({
           '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
         ],
       },
-      {
-        provider: 'Groq',
-        models: [
-          'Llama 3',
-        ],
-      },
+      // {
+      //   provider: 'Groq',
+      //   models: [
+      //     'Llama 3',
+      //   ],
+      // },
     ],
 
     models: [
@@ -69,15 +69,15 @@ const uiSlice = createSlice({
         key: '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',
         default: true,
       },
-      // {
-      //   provider: 'Claude',
-      //   models: [
-      //     '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
-      //   ],
-      //   defaultSelected: '3.5 Sonnet',
-      //   key: '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',
-      //   default: false,
-      // },
+      {
+        provider: 'Claude',
+        models: [
+          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+        ],
+        defaultSelected: '3.5 Sonnet',
+        key: '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',
+        default: false,
+      },
       // {
       //   provider: 'Groq',
       //   models: [
