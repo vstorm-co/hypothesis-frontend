@@ -64,18 +64,23 @@ const uiSlice = createSlice({
       {
         provider: 'OpenAI',
         models: [
-          'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+          "gpt-4-1106-preview",
+          "gpt-3.5-turbo-1106",
+          "gpt-4-turbo-2024-04-09",
+          "gpt-4o-2024-05-13",
         ],
-        defaultSelected: 'GPT-4 Turbo',
+        defaultSelected: 'gpt-4o-2024-05-13',
         key: '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',
         default: true,
       },
       {
         provider: 'Claude',
         models: [
-          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+          "claude-3-haiku-20240307",
+          "claude-3-sonnet-20240229",
+          "claude-3-opus-20240229",
         ],
-        defaultSelected: '3.5 Sonnet',
+        defaultSelected: 'claude-3-haiku-20240307',
         key: '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',
         default: false,
       },
