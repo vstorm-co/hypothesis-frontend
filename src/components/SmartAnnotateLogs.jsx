@@ -34,15 +34,7 @@ export function SmartAnnotateLogs(props) {
       return ""
     }
 
-    let s = new Date(logs[index - 1].date);
-    let r = new Date(request.date);
-
-    console.log(logs[index - 1]);
-    console.log(logs[index]);
-
-    var difference = r.getTime() - s.getTime();
-
-    var seconds = difference / 1000;
+    var seconds = request.elapsed_time;
 
     var minutes = Math.floor(seconds / 60);
     var remainingSeconds = seconds % 60;

@@ -42,6 +42,11 @@ export function OrgSettings() {
     selectNewAsDefault.value = false;
   }
 
+  function LoadModelToEdit(model) {
+    selectAddProvider.value = { ...model };
+    showAddModel.value = true;
+  }
+
   function changeProviderDefaultSelected(provider, defaultSelected) {
     let modelsArr = JSON.parse(JSON.stringify(models));
 
@@ -109,7 +114,7 @@ export function OrgSettings() {
                             <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
                             <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
                           </div>
-                          <div className={'p-2'}>
+                          <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
                             <img src={editPen} alt="" />
                           </div>
                         </div>

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
+import callApi from "../api";
 
 const copyAs = localStorage.getItem('ANT_defaultSaveAs');
 
@@ -175,5 +176,17 @@ export const showToast = (payload) => {
     setTimeout(() => {
       dispatch(uiActions.toggleToast({ tgl: false }))
     }, 3000);
+  }
+}
+
+export const fetchModels = () => {
+  return async (dispatch) => {
+    try {
+      const models = await callApi('/models', {}, true);
+      console.log(models);
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

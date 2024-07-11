@@ -18,7 +18,7 @@ import { PromptInput } from './PromptInput';
 import { route } from 'preact-router';
 import { MessageData } from './MessageData';
 import { Loading } from './Loading';
-import { deleteMessageAnnotations } from '../store/h-slice';
+import { createAnnotations, deleteMessageAnnotations } from '../store/h-slice';
 
 
 export function Message(props) {
@@ -161,6 +161,11 @@ export function Message(props) {
     }
   }
 
+  function tryAnnotateAgain() {
+    let formData = { ...props.Message.content_dict.input };
+    dispatch(createAnnotations(formData));
+  }
+
   if (props.Message.created_by === 'user') {
     return (
       <div className={'flex mt-2 group message-box'}>
@@ -253,19 +258,49 @@ export function Message(props) {
                 </div>
               </div>
               <div className={'flex flex-col group w-full'}>
-                <div className={`ml-2 mt-2 text-[#202020] max-w-[99%] text-sm bot-response response-${props.Message.uuid}`}>
-                  <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{'**Error**: ' + props.Message.content}</ReactMarkdown>
-                </div>
-                <div className={'w-full'}>
-                  <div className={'flex gap-1 w-full justify-end'}>
-                    <div className={'flex'}>
-                      <button href={generateAntLink()} target="_blank" type="button" disabled className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                        Try Again
-                        <img src={refresh} className={'ml-2'} alt="" />
-                      </button>
+                <div className={'flex'}>
+                  <div className={`ml-2 mt-2 text-[#202020] max-w-[99%] text-sm shrink-0 bot-response response-${props.Message.uuid}`}>
+                    <ReactMarkdown rehypePlugins={[[rehypePrism, { ignoreMissing: true }]]}>{'**Error**: annotations with the following options were not created:'}</ReactMarkdown>
+                  </div>
+                  <div className={'w-full'}>
+                    <div className={'flex gap-1 w-full justify-end'}>
+                      <div className={'flex'}>
+                        <button onClick={() => tryAnnotateAgain()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                          Try Again
+                          <img src={refresh} className={'ml-2'} alt="" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+                {props.Message.content_dict.input &&
+                  <div className={'ml-2'}>
+                    <div>
+                      <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                        Prompt
+                      </div>
+                      <div className={'text-sm leading-6'}>
+                        “{props.Message.content_dict.input.prompt}”
+                      </div>
+                    </div>
+                    <div className={'mt-2'}>
+                      <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                        Source
+                      </div>
+                      <div className={'text-sm leading-6'}>
+                        <a className={'underline'} href={`${props.Message.content_dict.input.url}`}>{props.Message.content_dict.input.url}</a>
+                      </div>
+                    </div>
+                    <div className={'mt-2'}>
+                      <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                        Reason
+                      </div>
+                      <div className={'text-sm leading-6'}>
+                        {props.Message.content_dict.reason}
+                      </div>
+                    </div>
+                  </div>
+                }
               </div>
             </div>
           </div>

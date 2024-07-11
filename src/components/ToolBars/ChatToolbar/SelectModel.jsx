@@ -24,7 +24,6 @@ export function SelectModel() {
     useEffect(() => {
       function handleClickOutside(e) {
         if (ref.current && !ref.current.contains(e.target)) {
-          console.log(ref.current.classList);
           if (ref.current.classList.contains('providers')) {
             providersVisible.value = false;
           } else if (ref.current.classList.contains('models')) {

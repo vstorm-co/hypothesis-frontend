@@ -34,7 +34,7 @@ export function Chat(props) {
 	const forceInputFocus = useSignal(0);
 
 	const mousePreviousPosition = useSignal(0);
-	const logsWidth = useSignal(320);
+	const logsWidth = useSignal(420);
 
 	const expandLogs = useSignal(false);
 
@@ -604,7 +604,7 @@ export function Chat(props) {
 					</div>
 
 				</div >
-				<div style={{ width: `${logsWidth.value}px` }} className={'bg-[#EBEBEB] h-[100vh] max-w-[600px] min-w-[430px] shrink-0 overflow-y-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
+				<div style={{ width: `${logsWidth.value}px` }} className={'bg-[#EBEBEB] h-[100vh] max-w-[600px] min-w-[320px] shrink-0 overflow-y-auto border-l relative p-1 ' + (showAnnotateLogs ? 'block' : 'hidden')}>
 					<div className={'flex flex-col h-full ' + (logs.length > 0 ? 'pt-8' : '')}>
 						<div onClick={() => expandLogs.value = !expandLogs.value} className={'bg-white px-2 py-1 rounded absolute top-2 right-2 cursor-pointer z-50 ' + (logs.length > 0 ? 'block' : 'hidden')}>
 							{expandLogs.value &&

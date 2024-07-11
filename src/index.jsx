@@ -23,7 +23,7 @@ import { Chat } from './pages/Chat.jsx';
 import { getUserOrganizationsData } from "./store/user-slice";
 import { getTemplatesData } from "./store/templates-slice";
 import { getChatsData, chatsActions, selectChat } from "./store/chats-slice";
-import { uiActions } from './store/ui-slice';
+import { fetchModels, uiActions } from './store/ui-slice';
 
 import 'prismjs/themes/prism.css'
 import './style.css';
@@ -38,6 +38,8 @@ export function App() {
 		store.dispatch(getUserOrganizationsData());
 		store.dispatch(getChatsData());
 		store.dispatch(getTemplatesData());
+
+		store.dispatch(fetchModels());
 	}, [])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
