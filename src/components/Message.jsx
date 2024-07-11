@@ -19,6 +19,7 @@ import { route } from 'preact-router';
 import { MessageData } from './MessageData';
 import { Loading } from './Loading';
 import { createAnnotations, deleteMessageAnnotations } from '../store/h-slice';
+import { getChatsData } from '../store/chats-slice';
 
 
 export function Message(props) {
@@ -161,9 +162,10 @@ export function Message(props) {
     }
   }
 
-  function tryAnnotateAgain() {
+  async function tryAnnotateAgain() {
     let formData = { ...props.Message.content_dict.input };
-    dispatch(createAnnotations(formData));
+    await dispatch(createAnnotations(formData));
+    dispatch(getChatsData(currentChat.uuid))
   }
 
   if (props.Message.created_by === 'user') {
