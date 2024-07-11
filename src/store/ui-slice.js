@@ -76,11 +76,11 @@ const uiSlice = createSlice({
       {
         provider: 'Claude',
         models: [
-          "claude-3-haiku-20240307",
+          // "claude-3-haiku-20240307",
           "claude-3-sonnet-20240229",
-          "claude-3-opus-20240229",
+          // "claude-3-opus-20240229",
         ],
-        defaultSelected: 'claude-3-haiku-20240307',
+        defaultSelected: 'claude-3-sonnet-20240229',
         key: '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',
         default: false,
       },
