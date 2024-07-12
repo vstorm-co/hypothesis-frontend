@@ -49,14 +49,14 @@ export function SmartAnnotateLogs(props) {
   const requestList = filteredLogs.map((request, i) =>
     <div className={'max-w-full break-words'}>
       <div className={'p-0.5 text-xs break-words max-w-full'}>
-        <ReactJson enableClipboard={false} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
+        <ReactJson enableClipboard={true} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
       </div>
     </div>
   );
 
   if (logs.length > 0) {
     return (
-      <div>
+      <div className={'pt-2'}>
         {requestList}
       </div>
     )
