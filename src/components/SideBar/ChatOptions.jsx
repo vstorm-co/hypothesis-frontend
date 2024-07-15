@@ -94,7 +94,7 @@ export function ChatOptions(props) {
             </div>
           </div>
           <div className={'p-4 text-white w-[240px] top-10 z-50 left-0 rounded text-xs'}>
-            <div className={''}><span className={'text-[#747474]'}>Model:</span> GPT-4</div>
+            <div className={''}><span className={'text-[#747474]'}>Model:</span> {chatOptions.data?.model_name}</div>
             <div className={'mt-2'}>
               <span className={'text-[#747474]'}>Tokens:</span>
               <ul className={'list-disc tokens mt-0.5 pl-6 font-light'}>

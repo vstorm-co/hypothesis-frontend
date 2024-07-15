@@ -19,6 +19,7 @@ import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 import { hSliceActions } from '../store/h-slice';
 import { HelpToolTip } from '../components/Tooltips/HelpToolTip';
 import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
+import { showToast } from '../store/ui-slice';
 
 const msgLoading = signal(false);
 export function Chat(props) {
@@ -34,7 +35,7 @@ export function Chat(props) {
 	const forceInputFocus = useSignal(0);
 
 	const mousePreviousPosition = useSignal(0);
-	const logsWidth = useSignal(320);
+	const logsWidth = useSignal(420);
 
 	const expandLogs = useSignal(false);
 
@@ -276,6 +277,13 @@ export function Chat(props) {
 	function handleResize(e) {
 		let body = document.querySelector('body');
 		logsWidth.value = body.clientWidth - e.clientX;
+	}
+
+	function copyLogs() {
+		let filteredLogs = logs.filter(l => l.room_id === currentChat.uuid);
+		navigator.clipboard.writeText(JSON.stringify(filteredLogs));
+
+		dispatch(showToast({ content: 'Logs copied to clipboard' }))
 	}
 
 	if (!currentChat.uuid) {
@@ -623,6 +631,9 @@ export function Chat(props) {
 									Expand All
 								</div>
 							}
+						</div>
+						<div onClick={() => copyLogs()} className={'bg-white px-2 py-1 rounded absolute top-2 left-2 cursor-pointer z-50 text-sm ' + (logs.length > 0 ? 'block' : 'hidden')}>
+							Copy Logs to Clipboard
 						</div>
 						<span onMouseDown={handleAddEventToResize} className={'block absolute top-0 -left-2 w-3 h-full bg-[#595959] opacity-20 hover:opacity-75 z-51 cursor-col-resize'}></span>
 						<SmartAnnotateLogs expandLogs={expandLogs.value} />

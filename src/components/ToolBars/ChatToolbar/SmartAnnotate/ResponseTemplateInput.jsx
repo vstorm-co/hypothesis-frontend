@@ -3,14 +3,11 @@ import { useSelector } from "react-redux";
 import { useEffect, useRef } from "preact/hooks";
 import { route } from "preact-router";
 import { SmartInlineTemplate } from "./SmartInlineTemplate";
-
-
+import { SelectModel } from "../SelectModel";
 
 export function ResponseTemplateInput(props) {
-  const user = useSelector(state => state.user.currentUser);
   const currentChat = useSelector(state => state.chats.currentChat);
   const templates = useSelector(state => state.templates.useTemplates);
-  const userFiles = useSelector(state => state.files.files);
 
   const useTemplateVisible = useSignal(false);
   const promptMode = useSignal('write');
@@ -333,7 +330,10 @@ export function ResponseTemplateInput(props) {
       {templates?.length > 0 &&
         <div className={'flex justify-end'}>
           {/* <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} /> */}
-          <div className={'ml-4 flex items-center justify-center'}>
+          <div className={'ml-4 flex items-center justify-center -mt-[2px]'}>
+            {props.showModels &&
+              <SelectModel />
+            }
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
             </div>

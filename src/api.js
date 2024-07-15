@@ -4,7 +4,7 @@ import { route } from 'preact-router';
 import store from "./store";
 const defaultUrl = import.meta.env.VITE_API_URL;
 
-const callApi = async (url, options = {}) => {
+const callApi = async (url, options = {}, skip404 = false) => {
   const user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 
   const defaultOptions = {
@@ -25,7 +25,9 @@ const callApi = async (url, options = {}) => {
       case 401:
         route(user.refresh_token ? '/refresh-token' : '/auth'); break;
       case 404:
-        route('/_404'); break;
+        if (!skip404) {
+          route('/_404'); break;
+        } break;
     }
   }
 

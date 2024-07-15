@@ -1,14 +1,10 @@
 // @ts-nocheck
 import chatIcon from '../../assets/chat.svg';
 import meChat from '../../assets/me-chat.svg';
-import elipsisVert from '../../assets/ellipsis-vertical.svg';
 import { route } from 'preact-router'
-import { selectChat } from '../../store/chats-slice';
 import { templatesActions } from '../../store/templates-slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals';
-import { ChatOptions } from './ChatOptions';
 import { uiActions } from '../../store/ui-slice';
 
 export const ChatBar = props => {
@@ -101,7 +97,7 @@ export const ChatBar = props => {
 
 
   return (
-    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (isSelected() ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
+    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (props.ChatData.uuid === currentChat.uuid ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
       <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>

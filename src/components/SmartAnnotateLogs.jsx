@@ -34,15 +34,7 @@ export function SmartAnnotateLogs(props) {
       return ""
     }
 
-    let s = new Date(logs[index - 1].date);
-    let r = new Date(request.date);
-
-    console.log(logs[index - 1]);
-    console.log(logs[index]);
-
-    var difference = r.getTime() - s.getTime();
-
-    var seconds = difference / 1000;
+    var seconds = request.elapsed_time;
 
     var minutes = Math.floor(seconds / 60);
     var remainingSeconds = seconds % 60;
@@ -57,14 +49,14 @@ export function SmartAnnotateLogs(props) {
   const requestList = filteredLogs.map((request, i) =>
     <div className={'max-w-full break-words'}>
       <div className={'p-0.5 text-xs break-words max-w-full'}>
-        <ReactJson enableClipboard={false} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
+        <ReactJson enableClipboard={true} collapsed={props.expandLogs ? 4 : true} displayDataTypes={false} displayObjectSize={false} name={`${generateDate(request)} ${request.api} ${request.type}${getTimeSpent(request, i)}`} src={request} />
       </div>
     </div>
   );
 
   if (logs.length > 0) {
     return (
-      <div>
+      <div className={'pt-2'}>
         {requestList}
       </div>
     )

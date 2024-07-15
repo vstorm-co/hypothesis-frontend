@@ -23,12 +23,13 @@ import { Chat } from './pages/Chat.jsx';
 import { getUserOrganizationsData } from "./store/user-slice";
 import { getTemplatesData } from "./store/templates-slice";
 import { getChatsData, chatsActions, selectChat } from "./store/chats-slice";
-import { uiActions } from './store/ui-slice';
+import { fetchModels, uiActions } from './store/ui-slice';
 
 import 'prismjs/themes/prism.css'
 import './style.css';
 import { RefreshToken } from './pages/RefreshToken';
 import { ScafoldPrompt } from './pages/ScafoldPrompt';
+import { OrgSettings } from './pages/OrgSettings';
 
 export function App() {
 	useEffect(() => {
@@ -37,6 +38,8 @@ export function App() {
 		store.dispatch(getUserOrganizationsData());
 		store.dispatch(getChatsData());
 		store.dispatch(getTemplatesData());
+
+		store.dispatch(fetchModels());
 	}, [])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
@@ -86,6 +89,7 @@ export function App() {
 								<Home path="/home" />
 								<PrivacyPolicy path="/privacy-policy" />
 								<Authorize path="/auth" />
+								<OrgSettings path="/organization-settings" />
 								<RefreshToken path="/refresh-token" />
 								<SetUp path="/setup" />
 								<Chat path="/chats/:id" />
