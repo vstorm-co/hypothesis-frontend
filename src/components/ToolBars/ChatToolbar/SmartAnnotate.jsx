@@ -300,7 +300,7 @@ export function SmartAnnotate(props) {
       } else {
         annotationLoading.value = true;
         localStorage.setItem("ANT_annotateToCreate", JSON.stringify(formData));
-        await dispatch(createChat(formData.prompt));
+        await dispatch(createChat('New Chat'));
         annotationLoading.value = false;
         dispatch(hSliceActions.toggleFormVisible(false));
       }
