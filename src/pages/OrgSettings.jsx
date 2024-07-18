@@ -87,6 +87,7 @@ export function OrgSettings() {
 
   function handleDefault() {
     if (editModelMode.value) {
+      selectAddProvider.value.default = true;
       dispatch(toggleDefaultModel(selectAddProvider.value.uuid));
     }
     selectNewAsDefault.value = true
@@ -191,7 +192,7 @@ export function OrgSettings() {
                 {models.length === 0 &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
                 }
-                <button onClick={() => showAddModel.value = true} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
                 </button>
               </div>
