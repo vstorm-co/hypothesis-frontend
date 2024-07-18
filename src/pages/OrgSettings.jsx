@@ -70,6 +70,7 @@ export function OrgSettings() {
   function LoadModelToEdit(model) {
     selectAddProvider.value = { ...model };
     apikey.value = model.api_key;
+    defaultModelToSelect.value = model.defaultSelected
     selectNewAsDefault.value = model.default
     showAddModel.value = true;
     editModelMode.value = true;
@@ -88,7 +89,7 @@ export function OrgSettings() {
     if (editModelMode.value) {
       dispatch(toggleDefaultModel(selectAddProvider.value.uuid));
     }
-    selectNewAsDefault.value = !selectNewAsDefault.value
+    selectNewAsDefault.value = true
   }
 
   return (
@@ -306,7 +307,7 @@ export function OrgSettings() {
                     <div class="relative">
                       <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
                         {selectAddProvider.value.models.map(m => (
-                          <option value={m}>{m}</option>
+                          <option value={m} selected={m === defaultModelToSelect.value}>{m}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
@@ -325,7 +326,7 @@ export function OrgSettings() {
                   </div>
                 </div>
                 <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
-                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
+                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0 ' + ((editModelMode.value && selectAddProvider.value.default) ? 'pointer-events-none opacity-50' : '')}>
                     <label class="switch">
                       <input onChange={() => handleDefault()} type="checkbox" checked={selectNewAsDefault.value} />
                       <span class="slider round"></span>
