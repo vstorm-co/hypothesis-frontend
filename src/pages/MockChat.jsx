@@ -107,6 +107,7 @@ export function MockChat(props) {
               <Message Loading={true} Message={msgs[2]} />
             </div>
             <PromptInput
+              showModels={true}
               Icon={'send'}
               blockSending={false}
               WSsendMessage={() => { }}
