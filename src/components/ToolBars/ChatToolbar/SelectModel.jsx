@@ -54,46 +54,48 @@ export function SelectModel() {
     modelsVisible.value = false;
   }
 
-  return (
-    <div className={'mr-2 flex'}>
-      <div ref={providersListRef} className={'relative providers'}>
-        <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
-          <img src={OpenAi} className={'w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-          <img src={Claude} className={'w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
-          <img src={Groq} className={'w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />
-          <span className={(models.length > 1 ? '' : 'hidden')}>{currentModel.provider}</span>
-          <img src={angleDown} className={'ml-1 ' + (models.length > 1 ? '' : 'hidden')} alt="" />
-        </div>
+  if (models.length > 0) {
+    return (
+      <div className={'mr-2 flex'}>
+        <div ref={providersListRef} className={'relative providers'}>
+          <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
+            <img src={OpenAi} className={'w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+            <img src={Claude} className={'w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
+            <img src={Groq} className={'w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />
+            <span className={(models.length > 1 ? '' : 'hidden')}>{currentModel.provider}</span>
+            <img src={angleDown} className={'ml-1 ' + (models.length > 1 ? '' : 'hidden')} alt="" />
+          </div>
 
-        <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] w-[140px] ' + (providersVisible.value ? '' : 'hidden')}>
-          {models.map(model => (
-            <div onClick={() => handleProviderSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.provider === model.provider ? 'box-shadow' : '')}>
-              <img src={OpenAi} className={'w-4 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-              <img src={Claude} className={'w-4 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
-              <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
-              <div className={'max-w-full truncate ml-[5px] text-sm  leading-6 font-bold'}>
-                {model.provider}
+          <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] w-[140px] ' + (providersVisible.value ? '' : 'hidden')}>
+            {models.map(model => (
+              <div onClick={() => handleProviderSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.provider === model.provider ? 'box-shadow' : '')}>
+                <img src={OpenAi} className={'w-4 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+                <img src={Claude} className={'w-4 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
+                <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
+                <div className={'max-w-full truncate ml-[5px] text-sm  leading-6 font-bold'}>
+                  {model.provider}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+        <div ref={modelListRef} className={'relative models'}>
+          <div onClick={() => { modelsVisible.value = true }} className={'flex border border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
+            {currentModel.defaultSelected}
+            <img src={angleDown} className={'ml-1'} alt="" />
+          </div>
+
+          <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] ' + (modelsVisible.value ? '' : 'hidden')}>
+            {currentModel.models.map(model => (
+              <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.defaultSelected === model ? 'box-shadow' : '')}>
+                <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
+                  {model}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div ref={modelListRef} className={'relative models'}>
-        <div onClick={() => { modelsVisible.value = true }} className={'flex border border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-          {currentModel.defaultSelected}
-          <img src={angleDown} className={'ml-1'} alt="" />
-        </div>
-
-        <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] ' + (modelsVisible.value ? '' : 'hidden')}>
-          {currentModel.models.map(model => (
-            <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.defaultSelected === model ? 'box-shadow' : '')}>
-              <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
-                {model}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
+    )
+  }
 }

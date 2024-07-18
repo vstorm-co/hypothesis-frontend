@@ -12,6 +12,7 @@ import { UseFile } from "./ToolBars/ChatToolbar/UseFile";
 import { route } from "preact-router";
 import { SmartAnnotate } from "./ToolBars/ChatToolbar/SmartAnnotate";
 import { hSliceActions } from "../store/h-slice";
+import { SelectModel } from "./ToolBars/ChatToolbar/SelectModel";
 
 
 
@@ -435,6 +436,9 @@ export function PromptInput(props) {
             </div>
           }
           <div className={'ml-auto flex items-center justify-center'}>
+            {props.showModels &&
+              <SelectModel />
+            }
             <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               Write
             </div>
