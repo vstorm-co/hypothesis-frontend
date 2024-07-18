@@ -52,47 +52,10 @@ const uiSlice = createSlice({
           '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
         ],
       },
-      // {
-      //   provider: 'Groq',
-      //   models: [
-      //     'Llama 3',
-      //   ],
-      // },
     ],
 
     models: [
-      {
-        provider: 'OpenAI',
-        models: [
-          "gpt-4-1106-preview",
-          "gpt-3.5-turbo-1106",
-          "gpt-4-turbo-2024-04-09",
-          "gpt-4o-2024-05-13",
-        ],
-        defaultSelected: 'gpt-4o-2024-05-13',
-        key: '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',
-        default: true,
-      },
-      {
-        provider: 'Claude',
-        models: [
-          "claude-3-haiku-20240307",
-          "claude-3-sonnet-20240229",
-          "claude-3-opus-20240229",
-        ],
-        defaultSelected: 'claude-3-sonnet-20240229',
-        key: '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',
-        default: false,
-      },
-      // {
-      //   provider: 'Groq',
-      //   models: [
-      //     'Llama 3',
-      //   ],
-      //   defaultSelected: 'Llama 3',
-      //   key: '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',
-      //   default: false,
-      // },
+
     ],
     currentModel: {
       provider: 'OpenAI',
@@ -110,7 +73,10 @@ const uiSlice = createSlice({
       }
     },
     setModels(state, action) {
-      state.models = action.payload
+      state.models = action.payload;
+    },
+    setAvailableProviders(state, action) {
+      state.availableProviders = action.payload;
     },
     setHelpToolTipPosition(state, action) {
       state.helpToolTipPosition = { ...action.payload };
@@ -187,9 +153,73 @@ export const showToast = (payload) => {
 export const fetchModels = () => {
   return async (dispatch) => {
     try {
-      const models = await callApi('/models', {}, true);
+      const models = await callApi('/user-models', {}, true);
+      if (models.length) {
+        dispatch(uiActions.setModels(models));
+        dispatch(uiActions.setCurrentModel(models.find(m => m.default)));
+      }
       console.log(models);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
 
+export const fetchAvailableProviders = () => {
+  return async (dispatch) => {
+    try {
+      const providers = await callApi('/user-models/available-models', {}, true);
+      dispatch(uiActions.setAvailableProviders(providers));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const AddUserModel = (payload) => {
+  return async (dispatch) => {
+    try {
+      const model = await callApi('/user-models', { method: 'POST', body: JSON.stringify(payload) }, true);
+
+      if (payload.default) {
+        try {
+          const tgl = await callApi(`/user-models/${model.uuid}/toggle-default`, { method: 'POST' }, true);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      dispatch(fetchModels())
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const updateUserModel = (payload) => {
+  return async (dispatch) => {
+    try {
+      let modelToUpdate = {
+        provider: payload.provider,
+        defaultSelected: payload.defaultSelected,
+        api_key: payload.api_key,
+        default: payload.default,
+      }
+      const model = await callApi(`/user-models/${payload.uuid}`, { method: 'PUT', body: JSON.stringify(modelToUpdate) }, true);
+
+      dispatch(fetchModels())
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const toggleDefaultModel = (payload) => {
+  return async (dispatch) => {
+    try {
+      const toggle = await callApi(`/user-models/${payload}/toggle-default`, { method: 'POST' }, true);
+
+      dispatch(fetchModels())
     } catch (err) {
       console.log(err);
     }

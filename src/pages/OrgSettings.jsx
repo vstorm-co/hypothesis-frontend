@@ -8,11 +8,12 @@ import { useEffect } from "react";
 import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
-import { uiActions } from "../store/ui-slice";
+import { AddUserModel, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
 
 export function OrgSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
   const models = useSelector(state => state.ui.models);
+  const editModelMode = useSignal(false);
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const dispatch = useDispatch();
 
@@ -20,38 +21,76 @@ export function OrgSettings() {
   const defaultModelToSelect = useSignal('');
   const showAddModel = useSignal(false);
   const selectNewAsDefault = useSignal(false);
-  const apikey = useSignal('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');
+  const apikey = useSignal('');
 
   useEffect(() => {
     dispatch(templatesActions.setCurrentTemplate({}));
     dispatch(chatsActions.setCurrentChat({}));
   }, [])
 
-  function addModel() {
-    let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length === 0 ? selectAddProvider.value.models[0] : defaultModelToSelect.value, key: apikey.value };
-    let modelsArr = JSON.parse(JSON.stringify(models));
+  async function addModel() {
+    // let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length === 0 ? selectAddProvider.value.models[0] : defaultModelToSelect.value, key: apikey.value };
+    // let modelsArr = JSON.parse(JSON.stringify(models));
 
-    if (selectNewAsDefault.value) {
-      modelsArr.map(m => m.default = false);
+    // if (selectNewAsDefault.value) {
+    //   modelsArr.map(m => m.default = false);
+    // }
+
+    // modelsArr.push(model);
+
+    // dispatch(uiActions.setModels(modelsArr));
+
+    let model = {
+      provider: selectAddProvider.value.provider,
+      defaultSelected: defaultModelToSelect.value,
+      api_key: apikey.value,
+      default: selectNewAsDefault.value,
     }
 
-    modelsArr.push(model);
-
-    dispatch(uiActions.setModels(modelsArr));
+    await dispatch(AddUserModel(model));
     showAddModel.value = false;
     selectNewAsDefault.value = false;
   }
 
-  function LoadModelToEdit(model) {
-    selectAddProvider.value = { ...model };
-    showAddModel.value = true;
+  async function updateModel() {
+    let model = {
+      uuid: selectAddProvider.value.uuid,
+      provider: selectAddProvider.value.provider,
+      defaultSelected: defaultModelToSelect.value,
+      api_key: apikey.value,
+      default: selectNewAsDefault.value,
+    }
+
+    await dispatch(updateUserModel(model));
+    showAddModel.value = false;
+    selectNewAsDefault.value = false;
+    selectAddProvider.value = { models: [] };
   }
 
-  function changeProviderDefaultSelected(provider, defaultSelected) {
-    let modelsArr = JSON.parse(JSON.stringify(models));
+  function LoadModelToEdit(model) {
+    selectAddProvider.value = { ...model };
+    apikey.value = model.api_key;
+    defaultModelToSelect.value = model.defaultSelected
+    selectNewAsDefault.value = model.default
+    showAddModel.value = true;
+    editModelMode.value = true;
+  }
 
-    modelsArr[modelsArr.indexOf(modelsArr.find(m => m.provider === provider))].defaultSelected = defaultSelected;
-    dispatch(uiActions.setModels(modelsArr));
+  function changeProviderDefaultSelected(model, defaultSelected) {
+    dispatch(updateUserModel({ ...model, defaultSelected: defaultSelected }))
+
+    // let modelsArr = JSON.parse(JSON.stringify(models));
+
+    // modelsArr[modelsArr.indexOf(modelsArr.find(m => m.provider === provider))].defaultSelected = defaultSelected;
+    // dispatch(uiActions.setModels(modelsArr));
+  }
+
+  function handleDefault() {
+    if (editModelMode.value) {
+      selectAddProvider.value.default = true;
+      dispatch(toggleDefaultModel(selectAddProvider.value.uuid));
+    }
+    selectNewAsDefault.value = true
   }
 
   return (
@@ -103,51 +142,57 @@ export function OrgSettings() {
                 Models
               </div>
               <div className={'pb-4'}>
-                <div className={'mt-4 flex flex-col gap-4 w-full pb-4'}>
-                  {models.map(model => (
-                    <div className={'border border-[#DBDBDB] rounded-lg p-4 w-full'}>
-                      <div>
-                        <div className={'flex gap-2 text-sm leading-6 items-center justify-between'}>
-                          <div className={'flex gap-2'}>
-                            <img src={OpenAi} className={'w-4 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-                            <img src={Claude} className={'w-4 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
-                            <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
-                            <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
-                          </div>
-                          <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
-                            <img src={editPen} alt="" />
-                          </div>
-                        </div>
-                        <div className={'mt-4 flex gap-4'}>
-                          <div className={'w-1/2'}>
-                            <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                              Model
+                {models.length > 0 &&
+                  <div className={'mt-4 flex flex-col gap-4 w-full pb-4'}>
+                    {models.map(model => (
+                      <div className={'border border-[#DBDBDB] rounded-lg p-4 w-full'}>
+                        <div>
+                          <div className={'flex gap-2 text-sm leading-6 items-center justify-between'}>
+                            <div className={'flex gap-2'}>
+                              <img src={OpenAi} className={'w-4 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+                              <img src={Claude} className={'w-4 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
+                              <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
+                              <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
+                              <span className={'text-[#595959] '}>{model.uuid}</span>
                             </div>
+                            <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
+                              <img src={editPen} alt="" />
+                            </div>
+                          </div>
+                          <div className={'mt-4 flex gap-4'}>
+                            <div className={'w-1/2'}>
+                              <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                                Preffered Model
+                              </div>
 
-                            <div class="relative">
-                              <select onChange={(e) => changeProviderDefaultSelected(model.provider, e.currentTarget.value)} className={"overflow-hidden pr-6 "} >
-                                {model.models.map(m => (
-                                  <option value={m} selected={m === model.defaultSelected}>{m}</option>
-                                ))}
-                              </select>
-                              <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                              <div class="relative">
+                                <select onChange={(e) => changeProviderDefaultSelected(model, e.currentTarget.value)} className={"overflow-hidden pr-6 "} >
+                                  {model.models.map(m => (
+                                    <option value={m} selected={m === model.defaultSelected}>{m}</option>
+                                  ))}
+                                </select>
+                                <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
+                              </div>
                             </div>
-                          </div>
-                          <div className={'w-1/2'}>
-                            <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                              API key
-                            </div>
+                            <div className={'w-1/2'}>
+                              <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                                API key
+                              </div>
 
-                            <div className={'truncate text-sm leading-6 py-2'}>
-                              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
+                              <div className={'truncate text-sm leading-6 py-2'}>
+                                {model.api_key}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={() => showAddModel.value = true} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                    ))}
+                  </div>
+                }
+                {models.length === 0 &&
+                  <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
+                }
+                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
                 </button>
               </div>
@@ -228,16 +273,16 @@ export function OrgSettings() {
           <div className={'mx-auto'}>
             <div className={'px-8'}>
               <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
-                Add Model
+                {editModelMode.value ? 'Edit' : 'Add'} Model
               </div>
               <div className={'mt-4'}>
-                <div className={'w-1/2'}>
+                {!editModelMode.value && <div className={'w-1/2'}>
                   <div className="text-xs font-bold text-[#747474] mb-1 flex">
                     Provider
                   </div>
                   <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
                     {availableProviders.map(model => (
-                      <div onClick={() => selectAddProvider.value = model} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                      <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
                         <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
                         <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
                         <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
@@ -245,7 +290,15 @@ export function OrgSettings() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div>}
+                {editModelMode.value &&
+                  <div className={'flex items-center gap-2'}>
+                    <img src={OpenAi} className={'w-6 ' + (selectAddProvider.value.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+                    <img src={Claude} className={'w-6 ' + (selectAddProvider.value.provider != 'Claude' ? 'hidden' : '')} alt="" />
+                    <img src={Groq} className={'w-6 ' + (selectAddProvider.value.provider != 'Groq' ? 'hidden' : '')} alt="" />
+                    {selectAddProvider.value.provider}
+                  </div>
+                }
                 <div className={'overflow-hidden'}>
                   <div className={'mt-4'}>
                     <div className="text-xs font-bold text-[#747474] mb-1 flex">
@@ -255,7 +308,7 @@ export function OrgSettings() {
                     <div class="relative">
                       <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
                         {selectAddProvider.value.models.map(m => (
-                          <option value={m}>{m}</option>
+                          <option value={m} selected={m === defaultModelToSelect.value}>{m}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
@@ -274,16 +327,16 @@ export function OrgSettings() {
                   </div>
                 </div>
                 <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
-                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
+                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0 ' + ((editModelMode.value && selectAddProvider.value.default) ? 'pointer-events-none opacity-50' : '')}>
                     <label class="switch">
-                      <input onChange={() => selectNewAsDefault.value = !selectNewAsDefault.value} type="checkbox" checked={selectNewAsDefault.value} />
+                      <input onChange={() => handleDefault()} type="checkbox" checked={selectNewAsDefault.value} />
                       <span class="slider round"></span>
                     </label>
                     <span>Make Default</span>
                   </div>
                   <div className={'flex gap-1 justify-end'}>
                     <button type="button" onClick={() => { showAddModel.value = false }} className="btn-second">Cancel</button>
-                    <button onClick={() => addModel()} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">Add Model</button>
+                    <button onClick={() => { if (editModelMode.value) updateModel(); else addModel() }} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{editModelMode.value ? 'Edit' : 'Add'} Model</button>
                   </div>
                 </div>
               </div>

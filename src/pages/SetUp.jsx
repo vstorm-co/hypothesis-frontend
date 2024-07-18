@@ -11,7 +11,7 @@ import angleDown from '../assets/angle-down.svg';
 import papaya from '../assets/images/papaya.png';
 
 import { getOrganizationsData } from '../store/organizations-slice.js';
-import { showToast, uiActions } from "../store/ui-slice.js";
+import { AddUserModel, showToast, uiActions } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
 import { getChatsData } from '../store/chats-slice';
 import { getTemplatesData } from '../store/templates-slice';
@@ -52,6 +52,13 @@ export const SetUp = (props) => {
   const [orgLogoUrl, setorgLogoUrl] = useState('');
 
   const handleAddPersonal = async () => {
+    let model = {
+      provider: selectAddProvider.value.provider,
+      defaultSelected: defaultModelToSelect.value,
+      api_key: apikey.value,
+      default: true,
+    }
+
     if (DomainOrgs.value[0]) {
       handleUpdateOrganization()
     }
@@ -60,6 +67,8 @@ export const SetUp = (props) => {
     await dispatch(getChatsData());
     await dispatch(getTemplatesData());
     await dispatch(uiActions.setHideSideBar(false));
+
+    await dispatch(AddUserModel(model));
 
     let redirectToChat = localStorage.getItem("redirect_to_chat");
     if (redirectToChat?.length > 0) {
@@ -215,8 +224,8 @@ export const SetUp = (props) => {
                   </div>
                 </div>
               }
-              {/* (organizationCreated && organizationCreated.created) */}
-              {true &&
+
+              {(organizationCreated && organizationCreated.created) &&
                 <div>
                   <div className={'flex flex-col'}>
                     <div className={'text-[#202020] font-bold text-sm leading-6'}>
@@ -300,7 +309,7 @@ export const SetUp = (props) => {
                       </div>
                       <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
                         {availableProviders.map(model => (
-                          <div onClick={() => selectAddProvider.value = model} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                          <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
                             <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
                             <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
                             <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />

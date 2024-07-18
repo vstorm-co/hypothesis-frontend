@@ -24,6 +24,7 @@ import { showToast } from '../store/ui-slice';
 const msgLoading = signal(false);
 export function Chat(props) {
 	const currentChat = useSelector(state => state.chats.currentChat);
+	const currentModel = useSelector(state => state.ui.currentModel);
 	const logs = useSelector(state => state.h.logs);
 
 	const chats = useSelector(state => state.chats.chats);
@@ -181,12 +182,12 @@ export function Chat(props) {
 			promptsLeft.value = promptArray;
 			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html }));
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, user_model_uuid: currentModel.uuid, selectedModel: currentModel.defaultSelected }));
 			promptsLeft.value.shift();
 		} else {
 			dispatch(chatsActions.addMessage({ created_by: "user", sender_picture: user.picture, content: promptArray[0].prompt, content_html: promptArray[0].html }));
 
-			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, }));
+			sendMessage(JSON.stringify({ type: 'message', content: promptArray[0].prompt, content_html: promptArray[0].html, user_model_uuid: currentModel.uuid, selectedModel: currentModel.defaultSelected }));
 		}
 
 		setTimeout(() => {
@@ -576,6 +577,7 @@ export function Chat(props) {
 							</div>
 							<div className={'relative'}>
 								<PromptInput
+									showModels={true}
 									Icon={(blockSending.value ? 'stop' : 'send')}
 									blockSending={blockSending.value}
 									SubmitButtonText={(blockSending.value ? 'Stop Generating' : 'Send Prompt')}
