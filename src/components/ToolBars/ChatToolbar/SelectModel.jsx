@@ -16,7 +16,10 @@ export function SelectModel() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const defaultModel = models.find(m => m.default === true);
+    let defaultModel = models.find(m => m.default === true);
+    if (defaultModel === undefined) {
+      defaultModel = models[0];
+    }
     dispatch(uiActions.setCurrentModel(defaultModel));
   }, [models])
 
@@ -86,7 +89,7 @@ export function SelectModel() {
           </div>
 
           <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] ' + (modelsVisible.value ? '' : 'hidden')}>
-            {currentModel.models.map(model => (
+            {currentModel.models?.map(model => (
               <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.defaultSelected === model ? 'box-shadow' : '')}>
                 <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
                   {model}
