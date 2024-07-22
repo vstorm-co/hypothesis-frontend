@@ -63,7 +63,7 @@ export const ChatBar = props => {
       let chatOptionsVisible = chatOptions.show && isCurrentChatOptions;
       return `${(chatOptions.show && isCurrentChatOptions) ? 'bg-[#0f0f0f]' : 'bg-[#202020]'} ${(chatOptionsVisible && !isSelected()) ? 'py-1 ' : 'py-2'} ${(chatOptionsVisible || isSelected()) ? '' : 'hover:py-1'}`
     } else {
-      return `py-2 ${isSelected() ? '' : 'hover:py-1'}`
+      return `py-2 ${isSelected() || CheckUsersOnChat() ? '' : 'hover:py-1'}`
     }
   }
 

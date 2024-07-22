@@ -67,7 +67,7 @@ class CopyAs extends Component {
     navigator.clipboard.writeText(this.props.msg.content);
 
     this.props.dispatch(showToast({ content: `Copied as markdown` }));
-    this.props.dispatch(uiActions.changeCopyAs('md'))
+    this.props.dispatch(uiActions.changeCopyAs({ method: 'md', uuid: this.props.chatUID }))
     this.props.toggleShowCopyAs(false);
   }
 
@@ -78,7 +78,7 @@ class CopyAs extends Component {
     navigator.clipboard.writeText(content);
 
     this.props.dispatch(showToast({ content: `Copied as Plain Text` }));
-    this.props.dispatch(uiActions.changeCopyAs('txt'))
+    this.props.dispatch(uiActions.changeCopyAs({ method: 'txt', uuid: this.props.chatUID }))
     this.props.toggleShowCopyAs(false);
   }
 
@@ -91,7 +91,7 @@ class CopyAs extends Component {
     navigator.clipboard.write([clipboardItem]);
 
     this.props.dispatch(showToast({ content: `Copied as Formatted` }));
-    this.props.dispatch(uiActions.changeCopyAs('rtf'))
+    this.props.dispatch(uiActions.changeCopyAs({ method: 'rtf', uuid: this.props.chatUID }));
     this.props.toggleShowCopyAs(false);
   }
 

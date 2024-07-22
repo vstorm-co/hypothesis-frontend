@@ -241,7 +241,7 @@ export function Message(props) {
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{props.Message.content}</ReactMarkdown>
             </div>
             <div className={'ml-auto shrink-0 invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:visible')}>
-              <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} />
+              <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} chatUID={currentChat.uuid} />
             </div>
           </div>
         </div>
