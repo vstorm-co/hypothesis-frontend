@@ -59,13 +59,13 @@ export function SelectModel() {
 
   if (models.length > 0) {
     return (
-      <div className={'mr-2 flex'}>
-        <div ref={providersListRef} className={'relative providers'}>
-          <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
-            <img src={OpenAi} className={'w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-            <img src={Claude} className={'w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
-            <img src={Groq} className={'w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />
-            <span className={(models.length > 1 ? '' : 'hidden')}>{currentModel.provider}</span>
+      <div className={'mx-2 flex'}>
+        <div ref={providersListRef} className={'relative providers flex shrink-0'}>
+          <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex shrink-0 gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
+            <img src={OpenAi} className={'shrink-0 w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+            <img src={Claude} className={'shrink-0 w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
+            <img src={Groq} className={'shrink-0 w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />
+            <span className={(models.length > 1 ? 'hidden lg:block' : 'hidden')}>{currentModel.provider}</span>
             <img src={angleDown} className={'ml-1 ' + (models.length > 1 ? '' : 'hidden')} alt="" />
           </div>
 
@@ -83,8 +83,10 @@ export function SelectModel() {
           </div>
         </div>
         <div ref={modelListRef} className={'relative models'}>
-          <div onClick={() => { modelsVisible.value = true }} className={'flex border border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-            {currentModel.defaultSelected}
+          <div onClick={() => { modelsVisible.value = true }} className={'flex border truncate border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
+            <div className={'max-w-[80px] lg:max-w-full truncate'}>
+              {currentModel.defaultSelected}
+            </div>
             <img src={angleDown} className={'ml-1'} alt="" />
           </div>
 

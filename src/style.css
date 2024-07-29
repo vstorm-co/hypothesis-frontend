@@ -263,7 +263,7 @@ input:disabled {
 }
 
 .input-form .write-button {
-	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
+	@apply lg:px-4 px-1 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
 }
 
 .response-template-input-form .write-button {
@@ -275,7 +275,7 @@ input:disabled {
 }
 
 .input-form .preview-button {
-	@apply px-4 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
+	@apply lg:px-4 px-2 text-sm leading-6 font-bold cursor-pointer py-2 lg:py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
 }
 
 .response-template-input-form .preview-button {

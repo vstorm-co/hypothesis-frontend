@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import callApi from "../api";
 
-const copyAs = localStorage.getItem('ANT_defaultSaveAs');
+// const copyAs = localStorage.getItem('ANT_defaultSaveAs');
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -24,7 +24,7 @@ const uiSlice = createSlice({
       left: '0px'
     },
     ToolTipContent: '',
-    copyAs: copyAs ? copyAs : 'md',
+    copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
     showToolbarHelp: false,
@@ -129,10 +129,27 @@ const uiSlice = createSlice({
     toggleTemplatesLoading(state, action) {
       state.templatesLoading = action.payload;
     },
+    setCopyAs(state, action) {
+      state.copyAs = action.payload;
+    },
     changeCopyAs(state, action) {
-      state.copyAs = action.payload
+      state.copyAs = action.payload.method;
 
-      localStorage.setItem('ANT_defaultSaveAs', action.payload);
+      let arr = JSON.parse(localStorage.getItem('ANT_defaultSaveAs'));
+      if (arr === null) {
+        arr = [];
+        arr[0] = action.payload;
+      } else {
+        let target = arr.find(c => c.uuid === action.payload.uuid);
+        console.log(target);
+        if (target != undefined) {
+          arr[arr.indexOf(target)].method = action.payload.method;
+        } else {
+          arr.push(action.payload);
+        }
+      }
+
+      localStorage.setItem('ANT_defaultSaveAs', JSON.stringify(arr));
     }
   }
 });

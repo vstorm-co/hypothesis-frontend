@@ -19,7 +19,7 @@ import { SmartAnnotateLogs } from '../components/SmartAnnotateLogs';
 import { hSliceActions } from '../store/h-slice';
 import { HelpToolTip } from '../components/Tooltips/HelpToolTip';
 import { ToolbarHelp } from '../components/Tooltips/ToolbarHelp';
-import { showToast } from '../store/ui-slice';
+import { showToast, uiActions } from '../store/ui-slice';
 
 const msgLoading = signal(false);
 export function Chat(props) {
@@ -78,6 +78,17 @@ export function Chat(props) {
 		blockSending.value = false;
 		userScrolledUp.value = false;
 		forceInputFocus.value = forceInputFocus.value + 1;
+
+		let arr = JSON.parse(localStorage.getItem('ANT_defaultSaveAs'));
+		if (arr != null) {
+			let target = arr.find(cc => cc.uuid == currentChat.uuid);
+
+			if (target != undefined) {
+				dispatch(uiActions.setCopyAs(target.method));
+			} else {
+				dispatch(uiActions.setCopyAs('md'));
+			}
+		}
 	}, [currentChat.uuid])
 
 	useEffect(() => {
