@@ -73,7 +73,7 @@ export function Footer() {
         </div>
         <div className={'flex flex-col transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[260px]' : 'max-h-0 overflow-hidden')}>
           {users.map(user => {
-            if (user.access_token !== currentUser.access_token)
+            if (user.id !== currentUser.id)
               return (
                 <div onClick={() => setUser(user)} class={'flex items-center px-2 py-1 rounded mt-4 relative cursor-pointer'}>
                   <img src={user.organization_uuid ? `${import.meta.env.VITE_API_URL}${user.organization_logo}` : user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>

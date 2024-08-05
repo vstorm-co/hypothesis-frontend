@@ -7,7 +7,7 @@ const organizationsSlice = createSlice({
   name: 'organizations',
   initialState: {
     organizations: [],  // it is only for global user -> is_admin==True in auth table
-    currentOrganization: null,
+    currentOrganization: { users: [] },
     userOrganizations: [],
   },
   reducers: {
@@ -45,6 +45,18 @@ export const getOrganizationsData = () => {
     try {
       const organizations = await callApi(`/organization`);
       dispatch(organizationsActions.setOrganizations(organizations));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const getOrganizationData = (payload) => {
+  return async (dispatch) => {
+    try {
+      const organization = await callApi(`/organization/${payload}`, {}, true);
+      dispatch(organizationsActions.setCurrentOrganization(organization));
+      console.log(organization);
     } catch (err) {
       console.log(err);
     }

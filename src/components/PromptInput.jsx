@@ -447,7 +447,7 @@ export function PromptInput(props) {
             {props.showModels &&
               <SelectModel />
             }
-            <div onClick={() => { promptMode.value = 'write' }} className={'write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
+            <div onClick={() => { promptMode.value = 'write' }} className={'shrink-0 write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
               <div className={'lg:hidden'}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.2929 4.29289C17.6534 3.93241 18.2206 3.90468 18.6129 4.2097L18.7071 4.29289L19.7071 5.29289C20.0676 5.65338 20.0953 6.22061 19.7903 6.6129L19.7071 6.70711L18.7071 7.70711C18.3466 8.06759 17.7794 8.09532 17.3871 7.7903L17.2929 7.70711L16.2929 6.70711C15.9324 6.34662 15.9047 5.77939 16.2097 5.3871L16.2929 5.29289L17.2929 4.29289Z" fill="#747474" />

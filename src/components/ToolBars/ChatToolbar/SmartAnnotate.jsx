@@ -271,8 +271,7 @@ export function SmartAnnotate(props) {
         prompt: prompt.value,
         room_id: currentChat.uuid ? currentChat.uuid : false,
         delete_annotations: confirmDeleteAnnotations.value,
-        provider: currentModel.provider,
-        model: currentModel.defaultSelected,
+        user_model_uuid: currentModel.uuid,
       }
 
       const regex = /^https:\/\/.*/;

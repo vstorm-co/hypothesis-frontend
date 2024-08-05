@@ -30,6 +30,7 @@ import './style.css';
 import { RefreshToken } from './pages/RefreshToken';
 import { ScafoldPrompt } from './pages/ScafoldPrompt';
 import { OrgSettings } from './pages/OrgSettings';
+import { OrgUsersSettings } from './pages/OrgUsersSettings';
 
 export function App() {
 	useEffect(() => {
@@ -91,6 +92,7 @@ export function App() {
 								<PrivacyPolicy path="/privacy-policy" />
 								<Authorize path="/auth" />
 								<OrgSettings path="/organization-settings" />
+								<OrgUsersSettings path="/organization-users" />
 								<RefreshToken path="/refresh-token" />
 								<SetUp path="/setup" />
 								<Chat path="/chats/:id" />

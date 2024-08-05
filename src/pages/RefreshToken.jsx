@@ -21,8 +21,8 @@ export function RefreshToken() {
   dispatch(uiActions.setHideSideBar(true));
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(refreshUserToken());
+    setTimeout(async () => {
+      await dispatch(refreshUserToken());
       dispatch(uiActions.setHideSideBar(false));
     }, 3000)
   }, [])
