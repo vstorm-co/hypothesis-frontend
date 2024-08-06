@@ -1,27 +1,72 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getOrganizationData } from "../store/organizations-slice";
+import { getOrganizationData, setUsersAsAdmins } from "../store/organizations-slice";
 import loopSvg from '../assets/loop.svg';
+import { useSignal } from "@preact/signals";
+import { showToast, uiActions } from "../store/ui-slice";
+import { Toast } from "../components/Toast";
 
 export function OrgUsersSettings(props) {
   const organization = useSelector(state => state.organizations.currentOrganization);
   const currentUser = useSelector(state => state.user.currentUser);
+
+  const selectedUsers = useSignal([]);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getOrganizationData(currentUser.organization_uuid));
   }, [])
 
+  function handleSelected(user) {
+    let target = selectedUsers.value.find(u => u.id === user.id);
+    if (target) {
+      let index = selectedUsers.value.indexOf(target)
+      selectedUsers.value = selectedUsers.value.slice(0, index).concat(selectedUsers.value.slice(index + 1));
+    } else {
+      selectedUsers.value = [...selectedUsers.value, user];
+    }
+  }
+
+  async function handleUserAdmin(user) {
+    let obj = {
+      organization_uuid: organization.uuid,
+      user_ids: [],
+      admin_ids: [],
+    }
+
+    if (user.is_admin) {
+      obj.user_ids.push(user.id);
+    } else {
+      obj.admin_ids.push(user.id);
+    }
+
+    await dispatch(setUsersAsAdmins(obj));
+    dispatch(showToast({ content: `${user.is_admin ? 'This user is not admin any more' : 'User set as Admin'}` }));
+  }
+
+  function isUserSelected(id) {
+    let user = selectedUsers.value.find(u => u.id === id);
+    if (user) {
+      return true;
+    } else {
+      return false
+    }
+  }
+
   return (
     <div className={'relative w-full'}>
       <div className={'pb-8 bg-white w-[780px] mx-auto'}>
         <div className={'mx-auto'}>
-          <div className={''}>
+          <div className={'relative'}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Users
               <button className="btn-second">
                 Back
               </button>
+            </div>
+            <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
+              <Toast />
             </div>
           </div>
           <div className={'max-h-[86vh] overflow-y-auto pt-8 pr-1'}>
@@ -38,17 +83,21 @@ export function OrgUsersSettings(props) {
             </div>
             <div className={'mt-4'}>
               <table className={'w-full'}>
-                <th className={'w-[40px]'}></th>
-                <th className={'text-left text-xs font-bold text-[#747474]'}>Users</th>
-                <th className={'text-left text-xs font-bold text-[#747474]'}>Email</th>
-                <th className={'text-left text-xs font-bold text-[#747474]'}>Admin</th>
-                <th></th>
-                <tbody>
+                <thead>
+                  <tr>
+                    <th className={'w-[40px]'}></th>
+                    <th className={'text-left text-xs font-bold text-[#747474]'}>Users</th>
+                    <th className={'text-left text-xs font-bold text-[#747474]'}>Email</th>
+                    <th className={'text-left text-xs font-bold text-[#747474]'}>Admin</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody key={selectedUsers.value.length}>
                   {organization.users.map((user) =>
-                    <tr>
+                    <tr key={user.id} className={'border-b border-[#DBDBDB] ' + (selectedUsers.value.some(u => u.id === user.id) ? 'bg-[#FAFAFA]' : '')}>
                       <td>
                         <label className="custom-check">
-                          <input type="checkbox" checked={false} />
+                          <input onChange={() => handleSelected(user)} type="checkbox" checked={selectedUsers.value.some(u => u.id === user.id)} />
                           <span class="checkmark"></span>
                         </label>
                       </td>
@@ -60,9 +109,9 @@ export function OrgUsersSettings(props) {
                         {user.email}
                       </td>
                       <td className={''}>
-                        <div className={'flex items-center text-sm leading-6 shrink-0'}>
+                        <div className={'flex items-center text-sm leading-6 shrink-0 pl-1'}>
                           <label class="switch">
-                            <input type="checkbox" checked={true} />
+                            <input onChange={() => handleUserAdmin(user)} type="checkbox" checked={user.is_admin} />
                             <span class="slider round"></span>
                           </label>
                         </div>
@@ -78,6 +127,11 @@ export function OrgUsersSettings(props) {
                   )}
                 </tbody>
               </table>
+            </div>
+            <div>
+              {/* <button onClick={() => console.log(selectedUsers.value)} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
+                Click
+              </button> */}
             </div>
           </div>
         </div>

@@ -70,6 +70,20 @@ export const createNewOrganization = (payload) => {
         method: 'POST',
         body: JSON.stringify(payload),
       })
+      dispatch(getOrganizationData(payload.organization_uuid));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const setUsersAsAdmins = (payload) => {
+  return async (dispatch) => {
+    try {
+      const organization = await callApi('/organization/add-users-to-organization', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      })
       dispatch(organizationsActions.createOrganizationSuccess(organization));
     } catch (err) {
       console.log(err);
