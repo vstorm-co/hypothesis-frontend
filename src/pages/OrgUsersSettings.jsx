@@ -46,6 +46,21 @@ export function OrgUsersSettings(props) {
     dispatch(showToast({ content: `${user.is_admin ? 'This user is not admin any more' : 'User set as Admin'}` }));
   }
 
+  async function setUsersAdmin() {
+    let obj = {
+      organization_uuid: organization.uuid,
+      user_ids: [],
+      admin_ids: [],
+    }
+
+    selectedUsers.value.forEach(u => {
+      obj.admin_ids.push(u.id);
+    });
+
+    await dispatch(setUsersAdmins(obj));
+    dispatch(showToast({ content: 'Success' }));
+  }
+
   function isUserSelected(id) {
     let user = selectedUsers.value.find(u => u.id === id);
     if (user) {
@@ -70,7 +85,7 @@ export function OrgUsersSettings(props) {
               <Toast />
             </div>
           </div>
-          <div className={'max-h-[86vh] overflow-y-auto pt-8 pr-1'}>
+          <div className={'max-h-[86vh] overflow-y-auto py-8 pr-1'}>
             <div className={'flex items-center w-full justify-between'}>
               <div className={'text-sm leading-6 font-bold flex items-center'}>
                 {organization.users.length} {organization.users.length > 1 ? 'Users' : 'User'}
@@ -129,10 +144,17 @@ export function OrgUsersSettings(props) {
                 </tbody>
               </table>
             </div>
-            <div>
-              {/* <button onClick={() => console.log(selectedUsers.value)} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
-                Click
-              </button> */}
+            <div className={'flex items-center justify-between mt-4'}>
+              {selectedUsers.value.length > 0 &&
+                <div className={'p-2 leading-6'}>
+                  <span className={'font-bold'}>{selectedUsers.value.length}</span> {selectedUsers.value.length < 2 ? 'user' : 'users'} selected
+                </div>
+              }
+              <div className={'ml-auto'}>
+                <button disabled={selectedUsers.value.length < 1} onClick={() => setUsersAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  Make Admin
+                </button>
+              </div>
             </div>
           </div>
         </div>
