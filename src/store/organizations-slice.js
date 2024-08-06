@@ -77,12 +77,26 @@ export const createNewOrganization = (payload) => {
   }
 }
 
-export const setUsersAsAdmins = (payload) => {
+export const setUsersAdmins = (payload) => {
   return async (dispatch) => {
     try {
-      const organization = await callApi('/organization/add-users-to-organization', {
+      const organization = await callApi(`/organization/add-organization-permissions/${payload.organization_uuid}`, {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ user_ids: payload.user_ids, admin_ids: payload.admin_ids }),
+      })
+      dispatch(organizationsActions.createOrganizationSuccess(organization));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const revokeUsersAdmins = (payload) => {
+  return async (dispatch) => {
+    try {
+      const organization = await callApi(`/organization/revoke-organization-permissions/${payload.organization_uuid}`, {
+        method: 'POST',
+        body: JSON.stringify({ user_ids: payload.user_ids, admin_ids: payload.admin_ids }),
       })
       dispatch(organizationsActions.createOrganizationSuccess(organization));
     } catch (err) {

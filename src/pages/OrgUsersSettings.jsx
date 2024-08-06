@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getOrganizationData, setUsersAsAdmins } from "../store/organizations-slice";
+import { getOrganizationData, revokeUsersAdmins, setUsersAdmins } from "../store/organizations-slice";
 import loopSvg from '../assets/loop.svg';
 import { useSignal } from "@preact/signals";
 import { showToast, uiActions } from "../store/ui-slice";
@@ -35,13 +35,14 @@ export function OrgUsersSettings(props) {
       admin_ids: [],
     }
 
+    obj.admin_ids.push(user.id);
+
     if (user.is_admin) {
-      obj.user_ids.push(user.id);
+      await dispatch(revokeUsersAdmins(obj));
     } else {
-      obj.admin_ids.push(user.id);
+      await dispatch(setUsersAdmins(obj));
     }
 
-    await dispatch(setUsersAsAdmins(obj));
     dispatch(showToast({ content: `${user.is_admin ? 'This user is not admin any more' : 'User set as Admin'}` }));
   }
 

@@ -21,6 +21,7 @@ export function OrgSettings() {
   const dispatch = useDispatch();
 
   const orgName = useSignal('');
+  const inviteUsers = useSignal('');
 
   const selectAddProvider = useSignal({ models: [] });
   const defaultModelToSelect = useSignal('');
@@ -212,7 +213,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
+                    <input onInput={(e) => { inviteUsers.value = e.currentTarget.value }} value={inviteUsers.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 px-2 bg-[#FAFAFA]'} placeholder={'example@email.com, example2@email.com'} type="text" />
                   </div>
                   <div className={'flex items-center gap-2 mt-2 text-sm leading-6 shrink-0'}>
                     <label class="switch">
