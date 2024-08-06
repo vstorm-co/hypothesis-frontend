@@ -84,7 +84,8 @@ export const setUsersAdmins = (payload) => {
         method: 'POST',
         body: JSON.stringify({ user_ids: payload.user_ids, admin_ids: payload.admin_ids }),
       })
-      dispatch(organizationsActions.createOrganizationSuccess(organization));
+      dispatch(getOrganizationData(payload.organization_uuid));
+
     } catch (err) {
       console.log(err);
     }
@@ -98,7 +99,8 @@ export const revokeUsersAdmins = (payload) => {
         method: 'POST',
         body: JSON.stringify({ user_ids: payload.user_ids, admin_ids: payload.admin_ids }),
       })
-      dispatch(organizationsActions.createOrganizationSuccess(organization));
+      dispatch(getOrganizationData(payload.organization_uuid));
+
     } catch (err) {
       console.log(err);
     }
