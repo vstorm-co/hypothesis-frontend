@@ -58,6 +58,7 @@ export function OrgUsersSettings(props) {
     });
 
     await dispatch(setUsersAdmins(obj));
+    selectedUsers.value = [];
     dispatch(showToast({ content: 'Success' }));
   }
 
@@ -90,12 +91,12 @@ export function OrgUsersSettings(props) {
               <div className={'text-sm leading-6 font-bold flex items-center'}>
                 {organization.users.length} {organization.users.length > 1 ? 'Users' : 'User'}
               </div>
-              <div className={'flex gap-4'}>
+              {/* <div className={'flex gap-4'}>
                 <div className="border-[1px] border-[#DBDBDB] bg-[#FAFAFA] rounded-lg flex items-center p-2">
                   <img className="w-4" src={loopSvg} alt="" />
                   <input type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 w-full" placeholder="Search..." />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className={'mt-4'}>
               <table className={'w-full'}>
