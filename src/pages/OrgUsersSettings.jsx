@@ -5,6 +5,7 @@ import loopSvg from '../assets/loop.svg';
 import { useSignal } from "@preact/signals";
 import { showToast, uiActions } from "../store/ui-slice";
 import { Toast } from "../components/Toast";
+import { Link } from "preact-router";
 
 export function OrgUsersSettings(props) {
   const organization = useSelector(state => state.organizations.currentOrganization);
@@ -79,7 +80,9 @@ export function OrgUsersSettings(props) {
             <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Users
               <button className="btn-second">
-                Back
+                <Link href={'/organization-settings'}>
+                  Back
+                </Link>
               </button>
             </div>
             <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
