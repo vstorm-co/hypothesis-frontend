@@ -157,9 +157,11 @@ export function OrgSettings() {
                               <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
                               <span className={'text-[#595959] '}>{model.uuid}</span>
                             </div>
-                            <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
-                              <img src={editPen} alt="" />
-                            </div>
+                            {isUserAdmin() &&
+                              <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
+                                <img src={editPen} alt="" />
+                              </div>
+                            }
                           </div>
                           <div className={'mt-4 flex gap-4'}>
                             <div className={'w-1/2'}>
