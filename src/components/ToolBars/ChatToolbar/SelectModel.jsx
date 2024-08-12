@@ -84,7 +84,7 @@ export function SelectModel() {
         </div>
         <div ref={modelListRef} className={'relative models'}>
           <div onClick={() => { modelsVisible.value = true }} className={'flex border truncate border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-            <div className={'max-w-[80px] lg:max-w-full truncate'}>
+            <div className={'min-w-[10px] max-w-[80px] lg:max-w-full truncate'}>
               {currentModel.defaultSelected}
             </div>
             <img src={angleDown} className={'ml-1'} alt="" />

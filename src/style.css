@@ -262,6 +262,68 @@ input:disabled {
 	padding-right: 460px;
 }
 
+.custom-check input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+	position: absolute;
+	top: 0;
+	left: 4px;
+	height: 20px;
+	width: 20px;
+	border: 1px solid #DBDBDB;
+	border-radius: 4px;
+}
+
+.custom-check {
+	display: block;
+	position: relative;
+	margin-bottom: 18px;
+	cursor: pointer;
+	font-size: 16px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* On mouse-over, add a grey background color */
+.custom-check:hover input~.checkmark {
+	background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.custom-check input:checked~.checkmark {
+	background-color: #747474;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+/* Show the checkmark when checked */
+.custom-check input:checked~.checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator */
+.custom-check .checkmark:after {
+	width: 20px;
+	height: 20px;
+	background-image: url("./assets/check-white.svg");
+	background-repeat: no-repeat;
+	background-position: 3px 3px;
+}
+
 .input-form .write-button {
 	@apply lg:px-4 px-1 text-sm leading-6 font-bold cursor-pointer py-1 border-[#DBDBDB] border-b-0 border-b-white -mb-[1px] rounded-t;
 }

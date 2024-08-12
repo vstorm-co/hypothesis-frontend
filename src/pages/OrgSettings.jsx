@@ -9,13 +9,19 @@ import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
 import { AddUserModel, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
+import { getOrganizationData, organizationsActions } from "../store/organizations-slice";
+import { Link } from "preact-router";
 
 export function OrgSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
+  const organization = useSelector(state => state.organizations.currentOrganization);
   const models = useSelector(state => state.ui.models);
   const editModelMode = useSignal(false);
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const dispatch = useDispatch();
+
+  const orgName = useSignal('');
+  const inviteUsers = useSignal('');
 
   const selectAddProvider = useSignal({ models: [] });
   const defaultModelToSelect = useSignal('');
@@ -23,23 +29,18 @@ export function OrgSettings() {
   const selectNewAsDefault = useSignal(false);
   const apikey = useSignal('');
 
-  useEffect(() => {
-    dispatch(templatesActions.setCurrentTemplate({}));
-    dispatch(chatsActions.setCurrentChat({}));
+  useEffect(async () => {
+    await dispatch(templatesActions.setCurrentTemplate({}));
+    await dispatch(chatsActions.setCurrentChat({}));
+    await dispatch(getOrganizationData(currentUser.organization_uuid));
+
   }, [])
 
+  useEffect(() => {
+    orgName.value = organization.name;
+  }, [organization])
+
   async function addModel() {
-    // let model = { ...selectAddProvider.value, default: selectNewAsDefault.value, defaultSelected: defaultModelToSelect.value.length === 0 ? selectAddProvider.value.models[0] : defaultModelToSelect.value, key: apikey.value };
-    // let modelsArr = JSON.parse(JSON.stringify(models));
-
-    // if (selectNewAsDefault.value) {
-    //   modelsArr.map(m => m.default = false);
-    // }
-
-    // modelsArr.push(model);
-
-    // dispatch(uiActions.setModels(modelsArr));
-
     let model = {
       provider: selectAddProvider.value.provider,
       defaultSelected: defaultModelToSelect.value,
@@ -78,11 +79,6 @@ export function OrgSettings() {
 
   function changeProviderDefaultSelected(model, defaultSelected) {
     dispatch(updateUserModel({ ...model, defaultSelected: defaultSelected }))
-
-    // let modelsArr = JSON.parse(JSON.stringify(models));
-
-    // modelsArr[modelsArr.indexOf(modelsArr.find(m => m.provider === provider))].defaultSelected = defaultSelected;
-    // dispatch(uiActions.setModels(modelsArr));
   }
 
   function handleDefault() {
@@ -93,6 +89,12 @@ export function OrgSettings() {
     selectNewAsDefault.value = true
   }
 
+  function isUserAdmin() {
+    let targetUser = organization.users.find(u => u.id === currentUser.user_id);
+    return targetUser ? targetUser.is_admin : false;
+  };
+
+
   return (
     <div className={'relative w-full'}>
       <div className={'pb-8 bg-white w-[780px] mx-auto'}>
@@ -100,7 +102,7 @@ export function OrgSettings() {
           <div className={''}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Organization Settings
-              <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+              <button type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                 Save Changes
               </button>
             </div>
@@ -119,7 +121,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
+                    <input onInput={(e) => orgName.value = e.currentTarget.value} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
                   </div>
                 </div>
                 <div className={'w-1/2'} >
@@ -130,7 +132,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex'}>
-                    <img src={currentUser.organization_uuid && currentUser.organization_logo ? `${import.meta.env.VITE_API_URL}${currentUser.organization_logo}` : currentUser.picture} className="w-10 h-10 bg-white"></img>
+                    <img src={`${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 bg-white"></img>
                     <button type="button" className="bg-[#FAFAFA] text-sm leading-6 font-bold ml-4 px-2 text-[#747474]">Remove Logo</button>
                   </div>
                 </div>
@@ -155,9 +157,11 @@ export function OrgSettings() {
                               <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
                               <span className={'text-[#595959] '}>{model.uuid}</span>
                             </div>
-                            <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
-                              <img src={editPen} alt="" />
-                            </div>
+                            {isUserAdmin() &&
+                              <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
+                                <img src={editPen} alt="" />
+                              </div>
+                            }
                           </div>
                           <div className={'mt-4 flex gap-4'}>
                             <div className={'w-1/2'}>
@@ -192,7 +196,7 @@ export function OrgSettings() {
                 {models.length === 0 &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
                 }
-                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={false} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
                 </button>
               </div>
@@ -211,7 +215,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
+                    <input onInput={(e) => { inviteUsers.value = e.currentTarget.value }} value={inviteUsers.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 px-2 bg-[#FAFAFA]'} placeholder={'example@email.com, example2@email.com'} type="text" />
                   </div>
                   <div className={'flex items-center gap-2 mt-2 text-sm leading-6 shrink-0'}>
                     <label class="switch">
@@ -232,26 +236,16 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'grid grid-cols-2 gap-1 text-sm leading-6'}>
-                    <div className='flex items-center gap-2'>
-                      <img src="" className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                      Erik Bode
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <img src="" className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                      Jared Pendergraft
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <img src="" className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                      Cameron Chaplin
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <img src="" className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                      Josh Hirte
-                    </div>
+                    {organization?.users.map((user) =>
+                      <div className='flex items-center gap-2'>
+                        <img src={user.picture} className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
+                        {user.name}
+                      </div>
+                    )}
                   </div>
-                  <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
+                  <Link href={'/organization-users'} className={"bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded inline-block " + (isUserAdmin() ? '' : 'pointer-events-none opacity-50')}>
                     Edit Users
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
