@@ -825,3 +825,14 @@ input:checked+.slider:before {
 .provider-drop-shadow {
 	box-shadow: 0px 0px 4px 0px #FAFAFA;
 }
+
+@media (max-width: 960px) {
+
+	/* … */
+	.side-bar-shadow.active {
+		box-shadow: 0px 0px 1px 0px #0000004F;
+
+		box-shadow: 8px 0px 12px 0px #00000026;
+
+	}
+}

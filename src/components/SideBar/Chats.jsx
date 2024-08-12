@@ -106,12 +106,12 @@ export function Chats(props) {
   return (
     <div className={"px-3 flex flex-col overflow-hidden " + (ui.chatsExpanded ? 'flex-1' : 'h-14 pb-8')} >
       <ChatOptions />
-      <div className="text-xs leading-6 font-bold flex items-center py-4 pl-2">
+      <div className="text-xs leading-6 font-bold flex justify-between items-center py-4 px-1">
         <div onClick={() => handleExpanded()} className={'flex cursor-pointer'}>
           <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (ui.chatsExpanded ? '' : '-rotate-90')} />
           <div>CHATS</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + (info?.total > 0 && chats?.length > 0 ? '' : 'hidden')}>{info?.total}</div>
         </div>
-        <div onClick={callCreateChat} class="flex items-center justify-center ml-auto font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
+        <div onClick={callCreateChat} class="flex items-center justify-center font-normal text-sm px-3 bg-[#0F0F0F] border border-[#595959] rounded-[4px] py-0.5 cursor-pointer">
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
