@@ -443,9 +443,6 @@ export function SmartAnnotate(props) {
                 <div className={'w-full'}>
                   <div className="text-xs relative z-[10] font-bold text-[#747474] mb-1 flex w-[100px]">
                     Prompt <HelpToolTip content={'The specific prompt that will create the annotations you’re interested in.'} />
-                    {!promptValid.value &&
-                      <div class="text-[#EF4444] text-[10px] leading-4 text-center ml-24">You have to add a prompt...</div>
-                    }
                   </div>
                   <div class="relative -mt-[25px]">
                     <ResponseTemplateInput
@@ -457,7 +454,9 @@ export function SmartAnnotate(props) {
                     // clearInputOnSubmit={true}
                     />
                   </div>
-
+                  {!promptValid.value &&
+                    <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
+                  }
                 </div>
               </div>
 
