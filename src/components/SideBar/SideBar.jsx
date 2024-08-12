@@ -3,6 +3,10 @@ import { Chats } from './Chats';
 import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
 
+import { StyleTransition } from 'preact-transitioning';
+
+import sidebarToggleIcon from '../../assets/sidebar.svg';
+
 import { Filters } from './Filters';
 import { useSignal } from '@preact/signals';
 import { useSelector } from 'react-redux';
@@ -13,6 +17,7 @@ export function SideBar() {
   const hideSideBar = useSelector(state => state.ui.hideSideBar);
 
   const hideScrollBar = useSignal(false);
+  const expandSidebar = useSignal(true);
 
   const scrollRef = useRef();
 
@@ -36,23 +41,50 @@ export function SideBar() {
 
   if (!hideSideBar) {
     return (
-      <div className="bg-[#202020] text-[#FFFFFF]">
-        <div className="w-80 h-[100vh] flex flex-col relative pb-20">
-          <div className={'pl-4 pr-2 pt-2 flex'}>
-            <div className={'w-11/12'}>
-              <SearchBar />
+      <div className={"bg-[#202020] text-[#FFFFFF] absolute desktop:relative side-bar-shadow " + (expandSidebar.value ? 'active z-[100]' : 'z-50')}>
+        <div style={{ transition: 'width 300ms' }} className={"h-[100vh] flex flex-col relative pb-20 " + (expandSidebar.value ? 'w-80' : 'w-12')}>
+          <div style={{ transition: 'all 1ms' }} className={'pt-4 flex items-center justify-between ' + (expandSidebar.value ? 'px-3' : 'px-1.5')}>
+            <div onClick={() => expandSidebar.value = !expandSidebar.value} className={'p-2 cursor-pointer flex-shrink-0'}>
+              <img src={sidebarToggleIcon} alt="" />
             </div>
-            <div className={'mt-1 ml-1'}>
-              <Filters />
+            <StyleTransition
+              in={expandSidebar.value}
+              duration={1}
+              styles={{
+                enter: { opacity: 0 },
+                enterActive: { opcaity: 1 },
+              }}
+            >
+              <div style={{ transition: 'opacity 1ms' }} className={'flex'}>
+                <div className={''}>
+                  <SearchBar />
+                </div>
+                <div className={'flex items-center'}>
+                  <Filters />
+                </div>
+              </div>
+            </StyleTransition>
+          </div>
+          <StyleTransition
+            in={expandSidebar.value}
+            duration={300}
+            styles={{
+              enter: { opacity: 0 },
+              enterActive: { opcaity: 1 },
+              exit: { opacity: 1 },
+              exitActive: { opacity: 0 }
+            }}
+          >
+            <div style={{ transition: 'opacity 100ms' }} className={'overflow-hidden flex flex-col h-full'}>
+              <div ref={scrollRef} className={"overflow-hidden flex flex-col h-full"}>
+                <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
+                <Templates />
+              </div>
+              <div className={'overflow-y-hidden'}>
+                <Footer />
+              </div>
             </div>
-          </div>
-          <div ref={scrollRef} className={"overflow-hidden flex flex-col h-full"}>
-            <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
-            <Templates />
-          </div>
-          <div className={'overflow-y-hidden'}>
-            <Footer />
-          </div>
+          </StyleTransition>
         </div>
       </div>
     )

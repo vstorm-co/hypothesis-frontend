@@ -307,18 +307,18 @@ export function Chat(props) {
 	} else {
 		return (
 			<div className={'flex w-full'}>
-				<div className={'flex w-full mx-4 page-chat'}>
-					<div className={'pt-10 ml-4 mr-7 flex flex-col shrink-0'}>
+				<div className={'flex justify-between w-full px-4 desktop:mx-8 page-chat'}>
+					<div className={'pt-4 pr-4 flex flex-col shrink-0'}>
 						{activeUsers.value.map(u => (
 							<img title={u.user_name} src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
 						))}
 						<img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
 					</div>
 					<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-						<div className="h-[100vh] flex flex-col pt-4 pb-2 relative">
-							<div className={'flex items-center py-3 border-b border-[#DBDBDB] relative'}>
+						<div className="h-[100vh] flex flex-col relative">
+							<div className={'flex items-center py-5 border-b border-[#DBDBDB] relative'}>
 								<div onClick={() => { handleTitleInputClick() }} class="flex items-center w-full cursor-pointer">
-									<div className={'text-lg leading-6 font-bold py-2 max-h-[156px] overflow-hidden text-[#595959] ' + (editTitle ? 'hidden' : '')}>
+									<div className={'text-lg leading-6 font-bold max-h-[156px] overflow-hidden text-[#595959] ' + (editTitle ? 'hidden' : '')}>
 										{currentChat.name}
 									</div>
 									<div className={'w-full ' + (editTitle ? '' : 'hidden')}>
@@ -601,7 +601,7 @@ export function Chat(props) {
 									clearInputOnSubmit={true}
 									forceFocus={forceInputFocus.value}
 								/>
-								<div className={'absolute bottom-0 text-[#747474] text-xs self-start py-2'}>
+								<div className={'absolute bottom-0 z-50 text-[#747474] text-xs self-start py-2'}>
 									<ToolbarHelp onChat={true} />
 									{fileUpdating &&
 										<div className={'text-[#EF4444]'}>

@@ -83,9 +83,9 @@ export function App() {
 		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
 			<Provider store={store}>
 				<main>
-					<div className="flex overflow-hidden">
+					<div className="desktop:flex overflow-hidden">
 						<SideBar />
-						<div class="chatbox flex w-full">
+						<div class="chatbox flex w-full pl-12 desktop:pl-0">
 							<Router>
 								<MockChat path="/" />
 								<Home path="/home" />

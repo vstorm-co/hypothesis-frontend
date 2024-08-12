@@ -76,7 +76,7 @@ export function Templates() {
 
   return (
     <div className={"px-3 border-t border-[#747474] flex flex-col overflow-hidden " + (ui.templatesExpanded ? 'flex-1' : 'h-0 pb-12')}>
-      <div className="text-xs leading-6 font-bold flex items-center pl-2 py-4">
+      <div className="text-xs leading-6 font-bold flex items-center px-1 py-4">
         <div onClick={() => handleExpand()} className={'flex cursor-pointer'}>
           <img src={caretDown} alt="" className={'w-4 mr-1 transform ' + (ui.templatesExpanded ? '' : '-rotate-90')} />
           <div>TEMPLATES</div> <div className={"ml-2 px-2 border border-[#595959] font-normal flex justify-center items-center rounded-[4px] " + ((info?.total > 0 && templates?.length > 0) ? '' : 'hidden')}>{info?.total}</div>
