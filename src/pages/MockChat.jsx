@@ -141,7 +141,7 @@ export function MockChat(props) {
                   <Toast />
                 </div>
               </div>
-              <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
+              <div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto" ref={chatRef}>
                 <Message Loading={true} Message={msg} />
               </div>
               <PromptInput

@@ -9,17 +9,39 @@ import sidebarToggleIcon from '../../assets/sidebar.svg';
 
 import { Filters } from './Filters';
 import { useSignal } from '@preact/signals';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'preact/hooks';
+import { uiActions } from '../../store/ui-slice';
 
 
 export function SideBar() {
   const hideSideBar = useSelector(state => state.ui.hideSideBar);
+  const expandSidebar = useSelector(state => state.ui.expandSidebar);
 
   const hideScrollBar = useSignal(false);
-  const expandSidebar = useSignal(true);
 
+  const sideBarRef = useRef(null);
   const scrollRef = useRef();
+
+  const dispatch = useDispatch();
+
+
+  function outsideClickHanlder(ref) {
+    useEffect(() => {
+      function handleClickOutside(e) {
+        let width = window.innerWidth;
+        if (ref.current && !ref.current.contains(e.target) && width < 960) {
+          dispatch(uiActions.setExpandSideBar(false));
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+      }
+    }, [ref])
+  }
+  outsideClickHanlder(sideBarRef);
 
   function handleToggleScrollBar(tgl) {
     hideScrollBar.value = tgl;
@@ -41,14 +63,14 @@ export function SideBar() {
 
   if (!hideSideBar) {
     return (
-      <div className={"bg-[#202020] text-[#FFFFFF] absolute desktop:relative side-bar-shadow " + (expandSidebar.value ? 'active z-[100]' : 'z-50')}>
-        <div style={{ transition: 'width 300ms' }} className={"h-[100vh] flex flex-col relative pb-20 " + (expandSidebar.value ? 'w-80' : 'w-12')}>
-          <div style={{ transition: 'all 1ms' }} className={'pt-4 flex items-center justify-between ' + (expandSidebar.value ? 'px-3' : 'px-1.5')}>
-            <div onClick={() => expandSidebar.value = !expandSidebar.value} className={'p-2 cursor-pointer flex-shrink-0'}>
+      <div onClick={() => { if (!expandSidebar) dispatch(uiActions.setExpandSideBar(true)); }} ref={sideBarRef} className={"bg-[#202020] text-[#FFFFFF] absolute desktop:relative side-bar-shadow " + (expandSidebar ? 'active z-[100]' : 'z-50')}>
+        <div style={{ transition: 'width 300ms' }} className={"h-[100vh] flex flex-col relative pb-20 " + (expandSidebar ? 'w-80' : 'w-12')}>
+          <div style={{ transition: 'all 1ms' }} className={'pt-4 flex justify-between ' + (expandSidebar ? 'px-3' : 'px-1.5')}>
+            <div onClick={(e) => { e.stopPropagation(); dispatch(uiActions.setExpandSideBar(!expandSidebar)) }} className={'p-2 cursor-pointer flex-shrink-0 mt-1'}>
               <img src={sidebarToggleIcon} alt="" />
             </div>
             <StyleTransition
-              in={expandSidebar.value}
+              in={expandSidebar}
               duration={1}
               styles={{
                 enter: { opacity: 0 },
@@ -59,14 +81,14 @@ export function SideBar() {
                 <div className={''}>
                   <SearchBar />
                 </div>
-                <div className={'flex items-center'}>
+                <div className={'flex mt-1'}>
                   <Filters />
                 </div>
               </div>
             </StyleTransition>
           </div>
           <StyleTransition
-            in={expandSidebar.value}
+            in={expandSidebar}
             duration={300}
             styles={{
               enter: { opacity: 0 },

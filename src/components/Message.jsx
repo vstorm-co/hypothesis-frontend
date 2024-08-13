@@ -205,7 +205,7 @@ export function Message(props) {
             <button onClick={() => { callEditMessage() }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
           </div> */}
         </div>
-        <div className={'ml-auto invisible group-hover:visible flex items-start shrink-0'}>
+        <div className={'ml-auto invisible group-hover:visible sm:flex hidden items-start shrink-0'}>
           <EditMessage toggleEdit={toggleEdit} />
           <SaveAsTemplate toggleShowSaveAs={tgl => setShowSaveAs(tgl)} showSaveAs={showSaveAs} msg={props.Message} />
           <CloneChatFromHere msg={props.Message} />
@@ -237,10 +237,10 @@ export function Message(props) {
             </div>
           </div>
           <div className={'flex group w-full'}>
-            <div className={`ml-2 mt-2 text-[#202020] max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
+            <div className={`ml-2 mt-2 text-[#202020] max-w-[97%] sm:max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{props.Message.content}</ReactMarkdown>
             </div>
-            <div className={'ml-auto shrink-0 invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'group-hover:visible')}>
+            <div className={'ml-auto shrink-0 hidden sm:block invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'sm:group-hover:visible')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} chatUID={currentChat.uuid} />
             </div>
           </div>
