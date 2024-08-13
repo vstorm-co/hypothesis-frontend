@@ -27,7 +27,7 @@ const uiSlice = createSlice({
     copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
-    expandSidebar: false,
+    expandSidebar: true,
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,
