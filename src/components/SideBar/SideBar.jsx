@@ -49,6 +49,11 @@ export function SideBar() {
 
   useEffect(() => {
     console.dir(scrollRef.current)
+
+    let width = window.innerWidth;
+    if (width < 960) {
+      dispatch(uiActions.setExpandSideBar(false));
+    }
   }, []);
 
   function handleClass() {
