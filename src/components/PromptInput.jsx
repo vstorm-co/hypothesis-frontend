@@ -418,12 +418,12 @@ export function PromptInput(props) {
   }
 
   return (
-    <div className={'absolute w-[100vw] sm:w-full bottom-0 sm:bottom-2 -left-28 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white'}>
+    <div className={'absolute w-[96vw] sm:w-full bottom-0 sm:bottom-2 -left-16 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white'}>
       <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
         <InlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
         {templates?.length > 0 &&
           <div className={'flex shrink-0'}>
-            <div className={'flex shrink-0'}>
+            <div className={'flex  shrink-0'}>
               <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
               <ReturnResponse ReturnResponse={handleReturnResponse} />
               <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />

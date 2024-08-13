@@ -27,6 +27,7 @@ const uiSlice = createSlice({
     copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
+    expandSidebar: false,
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,
@@ -122,6 +123,9 @@ const uiSlice = createSlice({
     },
     setHideSideBar(state, action) {
       state.hideSideBar = action.payload;
+    },
+    setExpandSideBar(state, action) {
+      state.expandSidebar = action.payload;
     },
     toggleChatsLoading(state, action) {
       state.chatsLoading = action.payload;

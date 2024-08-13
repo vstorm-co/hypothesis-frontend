@@ -14,9 +14,14 @@ export const ChatBar = props => {
   const ShowOptions = useSignal(false);
 
   const callSelectChat = () => {
-    route(`/chats/${props.ChatData.uuid}`);
     // dispatch(selectChat(props.ChatData.uuid));
+
+    let width = window.innerWidth;
+    if (width < 960) {
+      dispatch(uiActions.setExpandSideBar(false));
+    }
     dispatch(templatesActions.setCurrentTemplate({}));
+    route(`/chats/${props.ChatData.uuid}`);
   }
 
   function isSelected() {
@@ -98,7 +103,7 @@ export const ChatBar = props => {
 
   return (
     <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (props.ChatData.uuid === currentChat.uuid ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
-      <div onClick={callSelectChat} className={'flex w-full cursor-pointer'}>
+      <div onClick={(e) => { e.stopPropagation(); callSelectChat() }} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
           <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>

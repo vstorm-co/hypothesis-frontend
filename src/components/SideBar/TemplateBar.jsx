@@ -5,15 +5,23 @@ import { chatsActions } from '../../store/chats-slice';
 import { selectTemplate } from '../../store/templates-slice';
 
 import braces from '../../assets/braces.svg'
+import { uiActions } from '../../store/ui-slice';
 
 export function TemplateBar(props) {
   const dispatch = useDispatch();
   const currentTemplate = useSelector(state => state.templates.currentTemplate);
 
   const callSelectTemplate = () => {
-    route(`/templates/${props.TemplateData.uuid}`);
-    dispatch(selectTemplate(props.TemplateData.uuid));
+    let width = window.innerWidth;
+    if (width < 960) {
+      dispatch(uiActions.setExpandSideBar(false));
+    }
     dispatch(chatsActions.setCurrentChat({ messages: [] }));
+
+
+    dispatch(selectTemplate(props.TemplateData.uuid));
+    route(`/templates/${props.TemplateData.uuid}`);
+
   }
 
   function isSelected() {
@@ -44,7 +52,7 @@ export function TemplateBar(props) {
   }
 
   return (
-    <div onClick={callSelectTemplate} className={"flex items-center bg-[#202020] py-2 px-2 rounded cursor-pointer " + (isSelected() ? 'bg-[#747474]' : 'hover:bg-[#0F0F0F]')}>
+    <div onClick={(e) => { e.stopPropagation(); callSelectTemplate() }} className={"flex items-center bg-[#202020] py-2 px-2 rounded cursor-pointer " + (isSelected() ? 'bg-[#747474]' : 'hover:bg-[#0F0F0F]')}>
       <div className={'w-4 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M8 13.5C8 13.7761 8.22386 14 8.5 14H9.23047C11.4453 14 12.1836 13.294 12.1836 11.1831V9.63691C12.1836 8.65221 12.4797 8.28984 13.5021 8.21308C13.7774 8.1924 14.002 7.97281 14.002 7.69667V6.31039C14.002 6.03425 13.7774 5.81466 13.5021 5.79398C12.4797 5.71722 12.1836 5.35485 12.1836 4.37015V2.81694C12.1836 0.706001 11.4453 0 9.23047 0H8.5C8.22386 0 8 0.223858 8 0.5V1.4062C8 1.68235 8.22386 1.9062 8.5 1.9062H8.58789C9.51074 1.9062 9.69531 2.13212 9.69531 3.25466V5.27383C9.69531 6.22693 10.3379 6.83409 11.4521 6.93293V7.07413C10.3379 7.17297 9.69531 7.78013 9.69531 8.73323V10.7453C9.69531 11.8679 9.51074 12.0938 8.58789 12.0938H8.5C8.22386 12.0938 8 12.3177 8 12.5938V13.5Z" />

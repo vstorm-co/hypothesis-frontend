@@ -308,7 +308,7 @@ export function Chat(props) {
 		return (
 			<div className={'flex w-full'}>
 				<div className={'flex justify-between w-full px-4 desktop:mx-8 page-chat'}>
-					<div className={'pt-4 pr-4 flex flex-col shrink-0'}>
+					<div className={'pt-4 pr-4 sm:flex flex-col shrink-0 hidden'}>
 						{activeUsers.value.map(u => (
 							<img title={u.user_name} src={u.sender_picture} className="w-8 h-8 border border-[#DBDBDB] rounded-full shrink-0" />
 						))}
@@ -317,7 +317,7 @@ export function Chat(props) {
 					<div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
 						<div className="h-[100vh] flex flex-col relative">
 							<div className={'flex items-center py-5 border-b border-[#DBDBDB] relative'}>
-								<div onClick={() => { handleTitleInputClick() }} class="flex items-center w-full cursor-pointer">
+								<div onClick={() => { handleTitleInputClick() }} class="sm:flex items-center w-full cursor-pointer">
 									<div className={'text-lg leading-6 font-bold max-h-[156px] overflow-hidden text-[#595959] ' + (editTitle ? 'hidden' : '')}>
 										{currentChat.name}
 									</div>
@@ -334,20 +334,20 @@ export function Chat(props) {
 											press 'Enter' to confirm
 										</div>
 									</div>
+									<div className={'sm:ml-auto text-xs text-[#747474] shrink-0'}>
+										{EditedAt()}
+									</div>
 								</div>
+
 
 								<div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
 									<Toast />
-								</div>
-
-								<div className={'ml-5 text-xs text-[#747474] shrink-0'}>
-									{EditedAt()}
 								</div>
 								<div className={'ml-5 shrink-0'}>
 									<ChatToolBar />
 								</div>
 							</div>
-							<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible pb-4" ref={chatRef}>
+							<div onScroll={(e) => { handleScroll(e) }} className="2xl:max-w-[1280px] chat-scroll max-w-[860px] w-full h-full overflow-y-auto overflow-x-visible mb-48 sm:mb-4" ref={chatRef}>
 								{/* <Message Message={
 									{
 										created_by: 'annotation',
@@ -601,7 +601,7 @@ export function Chat(props) {
 									clearInputOnSubmit={true}
 									forceFocus={forceInputFocus.value}
 								/>
-								<div className={'absolute bottom-0 z-50 text-[#747474] text-xs self-start py-2'}>
+								<div className={'absolute bottom-4 -left-12 sm:bottom-2 sm:left-0 z-50  text-[#747474] text-xs self-start py-2'}>
 									<ToolbarHelp onChat={true} />
 									{fileUpdating &&
 										<div className={'text-[#EF4444]'}>
