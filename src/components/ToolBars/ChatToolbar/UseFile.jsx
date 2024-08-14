@@ -111,11 +111,9 @@ export function UseFile(props) {
   useEffect(async () => {
     inputRef.current.value = '';
     inputRef.current.focus();
-  }, [props.Visible]);
 
-    useEffect(async () => {
-      await dispatch(refreshGoogleToken());
-    }, []);
+    await dispatch(refreshGoogleToken());
+  }, [props.Visible]);
 
   const url = useSignal('');
 
