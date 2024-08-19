@@ -112,7 +112,9 @@ export function UseFile(props) {
     inputRef.current.value = '';
     inputRef.current.focus();
 
-    await dispatch(refreshGoogleToken());
+    if (props.Visible) {
+      await dispatch(refreshGoogleToken());
+    }
 
   }, [props.Visible]);
 

@@ -127,11 +127,11 @@ export function MockChat(props) {
     return (
       <div className={'flex w-full page-start'}>
         <div className={'flex w-full mx-4'}>
-          <div className={'pt-10 pl-4 mr-7 flex flex-col'}>
+          <div className={'pt-10 pl-4 mr-7 sm:flex flex-col hidden'}>
             <img className="w-8 h-8 border border-[#DBDBDB] rounded-full invisible" />
           </div>
           <div className="mx-auto 2xl:max-w-[1280px] max-w-[860px] w-full">
-            <div className="h-[100vh] flex flex-col pt-4 pb-2">
+            <div className="h-[100vh] flex flex-col pt-4 sm:pb-2">
               <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
                 <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
                   Welcome back!!
@@ -144,15 +144,17 @@ export function MockChat(props) {
               <div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto" ref={chatRef}>
                 <Message Loading={true} Message={msg} />
               </div>
-              <PromptInput
-                showModels={true}
-                Icon={'send'}
-                blockSending={false}
-                WSsendMessage={() => { }}
-                SubmitButtonText={'Send Prompt'}
-                handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
-                SecondButton={true}
-              />
+              <div className={'relative'}>
+                <PromptInput
+                  showModels={true}
+                  Icon={'send'}
+                  blockSending={false}
+                  WSsendMessage={() => { }}
+                  SubmitButtonText={'Send Prompt'}
+                  handleSubmitButton={(value) => { callCreateChat(value.promptArray) }}
+                  SecondButton={true}
+                />
+              </div>
               <div className={'absolute bottom-2 text-[#747474] text-xs self-start py-2'}>
                 <ToolbarHelp onChat={true} />
               </div>

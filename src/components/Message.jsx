@@ -178,7 +178,7 @@ export function Message(props) {
               <div className={'self-center flex'}>
                 <div onClick={e => handlePillClick(e)} className={(EditEnabled.value ? 'hidden' : '') + " mx-4 self-center overflow-hidden leading-6  inline-block break-all text-[#202020] text-sm user-message"} dangerouslySetInnerHTML={{ __html: props.Message.content_html ? props.Message.content_html : props.Message.content }}></div>
               </div>
-              <div className={'max-w-[92%] w-full ml-4 p-2 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
+              <div className={'max-w-[92%] w-full ml-4 p-2 pt-4 bg-white rounded  ' + (EditEnabled.value ? '' : 'hidden')}>
                 <PromptInput
                   blockSending={false}
                   WSsendMessage={() => { }}
