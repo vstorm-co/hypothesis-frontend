@@ -9,7 +9,7 @@ export function Toast(props) {
 
   return (
     <StyleTransition
-      in={true}
+      in={toast.active}
       duration={300}
       styles={{
         enter: { opacity: 0 },
