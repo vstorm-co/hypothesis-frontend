@@ -86,7 +86,7 @@ export function App() {
 				<main>
 					<div className="desktop:flex overflow-hidden relative">
 						<SideBar />
-						<div className={'absolute z-[1000000] left-2/3 top-4 transform -translate-x-3/4'}>
+						<div className={'absolute z-[1000000] left-1/2 top-4 transform -translate-x-8'}>
 							<Toast />
 						</div>
 						<div class="chatbox flex w-full pl-12 desktop:pl-0">
