@@ -102,7 +102,7 @@ export function OrgSettings() {
           <div className={''}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Organization Settings
-              <button type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+              <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                 Save Changes
               </button>
             </div>
@@ -166,7 +166,7 @@ export function OrgSettings() {
                           <div className={'mt-4 flex gap-4'}>
                             <div className={'w-1/2'}>
                               <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                                Preffered Model
+                                Preferred Model
                               </div>
 
                               <div class="relative">

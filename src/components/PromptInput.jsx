@@ -417,6 +417,15 @@ export function PromptInput(props) {
     props.handleSetBlock(false);
   }
 
+  function handlePaste(e) {
+    e.preventDefault();
+    const regexp = /<!--[\s\S]*?-->|<\/?(?!ol\b|ul\b|li\b)[a-z][\w-]*(?:\s+[^<>]*)?>/g;
+
+    let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace(/\n\s*\n/g, '').trim()
+
+    e.target.innerHTML = target;
+  }
+
   return (
     <div className={'absolute w-[96vw] sm:w-full bottom-0 sm:bottom-2 -left-16 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white'}>
       <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
@@ -473,6 +482,7 @@ export function PromptInput(props) {
             </div>
           </div>}
         <div
+          onPaste={(e) => handlePaste(e)}
           data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
           spellCheck={false}
           ref={InputRef}
