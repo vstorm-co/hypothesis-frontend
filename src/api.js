@@ -4,13 +4,13 @@ import { route } from 'preact-router';
 import store from "./store";
 const defaultUrl = import.meta.env.VITE_API_URL;
 
-const callApi = async (url, options = {}, skip404 = false) => {
+const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
   const user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 
   const defaultOptions = {
     headers: {
       Authorization: `Bearer ${user ? user.access_token : ''}`,
-      'Content-Type': 'application/json',
+      'Content-Type': isImage ? 'multipart/form-data' : 'application/json',
     },
   }
 

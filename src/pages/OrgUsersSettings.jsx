@@ -85,9 +85,6 @@ export function OrgUsersSettings(props) {
                 </Link>
               </button>
             </div>
-            <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-              <Toast />
-            </div>
           </div>
           <div className={'max-h-[86vh] overflow-y-auto py-8 pr-1'}>
             <div className={'flex items-center w-full justify-between'}>

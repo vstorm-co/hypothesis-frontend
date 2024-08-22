@@ -4,12 +4,12 @@ import Claude from '../assets/Claude.svg';
 import Groq from '../assets/Groq.svg';
 import editPen from '../assets/edit_pen.svg';
 import angleDown from '../assets/angle-down.svg';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
-import { AddUserModel, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
-import { getOrganizationData, organizationsActions } from "../store/organizations-slice";
+import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
+import { getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
 import { Link } from "preact-router";
 
 export function OrgSettings() {
@@ -21,6 +21,29 @@ export function OrgSettings() {
   const dispatch = useDispatch();
 
   const orgName = useSignal('');
+  const orgLogo = useSignal('');
+  const newOrgLogoUrl = useSignal(null);
+
+  const logoRef = useRef(null);
+  const addModelModalRef = useRef(null);
+
+  function outsideAddModelClickHanlder(ref) {
+    useEffect(() => {
+      function handleClickOutside(e) {
+        if (ref.current && !ref.current.contains(e.target)) {
+          showAddModel.value = false;
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+      }
+    }, [ref])
+  }
+
+  outsideAddModelClickHanlder(addModelModalRef);
+
   const inviteUsers = useSignal('');
 
   const selectAddProvider = useSignal({ models: [] });
@@ -49,6 +72,8 @@ export function OrgSettings() {
     }
 
     await dispatch(AddUserModel(model));
+    dispatch(showToast({ content: 'Model Added' }))
+
     showAddModel.value = false;
     selectNewAsDefault.value = false;
   }
@@ -63,6 +88,8 @@ export function OrgSettings() {
     }
 
     await dispatch(updateUserModel(model));
+    dispatch(showToast({ content: 'Model Updated' }))
+
     showAddModel.value = false;
     selectNewAsDefault.value = false;
     selectAddProvider.value = { models: [] };
@@ -85,6 +112,7 @@ export function OrgSettings() {
     if (editModelMode.value) {
       selectAddProvider.value.default = true;
       dispatch(toggleDefaultModel(selectAddProvider.value.uuid));
+      dispatch(showToast({ content: 'Model Set as Default' }))
     }
     selectNewAsDefault.value = true
   }
@@ -94,6 +122,27 @@ export function OrgSettings() {
     return targetUser ? targetUser.is_admin : false;
   };
 
+  async function updateOrganizationData() {
+    await dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
+    if (newOrgLogoUrl.value) {
+      let imgData = new FormData();
+      imgData.append("picture", orgLogo.value);
+      await dispatch(setOrganizationImage({ imgData, uuid: organization.uuid }));
+    }
+    dispatch(showToast({ content: 'General Data Saved' }))
+  };
+
+  function handleUpdateOrgLogo(e) {
+    orgLogo.value = e.target.files[0];
+
+    let file = e.target.files[0];
+    const reader = new FileReader();
+    const url = reader.readAsDataURL(file);
+
+    reader.onloadend = function (e) {
+      newOrgLogoUrl.value = reader.result;
+    }
+  }
 
   return (
     <div className={'relative w-full'}>
@@ -102,7 +151,7 @@ export function OrgSettings() {
           <div className={''}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Organization Settings
-              <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+              <button type="submit" disabled={!isUserAdmin()} onClick={(e) => updateOrganizationData()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                 Save Changes
               </button>
             </div>
@@ -132,8 +181,15 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex'}>
-                    <img src={`${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 bg-white"></img>
+                    <img onClick={() => { logoRef.current.click() }} src={newOrgLogoUrl.value ? newOrgLogoUrl.value : `${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 rounded-lg bg-white"></img>
                     <button type="button" className="bg-[#FAFAFA] text-sm leading-6 font-bold ml-4 px-2 text-[#747474]">Remove Logo</button>
+                    <input
+                      type="file"
+                      value={orgLogo.value}
+                      className="hidden"
+                      onChange={(e) => { handleUpdateOrgLogo(e) }}
+                      ref={logoRef}
+                    />
                   </div>
                 </div>
               </div>
@@ -263,7 +319,7 @@ export function OrgSettings() {
             </div>
           </div>
         </div>
-        <div className={'pb-8 bg-white rounded z-50 top-12 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (showAddModel.value ? 'fixed' : 'hidden')}>
+        <div ref={addModelModalRef} className={'pb-8 bg-white rounded z-50 top-12 left-1/2 transform -translate-x-36 w-[640px] border shadow-xl ' + (showAddModel.value ? 'fixed' : 'hidden')}>
           <div className={'mx-auto'}>
             <div className={'px-8'}>
               <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
@@ -300,7 +356,7 @@ export function OrgSettings() {
                     </div>
 
                     <div class="relative">
-                      <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
+                      <select disabled={selectAddProvider.value.models < 1} onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
                         {selectAddProvider.value.models.map(m => (
                           <option value={m} selected={m === defaultModelToSelect.value}>{m}</option>
                         ))}

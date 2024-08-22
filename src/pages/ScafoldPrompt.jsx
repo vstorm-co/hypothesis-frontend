@@ -27,10 +27,6 @@ export function ScafoldPrompt() {
                 Default Scaffolding Prompt
               </div>
             </div>
-
-            {/* <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-              <Toast />
-            </div> */}
           </div>
           <div className={'mt-4'}>
             {/* <div className={'mb-2 pl-1 font-bold text-xs text-[#747474]'}>

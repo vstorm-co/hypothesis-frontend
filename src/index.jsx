@@ -31,6 +31,7 @@ import { RefreshToken } from './pages/RefreshToken';
 import { ScafoldPrompt } from './pages/ScafoldPrompt';
 import { OrgSettings } from './pages/OrgSettings';
 import { OrgUsersSettings } from './pages/OrgUsersSettings';
+import { Toast } from './components/Toast';
 
 export function App() {
 	useEffect(() => {
@@ -83,8 +84,11 @@ export function App() {
 		<GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
 			<Provider store={store}>
 				<main>
-					<div className="desktop:flex overflow-hidden">
+					<div className="desktop:flex overflow-hidden relative">
 						<SideBar />
+						<div className={'absolute z-[1000000] left-2/3 top-4 transform -translate-x-3/4'}>
+							<Toast />
+						</div>
 						<div class="chatbox flex w-full pl-12 desktop:pl-0">
 							<Router>
 								<MockChat path="/" />
