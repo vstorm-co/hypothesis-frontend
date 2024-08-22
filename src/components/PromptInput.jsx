@@ -421,7 +421,7 @@ export function PromptInput(props) {
     e.preventDefault();
     const regexp = /<!--[\s\S]*?-->|<\/?(?!ol\b|ul\b|li\b)[a-z][\w-]*(?:\s+[^<>]*)?>/g;
 
-    let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace(/\n\s*\n/g, '').trim()
+    let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
 
     e.target.innerHTML = target;
   }

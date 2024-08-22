@@ -107,14 +107,28 @@ export const revokeUsersAdmins = (payload) => {
   }
 }
 
-export const updateCurrentOrganization = (payload) => {
+export const updateOrganization = (payload) => {
   return async (dispatch) => {
     try {
-      const updatedOrganization = await callApi(`/organizations/${payload.uuid}`, {
+      const updatedOrganization = await callApi(`/organization/${payload.uuid}`, {
         method: 'PUT',
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ name: payload.name }),
       });
-      dispatch(organizationsActions.updateOrganizationSuccess(updatedOrganization));
+      dispatch(getOrganizationData(payload.uuid));
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const setOrganizationImage = (payload) => {
+  return async (dispatch) => {
+    try {
+      const updatedOrganization = await callApi(`/organization/set-image/${payload.uuid}`, {
+        method: 'POST',
+        body: payload.imgData,
+      }, true, true);
+      dispatch(getOrganizationData(payload.uuid));
     } catch (err) {
       console.log(err)
     }

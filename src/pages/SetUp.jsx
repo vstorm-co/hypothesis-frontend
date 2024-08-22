@@ -186,9 +186,6 @@ export const SetUp = (props) => {
           </div>
         </div>
         <div className="bg-white px-8 pb-8 rounded relative">
-          <div className={'absolute left-1/2 top-8 transform -translate-x-1/2 -translate-y-1/2'}>
-            <Toast />
-          </div>
           <div
             className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB] mb-4'}>
             Add Account

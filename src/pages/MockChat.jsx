@@ -95,10 +95,6 @@ export function MockChat(props) {
               <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
                 Welcome to Papaya
               </div>
-
-              <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-                <Toast />
-              </div>
             </div>
             <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>
 
@@ -135,10 +131,6 @@ export function MockChat(props) {
               <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
                 <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
                   Welcome back!!
-                </div>
-
-                <div className={'absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}>
-                  <Toast />
                 </div>
               </div>
               <div className="2xl:max-w-[1280px] max-w-[860px] w-full h-full overflow-y-auto" ref={chatRef}>
