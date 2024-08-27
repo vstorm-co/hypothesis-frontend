@@ -29,6 +29,7 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
           route('/_404'); break;
         } break;
     }
+    throw new Error('server error ocured')
   }
 
   return response.json();

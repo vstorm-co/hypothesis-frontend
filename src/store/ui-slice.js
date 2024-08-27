@@ -227,10 +227,11 @@ export const updateUserModel = (payload) => {
         default: payload.default,
       }
       const model = await callApi(`/user-models/${payload.uuid}`, { method: 'PUT', body: JSON.stringify(modelToUpdate) }, true);
+      dispatch(showToast({ content: 'Provider Settings Updated' }))
 
       dispatch(fetchModels())
     } catch (err) {
-      console.log(err);
+      dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
     }
   }
 }
@@ -242,7 +243,7 @@ export const toggleDefaultModel = (payload) => {
 
       dispatch(fetchModels())
     } catch (err) {
-      console.log(err);
+      dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
     }
   }
 }

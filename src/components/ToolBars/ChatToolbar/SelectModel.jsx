@@ -59,7 +59,7 @@ export function SelectModel() {
 
   if (models.length > 0) {
     return (
-      <div className={'mx-2 flex'}>
+      <div className={'mx-2 flex bg-white'}>
         <div ref={providersListRef} className={'relative providers flex shrink-0'}>
           <div onClick={() => { if (models.length > 1) providersVisible.value = true }} className={'flex shrink-0 gap-1 border border-[#DBDBDB] text-sm leading-6 rounded-tl font-bold px-2 border-b-0 cursor-pointer ' + (models.length > 1 ? 'py-1' : 'py-2')}>
             <img src={OpenAi} className={'shrink-0 w-4 ' + (currentModel.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
@@ -84,7 +84,7 @@ export function SelectModel() {
         </div>
         <div ref={modelListRef} className={'relative models'}>
           <div onClick={() => { modelsVisible.value = true }} className={'flex border truncate border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-            <div className={'min-w-[10px] max-w-[80px] lg:max-w-full truncate'}>
+            <div className={'min-w-[10px] max-w-[100px] lg:max-w-[120px] xl:max-w-full truncate'}>
               {currentModel.defaultSelected}
             </div>
             <img src={angleDown} className={'ml-1'} alt="" />
@@ -93,7 +93,7 @@ export function SelectModel() {
           <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] ' + (modelsVisible.value ? '' : 'hidden')}>
             {currentModel.models?.map(model => (
               <div onClick={() => handleModelSelect(model)} className={' max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow ' + (currentModel.defaultSelected === model ? 'box-shadow' : '')}>
-                <div className={'max-w-full truncate ml-[5px] text-sm  leading-6'}>
+                <div className={'truncate ml-[5px] text-sm  leading-6'}>
                   {model}
                 </div>
               </div>
