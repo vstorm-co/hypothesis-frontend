@@ -72,7 +72,6 @@ export function OrgSettings() {
     }
 
     await dispatch(AddUserModel(model));
-    dispatch(showToast({ content: 'Model Added' }))
 
     showAddModel.value = false;
     selectNewAsDefault.value = false;
@@ -122,14 +121,19 @@ export function OrgSettings() {
     return targetUser ? targetUser.is_admin : false;
   };
 
+
+
+  let OrgUpdateNameTimeout;
   async function updateOrganizationData() {
-    await dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
-    if (newOrgLogoUrl.value) {
-      let imgData = new FormData();
-      imgData.append("picture", orgLogo.value);
-      await dispatch(setOrganizationImage({ imgData, uuid: organization.uuid }));
-    }
-    dispatch(showToast({ content: 'General Data Saved' }))
+    clearTimeout(OrgUpdateNameTimeout);
+    OrgUpdateNameTimeout = setTimeout(() => {
+      dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
+    }, 1000)
+    // if (newOrgLogoUrl.value) {
+    //   let imgData = new FormData();
+    //   imgData.append("picture", orgLogo.value);
+    //   await dispatch(setOrganizationImage({ imgData, uuid: organization.uuid }));
+    // }
   };
 
   function handleUpdateOrgLogo(e) {
@@ -146,17 +150,17 @@ export function OrgSettings() {
 
   return (
     <div className={'relative w-full'}>
-      <div className={'pb-8 bg-white w-[780px] mx-auto'}>
+      <div className={'bg-white w-[780px] mx-auto'}>
         <div className={'mx-auto'}>
           <div className={''}>
-            <div className={'text-[#595959] font-bold text-lg leading-6 py-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
+            <div className={'text-[#595959] font-bold text-lg leading-6 pt-4 pb-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Organization Settings
-              <button type="submit" disabled={!isUserAdmin()} onClick={(e) => updateOrganizationData()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+              {/* <button type="submit" disabled={!isUserAdmin()} onClick={(e) => updateOrganizationData()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                 Save Changes
-              </button>
+              </button> */}
             </div>
           </div>
-          <div className={'max-h-[86vh] overflow-y-auto pt-8 pr-1'}>
+          <div className={'max-h-[93vh] overflow-y-auto pt-8 pr-2.5'}>
             <div className={''}>
               <div className={'text-sm leading-6 font-bold'}>
                 General
@@ -170,7 +174,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input onInput={(e) => orgName.value = e.currentTarget.value} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
+                    <input onChange={(e) => { orgName.value = e.currentTarget.value; updateOrganizationData() }} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
                   </div>
                 </div>
                 <div className={'w-1/2'} >
@@ -211,7 +215,7 @@ export function OrgSettings() {
                               <img src={Claude} className={'w-4 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
                               <img src={Groq} className={'w-4 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
                               <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
-                              <span className={'text-[#595959] '}>{model.uuid}</span>
+                              {/* <span className={'text-[#595959] '}>{model.uuid}</span> */}
                             </div>
                             {isUserAdmin() &&
                               <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
@@ -220,7 +224,7 @@ export function OrgSettings() {
                             }
                           </div>
                           <div className={'mt-4 flex gap-4'}>
-                            <div className={'w-1/2 border'}>
+                            <div className={'w-1/2'}>
                               <div className="text-xs font-bold text-[#747474] mb-1 flex">
                                 Preferred Model
                               </div>
@@ -234,7 +238,7 @@ export function OrgSettings() {
                                 <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
                               </div>
                             </div>
-                            <div className={'w-1/2 border'}>
+                            <div className={'w-1/2'}>
                               <div className="text-xs font-bold text-[#747474] mb-1 flex">
                                 API key
                               </div>

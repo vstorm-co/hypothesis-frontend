@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 import { userActions } from "./user-slice";
+import { showToast } from "./ui-slice";
 import callApi from "../api";
 
 const organizationsSlice = createSlice({
@@ -56,7 +57,6 @@ export const getOrganizationData = (payload) => {
     try {
       const organization = await callApi(`/organization/${payload}`, {}, true);
       dispatch(organizationsActions.setCurrentOrganization(organization));
-      console.log(organization);
     } catch (err) {
       console.log(err);
     }
@@ -113,8 +113,9 @@ export const updateOrganization = (payload) => {
       const updatedOrganization = await callApi(`/organization/${payload.uuid}`, {
         method: 'PUT',
         body: JSON.stringify({ name: payload.name }),
-      });
-      dispatch(getOrganizationData(payload.uuid));
+      }, true);
+      dispatch(getOrganizationData(payload.uuid))
+      dispatch(showToast({ content: 'Organization Name Saved' }));
     } catch (err) {
       console.log(err)
     }
