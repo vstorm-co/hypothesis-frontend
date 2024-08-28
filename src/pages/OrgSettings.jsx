@@ -220,13 +220,13 @@ export function OrgSettings() {
                             }
                           </div>
                           <div className={'mt-4 flex gap-4'}>
-                            <div className={'w-1/2'}>
+                            <div className={'w-1/2 border'}>
                               <div className="text-xs font-bold text-[#747474] mb-1 flex">
                                 Preferred Model
                               </div>
 
-                              <div class="relative">
-                                <select onChange={(e) => changeProviderDefaultSelected(model, e.currentTarget.value)} className={"overflow-hidden pr-6 "} >
+                              <div class="relative w-full">
+                                <select onChange={(e) => changeProviderDefaultSelected(model, e.currentTarget.value)} className={"overflow-hidden"} >
                                   {model.models.map(m => (
                                     <option value={m} selected={m === model.defaultSelected}>{m}</option>
                                   ))}
@@ -234,7 +234,7 @@ export function OrgSettings() {
                                 <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
                               </div>
                             </div>
-                            <div className={'w-1/2'}>
+                            <div className={'w-1/2 border'}>
                               <div className="text-xs font-bold text-[#747474] mb-1 flex">
                                 API key
                               </div>
