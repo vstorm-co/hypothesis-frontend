@@ -15,7 +15,7 @@ import { createAnnotations, getProfileInfo, hSliceActions } from '../../../../st
 import { createChat, getChatsData } from '../../../../store/chats-slice';
 
 export function Form() {
-  const annotationFormRef = useRef();
+  const annotationFormRef = useRef(null);
   const currentChat = useSelector(state => state.chats.currentChat);
   const currentUser = useSelector(state => state.user.currentUser);
   const currentModel = useSelector(state => state.ui.currentModel);
