@@ -62,7 +62,7 @@ export function Templates() {
   }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
   useEffect(() => {
-    if (currentTemplate.uuid != '') {
+    if (currentTemplate.uuid != '' && virtuoso.current) {
       let target = templates.find(t => t.uuid === currentTemplate.uuid);
       let targetIndex = templates.indexOf(target);
 
