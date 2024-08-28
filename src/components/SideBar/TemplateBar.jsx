@@ -16,7 +16,7 @@ export function TemplateBar(props) {
     if (width < 960) {
       dispatch(uiActions.setExpandSideBar(false));
     }
-    dispatch(chatsActions.setCurrentChat({ messages: [] }));
+    dispatch(chatsActions.setCurrentChat({ uuid: null }));
 
 
     dispatch(selectTemplate(props.TemplateData.uuid));

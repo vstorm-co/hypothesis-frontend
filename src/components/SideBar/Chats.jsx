@@ -3,7 +3,7 @@ import { ChatBar } from './ChatBar';
 import plus from '../../assets/plus.svg';
 import { chatsActions, createChat, getChatsData } from "../../store/chats-slice";
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useReducer, useState } from 'preact/hooks';
 import { Loading } from '../Loading';
 import { Virtuoso } from 'react-virtuoso';
 import { Transition } from 'react-transition-group';
@@ -40,7 +40,6 @@ export function Chats(props) {
 
   const organizationChats = useSelector(state => state.chats.organizationChats);
 
-
   useEffect(() => {
     let virtuosoScroll = document.querySelector('.chats div[data-testid="virtuoso-scroller"]');
 
@@ -64,39 +63,8 @@ export function Chats(props) {
 
   }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
-  useEffect(() => {
-    if (info.total > 5) {
-      setLoadSize(5);
-    }
-    if (info.total < 5) {
-      setLoadSize(0);
-    }
-
-    if ((info.total - size) < 5) {
-      setLoadSize(info.total - size);
-    }
-  }, [info.total]);
-
   function callCreateChat() {
     dispatch(createChat('New Chat'));
-  }
-
-  function callLoadMore() {
-    dispatch(chatsActions.setSize(size + loadSize));
-
-    if (info.total > 20) {
-      setLoadSize(10);
-    }
-
-    if (info.total < 5) {
-      setLoadSize(0);
-    }
-
-    if ((info.total - (size + loadSize)) < 5) {
-      setLoadSize(info.total - (size + loadSize));
-    }
-
-    dispatch(getChatsData());
   }
 
   function handleToggleScrollBar(tgl) {
