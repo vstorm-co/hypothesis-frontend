@@ -1,4 +1,5 @@
 import { refreshUserToken } from "./store/user-slice";
+import { showToast } from "./store/ui-slice";
 import { route } from 'preact-router';
 
 import store from "./store";
@@ -29,6 +30,7 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
           route('/_404'); break;
         } break;
     }
+    store.dispatch(showToast({ content: `Error occurred` }, true, response))
     throw new Error('server error ocured')
   }
 

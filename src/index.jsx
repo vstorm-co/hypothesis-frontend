@@ -89,7 +89,7 @@ export function App() {
 						<Form />
 
 						<SideBar />
-						<div className={'absolute z-[1000000] left-1/2 top-4 transform -translate-x-8'}>
+						<div className={'absolute z-[1000000] right-8 top-4 transform'}>
 							<Toast />
 						</div>
 						<div class="chatbox flex w-full pl-12 desktop:pl-0">

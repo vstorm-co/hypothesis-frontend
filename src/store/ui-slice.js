@@ -15,6 +15,8 @@ const uiSlice = createSlice({
     toast: {
       active: false,
       content: '',
+      error: false,
+      errorData: {},
     },
     adminBar: {
       active: false,
@@ -69,6 +71,8 @@ const uiSlice = createSlice({
   reducers: {
     toggleToast(state, action) {
       state.toast.active = action.payload.tgl;
+      state.toast.error = action.payload.error;
+      state.toast.errorData = action.payload.errorData;
       if (action.payload.content) {
         state.toast.content = action.payload.content;
       }
@@ -162,12 +166,14 @@ export const uiActions = uiSlice.actions;
 
 export default uiSlice;
 
-export const showToast = (payload) => {
+export const showToast = (payload, error = false, errorData = {}) => {
   return async (dispatch) => {
-    dispatch(uiActions.toggleToast({ tgl: true, content: payload.content }));
-    setTimeout(() => {
-      dispatch(uiActions.toggleToast({ tgl: false }))
-    }, 3000);
+    dispatch(uiActions.toggleToast({ tgl: true, content: payload.content, error, errorData }));
+    if (!error) {
+      setTimeout(() => {
+        dispatch(uiActions.toggleToast({ tgl: false, content: '', error: false, errorData: {} }))
+      }, 2200);
+    }
   }
 }
 
@@ -203,13 +209,10 @@ export const AddUserModel = (payload) => {
       const model = await callApi('/user-models', { method: 'POST', body: JSON.stringify(payload) }, true);
 
       if (payload.default) {
-        try {
-          const tgl = await callApi(`/user-models/${model.uuid}/toggle-default`, { method: 'POST' }, true);
-        } catch (err) {
-          console.log(err);
-        }
+        const tgl = await callApi(`/user-models/${model.uuid}/toggle-default`, { method: 'POST' }, true);
       }
 
+      dispatch(showToast({ content: 'Model Added' }))
       dispatch(fetchModels())
     } catch (err) {
       console.log(err);
@@ -231,7 +234,7 @@ export const updateUserModel = (payload) => {
 
       dispatch(fetchModels())
     } catch (err) {
-      dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
+      // dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
     }
   }
 }
@@ -243,7 +246,7 @@ export const toggleDefaultModel = (payload) => {
 
       dispatch(fetchModels())
     } catch (err) {
-      dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
+      // dispatch(showToast({ content: 'Something is wrong with the servers. Try again later.' }))
     }
   }
 }
