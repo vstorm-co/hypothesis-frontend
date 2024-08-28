@@ -32,6 +32,7 @@ import { ScafoldPrompt } from './pages/ScafoldPrompt';
 import { OrgSettings } from './pages/OrgSettings';
 import { OrgUsersSettings } from './pages/OrgUsersSettings';
 import { Toast } from './components/Toast';
+import { Form } from './components/ToolBars/ChatToolbar/SmartAnnotate/Form';
 
 export function App() {
 	useEffect(() => {
@@ -85,6 +86,8 @@ export function App() {
 			<Provider store={store}>
 				<main>
 					<div className="desktop:flex overflow-hidden relative">
+						<Form />
+
 						<SideBar />
 						<div className={'absolute z-[1000000] left-1/2 top-4 transform -translate-x-8'}>
 							<Toast />
