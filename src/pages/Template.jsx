@@ -24,7 +24,7 @@ export function Template(props) {
 
   useEffect(() => {
     dispatch(selectTemplate(props.matches.id));
-    dispatch(chatsActions.setCurrentChat({}));
+    // dispatch(chatsActions.setCurrentChat({}));
   }, [window.location.href]);
 
   function handleToggleEditTitle(tgl) {
