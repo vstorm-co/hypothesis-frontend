@@ -21,7 +21,6 @@ import { SetUp } from './pages/SetUp.jsx';
 import { Chat } from './pages/Chat.jsx';
 
 import { getUserOrganizationsData } from "./store/user-slice";
-import { fetchModels } from './store/ui-slice';
 import { getTemplatesData } from "./store/templates-slice";
 import { getChatsData, chatsActions, selectChat } from "./store/chats-slice";
 import { fetchAvailableProviders, fetchModels, uiActions } from './store/ui-slice';
