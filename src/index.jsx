@@ -77,6 +77,8 @@ export function App() {
 				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(uiActions.toggleFileUpdating(false));
 				}
+			} else if (json_data.type === 'user-model-changed') {
+				store.dispatch(getOrganizationData(currentUser.organization_uuid));
 			}
 		}
 	});
