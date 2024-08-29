@@ -31,7 +31,9 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
         } break;
     }
     console.log(response);
-    store.dispatch(showToast({ content: `Error occurred` }, true, response))
+    if (user) {
+      store.dispatch(showToast({ content: `Error occurred` }, true, response))
+    };
     throw new Error('server error ocured')
   }
 
