@@ -419,12 +419,16 @@ export function PromptInput(props) {
   }
 
   function handlePaste(e) {
-    e.preventDefault();
-    const regexp = /<!--[\s\S]*?-->|<\/?(?!ol\b|ul\b|li\b)[a-z][\w-]*(?:\s+[^<>]*)?>/g;
+    if (e.clipboardData.getData("text/html")) {
+      e.preventDefault();
+      const regexp = /<!--[\s\S]*?-->|<\/?(?!ol\b|ul\b|li\b)[a-z][\w-]*(?:\s+[^<>]*)?>/g;
 
-    let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
+      let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
 
-    e.target.innerHTML = target;
+      e.target.innerHTML = target;
+      input.value = target;
+      setRange();
+    }
   }
 
   return (
