@@ -426,6 +426,7 @@ export function PromptInput(props) {
       let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
 
       e.target.innerHTML = target;
+      input.value = target;
     }
   }
 
