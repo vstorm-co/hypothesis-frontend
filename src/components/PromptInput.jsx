@@ -427,6 +427,7 @@ export function PromptInput(props) {
 
       e.target.innerHTML = target;
       input.value = target;
+      setRange();
     }
   }
 
