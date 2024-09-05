@@ -458,7 +458,7 @@ input:disabled {
 
 body {
 	font-family: 'SF Pro';
-	@apply mr-9
+	@apply mr-5
 }
 
 

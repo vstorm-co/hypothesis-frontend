@@ -66,7 +66,7 @@ export function SelectModel() {
             <img src={Claude} className={'shrink-0 w-4 ' + (currentModel.provider != 'Claude' ? 'hidden' : '')} alt="" />
             <img src={Groq} className={'shrink-0 w-4 ' + (currentModel.provider != 'Groq' ? 'hidden' : '')} alt="" />
             <span className={(models.length > 1 ? 'hidden lg:block' : 'hidden')}>{currentModel.provider}</span>
-            <img src={angleDown} className={'ml-1 ' + (models.length > 1 ? '' : 'hidden')} alt="" />
+            <img src={angleDown} className={'ml-1 w-4 ' + (models.length > 1 ? '' : 'hidden')} alt="" />
           </div>
 
           <div className={'absolute bottom-9 shadow-2xl left-0 bg-white border rounded border-[#DBDBDB] w-[140px] ' + (providersVisible.value ? '' : 'hidden')}>
@@ -84,7 +84,7 @@ export function SelectModel() {
         </div>
         <div ref={modelListRef} className={'relative models'}>
           <div onClick={() => { modelsVisible.value = true }} className={'flex border truncate border-[#DBDBDB] text-sm leading-6 rounded-tr px-2 py-1 border-b-0 border-l-0 cursor-pointer'}>
-            <div className={'min-w-[10px] max-w-[100px] lg:max-w-[120px] xl:max-w-full truncate'}>
+            <div className={'min-w-[60px] w-[16vw] sm:w-[12vw] lg:w-[13vw] max-w-[170px] truncate'}>
               {currentModel.defaultSelected}
             </div>
             <img src={angleDown} className={'ml-1'} alt="" />
