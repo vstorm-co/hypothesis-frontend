@@ -11,8 +11,10 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
   const defaultOptions = {
     headers: {
       Authorization: `Bearer ${user ? user.access_token : ''}`,
-      'Content-Type': isImage ? 'multipart/form-data' : 'application/json',
-    },
+    }
+  }
+  if (!isImage) {
+    defaultOptions.headers = { ...defaultOptions.headers, 'Content-Type': 'application/json' }
   }
 
 

@@ -68,7 +68,9 @@ export const SetUp = (props) => {
     await dispatch(getTemplatesData());
     await dispatch(uiActions.setHideSideBar(false));
 
-    await dispatch(AddUserModel(model));
+    if (selectAddProvider.value.providers) {
+      await dispatch(AddUserModel(model));
+    }
 
     let redirectToChat = localStorage.getItem("redirect_to_chat");
     if (redirectToChat?.length > 0) {

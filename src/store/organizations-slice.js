@@ -4,6 +4,8 @@ import { userActions } from "./user-slice";
 import { showToast } from "./ui-slice";
 import callApi from "../api";
 
+import { getUserOrganizationsData } from "./user-slice";
+
 const organizationsSlice = createSlice({
   name: 'organizations',
   initialState: {
@@ -114,8 +116,9 @@ export const updateOrganization = (payload) => {
         method: 'PUT',
         body: JSON.stringify({ name: payload.name }),
       }, true);
-      dispatch(getOrganizationData(payload.uuid))
-      dispatch(showToast({ content: 'Organization Name Saved' }));
+      dispatch(getOrganizationData(payload.uuid));
+      dispatch(getUserOrganizationsData());
+      dispatch(showToast({ content: 'General Data Saved' }));
     } catch (err) {
       console.log(err)
     }
@@ -127,9 +130,10 @@ export const setOrganizationImage = (payload) => {
     try {
       const updatedOrganization = await callApi(`/organization/set-image/${payload.uuid}`, {
         method: 'POST',
-        body: payload.imgData,
+        body: payload.data,
       }, true, true);
       dispatch(getOrganizationData(payload.uuid));
+      dispatch(getUserOrganizationsData());
     } catch (err) {
       console.log(err)
     }

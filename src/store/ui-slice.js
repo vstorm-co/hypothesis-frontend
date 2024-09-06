@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import callApi from "../api";
 
 // const copyAs = localStorage.getItem('ANT_defaultSaveAs');
+let width = window.innerWidth;
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -29,7 +30,7 @@ const uiSlice = createSlice({
     copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
-    expandSidebar: true,
+    expandSidebar: width > 960,
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,

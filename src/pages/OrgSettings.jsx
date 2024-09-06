@@ -121,19 +121,14 @@ export function OrgSettings() {
     return targetUser ? targetUser.is_admin : false;
   };
 
+  function updateOrganizationData() {
+    dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
 
-
-  let OrgUpdateNameTimeout;
-  async function updateOrganizationData() {
-    clearTimeout(OrgUpdateNameTimeout);
-    OrgUpdateNameTimeout = setTimeout(() => {
-      dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
-    }, 1000)
-    // if (newOrgLogoUrl.value) {
-    //   let imgData = new FormData();
-    //   imgData.append("picture", orgLogo.value);
-    //   await dispatch(setOrganizationImage({ imgData, uuid: organization.uuid }));
-    // }
+    if (newOrgLogoUrl.value) {
+      let formData = new FormData();
+      formData.append("picture", orgLogo.value)
+      dispatch(setOrganizationImage({ uuid: organization.uuid, data: formData }));
+    }
   };
 
   function handleUpdateOrgLogo(e) {
@@ -148,16 +143,15 @@ export function OrgSettings() {
     }
   }
 
+
+
   return (
     <div className={'relative w-full'}>
-      <div className={'bg-white w-[780px] mx-auto'}>
+      <div className={'bg-white desktop:w-[780px] mx-auto px-4 desktop:px-8'}>
         <div className={'mx-auto'}>
           <div className={''}>
             <div className={'text-[#595959] font-bold text-lg leading-6 pt-4 pb-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
               Organization Settings
-              {/* <button type="submit" disabled={!isUserAdmin()} onClick={(e) => updateOrganizationData()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                Save Changes
-              </button> */}
             </div>
           </div>
           <div className={'max-h-[93vh] overflow-y-auto pt-8 pr-2.5'}>
@@ -174,7 +168,7 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input onChange={(e) => { orgName.value = e.currentTarget.value; updateOrganizationData() }} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
+                    <input onChange={(e) => { orgName.value = e.currentTarget.value; }} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
                   </div>
                 </div>
                 <div className={'w-1/2'} >
@@ -185,8 +179,8 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'flex'}>
-                    <img onClick={() => { logoRef.current.click() }} src={newOrgLogoUrl.value ? newOrgLogoUrl.value : `${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 rounded-lg bg-white"></img>
-                    <button type="button" className="bg-[#FAFAFA] text-sm leading-6 font-bold ml-4 px-2 text-[#747474]">Remove Logo</button>
+                    <img src={newOrgLogoUrl.value ? newOrgLogoUrl.value : `${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 rounded-lg bg-white"></img>
+                    <button onClick={() => { logoRef.current.click() }} type="button" className="bg-[#FAFAFA] text-sm leading-6 font-bold ml-4 px-2 text-[#747474]">Change Logo</button>
                     <input
                       type="file"
                       value={orgLogo.value}
@@ -196,6 +190,11 @@ export function OrgSettings() {
                     />
                   </div>
                 </div>
+              </div>
+              <div className={'mt-4'}>
+                <button onClick={() => updateOrganizationData()} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  Save General
+                </button>
               </div>
             </div>
 
@@ -230,7 +229,7 @@ export function OrgSettings() {
                               </div>
 
                               <div class="relative w-full">
-                                <select onChange={(e) => changeProviderDefaultSelected(model, e.currentTarget.value)} className={"overflow-hidden"} >
+                                <select onChange={(e) => changeProviderDefaultSelected(model, e.currentTarget.value)} className={"overflow-hidden truncate pr-4"} >
                                   {model.models.map(m => (
                                     <option value={m} selected={m === model.defaultSelected}>{m}</option>
                                   ))}
@@ -268,8 +267,8 @@ export function OrgSettings() {
               </div>
               <div className={'mt-4 flex w-full pb-4'}>
                 <div className={'w-1/2'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Invite New Users <span class="ml-0.5 font-normal">(Comma-separated for multiple)</span>
+                  <div className="text-xs font-bold text-[#747474] mb-1">
+                    <span>Invite New Users</span> <span class="font-normal">(Comma-separated for multiple)</span>
                     {/* {!urlValid.value &&
                     <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
                   } */}
@@ -290,7 +289,7 @@ export function OrgSettings() {
                 </div>
                 <div className={'w-1/2 border-l border-[#DBDBDB] ml-4 pl-4'} >
                   <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Users <span class="ml-0.5 font-normal">(4)</span>
+                    Users <span class="ml-0.5 font-normal">({organization?.users.length})</span>
                     {/* {!urlValid.value &&
                     <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
                   } */}
@@ -299,7 +298,9 @@ export function OrgSettings() {
                     {organization?.users.map((user) =>
                       <div className='flex items-center gap-2'>
                         <img src={user.picture} className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                        {user.name}
+                        <div className={'truncate'}>
+                          {user.name}
+                        </div>
                       </div>
                     )}
                   </div>
