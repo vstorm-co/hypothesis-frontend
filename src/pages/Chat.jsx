@@ -265,6 +265,7 @@ export function Chat(props) {
 			sendMessage(JSON.stringify({ "type": "stop_generation", "user": user.email }));
 			dispatch(getChatsData(currentChat.uuid));
 		} else {
+			console.log(value);
 			sendMsgTwo(value.promptArray);
 		}
 	}

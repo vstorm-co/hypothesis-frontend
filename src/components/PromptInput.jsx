@@ -200,10 +200,17 @@ export function PromptInput(props) {
     } else {
       const parser = new DOMParser();
 
-      let targetPreview = input.value;
-
-      let htmlText = parser.parseFromString(targetPreview, 'text/html');
+      let htmlText = parser.parseFromString(input.value, 'text/html');
       let currentTemplates = htmlText.querySelectorAll('span.pill');
+
+      let editableElements = htmlText.querySelectorAll('span[contenteditable="true"]');
+
+      editableElements.forEach(element => {
+        element.setAttribute('contenteditable', 'false');
+      })
+
+      let targetPreview = htmlText.body.innerHTML;
+
       let lastPreview = targetPreview;
 
       while (currentTemplates.length > 0) {
@@ -249,7 +256,7 @@ export function PromptInput(props) {
         promptArray = promptArray.map((p, index) => {
           return {
             prompt: p.replace("&nbsp;", "").replace("<br>", "").trim(),
-            html: input.value.replace("&nbsp;", "").trim(),
+            html: htmlArray[index].replace("&nbsp;", "").trim(),
           };
         });
       }
@@ -423,11 +430,32 @@ export function PromptInput(props) {
       e.preventDefault();
       const regexp = /<!--[\s\S]*?-->|<\/?(?!ol\b|ul\b|li\b)[a-z][\w-]*(?:\s+[^<>]*)?>/g;
 
-      let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
+      // let target = e.clipboardData.getData("text/html").replace(regexp, "").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
+      let target = e.clipboardData.getData("text/html").replace(/[\u200B-\u200D\uFEFF\u00A0]+/g, '').replace("&nbsp;", "").replace("<br>", "").replace(/[\r\n]/g, "").trim()
 
-      e.target.innerHTML = target;
-      input.value = target;
-      setRange();
+      let element = document.createElement('span');
+      element.innerHTML = target;
+      element.setAttribute("contenteditable", 'true');
+
+      caret.value.insertNode(element);
+
+      caret.value.setStartAfter(element);
+      caret.value.setEndAfter(element);
+
+      const space = document.createTextNode(' ');
+      caret.value.insertNode(space);
+
+      caret.value.collapse(false);
+
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(caret.value);
+      caret.value.detach();
+
+      setTimeout(() => {
+        input.value = `${InputRef.current.innerHTML}`;
+      }, 100);
+
+      props.handleSetBlock(false);
     }
   }
 
