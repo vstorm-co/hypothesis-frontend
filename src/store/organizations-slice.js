@@ -125,6 +125,22 @@ export const updateOrganization = (payload) => {
   }
 }
 
+export const AddUsersToOrganization = (payload) => {
+  return async (dispatch) => {
+    try {
+      const response = await callApi(`/organization/add-organization-permissions/${payload.uuid}`, {
+        method: 'POST',
+        body: JSON.stringify(payload.data)
+      })
+      dispatch(getOrganizationData(payload.uuid));
+      dispatch(getUserOrganizationsData());
+      dispatch(showToast({ content: 'Users added to organization' }));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
 export const setOrganizationImage = (payload) => {
   return async (dispatch) => {
     try {

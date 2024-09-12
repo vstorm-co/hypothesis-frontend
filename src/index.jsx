@@ -35,10 +35,10 @@ import { Toast } from './components/Toast';
 import { Form } from './components/ToolBars/ChatToolbar/SmartAnnotate/Form';
 
 export function App() {
-	useEffect(() => {
+	useEffect(async () => {
 		store.dispatch(uiActions.toggleChatsLoading(true))
 
-		store.dispatch(getUserOrganizationsData());
+		await store.dispatch(getUserOrganizationsData());
 		store.dispatch(getChatsData());
 		store.dispatch(getTemplatesData());
 

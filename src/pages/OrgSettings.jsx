@@ -9,7 +9,7 @@ import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
 import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
-import { getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
+import { AddUsersToOrganization, getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
 import { Link } from "preact-router";
 
 export function OrgSettings() {
@@ -45,6 +45,8 @@ export function OrgSettings() {
   outsideAddModelClickHanlder(addModelModalRef);
 
   const inviteUsers = useSignal('');
+  const inviteAsAdmin = useSignal(false);
+  const inviteUsersError = useSignal(false);
 
   const selectAddProvider = useSignal({ models: [] });
   const defaultModelToSelect = useSignal('');
@@ -57,7 +59,16 @@ export function OrgSettings() {
     await dispatch(chatsActions.setCurrentChat({}));
     await dispatch(getOrganizationData(currentUser.organization_uuid));
 
+    let width = window.innerWidth;
+
+    if (width < 960) {
+      dispatch(uiActions.setExpandSideBar(false));
+    }
   }, [])
+
+  useEffect(() => {
+    dispatch(getOrganizationData(currentUser.organization_uuid));
+  }, [currentUser.organization_uuid])
 
   useEffect(() => {
     orgName.value = organization.name;
@@ -69,6 +80,7 @@ export function OrgSettings() {
       defaultSelected: defaultModelToSelect.value,
       api_key: apikey.value,
       default: selectNewAsDefault.value,
+      organization_uuid: organization.uuid
     }
 
     await dispatch(AddUserModel(model));
@@ -84,6 +96,7 @@ export function OrgSettings() {
       defaultSelected: defaultModelToSelect.value,
       api_key: apikey.value,
       default: selectNewAsDefault.value,
+      organization_uuid: organization.uuid
     }
 
     await dispatch(updateUserModel(model));
@@ -143,7 +156,26 @@ export function OrgSettings() {
     }
   }
 
+  function handleAddUsersToOrganization() {
+    inviteUsersError.value = false;
+    let emails = inviteUsers.value.split(",");
 
+    emails.forEach(email => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.trim())) {
+        inviteUsersError.value = true;
+      }
+    });
+    if (inviteUsersError.value) {
+      return
+    } else {
+      let data = {
+        user_ids: '',
+        admins_ids: '',
+      }
+      // dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
+    }
+  }
 
   return (
     <div className={'relative w-full'}>
@@ -154,7 +186,7 @@ export function OrgSettings() {
               Organization Settings
             </div>
           </div>
-          <div className={'max-h-[93vh] overflow-y-auto pt-8 pr-2.5'}>
+          <div className={'desktop:max-h-[93vh] max-h-[92vh] overflow-y-auto pt-8 pr-2.5 pb-4'}>
             <div className={''}>
               <div className={'text-sm leading-6 font-bold'}>
                 General
@@ -268,7 +300,7 @@ export function OrgSettings() {
               <div className={'mt-4 flex w-full pb-4'}>
                 <div className={'w-1/2'}>
                   <div className="text-xs font-bold text-[#747474] mb-1">
-                    <span>Invite New Users</span> <span class="font-normal">(Comma-separated for multiple)</span>
+                    <span>Add New Users</span> <span class="font-normal">(Comma-separated for multiple)</span>
                     {/* {!urlValid.value &&
                     <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
                   } */}
@@ -276,14 +308,19 @@ export function OrgSettings() {
                   <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
                     <input onInput={(e) => { inviteUsers.value = e.currentTarget.value }} value={inviteUsers.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 px-2 bg-[#FAFAFA]'} placeholder={'example@email.com, example2@email.com'} type="text" />
                   </div>
+                  {inviteUsersError.value &&
+                    <div className={'text-red-500 text-xs pl-1 mt-0.5 '}>
+                      Some of these are not exactly an email address.
+                    </div>
+                  }
                   <div className={'flex items-center gap-2 mt-2 text-sm leading-6 shrink-0'}>
-                    <label class="switch">
-                      <input type="checkbox" checked={true} />
+                    <label class="switch shrink-0">
+                      <input onChange={(e) => inviteAsAdmin.value = !inviteAsAdmin.value} type="checkbox" checked={inviteAsAdmin.value} />
                       <span class="slider round"></span>
                     </label>
                     <span>Add as Admin?</span>
                   </div>
-                  <button type="submit" disabled={true} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
+                  <button onClick={() => handleAddUsersToOrganization()} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
                     Send Invites
                   </button>
                 </div>
@@ -295,8 +332,8 @@ export function OrgSettings() {
                   } */}
                   </div>
                   <div className={'grid grid-cols-2 gap-1 text-sm leading-6'}>
-                    {organization?.users.map((user) =>
-                      <div className='flex items-center gap-2'>
+                    {organization?.users.map((user, index) =>
+                      <div className={'flex items-center gap-2 ' + (organization?.users.length === 1 ? 'col-span-2' : '')}>
                         <img src={user.picture} className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
                         <div className={'truncate'}>
                           {user.name}
@@ -391,7 +428,7 @@ export function OrgSettings() {
                   </div>
                   <div className={'flex gap-1 justify-end'}>
                     <button type="button" onClick={() => { showAddModel.value = false }} className="btn-second">Cancel</button>
-                    <button onClick={() => { if (editModelMode.value) updateModel(); else addModel() }} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{editModelMode.value ? 'Edit' : 'Add'} Model</button>
+                    <button onClick={() => { if (editModelMode.value) updateModel(); else addModel() }} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{editModelMode.value ? 'Save Changes' : 'Add Model'} </button>
                   </div>
                 </div>
               </div>
