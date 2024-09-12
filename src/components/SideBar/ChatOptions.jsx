@@ -58,7 +58,7 @@ export function ChatOptions(props) {
 
   return (
     <div ref={optionsRef} className="ml-2 relative">
-      <div style={chatOptions.position} className={"fixed z-50 border border-[#595959] rounded w-[240px] left-[328px] bg-[#0F0F0F] " + (chatOptions.show ? '' : 'hidden')}>
+      <div style={chatOptions.position} className={"fixed z-50 border border-[#595959] rounded w-[240px] left-10 md:left-[328px] bg-[#0F0F0F] " + (chatOptions.show ? '' : 'hidden')}>
         <div className="text-sm leading-6">
           <div onClick={e => { callCopyLink(); e.stopPropagation(); }} className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
             <div>
