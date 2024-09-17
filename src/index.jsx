@@ -33,6 +33,7 @@ import { OrgSettings } from './pages/OrgSettings';
 import { OrgUsersSettings } from './pages/OrgUsersSettings';
 import { Toast } from './components/Toast';
 import { Form } from './components/ToolBars/ChatToolbar/SmartAnnotate/Form';
+import { PersonalSettings } from './pages/PersonalSettings';
 
 export function App() {
 	useEffect(async () => {
@@ -102,6 +103,7 @@ export function App() {
 								<Authorize path="/auth" />
 								<OrgSettings path="/organization-settings" />
 								<OrgUsersSettings path="/organization-users" />
+								<PersonalSettings path="/personal-settings" />
 								<RefreshToken path="/refresh-token" />
 								<SetUp path="/setup" />
 								<Chat path="/chats/:id" />
