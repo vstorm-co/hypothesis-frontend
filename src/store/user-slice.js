@@ -49,6 +49,9 @@ const userSlice = createSlice({
       let users = JSON.parse(localStorage.getItem('ANT_users'));
       let usersTable = users ? users : [];
 
+      console.log(action);
+      console.log(usersTable);
+
       if (action.payload.access_token && !usersTable.find(u => u.organization_uuid === action.payload.organization_uuid && u.user_id === action.payload.user_id)) {
         let newUser = {
           user_id: action.payload.user_id,

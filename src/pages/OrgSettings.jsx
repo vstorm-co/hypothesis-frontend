@@ -186,7 +186,7 @@ export function OrgSettings() {
               Organization Settings
             </div>
           </div>
-          <div className={'desktop:max-h-[93vh] max-h-[92vh] overflow-y-auto pt-8 pr-2.5 pb-4'}>
+          <div className={'desktop:max-h-[91vh] max-h-[92vh] overflow-y-auto pt-8 pr-2.5'}>
             <div className={''}>
               <div className={'text-sm leading-6 font-bold'}>
                 General

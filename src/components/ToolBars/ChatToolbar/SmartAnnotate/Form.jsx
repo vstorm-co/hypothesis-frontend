@@ -316,14 +316,14 @@ export function Form() {
   }
 
   return (
-    <div ref={annotationFormRef} className={'pb-8 bg-white rounded z-50 top-2 left-1/2 transform w-[640px] border shadow-xl ' + (visible ? 'fixed ' : 'hidden ') + (expandSidebar ? '-translate-x-36' : '-translate-x-1/2')}>
+    <div ref={annotationFormRef} className={'pb-8 bg-white rounded z-[150] top-2 left-1/2 transform w-full md:w-[640px] border shadow-xl ' + (visible ? 'fixed ' : 'hidden ') + (expandSidebar ? '-translate-x-36' : '-translate-x-1/2')}>
       <div className={'mx-auto'}>
-        <div className={'px-8'}>
+        <div className={'px-4 md:px-8'}>
           <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
             AI Annotations
           </div>
         </div>
-        <div className={'max-h-[76vh] overflow-y-auto pl-8 pr-4 mr-4'}>
+        <div className={'max-h-[76vh] overflow-y-auto pl-4 md:pl-8 pr-4 mr-4'}>
           <div className={'py-4 text-sm leading-6'}>
             <div className={'font-bold text-[#202020]'}>Create smart annotations from any URL</div>
             <p className={'text-[#595959] mt-2'}>Already using Hypothesis and want to add some annotations to spark a conversation? Get started by configuring your account below:</p>
@@ -395,7 +395,7 @@ export function Form() {
                 <div className={'px-2 shrink-0'}>
                   <img src={urlType.value === 'url' ? share : googleDrive} className={'w-[16px] h-[16px]'} alt="" />
                 </div>
-                <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter HTML, PDF, YouTube URL or choose file from Google →'} type="text" />
+                <input value={url.value} onInput={onUrlInput} disabled={urlType.value === 'google-drive'} className={'w-full disabled:opacity-100 text-xs md:text-sm focus:outline-none placeholder:text-[#747474] border-r py-2 bg-[#FAFAFA]'} placeholder={'Enter HTML, PDF, YouTube URL or choose file from Google →'} type="text" />
                 <div title={urlType.value === 'url' ? 'Click to select a file in google drive' : 'Click to insert Url'} onClick={() => { handleInputType() }} className={'rounded-[4px] rounded-l-none  cursor-pointer shrink-0 p-3 bg-white'}>
                   <img src={urlType.value === 'url' ? googleDrive : share} className={''} alt="" />
                 </div>
@@ -449,15 +449,17 @@ export function Form() {
           <div className={'mt-4 flex justify-center ' + (annotationLoading.value ? '' : 'hidden')}>
             <Loading />
           </div>
-          <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
-            <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
-              <label class="switch">
-                <input type="checkbox" onChange={() => handleConfirmDeleteAnt()} checked={confirmDeleteAnnotations.value} />
-                <span class="slider round"></span>
-              </label>
-              <span>Delete existing annotations</span>
-            </div>
-            <div className={'flex gap-1 justify-end'}>
+          <div className={'mt-4 pb-2 flex w-full items-center flex-wrap gap-y-2'}>
+            {profileInfo.userid &&
+              <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0'}>
+                <label class="switch">
+                  <input type="checkbox" onChange={() => handleConfirmDeleteAnt()} checked={confirmDeleteAnnotations.value} />
+                  <span class="slider round"></span>
+                </label>
+                <span>Delete existing annotations</span>
+              </div>
+            }
+            <div className={'flex gap-1 ml-auto justify-end'}>
               <button disabled={annotationLoading.value} type="button" onClick={() => { dispatch(hSliceActions.toggleFormVisible(false)); }} className="btn-second">Cancel</button>
               <button disabled={annotationLoading.value} onClick={() => tryHandleSubmit()} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{profileInfo.userid ? 'Create Annotations' : 'Next Step'}</button>
             </div>

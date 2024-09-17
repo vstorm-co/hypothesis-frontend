@@ -30,6 +30,7 @@ export function Chats(props) {
 
   const showFadeBottom = useSignal(true);
   const showFadeTop = useSignal(false);
+  const topItemCount = useSignal(-1);
 
   const isFirstRender = useSignal(true);
 
@@ -63,6 +64,17 @@ export function Chats(props) {
 
   }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
+  useEffect(() => {
+    if (currentChat.uuid === null) {
+      topItemCount.value = -1;
+      dispatch(uiActions.toggleChatsLoading(false));
+      dispatch(uiActions.toggleChatsLoading(true));
+    } else {
+      topItemCount.value = 1;
+    }
+
+  }, [currentChat.uuid])
+
   function callCreateChat() {
     dispatch(createChat('New Chat'));
   }
@@ -88,7 +100,7 @@ export function Chats(props) {
           <Virtuoso
             style={{ height: '100%', scrollbarWidth: 'none' }}
             data={chats}
-            topItemCount={currentChat.uuid ? 1 : 0}
+            topItemCount={topItemCount.value}
             isScrolling={setIsScrolling}
             itemContent={(_, chat) => (
               <ChatBar handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} ChatData={chat} />
