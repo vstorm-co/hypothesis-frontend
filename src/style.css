@@ -560,11 +560,11 @@ button.btn-second:active:enabled {
 }
 
 .inputtext {
-	@apply p-2 text-sm leading-6 bg-[#FAFAFA] text-[#202020] border border-[#DBDBDB] rounded-[4px] focus:outline-none placeholder:text-[#747474]
+	@apply p-2 text-xs md:text-sm leading-6 bg-[#FAFAFA] text-[#202020] border border-[#DBDBDB] rounded-[4px] focus:outline-none placeholder:text-[#747474]
 }
 
 .inputtext-url {
-	@apply p-2 text-sm leading-6 bg-[#FAFAFA] text-[#202020] border border-[#DBDBDB] rounded-[4px] rounded-r-none focus:outline-none placeholder:text-[#747474]
+	@apply p-2 text-xs md:text-sm leading-6 bg-[#FAFAFA] text-[#202020] border border-[#DBDBDB] rounded-[4px] rounded-r-none focus:outline-none placeholder:text-[#747474]
 }
 
 .inputtext.wrong {
@@ -572,7 +572,7 @@ button.btn-second:active:enabled {
 }
 
 select {
-	@apply p-2 appearance-none w-full text-sm leading-6 border border-[#DBDBDB] rounded-[4px] bg-[#FAFAFA] focus:outline-none
+	@apply p-2 appearance-none w-full text-xs md:text-sm leading-6 border border-[#DBDBDB] rounded-[4px] bg-[#FAFAFA] focus:outline-none
 }
 
 option[value=""] {

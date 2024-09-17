@@ -6,9 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import AccountOptions from './AccountOptions';
 import { route } from 'preact-router';
 
-import { userActions } from '../../../store/user-slice';
+import { userActions, getUserOrganizationsData } from '../../../store/user-slice';
 import { chatsActions, getChatsData } from '../../../store/chats-slice';
-
+import { fetchModels } from '../../../store/ui-slice';
 import { AddNewAccount } from './AddNewAccount';
 import { ClearStorage } from './ClearStorage';
 import { Detonate } from './Detonate';
@@ -48,6 +48,9 @@ export function Footer() {
   function setUser(user) {
     dispatch(userActions.setUser(user));
     dispatch(chatsActions.setCurrentChat({}))
+    dispatch(getUserOrganizationsData());
+    dispatch(fetchModels());
+
     dispatch(getChatsData());
     dispatch(getTemplatesData());
     route('/');
@@ -73,7 +76,7 @@ export function Footer() {
         </div>
         <div className={'flex flex-col transition-all duration-300 ' + (switchUserActive.value ? 'max-h-[260px]' : 'max-h-0 overflow-hidden')}>
           {users.map(user => {
-            if (user.id !== currentUser.id)
+            if (user.user_id != currentUser.user_id)
               return (
                 <div onClick={() => setUser(user)} class={'flex items-center px-2 py-1 rounded mt-4 relative cursor-pointer'}>
                   <img src={user.organization_uuid ? `${import.meta.env.VITE_API_URL}${user.organization_logo}` : user.picture} className="w-8 h-8 bg-white rounded-full mr-2"></img>

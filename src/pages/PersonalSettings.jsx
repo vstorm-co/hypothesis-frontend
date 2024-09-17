@@ -9,10 +9,8 @@ import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
 import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
-import { AddUsersToOrganization, getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
-import { Link } from "preact-router";
 
-export function OrgSettings() {
+export function PersonalSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
   const organization = useSelector(state => state.organizations.currentOrganization);
   const models = useSelector(state => state.ui.models);
@@ -20,11 +18,6 @@ export function OrgSettings() {
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const dispatch = useDispatch();
 
-  const orgName = useSignal('');
-  const orgLogo = useSignal('');
-  const newOrgLogoUrl = useSignal(null);
-
-  const logoRef = useRef(null);
   const addModelModalRef = useRef(null);
 
   function outsideAddModelClickHanlder(ref) {
@@ -44,10 +37,6 @@ export function OrgSettings() {
 
   outsideAddModelClickHanlder(addModelModalRef);
 
-  const inviteUsers = useSignal('');
-  const inviteAsAdmin = useSignal(false);
-  const inviteUsersError = useSignal(false);
-
   const selectAddProvider = useSignal({ models: [] });
   const defaultModelToSelect = useSignal('');
   const showAddModel = useSignal(false);
@@ -57,7 +46,6 @@ export function OrgSettings() {
   useEffect(async () => {
     await dispatch(templatesActions.setCurrentTemplate({}));
     await dispatch(chatsActions.setCurrentChat({}));
-    await dispatch(getOrganizationData(currentUser.organization_uuid));
 
     let width = window.innerWidth;
 
@@ -65,14 +53,6 @@ export function OrgSettings() {
       dispatch(uiActions.setExpandSideBar(false));
     }
   }, [])
-
-  useEffect(() => {
-    dispatch(getOrganizationData(currentUser.organization_uuid));
-  }, [currentUser.organization_uuid])
-
-  useEffect(() => {
-    orgName.value = organization.name;
-  }, [organization])
 
   async function addModel() {
     let model = {
@@ -134,103 +114,17 @@ export function OrgSettings() {
     return targetUser ? targetUser.is_admin : false;
   };
 
-  function updateOrganizationData() {
-    dispatch(updateOrganization({ uuid: organization.uuid, name: orgName.value }));
-
-    if (newOrgLogoUrl.value) {
-      let formData = new FormData();
-      formData.append("picture", orgLogo.value)
-      dispatch(setOrganizationImage({ uuid: organization.uuid, data: formData }));
-    }
-  };
-
-  function handleUpdateOrgLogo(e) {
-    orgLogo.value = e.target.files[0];
-
-    let file = e.target.files[0];
-    const reader = new FileReader();
-    const url = reader.readAsDataURL(file);
-
-    reader.onloadend = function (e) {
-      newOrgLogoUrl.value = reader.result;
-    }
-  }
-
-  function handleAddUsersToOrganization() {
-    inviteUsersError.value = false;
-    let emails = inviteUsers.value.split(",");
-
-    emails.forEach(email => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email.trim())) {
-        inviteUsersError.value = true;
-      }
-    });
-    if (inviteUsersError.value) {
-      return
-    } else {
-      let data = {
-        user_ids: '',
-        admins_ids: '',
-      }
-      // dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
-    }
-  }
-
   return (
     <div className={'relative w-full'}>
       <div className={'bg-white desktop:w-[780px] mx-auto px-4 desktop:px-8'}>
         <div className={'mx-auto'}>
           <div className={''}>
             <div className={'text-[#595959] font-bold text-lg leading-6 pt-4 pb-3 text-center border-b border-[#DBDBDB] flex items-center justify-between'}>
-              Organization Settings
+              Personal Settings
             </div>
           </div>
-          <div className={'desktop:max-h-[91vh] max-h-[92vh] overflow-y-auto pt-8 pr-2.5'}>
-            <div className={''}>
-              <div className={'text-sm leading-6 font-bold'}>
-                General
-              </div>
-              <div className={'mt-4 flex w-full gap-4'}>
-                <div className={'w-1/2'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Organization Name
-                    {/* {!urlValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                  } */}
-                  </div>
-                  <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input onChange={(e) => { orgName.value = e.currentTarget.value; }} value={orgName.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r px-2 py-2 bg-[#FAFAFA]'} placeholder={''} type="text" />
-                  </div>
-                </div>
-                <div className={'w-1/2'} >
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Organization Logo <span class="ml-0.5 font-normal">(optional)</span>
-                    {/* {!urlValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                  } */}
-                  </div>
-                  <div className={'flex'}>
-                    <img src={newOrgLogoUrl.value ? newOrgLogoUrl.value : `${import.meta.env.VITE_API_URL}${organization.picture}`} className="w-10 h-10 rounded-lg bg-white"></img>
-                    <button onClick={() => { logoRef.current.click() }} type="button" className="bg-[#FAFAFA] text-sm leading-6 font-bold ml-4 px-2 text-[#747474]">Change Logo</button>
-                    <input
-                      type="file"
-                      value={orgLogo.value}
-                      className="hidden"
-                      onChange={(e) => { handleUpdateOrgLogo(e) }}
-                      ref={logoRef}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className={'mt-4'}>
-                <button onClick={() => updateOrganizationData()} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                  Save General
-                </button>
-              </div>
-            </div>
-
-            <div className={'border-y border-[#DBDBDB] mt-4 pb-4'}>
+          <div className={'desktop:max-h-[91vh] max-h-[92vh] overflow-y-auto pr-2.5'}>
+            <div className={'mt-4 pb-4'}>
               <div className={'text-sm leading-6 font-bold pt-4'}>
                 Models
               </div>
@@ -287,77 +181,10 @@ export function OrgSettings() {
                 {models.length === 0 &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
                 }
-                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
                 </button>
               </div>
-            </div>
-
-            <div className={'mt-4'}>
-              <div className={'text-sm leading-6 font-bold'}>
-                Users
-              </div>
-              <div className={'mt-4 flex w-full pb-4'}>
-                <div className={'w-1/2'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1">
-                    <span>Add New Users</span> <span class="font-normal">(Comma-separated for multiple)</span>
-                    {/* {!urlValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                  } */}
-                  </div>
-                  <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                    <input onInput={(e) => { inviteUsers.value = e.currentTarget.value }} value={inviteUsers.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r py-2 px-2 bg-[#FAFAFA]'} placeholder={'example@email.com, example2@email.com'} type="text" />
-                  </div>
-                  {inviteUsersError.value &&
-                    <div className={'text-red-500 text-xs pl-1 mt-0.5 '}>
-                      Some of these are not exactly an email address.
-                    </div>
-                  }
-                  <div className={'flex items-center gap-2 mt-2 text-sm leading-6 shrink-0'}>
-                    <label class="switch shrink-0">
-                      <input onChange={(e) => inviteAsAdmin.value = !inviteAsAdmin.value} type="checkbox" checked={inviteAsAdmin.value} />
-                      <span class="slider round"></span>
-                    </label>
-                    <span>Add as Admin?</span>
-                  </div>
-                  <button onClick={() => handleAddUsersToOrganization()} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
-                    Send Invites
-                  </button>
-                </div>
-                <div className={'w-1/2 border-l border-[#DBDBDB] ml-4 pl-4'} >
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Users <span class="ml-0.5 font-normal">({organization?.users.length})</span>
-                    {/* {!urlValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                  } */}
-                  </div>
-                  <div className={'grid grid-cols-2 gap-1 text-sm leading-6'}>
-                    {organization?.users.map((user, index) =>
-                      <div className={'flex items-center gap-2 ' + (organization?.users.length === 1 ? 'col-span-2' : '')}>
-                        <img src={user.picture} className={'w-8 h-8 border border-[#DBDBDB] rounded-full'} alt="" />
-                        <div className={'truncate'}>
-                          {user.name}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <Link href={'/organization-users'} className={"bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded inline-block " + (isUserAdmin() ? '' : 'pointer-events-none opacity-50')}>
-                    Edit Users
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className={'mt-4 border border-[#DBDBDB] rounded-lg border-dashed p-4'}>
-              <div className={'text-sm leading-6 font-bold'}>
-                Danger Zone
-              </div>
-              <div className={'text-[#747474] text-sm leading-6 mt-4'}>
-                Deleting an organization will remove all users’ access and sign them out immediately.
-              </div>
-              <button type="submit" disabled={true} className="bg-[#EF4444] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
-                Delete Organization
-              </button>
             </div>
           </div>
         </div>

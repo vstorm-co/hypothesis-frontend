@@ -87,7 +87,6 @@ export const SetUp = (props) => {
         name: orgName,
       };
 
-      // Send a POST request to create the organization
       const response = await fetch(`${import.meta.env.VITE_API_URL}/organization/${DomainOrgs.value[0].uuid}`, {
         method: 'PUT',
         headers: {
@@ -159,6 +158,7 @@ export const SetUp = (props) => {
   useEffect(() => {
     getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
+    dispatch(uiActions.setOrganizationCreated(null));
   }, [])
 
   const handleUploadClick = () => {
