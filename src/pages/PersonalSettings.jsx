@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
-import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
+import { AddUserModel, fetchModels, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
 
 export function PersonalSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
@@ -46,6 +46,7 @@ export function PersonalSettings() {
   useEffect(async () => {
     await dispatch(templatesActions.setCurrentTemplate({}));
     await dispatch(chatsActions.setCurrentChat({}));
+    dispatch(fetchModels());
 
     let width = window.innerWidth;
 

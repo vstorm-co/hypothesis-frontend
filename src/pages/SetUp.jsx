@@ -11,7 +11,7 @@ import angleDown from '../assets/angle-down.svg';
 import papaya from '../assets/images/papaya.png';
 
 import { getOrganizationsData } from '../store/organizations-slice.js';
-import { AddUserModel, showToast, uiActions } from "../store/ui-slice.js";
+import { AddUserModel, showToast, uiActions, fetchModels } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
 import { getChatsData } from '../store/chats-slice';
 import { getTemplatesData } from '../store/templates-slice';
@@ -29,12 +29,16 @@ function toggleEditOrganization() {
 }
 
 export const SetUp = (props) => {
+  const models = useSelector(state => state.ui.models);
   const user = useSelector(state => state.user.currentUser);
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const DomainOrgs = useSignal([]);
+
   const apikey = useSignal('');
   const defaultModelToSelect = useSignal('');
   const selectAddProvider = useSignal({ models: [] });
+  const modelValid = useSignal(true);
+
   const dispatch = useDispatch();
 
   const organizationCreated = useSelector(state => state.ui.organizationCreated)
@@ -52,6 +56,13 @@ export const SetUp = (props) => {
   const [orgLogoUrl, setorgLogoUrl] = useState('');
 
   const handleAddPersonal = async () => {
+
+    modelValid.value = apikey.value.length != 0 && defaultModelToSelect.value.length != 0 && selectAddProvider.value.provider;
+
+    if (!modelValid.value && models.length === 0) {
+      return
+    }
+
     let model = {
       provider: selectAddProvider.value.provider,
       defaultSelected: defaultModelToSelect.value,
@@ -158,7 +169,9 @@ export const SetUp = (props) => {
   useEffect(() => {
     getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
-    dispatch(uiActions.setOrganizationCreated(null));
+    dispatch(fetchModels());
+
+    console.log(models);
   }, [])
 
   const handleUploadClick = () => {
@@ -210,9 +223,6 @@ export const SetUp = (props) => {
             </div>
 
             <div className={'flex flex-col mt-8'}>
-
-              {/* (organizationCreated && organizationCreated.created) */}
-              {/* organizationCreated.created  */}
               {(organizationCreated && !organizationCreated.created) &&
                 <div>
                   <div className={'text-[#202020] font-bold text-sm leading-6'}>
@@ -294,54 +304,68 @@ export const SetUp = (props) => {
                     </div>
 
                   </div>
-                  <div className={'flex flex-col'}>
-                    <div className={'text-[#202020] font-bold text-sm leading-6'}>
-                      Model
-                    </div>
-                    <div className={'text-sm leading-6 text-[#595959] mt-2'}>
-                      In order to use Papaya you must select a default model and provide API credentials. You can always add additional models or make changes later in the Organization Settings page.
-                    </div>
+                </div>
+              }
+              {organizationCreated === null &&
+                <div>
+                  <div className={'text-[#202020] font-bold text-sm leading-6'}>
+                    Nice to see you again!
+                  </div>
+                  <div className={'text-sm text-[#595959]  mt-2'}>
+                    It's been a while! Amazing to have you back.
+                  </div>
+                </div>
+              }
+              {models.length === 0 &&
+                <div className={'flex flex-col mt-6'}>
+                  <div className={'text-[#202020] font-bold text-sm leading-6'}>
+                    Model
+                  </div>
+                  <div className={'text-sm leading-6 text-[#595959] mt-2'}>
+                    In order to use Papaya you must select a default model and provide API credentials. You can always add additional models or make changes later in the Organization Settings page.
+                  </div>
 
-                    <div className={'mt-4'}>
+                  {!modelValid.value &&
+                    <div class="text-[#EF4444] text-sm leading-6 mt-2">You have to configure AI model</div>
+                  }
+
+                  <div className={'mt-4'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      Provider
+                    </div>
+                    <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
+                      {availableProviders.map(model => (
+                        <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                          <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+                          <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
+                          <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
+                          {model.provider}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={'overflow-hidden flex gap-4'}>
+                    <div className={'mt-4 flex-1'}>
                       <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                        Provider
+                        Preffered Model
                       </div>
-                      <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
-                        {availableProviders.map(model => (
-                          <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
-                            <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-                            <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
-                            <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
-                            {model.provider}
-                          </div>
-                        ))}
+
+                      <div class="relative">
+                        <select disabled={selectAddProvider.value.models.length === 0} onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden border-[#DBDBDB] pr-6 py-2.5"} >
+                          {selectAddProvider.value.models.map(m => (
+                            <option value={m}>{m}</option>
+                          ))}
+                        </select>
+                        <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
                       </div>
                     </div>
-                    <div className={'overflow-hidden flex gap-4'}>
-                      <div className={'mt-4 flex-1'}>
-                        <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                          Preffered Model
-                        </div>
+                    <div className={'mt-4 flex-1'}>
+                      <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                        API Key
 
-                        <div class="relative">
-                          <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
-                            {selectAddProvider.value.models.map(m => (
-                              <option value={m}>{m}</option>
-                            ))}
-                          </select>
-                          <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
-                        </div>
                       </div>
-                      <div className={'mt-4 flex-1'}>
-                        <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                          API Key
-                          {/* {!urlValid.value &&
-                            <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                          } */}
-                        </div>
-                        <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                          <input value={apikey.value} onInput={(e) => apikey.value = e.currentTarget.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r p-2 bg-[#FAFAFA]'} placeholder={'Enter API Key'} type="text" />
-                        </div>
+                      <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
+                        <input value={apikey.value} onInput={(e) => apikey.value = e.currentTarget.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r p-2 bg-[#FAFAFA]'} placeholder={'Enter API Key'} type="text" />
                       </div>
                     </div>
                   </div>

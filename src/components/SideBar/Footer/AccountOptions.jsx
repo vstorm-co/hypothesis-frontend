@@ -49,7 +49,8 @@ class AccountOptions extends Component {
     route('/');
   }
 
-  logOut = () => {
+  logOut = (e) => {
+    e.stopPropagation();
     this.props.dispatch(userActions.logoutUser(this.props.user));
     this.props.tglSwitch();
   }

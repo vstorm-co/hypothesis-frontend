@@ -31,6 +31,7 @@ export function AddNewAccount() {
       });
 
       dispatch(userActions.setUser(data));
+      dispatch(uiActions.setOrganizationCreated(data.organization))
       dispatch(userActions.setUsers(data));
 
       route('/setup');

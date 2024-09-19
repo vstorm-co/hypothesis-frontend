@@ -57,7 +57,6 @@ export function OrgSettings() {
   useEffect(async () => {
     await dispatch(templatesActions.setCurrentTemplate({}));
     await dispatch(chatsActions.setCurrentChat({}));
-    await dispatch(getOrganizationData(currentUser.organization_uuid));
 
     let width = window.innerWidth;
 
@@ -67,7 +66,9 @@ export function OrgSettings() {
   }, [])
 
   useEffect(() => {
-    dispatch(getOrganizationData(currentUser.organization_uuid));
+    if (currentUser.organization_uuid) {
+      dispatch(getOrganizationData(currentUser.organization_uuid));
+    }
   }, [currentUser.organization_uuid])
 
   useEffect(() => {
@@ -173,7 +174,7 @@ export function OrgSettings() {
         user_ids: '',
         admins_ids: '',
       }
-      // dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
+      dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
     }
   }
 
