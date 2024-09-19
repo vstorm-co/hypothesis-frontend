@@ -170,9 +170,18 @@ export function OrgSettings() {
     if (inviteUsersError.value) {
       return
     } else {
-      let data = {
-        user_ids: '',
-        admins_ids: '',
+      let data;
+      if (inviteAsAdmin.value) {
+
+        data = {
+          user_ids: '',
+          admins_ids: emails,
+        }
+      } else {
+        data = {
+          user_ids: emails,
+          admins_ids: '',
+        }
       }
       dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
     }

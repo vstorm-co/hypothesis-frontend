@@ -316,7 +316,7 @@ export const SetUp = (props) => {
                   </div>
                 </div>
               }
-              {models.length === 0 &&
+              {models?.length === 0 &&
                 <div className={'flex flex-col mt-6'}>
                   <div className={'text-[#202020] font-bold text-sm leading-6'}>
                     Model

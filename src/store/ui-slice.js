@@ -58,9 +58,7 @@ const uiSlice = createSlice({
       },
     ],
 
-    models: [
-
-    ],
+    models: null,
     currentModel: {
       provider: '',
       models: [
