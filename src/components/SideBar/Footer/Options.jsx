@@ -7,6 +7,7 @@ import { Link, route } from 'preact-router';
 import { chatsActions } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
 import { fetchModels, uiActions } from '../../../store/ui-slice';
+import { getUserOrganizationsData } from "../../../store/user-slice";
 
 const showOptions = signal(false);
 
@@ -47,6 +48,7 @@ export function Options(props) {
     dispatch(uiActions.toggleChatsLoading(true));
     if (users.length > 1) {
       dispatch(userActions.setUser(users[0]));
+      dispatch(getUserOrganizationsData());
       route('/');
     } else {
       route('/auth');
