@@ -16,9 +16,9 @@ export function SelectModel() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let defaultModel = models.find(m => m.default === true);
+    let defaultModel = models?.find(m => m.default === true);
     if (defaultModel === undefined) {
-      defaultModel = models[0];
+      defaultModel = models ? models[0] : '';
     }
     dispatch(uiActions.setCurrentModel(defaultModel));
   }, [models])
@@ -57,7 +57,7 @@ export function SelectModel() {
     modelsVisible.value = false;
   }
 
-  if (models.length > 0) {
+  if (models?.length > 0) {
     return (
       <div className={'mx-2 flex bg-white'}>
         <div ref={providersListRef} className={'relative providers flex shrink-0'}>
