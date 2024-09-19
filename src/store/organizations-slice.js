@@ -128,7 +128,7 @@ export const updateOrganization = (payload) => {
 export const AddUsersToOrganization = (payload) => {
   return async (dispatch) => {
     try {
-      const response = await callApi(`/organization/add-organization-permissions/${payload.uuid}`, {
+      const response = await callApi(`/organization/add-new-users/${payload.uuid}`, {
         method: 'POST',
         body: JSON.stringify(payload.data)
       })
