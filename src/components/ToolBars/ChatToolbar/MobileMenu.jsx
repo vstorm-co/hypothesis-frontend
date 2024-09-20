@@ -166,12 +166,6 @@ export function MobileMenu(props) {
                 <span className={'ml-2 text-sm leading-6'}>AI Annotations</span>
               </div>
             </div>
-            <div onClick={(e) => { }} className={'hover:bg-[#F2F2F2] cursor-pointer p-1 border-b border-[#DBDBDB] ' + (false ? 'bg-[#F2F2F2]' : '')}>
-              <div className={'flex px-1'}>
-                <img src={showLogs} alt="" className={'w-4'} />
-                <span className={'ml-2 text-sm leading-6'}>Show Logs</span>
-              </div>
-            </div>
           </div>
         }
         {listMode.value === 'templates' &&

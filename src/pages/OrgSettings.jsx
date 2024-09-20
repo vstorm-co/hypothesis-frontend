@@ -57,7 +57,6 @@ export function OrgSettings() {
   useEffect(async () => {
     await dispatch(templatesActions.setCurrentTemplate({}));
     await dispatch(chatsActions.setCurrentChat({}));
-    await dispatch(getOrganizationData(currentUser.organization_uuid));
 
     let width = window.innerWidth;
 
@@ -67,7 +66,9 @@ export function OrgSettings() {
   }, [])
 
   useEffect(() => {
-    dispatch(getOrganizationData(currentUser.organization_uuid));
+    if (currentUser.organization_uuid) {
+      dispatch(getOrganizationData(currentUser.organization_uuid));
+    }
   }, [currentUser.organization_uuid])
 
   useEffect(() => {
@@ -169,11 +170,20 @@ export function OrgSettings() {
     if (inviteUsersError.value) {
       return
     } else {
-      let data = {
-        user_ids: '',
-        admins_ids: '',
+      let data;
+      if (inviteAsAdmin.value) {
+
+        data = {
+          user_ids: '',
+          admins_ids: emails,
+        }
+      } else {
+        data = {
+          user_ids: emails,
+          admins_ids: '',
+        }
       }
-      // dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
+      dispatch(AddUsersToOrganization({ uuid: organization.uuid, data }))
     }
   }
 
@@ -235,7 +245,7 @@ export function OrgSettings() {
                 Models
               </div>
               <div className={'pb-4'}>
-                {models.length > 0 &&
+                {models?.length > 0 &&
                   <div className={'mt-4 flex flex-col gap-4 w-full pb-4'}>
                     {models.map(model => (
                       <div className={'border border-[#DBDBDB] rounded-lg p-4 w-full'}>
@@ -284,7 +294,7 @@ export function OrgSettings() {
                     ))}
                   </div>
                 }
-                {models.length === 0 &&
+                {models?.length === 0 &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
                 }
                 <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
@@ -374,7 +384,7 @@ export function OrgSettings() {
                   </div>
                   <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
                     {availableProviders.map(model => (
-                      <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                      <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models?.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
                         <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
                         <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
                         <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />

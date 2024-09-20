@@ -58,15 +58,13 @@ const uiSlice = createSlice({
       },
     ],
 
-    models: [
-
-    ],
+    models: null,
     currentModel: {
-      provider: 'OpenAI',
+      provider: '',
       models: [
-        'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+
       ],
-      defaultSelected: 'GPT-4o',
+      defaultSelected: '',
     },
   },
   reducers: {
