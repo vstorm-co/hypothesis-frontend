@@ -37,14 +37,19 @@ import { PersonalSettings } from './pages/PersonalSettings';
 
 export function App() {
 	useEffect(async () => {
-		store.dispatch(uiActions.toggleChatsLoading(true))
+		let state = store.getState()
 
-		await store.dispatch(getUserOrganizationsData());
-		store.dispatch(getChatsData());
-		store.dispatch(getTemplatesData());
+		store.dispatch(uiActions.toggleChatsLoading(true));
 
-		store.dispatch(fetchModels());
-		store.dispatch(fetchAvailableProviders());
+		console.log("USER");
+		if (state.user.currentUser.access_token != null) {
+			await store.dispatch(getUserOrganizationsData());
+			store.dispatch(getChatsData());
+			store.dispatch(getTemplatesData());
+
+			store.dispatch(fetchModels());
+			store.dispatch(fetchAvailableProviders());
+		};
 	}, [])
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
@@ -60,7 +65,7 @@ export function App() {
 			let state = store.getState();
 			let json_data = JSON.parse(e.data)
 
-			if (json_data.type === 'room-changed') {
+			if (json_data.type === 'room-changed' && state.user.currentUser.access_token != null) {
 				if (json_data.id === state.chats.currentChat.uuid) {
 					store.dispatch(selectChat(json_data.id));
 				}
