@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSignal } from '@preact/signals';
 import { uiActions } from '../../store/ui-slice';
 
-export const ChatBar = props => {
+export function ChatBar(props) {
   const dispatch = useDispatch();
   const currentChat = useSelector(state => state.chats.currentChat);
   const chatOptions = useSelector(state => state.ui.chatOptions);
