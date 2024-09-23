@@ -4,10 +4,11 @@ import { signal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/compat';
 import { Link, route } from 'preact-router';
 
-import { chatsActions } from '../../../store/chats-slice';
+import { chatsActions, getChatsData } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
-import { fetchModels, uiActions } from '../../../store/ui-slice';
+import { fetchAvailableProviders, fetchModels, uiActions } from '../../../store/ui-slice';
 import { getUserOrganizationsData } from "../../../store/user-slice";
+import { getTemplatesData } from '../../../store/templates-slice';
 
 const showOptions = signal(false);
 
@@ -48,7 +49,12 @@ export function Options(props) {
     dispatch(uiActions.toggleChatsLoading(true));
     if (users.length > 1) {
       dispatch(userActions.setUser(users[0]));
-      dispatch(getUserOrganizationsData());
+      await dispatch(getUserOrganizationsData());
+      dispatch(getChatsData());
+      dispatch(getTemplatesData());
+
+      dispatch(fetchModels());
+      dispatch(fetchAvailableProviders());
       route('/');
     } else {
       route('/auth');

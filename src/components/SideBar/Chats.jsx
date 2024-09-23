@@ -96,7 +96,7 @@ export function Chats(props) {
         </div>
       </div>
       {!ui.chatsLoading &&
-        <div className={'text-[#747474] text-sm ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden px-2')}>
+        <div className={'text-[#747474] px-2 text-sm ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
           No chats to display.
         </div>
       }

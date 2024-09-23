@@ -166,10 +166,10 @@ export const SetUp = (props) => {
     }
   }
 
-  useEffect(() => {
-    getDomainOrganizations();
+  useEffect(async () => {
+    await getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
-    dispatch(fetchModels());
+    await dispatch(fetchModels());
 
     console.log(models);
   }, [])
