@@ -79,7 +79,7 @@ export const SetUp = (props) => {
     await dispatch(getTemplatesData());
     await dispatch(uiActions.setHideSideBar(false));
 
-    if (selectAddProvider.value.providers) {
+    if (selectAddProvider.value.provider) {
       await dispatch(AddUserModel(model));
     }
 
