@@ -34,8 +34,8 @@ const uiSlice = createSlice({
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,
-    chatsLoading: false,
-    templatesLoading: false,
+    chatsLoading: true,
+    templatesLoading: true,
     searchFilters: {
       visibility: 'all',
       sortBy: '-updated_at',

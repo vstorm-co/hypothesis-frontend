@@ -85,7 +85,7 @@ export function Templates() {
           <div>New</div> <img class="ml-1" src={plus} alt="" />
         </div>
       </div>
-      {!ui.chatsLoading &&
+      {(!ui.chatsLoading && templates.length > 0) &&
         <div className={'flex flex-col overflow-y-auto relative templates'}>
           {/* {templates?.map(temp => (
             <TemplateBar TemplateData={temp} />
@@ -102,11 +102,11 @@ export function Templates() {
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
           <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ')}></div>
-          <div className={'text-[#747474] px-2 text-sm mt-2 ' + (templates?.length === 0 ? '' : 'hidden')}>
-            No templates
-          </div>
         </div>
       }
+      <div className={'text-[#747474] px-2 text-sm mt-2 ' + (templates?.length === 0 ? '' : 'hidden')}>
+        No templates
+      </div>
       {ui.chatsLoading &&
         <div className={'flex items-center justify-center pb-2'}>
           <Loading />
