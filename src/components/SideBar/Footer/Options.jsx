@@ -8,7 +8,7 @@ import { chatsActions, getChatsData } from '../../../store/chats-slice';
 import { userActions } from '../../../store/user-slice';
 import { fetchAvailableProviders, fetchModels, uiActions } from '../../../store/ui-slice';
 import { getUserOrganizationsData } from "../../../store/user-slice";
-import { getTemplatesData } from '../../../store/templates-slice';
+import { getTemplatesData, templatesActions } from '../../../store/templates-slice';
 
 const showOptions = signal(false);
 
@@ -45,7 +45,8 @@ export function Options(props) {
     dispatch(uiActions.toggleChatsLoading(false));
 
     await dispatch(userActions.logoutUser(currentUser));
-    await dispatch(chatsActions.setChats([]));
+    await dispatch(chatsActions.setChats({ items: [] }));
+    await dispatch(templatesActions.setTemplates({ items: [] }));
     dispatch(uiActions.toggleChatsLoading(true));
     if (users.length > 1) {
       dispatch(userActions.setUser(users[0]));
