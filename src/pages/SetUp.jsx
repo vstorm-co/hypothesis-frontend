@@ -11,7 +11,7 @@ import angleDown from '../assets/angle-down.svg';
 import papaya from '../assets/images/papaya.png';
 
 import { getOrganizationsData } from '../store/organizations-slice.js';
-import { AddUserModel, showToast, uiActions, fetchModels } from "../store/ui-slice.js";
+import { AddUserModel, showToast, uiActions, fetchModels, fetchAvailableProviders } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
 import { getChatsData } from '../store/chats-slice';
 import { getTemplatesData } from '../store/templates-slice';
@@ -155,11 +155,14 @@ export const SetUp = (props) => {
 
       DomainOrgs.value = [...organizations];
 
-      setOrgName(DomainOrgs.value[0].name);
+      if (DomainOrgs.value.length > 0) {
+        setOrgName(DomainOrgs.value[0].name);
 
-      if (!orgLogo) {
-        setOrgLogo(DomainOrgs.value[0].picture);
+        if (!orgLogo) {
+          setOrgLogo(DomainOrgs.value[0].picture);
+        }
       }
+
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);
@@ -170,8 +173,7 @@ export const SetUp = (props) => {
     await getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
     await dispatch(fetchModels());
-
-    console.log(models);
+    await dispatch(fetchAvailableProviders());
   }, [])
 
   const handleUploadClick = () => {
