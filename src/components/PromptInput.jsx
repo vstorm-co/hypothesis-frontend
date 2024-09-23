@@ -463,57 +463,56 @@ export function PromptInput(props) {
     <div className={'absolute w-[96vw] sm:w-full bottom-0 sm:bottom-2 -left-16 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white'}>
       <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
         <InlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
-        {templates?.length > 0 &&
-          <div className={'flex shrink-0'}>
-            <div className={'hidden sm:flex shrink-0'}>
-              <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
-              <ReturnResponse ReturnResponse={handleReturnResponse} />
-              <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />
-              {!props.hideAnnotate &&
-                <div className={'flex'}>
-                  <SmartAnnotate />
-                  <div onClick={() => { dispatch(hSliceActions.toggleShowLogs(!showAnnotateLogs)) }} className={'text-sm mx-2 flex cursor-pointer text-[#595959] items-center gap-2'}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C3.10457 0 4 0.89543 4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0ZM2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM4 14C4 12.8954 3.10457 12 2 12C0.89543 12 0 12.8954 0 14C0 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14ZM16 14C16 13.4477 15.5523 13 15 13H7L6.88338 13.0067C6.38604 13.0645 6 13.4872 6 14C6 14.5523 6.44772 15 7 15H15L15.1166 14.9933C15.614 14.9355 16 14.5128 16 14ZM16 8C16 7.44772 15.5523 7 15 7H7L6.88338 7.00673C6.38604 7.06449 6 7.48716 6 8C6 8.55229 6.44772 9 7 9H15L15.1166 8.99327C15.614 8.93551 16 8.51284 16 8ZM16 2C16 1.44772 15.5523 1 15 1H7L6.88338 1.00673C6.38604 1.06449 6 1.48716 6 2C6 2.55228 6.44772 3 7 3H15L15.1166 2.99327C15.614 2.93551 16 2.51284 16 2Z" fill="currentColor" />
-                    </svg>
-                    <div className={'hidden lg:flex whitespace-nowrap'}>
-                      {showAnnotateLogs ? 'Hide' : 'Show'} Logs
-                    </div>
+        <div className={'flex shrink-0'}>
+          <div className={'hidden sm:flex shrink-0'}>
+            <UseTemplate Visible={useTemplateVisible.value} onToggleVisible={handleToggleVisible} Position={props.UseTemplatePosition ? props.UseTemplatePosition : 'top'} TemplatePicked={handleUseTemplate} />
+            <ReturnResponse ReturnResponse={handleReturnResponse} />
+            <UseFile FilePicked={handleFilePicked} onToggleVisible={toggleUseFile} Visible={showUseFile.value} Position={props.UseFilePosition ? props.UseFilePosition : 'top'} />
+            {!props.hideAnnotate &&
+              <div className={'flex'}>
+                <SmartAnnotate />
+                <div onClick={() => { dispatch(hSliceActions.toggleShowLogs(!showAnnotateLogs)) }} className={'text-sm mx-2 flex cursor-pointer text-[#595959] items-center gap-2'}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C3.10457 0 4 0.89543 4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.89543 0.89543 0 2 0ZM2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6ZM4 14C4 12.8954 3.10457 12 2 12C0.89543 12 0 12.8954 0 14C0 15.1046 0.89543 16 2 16C3.10457 16 4 15.1046 4 14ZM16 14C16 13.4477 15.5523 13 15 13H7L6.88338 13.0067C6.38604 13.0645 6 13.4872 6 14C6 14.5523 6.44772 15 7 15H15L15.1166 14.9933C15.614 14.9355 16 14.5128 16 14ZM16 8C16 7.44772 15.5523 7 15 7H7L6.88338 7.00673C6.38604 7.06449 6 7.48716 6 8C6 8.55229 6.44772 9 7 9H15L15.1166 8.99327C15.614 8.93551 16 8.51284 16 8ZM16 2C16 1.44772 15.5523 1 15 1H7L6.88338 1.00673C6.38604 1.06449 6 1.48716 6 2C6 2.55228 6.44772 3 7 3H15L15.1166 2.99327C15.614 2.93551 16 2.51284 16 2Z" fill="currentColor" />
+                  </svg>
+                  <div className={'hidden lg:flex whitespace-nowrap'}>
+                    {showAnnotateLogs ? 'Hide' : 'Show'} Logs
                   </div>
                 </div>
-              }
-            </div>
-            <div className={'sm:hidden shrink-0 flex'}>
-              <MobileMenu TemplatePicked={handleUseTemplate} ReturnResponse={handleReturnResponse} Position={'top'} />
-            </div>
-            <div className={'ml-auto flex items-center justify-center'}>
-              {props.showModels &&
-                <SelectModel />
-              }
-              <div onClick={() => { promptMode.value = 'write' }} className={'shrink-0 write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
-                <div className={'xl:hidden'}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.2929 4.29289C17.6534 3.93241 18.2206 3.90468 18.6129 4.2097L18.7071 4.29289L19.7071 5.29289C20.0676 5.65338 20.0953 6.22061 19.7903 6.6129L19.7071 6.70711L18.7071 7.70711C18.3466 8.06759 17.7794 8.09532 17.3871 7.7903L17.2929 7.70711L16.2929 6.70711C15.9324 6.34662 15.9047 5.77939 16.2097 5.3871L16.2929 5.29289L17.2929 4.29289Z" fill="#747474" />
-                    <path d="M14.2929 7.29289C14.6534 6.93241 15.2206 6.90468 15.6129 7.2097L15.7071 7.29289L16.7071 8.29289C17.0676 8.65338 17.0953 9.22061 16.7903 9.6129L16.7071 9.70711L11.7071 15.7071C11.6564 15.7578 11.6005 15.8028 11.5404 15.8414L11.4472 15.8944L9.44722 16.8944C8.62072 17.3077 7.74586 16.4805 8.06186 15.6521L8.10557 15.5528L9.10557 13.5528C9.13762 13.4887 9.17641 13.4283 9.22123 13.3727L9.29289 13.2929L14.2929 7.29289Z" fill="#747474" />
-                    <path d="M7 6C5.89543 6 5 6.89543 5 8V18C5 19.1046 5.89543 20 7 20H17C18.1046 20 19 19.1046 19 18V11.6923C19 11.14 18.5523 10.6923 18 10.6923C17.4477 10.6923 17 11.14 17 11.6923V17C17 17.5523 16.5523 18 16 18H8C7.44772 18 7 17.5523 7 17V9C7 8.44772 7.44772 8 8 8L10.5 8C11.0523 8 11.5 7.55228 11.5 7C11.5 6.44772 11.0523 6 10.5 6H7Z" fill="#747474" />
-                  </svg>
-                </div>
-                <div className={'hidden xl:block'}>
-                  Write
-                </div>
               </div>
-              <div onClick={() => { promptMode.value = 'preview'; generatePreview() }} className={'preview-button ' + (promptMode.value === 'preview' ? 'active' : '')}>
-                <div className={'xl:hidden'}>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C12.3599 2 16 4.60004 16 8C16 11.4 12.3599 14 8 14C3.64005 14 0 11.4 0 8C0 4.60004 3.64005 2 8 2ZM8 4C4.62796 4 2 5.87711 2 8C2 10.1229 4.62796 12 8 12C11.372 12 14 10.1229 14 8C14 5.87711 11.372 4 8 4ZM10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8Z" fill="#747474" />
-                  </svg>
-                </div>
-                <div className={'hidden xl:block'}>
-                  Preview
-                </div>
+            }
+          </div>
+          <div className={'sm:hidden shrink-0 flex'}>
+            <MobileMenu TemplatePicked={handleUseTemplate} ReturnResponse={handleReturnResponse} Position={'top'} />
+          </div>
+          <div className={'ml-auto flex items-center justify-center'}>
+            {props.showModels &&
+              <SelectModel />
+            }
+            <div onClick={() => { promptMode.value = 'write' }} className={'shrink-0 write-button ' + (promptMode.value === 'write' ? 'active' : '')}>
+              <div className={'xl:hidden'}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.2929 4.29289C17.6534 3.93241 18.2206 3.90468 18.6129 4.2097L18.7071 4.29289L19.7071 5.29289C20.0676 5.65338 20.0953 6.22061 19.7903 6.6129L19.7071 6.70711L18.7071 7.70711C18.3466 8.06759 17.7794 8.09532 17.3871 7.7903L17.2929 7.70711L16.2929 6.70711C15.9324 6.34662 15.9047 5.77939 16.2097 5.3871L16.2929 5.29289L17.2929 4.29289Z" fill="#747474" />
+                  <path d="M14.2929 7.29289C14.6534 6.93241 15.2206 6.90468 15.6129 7.2097L15.7071 7.29289L16.7071 8.29289C17.0676 8.65338 17.0953 9.22061 16.7903 9.6129L16.7071 9.70711L11.7071 15.7071C11.6564 15.7578 11.6005 15.8028 11.5404 15.8414L11.4472 15.8944L9.44722 16.8944C8.62072 17.3077 7.74586 16.4805 8.06186 15.6521L8.10557 15.5528L9.10557 13.5528C9.13762 13.4887 9.17641 13.4283 9.22123 13.3727L9.29289 13.2929L14.2929 7.29289Z" fill="#747474" />
+                  <path d="M7 6C5.89543 6 5 6.89543 5 8V18C5 19.1046 5.89543 20 7 20H17C18.1046 20 19 19.1046 19 18V11.6923C19 11.14 18.5523 10.6923 18 10.6923C17.4477 10.6923 17 11.14 17 11.6923V17C17 17.5523 16.5523 18 16 18H8C7.44772 18 7 17.5523 7 17V9C7 8.44772 7.44772 8 8 8L10.5 8C11.0523 8 11.5 7.55228 11.5 7C11.5 6.44772 11.0523 6 10.5 6H7Z" fill="#747474" />
+                </svg>
+              </div>
+              <div className={'hidden xl:block'}>
+                Write
               </div>
             </div>
-          </div>}
+            <div onClick={() => { promptMode.value = 'preview'; generatePreview() }} className={'preview-button ' + (promptMode.value === 'preview' ? 'active' : '')}>
+              <div className={'xl:hidden'}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C12.3599 2 16 4.60004 16 8C16 11.4 12.3599 14 8 14C3.64005 14 0 11.4 0 8C0 4.60004 3.64005 2 8 2ZM8 4C4.62796 4 2 5.87711 2 8C2 10.1229 4.62796 12 8 12C11.372 12 14 10.1229 14 8C14 5.87711 11.372 4 8 4ZM10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8Z" fill="#747474" />
+                </svg>
+              </div>
+              <div className={'hidden xl:block'}>
+                Preview
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           onPaste={(e) => handlePaste(e)}
           data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}

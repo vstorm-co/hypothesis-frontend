@@ -96,6 +96,11 @@ export function Chats(props) {
         </div>
       </div>
       {!ui.chatsLoading &&
+        <div className={'text-[#747474] px-2 text-sm ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
+          No chats to display.
+        </div>
+      }
+      {!ui.chatsLoading &&
         <div class="flex flex-col overflow-y-auto relative h-full chats">
           <Virtuoso
             style={{ height: '100%', scrollbarWidth: 'none' }}
@@ -108,9 +113,6 @@ export function Chats(props) {
           />
           <div className={"fadeBottom " + (showFadeBottom.value ? '' : 'hid')}></div>
           <div className={"fadeTop " + (showFadeTop.value ? '' : 'hid ') + (currentChat.uuid ? 'mt-14' : '')}></div>
-          <div className={'text-[#747474] px-2 text-sm mt-2 ' + (chats?.length === 0 && organizationChats?.length === 0 ? '' : 'hidden')}>
-            No chats
-          </div>
         </div>
       }
       {ui.chatsLoading &&

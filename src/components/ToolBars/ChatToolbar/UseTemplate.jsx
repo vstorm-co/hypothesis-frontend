@@ -55,11 +55,11 @@ export function UseTemplate(props) {
     props.TemplatePicked(template);
   }
 
-  function handleToggle(e){
+  function handleToggle(e) {
     console.log(e);
     let rect = e.target.getBoundingClientRect();
     console.log(props.Position);
-    if(props.Position === 'left'){
+    if (props.Position === 'left') {
       listPosition.value = {
         top: rect.top - 20,
         left: rect.left - 255,
@@ -80,14 +80,14 @@ export function UseTemplate(props) {
           <img src={braces} alt="" />
         </div>
       </div>
-      <div style={{...listPosition.value}} className={"fixed w-[240px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ')}>
+      <div style={{ ...listPosition.value }} className={"fixed w-[240px] border rounded bg-white z-50 transform max-h-[225px] overflow-y-auto scrollBar-dark " + (props.Visible ? '' : 'hidden ')}>
         <div className={'p-2 border-b'}>
           <div className="border border-[#DBDBDB] rounded-lg flex items-center p-2">
             <img className="w-4" src={loopSvg} alt="" />
             <input ref={inputRef} onInput={(e) => handleSearchForUpdate(e)} value={searchFor.value} type="text" className="bg-transparent placeholder:text-[#747474] focus:outline-none ml-2 max-w-full text-sm leading-6" placeholder="Search..." />
           </div>
         </div>
-        <div className={''}>
+        <div className={'use-templates-list'}>
           {templates.filter(temp => (temp.name.toLowerCase().includes(searchFor.value) && temp.uuid != currentTemplate.uuid)).map(template => (
             <div onClick={(e) => handleClick(e, template)} className={'max-w-[240px] flex items-center py-1 px-2 border-b cursor-pointer hover:bg-[#FAFAFA] hover:box-shadow'}>
               <img className="w-4" src={braces} alt="" />

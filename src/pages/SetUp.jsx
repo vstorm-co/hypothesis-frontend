@@ -11,7 +11,7 @@ import angleDown from '../assets/angle-down.svg';
 import papaya from '../assets/images/papaya.png';
 
 import { getOrganizationsData } from '../store/organizations-slice.js';
-import { AddUserModel, showToast, uiActions, fetchModels } from "../store/ui-slice.js";
+import { AddUserModel, showToast, uiActions, fetchModels, fetchAvailableProviders } from "../store/ui-slice.js";
 import { Toast } from '../components/Toast.jsx';
 import { getChatsData } from '../store/chats-slice';
 import { getTemplatesData } from '../store/templates-slice';
@@ -59,7 +59,7 @@ export const SetUp = (props) => {
 
     modelValid.value = apikey.value.length != 0 && defaultModelToSelect.value.length != 0 && selectAddProvider.value.provider;
 
-    if (!modelValid.value && models.length === 0) {
+    if (!modelValid.value && (models?.length === 0 || models === null)) {
       return
     }
 
@@ -79,7 +79,7 @@ export const SetUp = (props) => {
     await dispatch(getTemplatesData());
     await dispatch(uiActions.setHideSideBar(false));
 
-    if (selectAddProvider.value.providers) {
+    if (selectAddProvider.value.provider) {
       await dispatch(AddUserModel(model));
     }
 
@@ -155,23 +155,25 @@ export const SetUp = (props) => {
 
       DomainOrgs.value = [...organizations];
 
-      setOrgName(DomainOrgs.value[0].name);
+      if (DomainOrgs.value.length > 0) {
+        setOrgName(DomainOrgs.value[0].name);
 
-      if (!orgLogo) {
-        setOrgLogo(DomainOrgs.value[0].picture);
+        if (!orgLogo) {
+          setOrgLogo(DomainOrgs.value[0].picture);
+        }
       }
+
     } catch (error) {
       // Handle error
       console.error('Error creating organization:', error);
     }
   }
 
-  useEffect(() => {
-    getDomainOrganizations();
+  useEffect(async () => {
+    await getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
-    dispatch(fetchModels());
-
-    console.log(models);
+    await dispatch(fetchModels());
+    await dispatch(fetchAvailableProviders());
   }, [])
 
   const handleUploadClick = () => {
@@ -316,7 +318,7 @@ export const SetUp = (props) => {
                   </div>
                 </div>
               }
-              {models?.length === 0 &&
+              {models?.length === 0 || models === null &&
                 <div className={'flex flex-col mt-6'}>
                   <div className={'text-[#202020] font-bold text-sm leading-6'}>
                     Model

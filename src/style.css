@@ -447,7 +447,8 @@ input:disabled {
 	box-shadow: 2px 0px 0px 0px #747474 inset;
 }
 
-.templates-inline-list:empty:before {
+.templates-inline-list:empty:before,
+.use-templates-list:empty:before {
 	@apply text-sm leading-6;
 	content: 'No templates found';
 	color: #747474;

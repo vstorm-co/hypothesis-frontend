@@ -10,7 +10,7 @@ import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
 import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
 import { AddUsersToOrganization, getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
-import { Link } from "preact-router";
+import { Link, route } from "preact-router";
 
 export function OrgSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
@@ -73,6 +73,10 @@ export function OrgSettings() {
 
   useEffect(() => {
     orgName.value = organization.name;
+
+    if (!organization.name) {
+      route('/_404');
+    }
   }, [organization])
 
   async function addModel() {
@@ -294,7 +298,7 @@ export function OrgSettings() {
                     ))}
                   </div>
                 }
-                {models?.length === 0 &&
+                {models?.length === 0 || models === null &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
                 }
                 <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">

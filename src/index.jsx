@@ -36,8 +36,8 @@ import { Form } from './components/ToolBars/ChatToolbar/SmartAnnotate/Form';
 import { PersonalSettings } from './pages/PersonalSettings';
 
 export function App() {
+	let state = store.getState()
 	useEffect(async () => {
-		let state = store.getState()
 
 		store.dispatch(uiActions.toggleChatsLoading(true));
 
@@ -50,7 +50,23 @@ export function App() {
 			store.dispatch(fetchModels());
 			store.dispatch(fetchAvailableProviders());
 		};
-	}, [])
+	}, [state.user.currentUser.user_id])
+
+	// useEffect(async () => {
+	// 	store.dispatch(uiActions.toggleChatsLoading(true));
+
+	// 	console.log("USER");
+	// 	if (state.user.currentUser.access_token != null) {
+	// 		await store.dispatch(getUserOrganizationsData());
+	// 		store.dispatch(getChatsData());
+	// 		store.dispatch(getTemplatesData());
+
+	// 		store.dispatch(fetchModels());
+	// 		store.dispatch(fetchAvailableProviders());
+	// 	};
+	// }, [state.user.currentUser.uuid])
+
+
 
 	const { sendMessage } = useWebSocket(`${import.meta.env.VITE_LISTENER_WS_URL}`, {
 
