@@ -102,26 +102,26 @@ export const ChatBar = props => {
 
 
   return (
-    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (props.ChatData.uuid === currentChat.uuid ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
+    <div className={"flex w-full pl-2 pr-1 group items-center rounded " + (props.ChatData?.uuid === currentChat.uuid ? 'bg-[#747474] ' : 'hover:bg-[#0F0F0F] ') + handleClass()}>
       <div onClick={(e) => { e.stopPropagation(); callSelectChat() }} className={'flex w-full cursor-pointer'}>
         <img className={"w-4 mt-0.5 " + (CheckUsersOnChat() ? 'self-start' : '')} src={props.ChatData.visibility === 'just_me' ? meChat : chatIcon} alt="" />
         <div className={'flex ml-2 w-full ' + (CheckUsersOnChat() ? 'flex-col' : '')}>
-          <div title={props.ChatData.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>
-            {props.ChatData.name}
+          <div title={props.ChatData?.name} className={"font-bold mr-1 text-sm break-words " + (isSelected() ? 'leading-4' : 'truncate leading-6 max-w-[168px]')}>
+            {props.ChatData?.name}
           </div>
           <div className={'flex shrink-0 items-center ' + (CheckUsersOnChat() ? 'mt-2' : 'ml-auto')}>
             <div className={' text-xs shrink-0 ' + (isSelected() ? 'text-[#DBDBDB]' : 'text-[#747474]')}>
               {EditedAt()}
             </div>
             <div className={"ml-2 " + (CheckUsersOnChat() ? 'flex gap-[1px]' : 'hidden')}>
-              {props.ChatData.active_users.map(u => (
+              {props.ChatData?.active_users.map(u => (
                 <img title={u.name} src={u.picture} className="w-6 h-6 border-[#DBDBDB] rounded-full" />
               ))}
             </div>
           </div>
         </div>
       </div>
-      <div onClick={handleChatOptions} className={(chatOptions.show && (chatOptions.data.uuid === props.ChatData.uuid) ? 'block' : 'hidden group-hover:block') + ' ml-2 cursor-pointer hover:text-white rounded p-2 shrink-0 ' + (CheckUsersOnChat() ? 'self-start ' : '') + (isSelected() ? 'text-[#DBDBDB] ' : 'text-[#747474] ') + handleBoxClass()}>
+      <div onClick={handleChatOptions} className={(chatOptions.show && (chatOptions.data.uuid === props.ChatData?.uuid) ? 'block' : 'hidden group-hover:block') + ' ml-2 cursor-pointer hover:text-white rounded p-2 shrink-0 ' + (CheckUsersOnChat() ? 'self-start ' : '') + (isSelected() ? 'text-[#DBDBDB] ' : 'text-[#747474] ') + handleBoxClass()}>
         {/* <ChatOptions isSelected={isSelected()} ChatData={props.ChatData} toggleOptions={(tgl) => handleToggleOptions(tgl)} ShowOptions={ShowOptions.value} /> */}
         <div class="">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
