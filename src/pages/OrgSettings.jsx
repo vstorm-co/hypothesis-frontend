@@ -65,18 +65,14 @@ export function OrgSettings() {
     }
   }, [])
 
-  useEffect(() => {
+  useEffect(async () => {
     if (currentUser.organization_uuid) {
-      dispatch(getOrganizationData(currentUser.organization_uuid));
+      await dispatch(getOrganizationData(currentUser.organization_uuid));
     }
   }, [currentUser.organization_uuid])
 
   useEffect(() => {
     orgName.value = organization.name;
-
-    if (!organization.name) {
-      route('/_404');
-    }
   }, [organization])
 
   async function addModel() {
