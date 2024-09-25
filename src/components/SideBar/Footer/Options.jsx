@@ -35,6 +35,7 @@ export function Options(props) {
   const dispatch = useDispatch();
   const ui = useSelector(state => state.ui);
   const currentUser = useSelector(state => state.user.currentUser);
+  const organization = useSelector(state => state.organizations.currentOrganization);
   const users = useSelector(state => state.user.users);
 
   const optionsRef = useRef(null);
@@ -66,6 +67,11 @@ export function Options(props) {
     showOptions.value = false
   }
 
+  function isUserAdmin() {
+    let targetUser = organization.users.find(u => u.id === currentUser.user_id);
+    return targetUser ? targetUser.is_admin : false;
+  };
+
   return (
     <div ref={optionsRef} className="ml-2 relative">
       {props.colorClass === 'text-white' &&
@@ -85,7 +91,7 @@ export function Options(props) {
       }
       <div className={"absolute border border-[#595959] rounded w-[240px] bottom-0 -left-60 md:left-12 bg-[#0F0F0F] " + (showOptions.value ? '' : 'hidden')}>
         <div className="text-sm leading-6">
-          {currentUser.organization_uuid &&
+          {(currentUser.organization_uuid && isUserAdmin()) &&
             <Link onClick={() => handleOrganization()} href="/organization-settings" className={"cursor-pointer border-b border-[#595959] flex items-center w-full py-3 px-4 hover:bg-[#595959]"}>
               <span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
