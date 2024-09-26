@@ -73,6 +73,14 @@ export function OrgSettings() {
 
   useEffect(() => {
     orgName.value = organization.name;
+
+    const timeout = setTimeout(() => {
+      if (!isUserAdmin()) {
+        route('/_404')
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeout);
   }, [organization])
 
   async function addModel() {
@@ -330,7 +338,7 @@ export function OrgSettings() {
                     </label>
                     <span>Add as Admin?</span>
                   </div>
-                  <button onClick={() => handleAddUsersToOrganization()} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
+                  <button disabled={!isUserAdmin()} onClick={() => handleAddUsersToOrganization()} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 mt-4 rounded flex items-center">
                     Send Invites
                   </button>
                 </div>
