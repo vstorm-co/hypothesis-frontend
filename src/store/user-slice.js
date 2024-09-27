@@ -4,6 +4,8 @@ import { filesActions } from "./files-slice";
 import callApi from "../api";
 import { route } from 'preact-router';
 
+import { getOrganizationData } from "./organizations-slice";
+
 
 let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 let users = JSON.parse(localStorage.getItem('ANT_users'));
@@ -105,7 +107,8 @@ export const getUserOrganizationsData = () => {
     try {
       const organizations = await callApi('/organization/user-organizations')
       if (organizations.length > 0) {
-        dispatch(userActions.setCurrentUserOrganization(organizations[0]))
+        dispatch(userActions.setCurrentUserOrganization(organizations[0]));
+        dispatch(getOrganizationData(organizations[0].uuid));
       } else {
         dispatch(userActions.setCurrentUserOrganization({ picture: null, name: null, uuid: null }))
       }

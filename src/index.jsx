@@ -39,13 +39,18 @@ import { PersonalSettings } from './pages/PersonalSettings';
 export function App() {
 	let state = store.getState()
 	useEffect(async () => {
-
+		let localState = store.getState()
 		store.dispatch(uiActions.toggleChatsLoading(true));
 
 		console.log("USER");
-		if (state.user.currentUser.access_token != null) {
-			await store.dispatch(getUserOrganizationsData());
-			await store.dispatch(getOrganizationData(state.user.currentUser.organization_uuid));
+		if (localState.user.currentUser.access_token != null) {
+			store.dispatch(getUserOrganizationsData());
+
+			// if (localState.user.currentUser.organization_uuid != null) {
+			// 	console.log("DZIEJE SIE")
+			// 	store.dispatch(getOrganizationData(localState.user.currentUser.organization_uuid));
+			// }
+
 			store.dispatch(getChatsData());
 			store.dispatch(getTemplatesData());
 
