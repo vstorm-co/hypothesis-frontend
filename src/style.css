@@ -824,7 +824,7 @@ input:checked+.slider:before {
 	line-height: 16px;
 	border-radius: 4px;
 	position: fixed;
-	z-index: 99;
+	z-index: 199;
 }
 
 .tooltip:hover .tooltiptext {
