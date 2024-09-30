@@ -35,6 +35,7 @@ import { OrgUsersSettings } from './pages/OrgUsersSettings';
 import { Toast } from './components/Toast';
 import { Form } from './components/ToolBars/ChatToolbar/SmartAnnotate/Form';
 import { PersonalSettings } from './pages/PersonalSettings';
+import { HelpToolTipContent } from './components/Tooltips/HelpToolTipContent';
 
 export function App() {
 	let state = store.getState()
@@ -124,6 +125,7 @@ export function App() {
 							<Toast />
 						</div>
 						<div class="chatbox flex w-full pl-12 desktop:pl-0">
+							<HelpToolTipContent />
 							<Router>
 								<MockChat path="/" />
 								<Home path="/home" />

@@ -13,6 +13,7 @@ import { useSignal } from '@preact/signals';
 
 import { createAnnotations, getProfileInfo, hSliceActions } from '../../../../store/h-slice';
 import { createChat, getChatsData } from '../../../../store/chats-slice';
+import { HelpToolTipContent } from '../../../Tooltips/HelpToolTipContent';
 
 export function Form() {
   const annotationFormRef = useRef(null);
