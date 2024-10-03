@@ -62,6 +62,8 @@ const userSlice = createSlice({
           name: action.payload.name,
           picture: action.payload.picture,
           set_up: action.payload.set_up ? action.payload.set_up : false,
+          google_token: action.payload.google_access_token ? action.payload.google_access_token : null,
+          google_refresh_token: action.payload.google_refresh_token ? action.payload.google_refresh_token : null
         }
 
         usersTable.push(newUser);

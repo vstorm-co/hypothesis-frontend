@@ -108,12 +108,13 @@ export function UseFile(props) {
 
   const inputRef = useRef();
 
-  useEffect(async () => {
+  useEffect(() => {
     inputRef.current.value = '';
     inputRef.current.focus();
 
+    console.log(props.Visible);
     if (props.Visible) {
-      await dispatch(refreshGoogleToken());
+      dispatch(refreshGoogleToken());
     }
 
   }, [props.Visible]);
