@@ -3,6 +3,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDefaultScafoldPrompt } from "../store/h-slice";
 
+import ReactMarkdown from 'react-markdown';
+import rehypePrism from '@mapbox/rehype-prism';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+
 export function ScafoldPrompt() {
   const promptMode = useSignal('preview');
   const defaultScafoldPrompt = useSelector(state => state.h.defaultScafoldPrompt);
@@ -41,12 +46,10 @@ export function ScafoldPrompt() {
                   </div>
                 </div>
                 <div
-                  data-placeholder={''}
                   spellCheck={false}
-                  contentEditable={false}
-                  dangerouslySetInnerHTML={{ __html: defaultScafoldPrompt.length > 0 ? defaultScafoldPrompt : 'No Default Scaffolding prompt found' }} className={"msg min-h-[72px] " + (promptMode.value === 'write' ? 'write-box' : 'preview-box')}
+                  className={"msg min-h-[72px] " + (promptMode.value === 'write' ? 'write-box' : 'preview-box')}
                 >
-                  {defaultScafoldPrompt.length > 0 ? defaultScafoldPrompt : 'No Default Scaffolding prompt found'}
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{defaultScafoldPrompt.length > 0 ? defaultScafoldPrompt : 'No Default Scaffolding prompt found'}</ReactMarkdown>
                 </div>
                 {/* {promptMode.value === 'write' &&
         } */}
