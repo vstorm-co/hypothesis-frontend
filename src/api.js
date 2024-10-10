@@ -32,7 +32,7 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
           route('/_404'); break;
         } break;
     }
-    if (user) {
+    if (user && response.status !== 401) {
       store.dispatch(showToast({ content: `Error occurred` }, true, response))
     };
     throw new Error('server error ocured')
