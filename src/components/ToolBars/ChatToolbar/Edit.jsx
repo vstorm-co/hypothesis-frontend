@@ -54,8 +54,8 @@ export function Edit(props) {
     shareEnabled.value = currentChat.share
   }, [currentChat])
 
-  function callDeleteChat() {
-    dispatch(deleteChat({ chatId: currentChat.uuid }));
+  async function callDeleteChat() {
+    await dispatch(deleteChat({ chatId: currentChat.uuid }));
     toggleConfirmDelete();
     toggleEdit();
     route('/');
