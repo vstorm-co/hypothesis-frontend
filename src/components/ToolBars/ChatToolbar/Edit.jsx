@@ -56,9 +56,9 @@ export function Edit(props) {
 
   function callDeleteChat() {
     dispatch(deleteChat({ chatId: currentChat.uuid }));
-    route('/');
     toggleConfirmDelete();
     toggleEdit();
+    route('/');
   }
 
   const editChatShare = (tgl) => {
