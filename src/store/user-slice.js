@@ -15,6 +15,7 @@ const userSlice = createSlice({
   initialState: {
     currentUser: user ? user : { access_token: null },
     users: users ? users : [],
+    triedRefreshToken: false,
   },
   reducers: {
     setUser(state, action) {
@@ -96,6 +97,9 @@ const userSlice = createSlice({
 
         localStorage.removeItem('ANT_currentUser');
       }
+    },
+    setTriedRefreshToken(state, action) {
+      state.triedRefreshToken = action.payload;
     }
   }
 });
@@ -124,12 +128,18 @@ export const refreshUserToken = () => {
   return async (dispatch, getState) => {
     let state = getState();
 
-    try {
-      const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
-      dispatch(userActions.setUserTokens(tokens));
-      route('/')
-    } catch (error) {
-      console.log(error);
+    if (!state.user.triedRefreshToken) {
+      try {
+        const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
+        dispatch(userActions.setUserTokens(tokens));
+        route('/')
+      } catch (error) {
+        console.log(error);
+        dispatch(setTriedRefreshToken(true));
+      }
+    } else {
+      await dispatch(logoutUser(state.user.currentUser));
+      dispatch(setTriedRefreshToken(false));
     }
   }
 }

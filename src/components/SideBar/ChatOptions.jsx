@@ -49,8 +49,8 @@ export function ChatOptions(props) {
     confirmDelete.value = !confirmDelete.value;
   }
 
-  function callDeleteChat() {
-    dispatch(deleteChat({ chatId: chatOptions.data.uuid }));
+  async function callDeleteChat() {
+    await dispatch(deleteChat({ chatId: chatOptions.data.uuid }));
     confirmDelete.value = false;
     dispatch(uiActions.setChatsOptions({ show: false }))
     route('/');
