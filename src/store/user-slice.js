@@ -137,6 +137,7 @@ export const refreshUserToken = () => {
       } catch (error) {
         console.log(error);
         dispatch(userActions.setTriedRefreshToken(true));
+        dispatch(refreshUserToken());
       }
     } else {
       await dispatch(userActions.setUser({}));
