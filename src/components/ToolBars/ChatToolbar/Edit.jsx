@@ -177,7 +177,7 @@ export function Edit(props) {
             </div>
           </div>
         </div>
-        <div className={'p-1.5'}>
+        <div className={user.user_id === currentChat.owner ? 'p-1.5' : ''}>
           {user.user_id === currentChat.owner &&
             <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
               <img src={bin} alt="" />
