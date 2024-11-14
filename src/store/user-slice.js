@@ -135,11 +135,15 @@ export const refreshUserToken = () => {
         route('/')
       } catch (error) {
         console.log(error);
-        dispatch(setTriedRefreshToken(true));
+        dispatch(userActions.setTriedRefreshToken(true));
       }
     } else {
-      await dispatch(logoutUser(state.user.currentUser));
-      dispatch(setTriedRefreshToken(false));
+      await dispatch(userActions.setUser({}));
+      localStorage.clear();
+      await dispatch(userActions.setUsers([]));
+      await dispatch(hSliceActions.setInfo({}))
+      dispatch(userActions.setTriedRefreshToken(false));
+      route('/auth');
     }
   }
 }
