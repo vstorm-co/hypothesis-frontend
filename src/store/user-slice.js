@@ -5,6 +5,7 @@ import callApi from "../api";
 import { route } from 'preact-router';
 
 import { getOrganizationData } from "./organizations-slice";
+import { hSliceActions } from "./h-slice";
 
 
 let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
