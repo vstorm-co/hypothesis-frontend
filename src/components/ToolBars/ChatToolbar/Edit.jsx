@@ -65,13 +65,17 @@ export function Edit(props) {
     updateChatShare(tgl);
   }
 
-  const updateChatShare = (tgl) => {
-    dispatch(updateChat({
+  const updateChatShare = async (tgl) => {
+    await dispatch(updateChat({
       uuid: currentChat.uuid,
       visibility: tgl,
       organization_uuid: tgl === "organization" ? user.organization_uuid.toString() : null,
       share: currentChat.share,
     }));
+
+
+    let message = `Chat set to ${tgl === "organization" ? "organization" : "private"}`
+    dispatch(showToast({ content: message }));
   }
 
   function toggleSaveChatAsTemplate() {
@@ -173,13 +177,15 @@ export function Edit(props) {
             </div>
           </div>
         </div>
-        <div className={'p-1.5'}>
-          <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
-            <img src={bin} alt="" />
-            <div className={'ml-2'}>
-              Delete chat
+        <div className={user.user_id === currentChat.owner ? 'p-1.5' : ''}>
+          {user.user_id === currentChat.owner &&
+            <div onClick={toggleConfirmDelete} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+              <img src={bin} alt="" />
+              <div className={'ml-2'}>
+                Delete chat
+              </div>
             </div>
-          </div>
+          }
           <div className={'fixed rounded left-1/2 top-10 flex flex-col bg-[#020202] text-white w-[350px] ' + (confirmDelete.value ? '' : 'hidden')}>
             <div className='px-4 py-2'>
               Are you sure you want to delete this chat?

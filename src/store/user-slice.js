@@ -5,6 +5,7 @@ import callApi from "../api";
 import { route } from 'preact-router';
 
 import { getOrganizationData } from "./organizations-slice";
+import { hSliceActions } from "./h-slice";
 
 
 let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
@@ -15,6 +16,7 @@ const userSlice = createSlice({
   initialState: {
     currentUser: user ? user : { access_token: null },
     users: users ? users : [],
+    triedRefreshToken: false,
   },
   reducers: {
     setUser(state, action) {
@@ -96,6 +98,9 @@ const userSlice = createSlice({
 
         localStorage.removeItem('ANT_currentUser');
       }
+    },
+    setTriedRefreshToken(state, action) {
+      state.triedRefreshToken = action.payload;
     }
   }
 });
@@ -124,12 +129,23 @@ export const refreshUserToken = () => {
   return async (dispatch, getState) => {
     let state = getState();
 
-    try {
-      const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
-      dispatch(userActions.setUserTokens(tokens));
-      route('/')
-    } catch (error) {
-      console.log(error);
+    if (!state.user.triedRefreshToken) {
+      try {
+        const tokens = await callApi(`/auth/users/tokens?refresh_token=${state.user.currentUser.refresh_token}`, { method: 'PUT' })
+        dispatch(userActions.setUserTokens(tokens));
+        route('/')
+      } catch (error) {
+        console.log(error);
+        dispatch(userActions.setTriedRefreshToken(true));
+        dispatch(refreshUserToken());
+      }
+    } else {
+      await dispatch(userActions.setUser({}));
+      localStorage.clear();
+      await dispatch(userActions.setUsers([]));
+      await dispatch(hSliceActions.setInfo({}))
+      dispatch(userActions.setTriedRefreshToken(false));
+      route('/auth');
     }
   }
 }
