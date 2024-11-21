@@ -11,7 +11,7 @@ const templatesSlice = createSlice({
     templates: [],
     useTemplates: [],
     currentTemplate: {},
-    size: 100,
+    size: 999,
     info: {
       total: 6,
     }
