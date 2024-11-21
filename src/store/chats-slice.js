@@ -10,7 +10,7 @@ const chatsSlice = createSlice({
   name: 'chats',
   initialState: {
     chats: [],
-    size: 999,
+    size: 100,
     info: {
       total: 6,
     },
