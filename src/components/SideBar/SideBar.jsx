@@ -17,6 +17,7 @@ import { uiActions } from '../../store/ui-slice';
 export function SideBar() {
   const hideSideBar = useSelector(state => state.ui.hideSideBar);
   const expandSidebar = useSelector(state => state.ui.expandSidebar);
+  const guestMode = useSelector(state => state.user.guestMode);
 
   const hideScrollBar = useSignal(false);
 
@@ -48,70 +49,69 @@ export function SideBar() {
   }
 
   useEffect(() => {
-    console.dir(scrollRef.current)
+    console.dir(scrollRef.current);
 
     let width = window.innerWidth;
-    if (width < 960) {
-      dispatch(uiActions.setExpandSideBar(false));
-    }
   }, []);
 
-  function handleClass() {
-    if (scrollRef.current) {
-      if (!hideScrollBar.value) {
-        return 'overflow-y-auto pl-3 pr-3'
-      } else {
-        return 'overflow-x-visible px-4'
-      }
+
+  function handleToggleSidebar(e) {
+    if (!guestMode) {
+      e.stopPropagation();
+      dispatch(uiActions.setExpandSideBar(!expandSidebar))
     }
   }
 
   if (!hideSideBar) {
     return (
-      <div onClick={() => { if (!expandSidebar) dispatch(uiActions.setExpandSideBar(true)); }} ref={sideBarRef} className={"bg-[#202020] text-[#FFFFFF] absolute desktop:relative side-bar-shadow " + (expandSidebar ? 'active z-[100]' : 'z-50')}>
+      <div onClick={(e) => { if (!expandSidebar) handleToggleSidebar(e); }} ref={sideBarRef} className={"bg-[#202020] text-[#FFFFFF] absolute desktop:relative side-bar-shadow " + (expandSidebar ? 'active z-[100]' : 'z-50')}>
         <div style={{ transition: 'width 300ms' }} className={"h-[100vh] flex flex-col relative pb-20 " + (expandSidebar ? 'w-80' : 'w-12')}>
           <div style={{ transition: 'all 1ms' }} className={'pt-4 flex justify-between ' + (expandSidebar ? 'px-3' : 'px-1.5')}>
-            <div onClick={(e) => { e.stopPropagation(); dispatch(uiActions.setExpandSideBar(!expandSidebar)) }} className={'p-2 cursor-pointer flex-shrink-0 mt-1'}>
+            <div onClick={(e) => { handleToggleSidebar(e) }} className={'p-2 cursor-pointer flex-shrink-0 mt-1'}>
               <img src={sidebarToggleIcon} alt="" />
             </div>
+            {!guestMode &&
+              <StyleTransition
+                in={expandSidebar}
+                duration={1}
+                styles={{
+                  enter: { opacity: 0 },
+                  enterActive: { opcaity: 1 },
+                }}
+              >
+                <div style={{ transition: 'opacity 1ms' }} className={'flex'}>
+                  <div className={''}>
+                    <SearchBar />
+                  </div>
+                  <div className={'flex mt-1'}>
+                    <Filters />
+                  </div>
+                </div>
+              </StyleTransition>
+            }
+          </div>
+          {!guestMode &&
             <StyleTransition
               in={expandSidebar}
-              duration={1}
+              duration={300}
               styles={{
                 enter: { opacity: 0 },
                 enterActive: { opcaity: 1 },
+                exit: { opacity: 1 },
+                exitActive: { opacity: 0 }
               }}
             >
-              <div style={{ transition: 'opacity 1ms' }} className={'flex'}>
-                <div className={''}>
-                  <SearchBar />
+              <div style={{ transition: 'opacity 100ms' }} className={'overflow-hidden flex flex-col h-full'}>
+                <div ref={scrollRef} className={"overflow-hidden flex flex-col h-full"}>
+                  <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
+                  <Templates />
                 </div>
-                <div className={'flex mt-1'}>
-                  <Filters />
+                <div className={'overflow-y-hidden'}>
+                  <Footer />
                 </div>
               </div>
             </StyleTransition>
-          </div>
-          <StyleTransition
-            in={expandSidebar}
-            duration={300}
-            styles={{
-              enter: { opacity: 0 },
-              enterActive: { opcaity: 1 },
-              exit: { opacity: 1 },
-              exitActive: { opacity: 0 }
-            }}
-          >
-            <div style={{ transition: 'opacity 100ms' }} className={'overflow-hidden flex flex-col h-full'}>
-              <div ref={scrollRef} className={"overflow-hidden flex flex-col h-full"}>
-                <Chats handleToggleScrollBar={(tgl) => handleToggleScrollBar(tgl)} />
-                <Templates />
-              </div>
-              <div className={'overflow-y-hidden'}>
-                <Footer />
-              </div>
-            </div>
-          </StyleTransition>
+          }
         </div>
       </div>
     )

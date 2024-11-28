@@ -43,6 +43,7 @@ function outsideClickHanlder(ref) {
 export function Edit(props) {
   const currentChat = useSelector(state => state.chats.currentChat)
   const user = useSelector(state => state.user.currentUser);
+  const guestMode = useSelector(state => state.user.guestMode);
   const dispatch = useDispatch();
 
   const editRef = useRef(null);
@@ -161,19 +162,21 @@ export function Edit(props) {
             <div className={'mt-2'}><span className={'text-[#747474]'}>API Time:</span> {currentChat.elapsed_time.toFixed(2)} seconds</div>
           }
         </div>
-        <div className={'p-1.5 border-y'}>
-          <div onClick={toggleSaveChatAsTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
-            <img src={braces} alt="" />
-            <div className={'ml-2'}>
-              Save as Template
+        <div className={(guestMode ? 'pointer-events-none opacity-50' : '')}>
+          <div className={'p-1.5 border-y'}>
+            <div onClick={toggleSaveChatAsTemplate} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+              <img src={braces} alt="" />
+              <div className={'ml-2'}>
+                Save as Template
+              </div>
             </div>
           </div>
-        </div>
-        <div className={'p-1.5 border-b'}>
-          <div onClick={toggleDuplicateChat} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
-            <img src={duplicate} alt="" />
-            <div className={'ml-2'}>
-              Duplicate Chat
+          <div className={'p-1.5 border-b'}>
+            <div onClick={toggleDuplicateChat} className={'flex p-1.5 hover:bg-[#F2F2F2] rounded cursor-pointer'}>
+              <img src={duplicate} alt="" />
+              <div className={'ml-2'}>
+                Duplicate Chat
+              </div>
             </div>
           </div>
         </div>

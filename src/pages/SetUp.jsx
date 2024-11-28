@@ -15,7 +15,8 @@ import { AddUserModel, showToast, uiActions, fetchModels, fetchAvailableProvider
 import { Toast } from '../components/Toast.jsx';
 import { getChatsData } from '../store/chats-slice';
 import { getTemplatesData } from '../store/templates-slice';
-import { getUserOrganizationsData } from '../store/user-slice';
+import { getUserOrganizationsData, userActions } from '../store/user-slice';
+import { Loading } from '../components/Loading';
 
 const loading = signal(true);
 const editOrganization = signal(false);
@@ -33,6 +34,8 @@ export const SetUp = (props) => {
   const user = useSelector(state => state.user.currentUser);
   const availableProviders = useSelector(state => state.ui.availableProviders);
   const DomainOrgs = useSignal([]);
+
+  const modelsLoading = useSignal(true);
 
   const apikey = useSignal('');
   const defaultModelToSelect = useSignal('');
@@ -82,6 +85,8 @@ export const SetUp = (props) => {
     if (selectAddProvider.value.provider) {
       await dispatch(AddUserModel(model));
     }
+
+    dispatch(userActions.setGuestMode(false));
 
     let redirectToChat = localStorage.getItem("redirect_to_chat");
     if (redirectToChat?.length > 0) {
@@ -173,6 +178,7 @@ export const SetUp = (props) => {
     await getDomainOrganizations();
     dispatch(uiActions.setHideSideBar(true));
     await dispatch(fetchModels());
+    modelsLoading.value = false;
     await dispatch(fetchAvailableProviders());
   }, [])
 
@@ -318,7 +324,12 @@ export const SetUp = (props) => {
                   </div>
                 </div>
               }
-              {models?.length === 0 || models === null &&
+              {/* {modelsLoading &&
+                <div className="flex py-4 items-center justify-center">
+                  <Loading />
+                </div>
+              } */}
+              {models?.length === 0 && !modelsLoading &&
                 <div className={'flex flex-col mt-6'}>
                   <div className={'text-[#202020] font-bold text-sm leading-6'}>
                     Model

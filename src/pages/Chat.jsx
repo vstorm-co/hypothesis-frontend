@@ -29,6 +29,7 @@ export function Chat(props) {
 
 	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
+	const guestMode = useSelector(state => state.user.guestMode);
 	const fileUpdating = useSelector(state => state.ui.fileUpdating);
 	const showAnnotateLogs = useSelector(state => state.h.showLogs);
 
@@ -69,8 +70,8 @@ export function Chat(props) {
 		forceInputFocus.value = forceInputFocus.value + 1;
 	}, [chatRef.current])
 
-	useEffect(() => {
-		dispatch(selectChat(props.matches.id));
+	useEffect(async () => {
+		await dispatch(selectChat(props.matches.id));
 		dispatch(templatesActions.setCurrentTemplate({}));
 	}, [window.location.href])
 
@@ -92,11 +93,6 @@ export function Chat(props) {
 	}, [currentChat.uuid])
 
 	useEffect(() => {
-		if (user.access_token === null) {
-			route('/auth');
-			localStorage.setItem("redirect_to_chat", props.matches.id);
-		}
-
 		setTimeout(() => {
 			if (!userScrolledUp.value) {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight

@@ -25,6 +25,7 @@ import { getChatsData } from '../store/chats-slice';
 export function Message(props) {
   const currentChat = useSelector(state => state.chats.currentChat);
   const user = useSelector(state => state.user.currentUser);
+  const guestMode = useSelector(state => state.user.guestMode);
 
   const [showSaveAs, setShowSaveAs] = useState(false);
   const [showCopyAs, setShowCopyAs] = useState(false);
@@ -205,7 +206,7 @@ export function Message(props) {
             <button onClick={() => { callEditMessage() }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded">Save & Submit</button>
           </div> */}
         </div>
-        <div className={'ml-auto invisible group-hover:visible sm:flex hidden items-start shrink-0'}>
+        <div className={'ml-auto invisible sm:flex hidden items-start shrink-0 ' + (guestMode ? '' : 'group-hover:visible')}>
           <EditMessage toggleEdit={toggleEdit} />
           <SaveAsTemplate toggleShowSaveAs={tgl => setShowSaveAs(tgl)} showSaveAs={showSaveAs} msg={props.Message} />
           <CloneChatFromHere msg={props.Message} />

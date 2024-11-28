@@ -25,6 +25,8 @@ export function PromptInput(props) {
   const userFiles = useSelector(state => state.files.files);
   const showAnnotateLogs = useSelector(state => state.h.showLogs);
 
+  const guestMode = useSelector(state => state.user.guestMode);
+
   const dispatch = useDispatch();
 
   const useTemplateVisible = useSignal(false);
@@ -460,7 +462,7 @@ export function PromptInput(props) {
   }
 
   return (
-    <div className={'absolute w-[96vw] sm:w-full bottom-0 sm:bottom-2 -left-16 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white'}>
+    <div className={'absolute w-[96vw] sm:w-full bottom-0 sm:bottom-2 -left-16 sm:left-0 z-[50] sm:z-[49] sm:relative bg-white p-4 sm:p-0 sm:bg-white ' + (guestMode ? 'pointer-events-none opacity-50' : '')}>
       <form onSubmit={e => { e.preventDefault(); handleSubmit() }} className="mt-auto shrink-0 input-form">
         <InlineTemplate handleUseInlineTemplate={(template) => handleUseInlineTemplate(template)} showPrePill={showPrePill.value} prePillContent={prePillContent.value} />
         <div className={'flex shrink-0'}>
