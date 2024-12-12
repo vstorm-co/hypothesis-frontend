@@ -55,6 +55,12 @@ export function Chat(props) {
 
 	const chatRef = useRef();
 
+	function forceFocus(){
+		if(!guestMode){
+			forceInputFocus.value = forceInputFocus.value + 1;
+		}
+	}
+
 	useEffect(() => {
 		setTimeout(() => {
 			let scroll = document.querySelector('.chat-scroll');
@@ -67,7 +73,7 @@ export function Chat(props) {
 			console.log("Registered");
 		}, 500);
 
-		forceInputFocus.value = forceInputFocus.value + 1;
+		forceFocus()
 	}, [chatRef.current])
 
 	useEffect(async () => {
@@ -78,7 +84,7 @@ export function Chat(props) {
 	useEffect(() => {
 		blockSending.value = false;
 		userScrolledUp.value = false;
-		forceInputFocus.value = forceInputFocus.value + 1;
+		forceFocus()
 
 		let arr = JSON.parse(localStorage.getItem('ANT_defaultSaveAs'));
 		if (arr != null) {
@@ -172,7 +178,7 @@ export function Chat(props) {
 				} else {
 					blockSending.value = false;
 					msgLoading.value = false;
-					forceInputFocus.value = forceInputFocus.value + 1;
+					forceFocus()
 
 					setTimeout(() => {
 						dispatch(getChatsData(currentChat.uuid))

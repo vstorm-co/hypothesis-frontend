@@ -52,15 +52,19 @@ export function PromptInput(props) {
   const InputRef = useRef();
 
   function setRange() {
-    const range = document.createRange();
-    const sel = window.getSelection();
-    range.setStart(InputRef.current, InputRef.current.childNodes.length);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
-    range.detach();
 
-    saveCaret();
+    if(!guestMode){
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.setStart(InputRef.current, InputRef.current.childNodes.length);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      range.detach();
+  
+      saveCaret();
+    }
+
   };
 
   useEffect(() => {
@@ -520,7 +524,7 @@ export function PromptInput(props) {
           data-placeholder={props.blockSending && !props.DisableProcessing ? 'Processing...' : 'Enter a prompt...'}
           spellCheck={false}
           ref={InputRef}
-          contentEditable={promptMode.value === 'write' && !props.blockSending}
+          contentEditable={promptMode.value === 'write' && !props.blockSending && !guestMode}
           onKeyDown={promptMode.value === 'write' ? handleKeyDown : () => { console.log("AAAA") }}
           onKeyUp={promptMode.value === 'write' ? handleKeyUp : () => { }}
           onClick={promptMode.value === 'write' ? (e) => { handlePillClick(e); saveCaret() } : () => { }}
