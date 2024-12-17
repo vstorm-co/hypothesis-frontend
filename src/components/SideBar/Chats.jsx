@@ -64,11 +64,12 @@ export function Chats(props) {
 
   }, [isScrolling, ui.chatsExpanded, ui.templatesExpanded])
 
-  useEffect(() => {
+  useEffect(async () => {
     if (currentChat.uuid === null) {
       topItemCount.value = -1;
-      dispatch(uiActions.toggleChatsLoading(false));
-      dispatch(uiActions.toggleChatsLoading(true));
+
+      await dispatch(uiActions.toggleChatsLoading(true));
+      await dispatch(uiActions.toggleChatsLoading(false));
     } else {
       topItemCount.value = 1;
     }

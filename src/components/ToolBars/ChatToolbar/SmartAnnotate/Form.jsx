@@ -27,6 +27,8 @@ export function Form() {
   const token = useSignal('');
   const username = useSignal('');
 
+  const complexAnt = useSignal(false);
+
   const group = useSignal('placeholder');
   const groupValid = useSignal(true);
   const tags = useSignal('');
@@ -162,6 +164,10 @@ export function Form() {
     })
   }
 
+  function handleComplexAnt(){
+    complexAnt.value = !complexAnt.value
+  }
+
   function handleInputType() {
     if (urlType.value === 'url') {
       urlType.value = 'google-drive';
@@ -282,6 +288,7 @@ export function Form() {
         delete_annotations: confirmDeleteAnnotations.value,
         model: currentModel.defaultSelected,
         user_model_uuid: currentModel.uuid,
+        annotation_deep_analysis: complexAnt.value,
       }
 
       const regex = /^https:\/\/.*/;
@@ -422,6 +429,13 @@ export function Form() {
                 {!promptValid.value &&
                   <div class="text-[#EF4444] text-[10px] leading-4 text-center">You have to add a prompt...</div>
                 }
+                <div className={'flex items-center gap-2 mt-2 text-sm leading-6 shrink-0'}>
+                  <label class="switch">
+                    <input type="checkbox" onChange={() => handleComplexAnt()} checked={complexAnt.value} />
+                    <span class="slider round"></span>
+                  </label>
+                  <span>Complex annotations</span>
+                </div>
               </div>
             </div>
 

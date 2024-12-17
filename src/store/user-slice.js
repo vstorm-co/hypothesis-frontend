@@ -15,6 +15,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     currentUser: user ? user : { access_token: null },
+    guestMode: user ? false : true,
     users: users ? users : [],
     triedRefreshToken: false,
   },
@@ -34,6 +35,9 @@ const userSlice = createSlice({
       } else {
         state.currentUser = {}
       }
+    },
+    setGuestMode(state, action) {
+      state.guestMode = action.payload
     },
     setUserTokens(state, action) {
       state.currentUser.access_token = action.payload.access_token;

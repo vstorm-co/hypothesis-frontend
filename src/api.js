@@ -29,7 +29,7 @@ const callApi = async (url, options = {}, skip404 = false, isImage = false) => {
         route(user.refresh_token ? '/refresh-token' : '/auth'); break;
       case 404:
         if (!skip404) {
-          route('/_404'); break;
+          console.log("AAA"); break;
         } break;
     }
     if (user && response.status !== 401) {

@@ -29,6 +29,7 @@ export function Chat(props) {
 
 	const chats = useSelector(state => state.chats.chats);
 	const user = useSelector(state => state.user.currentUser);
+	const guestMode = useSelector(state => state.user.guestMode);
 	const fileUpdating = useSelector(state => state.ui.fileUpdating);
 	const showAnnotateLogs = useSelector(state => state.h.showLogs);
 
@@ -54,6 +55,12 @@ export function Chat(props) {
 
 	const chatRef = useRef();
 
+	function forceFocus(){
+		if(!guestMode){
+			forceInputFocus.value = forceInputFocus.value + 1;
+		}
+	}
+
 	useEffect(() => {
 		setTimeout(() => {
 			let scroll = document.querySelector('.chat-scroll');
@@ -66,18 +73,18 @@ export function Chat(props) {
 			console.log("Registered");
 		}, 500);
 
-		forceInputFocus.value = forceInputFocus.value + 1;
+		forceFocus()
 	}, [chatRef.current])
 
-	useEffect(() => {
-		dispatch(selectChat(props.matches.id));
+	useEffect(async () => {
+		await dispatch(selectChat(props.matches.id));
 		dispatch(templatesActions.setCurrentTemplate({}));
 	}, [window.location.href])
 
 	useEffect(() => {
 		blockSending.value = false;
 		userScrolledUp.value = false;
-		forceInputFocus.value = forceInputFocus.value + 1;
+		forceFocus()
 
 		let arr = JSON.parse(localStorage.getItem('ANT_defaultSaveAs'));
 		if (arr != null) {
@@ -92,11 +99,6 @@ export function Chat(props) {
 	}, [currentChat.uuid])
 
 	useEffect(() => {
-		if (user.access_token === null) {
-			route('/auth');
-			localStorage.setItem("redirect_to_chat", props.matches.id);
-		}
-
 		setTimeout(() => {
 			if (!userScrolledUp.value) {
 				chatRef.current.scrollTop = chatRef.current.scrollHeight
@@ -176,7 +178,7 @@ export function Chat(props) {
 				} else {
 					blockSending.value = false;
 					msgLoading.value = false;
-					forceInputFocus.value = forceInputFocus.value + 1;
+					forceFocus()
 
 					setTimeout(() => {
 						dispatch(getChatsData(currentChat.uuid))

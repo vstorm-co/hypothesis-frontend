@@ -27,7 +27,7 @@ export function MockChat(props) {
   const chatRef = useRef(null);
 
   useEffect(() => {
-    if (user.access_token === null) {
+    if (user.access_token === null && !user.guestMode) {
       route('/auth')
     }
 

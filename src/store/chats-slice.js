@@ -5,6 +5,7 @@ import { uiActions } from "./ui-slice";
 
 import callApi from "../api";
 import { getFiles } from "./files-slice";
+import { userActions } from "./user-slice";
 
 const chatsSlice = createSlice({
   name: 'chats',
@@ -154,9 +155,14 @@ export const cloneChat = (payload) => {
 }
 
 export const selectChat = (payload) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    let state = getState();
     try {
       const chat = await callApi(`/chat/room/${payload}?user_join=true`);
+      console.log(state.user.currentUser);
+      if (state.user.currentUser.access_token === null) {
+        await dispatch(userActions.setGuestMode(true))
+      }
       dispatch(chatsActions.setCurrentChat(chat));
     } catch (err) {
       console.log(err);

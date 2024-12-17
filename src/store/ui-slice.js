@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createSlice } from "@reduxjs/toolkit";
 import callApi from "../api";
+let user = JSON.parse(localStorage.getItem('ANT_currentUser'));
 
 // const copyAs = localStorage.getItem('ANT_defaultSaveAs');
 let width = window.innerWidth;
@@ -30,7 +31,7 @@ const uiSlice = createSlice({
     copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
-    expandSidebar: width > 960,
+    expandSidebar: (width > 960) && user,
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,
@@ -61,9 +62,7 @@ const uiSlice = createSlice({
     models: null,
     currentModel: {
       provider: '',
-      models: [
-
-      ],
+      models: [],
       defaultSelected: '',
     },
   },
