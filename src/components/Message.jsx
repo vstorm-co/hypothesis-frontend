@@ -241,6 +241,11 @@ export function Message(props) {
             <div className={`ml-2 mt-2 text-[#202020] max-w-[97%] sm:max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{props.Message.content}</ReactMarkdown>
             </div>
+            {props.isLoading && 
+              <div className='mt-2 ml-2'>
+                <Loading />
+              </div>
+            }
             <div className={'ml-auto shrink-0 hidden sm:block invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'sm:group-hover:visible')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} chatUID={currentChat.uuid} />
             </div>
