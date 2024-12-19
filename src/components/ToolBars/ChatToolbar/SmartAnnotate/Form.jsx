@@ -434,7 +434,7 @@ export function Form() {
                     <input type="checkbox" onChange={() => handleComplexAnt()} checked={complexAnt.value} />
                     <span class="slider round"></span>
                   </label>
-                  <span>Complex annotations</span>
+                  <span>One prompt per annotation (slower)</span>
                 </div>
               </div>
             </div>

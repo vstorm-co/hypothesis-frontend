@@ -31,7 +31,7 @@ const uiSlice = createSlice({
     copyAs: 'md',
     organizationCreated: null,
     hideSideBar: false,
-    expandSidebar: (width > 960) && user,
+    expandSidebar: width > 960,
     showToolbarHelp: false,
     chatsExpanded: true,
     templatesExpanded: false,

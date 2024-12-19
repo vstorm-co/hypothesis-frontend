@@ -580,8 +580,8 @@ export function Chat(props) {
 										<Message Message={MockMessage} />
 									</div>
 								}
-								{currentChat.messages?.map(msg => (
-									<Message handleUpdateMessage={handleUpdateMessage} Message={msg} />
+								{currentChat.messages?.map((msg, i) => (
+									<Message isLoading={i === currentChat.messages.length - 1 ? blockSending.value : false} handleUpdateMessage={handleUpdateMessage} Message={msg} />
 								))}
 							</div>
 							<div className={'relative'}>

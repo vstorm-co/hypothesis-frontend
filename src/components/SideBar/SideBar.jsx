@@ -2,6 +2,7 @@ import { SearchBar } from './SearchBar';
 import { Chats } from './Chats';
 import { Templates } from './Templates';
 import { Footer } from './Footer/Footer';
+import plus from '../../assets/plus.svg';
 
 import { StyleTransition } from 'preact-transitioning';
 
@@ -12,6 +13,7 @@ import { useSignal } from '@preact/signals';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'preact/hooks';
 import { uiActions } from '../../store/ui-slice';
+import { LoginFromGuest } from './LoginFromGuest';
 
 
 export function SideBar() {
@@ -56,10 +58,8 @@ export function SideBar() {
 
 
   function handleToggleSidebar(e) {
-    if (!guestMode) {
-      e.stopPropagation();
-      dispatch(uiActions.setExpandSideBar(!expandSidebar))
-    }
+    e.stopPropagation();
+    dispatch(uiActions.setExpandSideBar(!expandSidebar))
   }
 
   if (!hideSideBar) {
@@ -90,6 +90,9 @@ export function SideBar() {
               </StyleTransition>
             }
           </div>
+          {guestMode &&
+              <LoginFromGuest />
+            }
           {!guestMode &&
             <StyleTransition
               in={expandSidebar}
