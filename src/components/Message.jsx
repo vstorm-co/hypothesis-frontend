@@ -217,7 +217,7 @@ export function Message(props) {
     return (
       <div onMouseLeave={() => setShowCopyAs(false)} className="flex mt-2">
         <div className="rounded flex p-2 w-full overflow-x-visible">
-          <div class={''}>
+          <div class={'flex flex-col justify-between pb-4'}>
             <div onMouseEnter={e => handleMessageData(e)} onMouseLeave={e => handleMessageData(e)} className={"w-8 h-8 bg-[#202020] rounded-full mr-2 flex items-center justify-center shrink-0 relative overflow-visible ppya-avatar "}>
               <img src={papaya} className="w-3" alt="" />
               <MessageData Visible={MessageDataVisible.value} Position={MessageDataStyle.value} Message={props.Message} />
@@ -236,16 +236,17 @@ export function Message(props) {
                 }
               </div> */}
             </div>
+            {props.isLoading && 
+                <div className='mt-4 ml-2'>
+                  <Loading />
+                </div>
+              }
           </div>
           <div className={'flex group w-full'}>
             <div className={`ml-2 mt-2 text-[#202020] max-w-[97%] sm:max-w-[85%] text-sm bot-response response-${props.Message.uuid}`}>
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeRaw], [rehypePrism, { ignoreMissing: true }]]} remarkRehypeOptions={{ passThrough: ['link'] }}>{props.Message.content}</ReactMarkdown>
             </div>
-            {props.isLoading && 
-              <div className='mt-2 ml-2'>
-                <Loading />
-              </div>
-            }
+            
             <div className={'ml-auto shrink-0 hidden sm:block invisible ' + (hideCopyAsHere.includes(window.location.pathname) ? '' : 'sm:group-hover:visible')}>
               <CopyAs toggleShowCopyAs={tgl => setShowCopyAs(tgl)} showCopyAs={showCopyAs} msg={props.Message} chatUID={currentChat.uuid} />
             </div>
