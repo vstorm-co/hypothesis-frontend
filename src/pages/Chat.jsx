@@ -603,7 +603,7 @@ export function Chat(props) {
 									<ToolbarHelp onChat={true} />
 									{fileUpdating &&
 										<div className={'text-[#EF4444]'}>
-											Papaya is refreshing content of file included in this prompt. It may take some time to complete this process
+											Docdrop chat is refreshing content of file included in this prompt. It may take some time to complete this process
 										</div>
 									}
 									<div className={''}>

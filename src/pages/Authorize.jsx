@@ -6,7 +6,7 @@ import { userActions } from '../store/user-slice';
 import { uiActions } from '../store/ui-slice';
 import { route } from 'preact-router';
 
-import papaya from '../assets/images/papaya.png';
+import docdrop from '../assets/images/docdrop.png';
 
 const loading = signal(false);
 
@@ -55,7 +55,7 @@ export function Authorize() {
   let messages = [
     {
       created_by: 'bot',
-      content: "Welcome to your new favorite collaborative chat tool **Papaya**. To get started, you must first add an account, then you can create **chats, templates** or **invite others** to chat with you.",
+      content: "Welcome to your new favorite collaborative chat tool **Docdrop chat**. To get started, you must first add an account, then you can create **chats, templates** or **invite others** to chat with you.",
     },
     {
       created_by: 'bot',
@@ -67,8 +67,8 @@ export function Authorize() {
     <div className={'w-full h-[100vh] bg-[#202020]'}>
       <div className={'w-[720px] mx-auto'}>
         <div className={'py-9 flex items-center'}>
-          <img src={papaya} className={'w-6'} alt="" />
-          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+          <img src={docdrop} className={'w-6'} alt="" />
+          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Docdrop chat</h1>
           <div className={'text-sm leading-6 ml-4 text-[#747474]'}>
             Your Team and AI Everywhere
           </div>

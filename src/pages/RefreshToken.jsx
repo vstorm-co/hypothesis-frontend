@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { uiActions } from '../store/ui-slice';
 import { refreshUserToken } from '../store/user-slice';
 
-import papaya from '../assets/images/papaya.png';
+import docdrop from '../assets/images/docdrop.png';
 
 const loading = signal(false);
 
@@ -38,8 +38,8 @@ export function RefreshToken() {
     <div className={'w-full h-[100vh] bg-[#202020]'}>
       <div className={'w-[720px] mx-auto'}>
         <div className={'py-9 flex items-center'}>
-          <img src={papaya} className={'w-6'} alt="" />
-          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+          <img src={docdrop} className={'w-6'} alt="" />
+          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Docdrop chat</h1>
           <div className={'text-sm leading-6 ml-4 text-[#747474]'}>
             Your Team and AI Everywhere
           </div>
