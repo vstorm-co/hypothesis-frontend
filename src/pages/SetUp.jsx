@@ -8,7 +8,7 @@ import Claude from '../assets/Claude.svg';
 import Groq from '../assets/Groq.svg';
 import angleDown from '../assets/angle-down.svg';
 
-import papaya from '../assets/images/papaya.png';
+import docdrop from '../assets/images/docdrop.png';
 
 import { getOrganizationsData } from '../store/organizations-slice.js';
 import { AddUserModel, showToast, uiActions, fetchModels, fetchAvailableProviders } from "../store/ui-slice.js";
@@ -202,8 +202,8 @@ export const SetUp = (props) => {
     <div className={'flex flex-col w-full min-h-[100vh] overflow-auto bg-[#202020]'}>
       <div className={'mx-auto w-[720px]'}>
         <div className={'py-9 flex items-center'}>
-          <img src={papaya} className={'w-6'} alt="" />
-          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+          <img src={docdrop} className={'w-6'} alt="" />
+          <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Docdrop chat</h1>
           <div className={'text-sm leading-6 ml-4 text-[#747474]'}>
             Your Team and AI Everywhere
           </div>
@@ -237,7 +237,7 @@ export const SetUp = (props) => {
                     Join Organization
                   </div>
                   <div className={'text-sm text-[#595959]  mt-2'}>
-                    It looks likes other co-workers from <span className={'font-semibold'}>{orgName}</span> are already using Papaya. Join them!
+                    It looks likes other co-workers from <span className={'font-semibold'}>{orgName}</span> are already using Docdrop chat. Join them!
                   </div>
                 </div>
               }
@@ -335,7 +335,7 @@ export const SetUp = (props) => {
                     Model
                   </div>
                   <div className={'text-sm leading-6 text-[#595959] mt-2'}>
-                    In order to use Papaya you must select a default model and provide API credentials. You can always add additional models or make changes later in the Organization Settings page.
+                    In order to use Docdrop chat you must select a default model and provide API credentials. You can always add additional models or make changes later in the Organization Settings page.
                   </div>
 
                   {!modelValid.value &&
@@ -389,7 +389,7 @@ export const SetUp = (props) => {
               <button
                 onClick={() => handleAddPersonal()}
                 className={'bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center'}>
-                Start Using Papaya
+                Start Using Docdrop chat
               </button>
             </div>
           </div>

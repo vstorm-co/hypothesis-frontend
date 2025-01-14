@@ -69,7 +69,7 @@ export function MockChat(props) {
     const msgs = [
       {
         created_by: 'bot',
-        content: `Welcome to Papaya! You are the first user at **${user.organization_name}** and you’ve kicked off a new era of AI powered collaboration. Here’s how you can get started building AI powered workflows with your team: 
+        content: `Welcome to Docdrop chat! You are the first user at **${user.organization_name}** and you’ve kicked off a new era of AI powered collaboration. Here’s how you can get started building AI powered workflows with your team: 
    
   - You can begin by assigning the AI a job to do, in the text box below. Our AI will retain context from your interactions over time to help better serve you.
   - When you have built a prompt that meets your needs, you can save it in your prompt repository and share it with your team, the rest of your company or the world.
@@ -93,7 +93,7 @@ export function MockChat(props) {
           <div className="h-[100vh] flex flex-col pt-4 pb-2">
             <div className={'flex justify-between items-center border-b border-[#DBDBDB] relative'}>
               <div className={'text-lg leading-6 font-bold py-5 text-[#595959] '}>
-                Welcome to Papaya
+                Welcome to Docdrop chat
               </div>
             </div>
             <div className="2xl:max-w-[1280px] max-w-[860px] w-full overflow-y-auto" ref={chatRef}>

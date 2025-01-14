@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import papaya from '../assets/papaya.png'
+import docdrop from '../assets/images/docdrop.png';
 import { uiActions } from '../store/ui-slice';
 import { route } from 'preact-router';
 
@@ -12,8 +12,8 @@ export function Home(){
     <div className={'w-full min-h-[100vh] bg-[#202020]'}>
       <div className={'w-[720px] mx-auto'}>
         <div className={'py-9 flex items-center'}>
-            <img src={papaya} className={'w-6'} alt="" />
-            <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Papaya</h1>
+            <img src={docdrop} className={'w-6'} alt="" />
+            <h1 className={'font-bold ml-2 text-lg leading-6 text-white'}>Docdrop chat</h1>
             <div className={'text-sm leading-6 ml-4 text-[#747474]'}>
               Your Team and AI Everywhere
             </div>
@@ -26,13 +26,13 @@ export function Home(){
         <div className={'px-8 pb-8 bg-white rounded text-[#202020]'}>
           <div className={'mx-auto'}>
             <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
-                Welcome to Papaya
+                Welcome to Docdrop chat
             </div>
             <div className={'text-sm leading-6 mt-4'}>
               Our platform is designed to transform how individuals, teams, and communities interact with each other and with AI to accomplish collective tasks more efficiently. Below are the details of how our platform functions and how we handle data responsibly.
             </div>
             <div className={'mt-4 text-lg leading-6'}>
-              <h3 className={'text-[#595959]'}>What Papaya Does With User Data</h3>
+              <h3 className={'text-[#595959]'}>What Docdrop chat Does With User Data</h3>
               <p className={'mt-4 text-sm leading-6'}>
                 <span className={'font-bold'}>Individual Use</span>
                 <ul className={'list-disc pl-5'}>
@@ -75,7 +75,7 @@ export function Home(){
                 </ul>
               </p>
               <p className={'mt-4 text-sm leading-6'}>
-                <span className={'font-bold'}>How Papaya Enhances User Functionality</span>
+                <span className={'font-bold'}>How Docdrop chat Enhances User Functionality</span>
                 <ul className={'list-disc pl-5'}>
                   <li>Real-Time Interaction: Our platform allows for immediate collaboration, enhancing team synergy and productivity.</li>
                   <li>Template System: Save time with reusable prompts, creating consistent and efficient workflows.</li>
@@ -86,13 +86,13 @@ export function Home(){
             <div className={'mt-4 text-lg leading-6'}>
               <h3 className={'text-[#595959]'}>Terms of Use</h3>
               <div className={'text-sm leading-6 mt-4'}>
-                By accessing or using Papaya, you agree to abide by our Terms of Use:
+                By accessing or using Docdrop chat, you agree to abide by our Terms of Use:
                 <ul className={'list-disc pl-5 mt-4'}>
                   <li>
-                  Compliant Usage: You will use Papaya in full compliance with the laws and regulations applicable to you.
+                  Compliant Usage: You will use Docdrop chat in full compliance with the laws and regulations applicable to you.
                   </li>
-                  <li>Content Responsibility: You are responsible for the content you generate and share on Papaya, ensuring it does not infringe on any laws or third-party rights.</li>
-                  <li>Acceptable Use: You agree not to misuse Papaya’s services or use them to conduct any unlawful activities.</li>
+                  <li>Content Responsibility: You are responsible for the content you generate and share on Docdrop chat, ensuring it does not infringe on any laws or third-party rights.</li>
+                  <li>Acceptable Use: You agree not to misuse Docdrop chat's services or use them to conduct any unlawful activities.</li>
                   <li>Modification Rights: We reserve the right to change or update these terms at any time. Continuous use of the platform after changes implies acceptance of the new terms.</li>
                 </ul>
               </div>
@@ -100,14 +100,14 @@ export function Home(){
                 For additional info go to <a target="#blank" className={'underline'} href="/privacy-policy">Privacy Policy & Data Use Transparency</a>
               </div>
               <div className={'text-sm leading-6 mt-4'}>
-                Your trust is invaluable to us as we build a platform that fosters open communication and collaboration. Thank you for being a part of Papaya's journey.
+                Your trust is invaluable to us as we build a platform that fosters open communication and collaboration. Thank you for being a part of Docdrop chat's journey.
               </div>
             </div>
           </div>
         </div>
         <div className={'flex w-full items-center justify-center gap-4 py-2 my-4'}>
           <div className={'text-sm leading-4 text-[#747474]'}>
-            © 2024 Papaya
+            © 2024 Docdrop chat
           </div>
           <div className={'text-sm leading-4 text-[#747474]'}>
             All Right Reserved

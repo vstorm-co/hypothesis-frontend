@@ -179,7 +179,7 @@ export function PersonalSettings() {
                   </div>
                 }
                 {models?.length === 0 || models === null &&
-                  <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Papaya to work properly</div>
+                  <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Docdrop chat to work properly</div>
                 }
                 <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
                   Add Model
