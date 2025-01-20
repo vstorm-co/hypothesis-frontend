@@ -68,10 +68,6 @@ export const getTemplatesData = (payload) => {
       url = `${url}&name__ilike=${state.ui.searchFilters.searchFor}`;
     }
 
-    if (state.templates.size) {
-      url = `${url}&size=${state.templates.size}`;
-    };
-
     if (state.ui.searchFilters.sortBy) {
       url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
     } else {
