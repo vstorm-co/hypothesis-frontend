@@ -95,10 +95,6 @@ export const getChatsData = (payload) => {
       url = `${url}&name__ilike=${state.ui.searchFilters.searchFor}`;
     }
 
-    if (state.chats.size) {
-      url = `${url}&size=${state.chats.size}`;
-    };
-
     if (state.ui.searchFilters.sortBy) {
       url = `${url}&order_by=${state.ui.searchFilters.sortBy}`;
     } else {
