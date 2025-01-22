@@ -97,7 +97,7 @@ export function Home(){
                 </ul>
               </div>
               <div className={'text-sm leading-6 mt-4'}>
-                For additional info go to <a target="#blank" className={'underline'} href="/privacy-policy">Privacy Policy & Data Use Transparency</a>
+                For additional info go to <a target="#blank" className={'underline'} href="https://docdrop.org/privacy/">Privacy Policy & Data Use Transparency</a>
               </div>
               <div className={'text-sm leading-6 mt-4'}>
                 Your trust is invaluable to us as we build a platform that fosters open communication and collaboration. Thank you for being a part of Docdrop chat's journey.
