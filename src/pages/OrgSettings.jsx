@@ -8,13 +8,14 @@ import { useEffect, useRef } from "react";
 import { templatesActions } from "../store/templates-slice";
 import { chatsActions } from "../store/chats-slice";
 import { useSignal } from "@preact/signals";
-import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel } from "../store/ui-slice";
+import { AddUserModel, showToast, toggleDefaultModel, uiActions, updateUserModel, fetchAvailableProviders } from "../store/ui-slice";
 import { AddUsersToOrganization, getOrganizationData, organizationsActions, setOrganizationImage, updateOrganization } from "../store/organizations-slice";
 import { Link, route } from "preact-router";
 
 export function OrgSettings() {
   const currentUser = useSelector(state => state.user.currentUser);
   const organization = useSelector(state => state.organizations.currentOrganization);
+  const user = useSelector(state => state.user.currentUser);
   const models = useSelector(state => state.ui.models);
   const editModelMode = useSignal(false);
   const availableProviders = useSelector(state => state.ui.availableProviders);
@@ -49,10 +50,31 @@ export function OrgSettings() {
   const inviteUsersError = useSignal(false);
 
   const selectAddProvider = useSignal({ models: [] });
+  const providerToCheck = useSignal('');
   const defaultModelToSelect = useSignal('');
   const showAddModel = useSignal(false);
+  const showDynamicModels = useSignal(false);
   const selectNewAsDefault = useSignal(false);
   const apikey = useSignal('');
+
+  const defaultProvidersList = [
+    {
+      provider: 'OpenAI',
+      models: [
+        
+      ],
+    },
+    {
+      provider: 'Claude',
+      models: [
+        
+      ],
+    },
+    {
+      provider: 'Groq',
+      models: []
+    }
+  ]
 
   useEffect(async () => {
     await dispatch(templatesActions.setCurrentTemplate({}));
@@ -83,12 +105,17 @@ export function OrgSettings() {
     return () => clearTimeout(timeout);
   }, [organization])
 
+  async function checkModels(){
+    await dispatch(fetchAvailableProviders({provider: providerToCheck.value, key: apikey.value}));
+    showDynamicModels.value = true;
+  }
+
   async function addModel() {
     let model = {
-      provider: selectAddProvider.value.provider,
-      defaultSelected: defaultModelToSelect.value,
+      provider: providerToCheck.value,
+      defaultSelected: defaultModelToSelect.value || availableProviders[0].models[0],
       api_key: apikey.value,
-      default: selectNewAsDefault.value,
+      user: user.id,
       organization_uuid: organization.uuid
     }
 
@@ -195,6 +222,21 @@ export function OrgSettings() {
     }
   }
 
+  function handleInputApiKey(e){
+    apikey.value = e.target.value;
+    
+    if (providerToCheck.value) {
+
+      dispatch(uiActions.setAvailableProviders(defaultProvidersList));
+    }
+  }
+
+  function handleShowCheckModels() { 
+    dispatch(uiActions.setAvailableProviders(defaultProvidersList));
+    apikey.value = '';
+    showAddModel.value = true;
+  }
+
   return (
     <div className={'relative w-full'}>
       <div className={'bg-white desktop:w-[780px] mx-auto px-4 desktop:px-8'}>
@@ -250,7 +292,7 @@ export function OrgSettings() {
 
             <div className={'border-y border-[#DBDBDB] mt-4 pb-4'}>
               <div className={'text-sm leading-6 font-bold pt-4'}>
-                Models
+                Available Providers
               </div>
               <div className={'pb-4'}>
                 {models?.length > 0 &&
@@ -266,11 +308,6 @@ export function OrgSettings() {
                               <span className={'font-bold'}>{model.provider}</span> <span className={'text-[#595959] ' + (model.default ? '' : 'hidden')}>Default</span>
                               {/* <span className={'text-[#595959] '}>{model.uuid}</span> */}
                             </div>
-                            {isUserAdmin() &&
-                              <div onClick={() => LoadModelToEdit(model)} className={'p-2 cursor-pointer'}>
-                                <img src={editPen} alt="" />
-                              </div>
-                            }
                           </div>
                           <div className={'mt-4 flex gap-4'}>
                             <div className={'w-1/2'}>
@@ -305,8 +342,8 @@ export function OrgSettings() {
                 {models?.length === 0 || models === null &&
                   <div class="text-[#EF4444] text-[14px] leading-4 my-3">You need to add at least one model for Docdrop chat to work properly</div>
                 }
-                <button onClick={() => { showAddModel.value = true; editModelMode.value = false; }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
-                  Add Model
+                <button onClick={() => { handleShowCheckModels() }} type="submit" disabled={!isUserAdmin()} className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">
+                  Check Available Models
                 </button>
               </div>
             </div>
@@ -386,67 +423,63 @@ export function OrgSettings() {
                 {editModelMode.value ? 'Edit' : 'Add'} Model
               </div>
               <div className={'mt-4'}>
-                {!editModelMode.value && <div className={'w-1/2'}>
-                  <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                    Provider
-                  </div>
-                  <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
-                    {availableProviders.map(model => (
-                      <div onClick={() => { selectAddProvider.value = model; defaultModelToSelect.value = model.models[0] }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models?.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (selectAddProvider.value.provider === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
-                        <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-                        <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
-                        <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
-                        {model.provider}
+              <div className={'overflow-hidden'}>
+                  {!false && <div className={'w-1/2'}>
+                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                      Provider
+                    </div>
+                    <div className={'flex w-full gap-2 text-sm leading-6 font-bold'}>
+                      {availableProviders.map(model => (
+                        <div onClick={() => { providerToCheck.value = model.provider; }} className={'flex shrink-0 gap-1 py-2 pl-2 pr-3 rounded-lg cursor-pointer ' + (models?.find(m => m.provider === model.provider) ? 'bg-[#EBEBEB] opacity-50 pointer-events-none ' : ' ') + (providerToCheck.value === model.provider ? 'border-2 border-[#747474]' : 'border border-[#DBDBDB]')}>
+                          <img src={OpenAi} className={'w-6 ' + (model.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
+                          <img src={Claude} className={'w-6 ' + (model.provider != 'Claude' ? 'hidden' : '')} alt="" />
+                          <img src={Groq} className={'w-6 ' + (model.provider != 'Groq' ? 'hidden' : '')} alt="" />
+                          {model.provider}
+                        </div>
+                      ))}
+                    </div>
+                  </div>}
+                  
+                  {providerToCheck.value &&
+                    <div className={'mt-4'}>
+                      <div className="text-xs font-bold text-[#747474] mb-1 flex">
+                        API Key
                       </div>
-                    ))}
-                  </div>
-                </div>}
-                {editModelMode.value &&
-                  <div className={'flex items-center gap-2'}>
-                    <img src={OpenAi} className={'w-6 ' + (selectAddProvider.value.provider != 'OpenAI' ? 'hidden' : '')} alt="" />
-                    <img src={Claude} className={'w-6 ' + (selectAddProvider.value.provider != 'Claude' ? 'hidden' : '')} alt="" />
-                    <img src={Groq} className={'w-6 ' + (selectAddProvider.value.provider != 'Groq' ? 'hidden' : '')} alt="" />
-                    {selectAddProvider.value.provider}
-                  </div>
-                }
-                <div className={'overflow-hidden'}>
+                      <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
+                        <input value={apikey.value} onInput={(e) => handleInputApiKey(e)} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r p-2 bg-[#FAFAFA]'} placeholder={'Enter API Key'} type="text" />
+                      </div>
+                    </div>
+                  }
+                </div>
+                {availableProviders[0].models.length > 0 && 
                   <div className={'mt-4'}>
                     <div className="text-xs font-bold text-[#747474] mb-1 flex">
                       Model
                     </div>
 
                     <div class="relative">
-                      <select disabled={selectAddProvider.value.models < 1} onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
-                        {selectAddProvider.value.models.map(m => (
+                      <select onChange={(e) => defaultModelToSelect.value = e.currentTarget.value} className={"overflow-hidden pr-6 "} >
+                        {availableProviders[0].models.map(m => (
                           <option value={m} selected={m === defaultModelToSelect.value}>{m}</option>
                         ))}
                       </select>
                       <img src={angleDown} className="pointer-events-none top-1/2 right-2 transform -translate-y-1/2 absolute"></img>
                     </div>
                   </div>
-                  <div className={'mt-4'}>
-                    <div className="text-xs font-bold text-[#747474] mb-1 flex">
-                      API Key
-                      {/* {!urlValid.value &&
-                    <div class="text-[#EF4444] text-[10px] leading-4 text-center mt-0.5 justify-self-center ml-12">This doesn't look like a link...</div>
-                  } */}
-                    </div>
-                    <div className={'flex items-center text-sm leading-6 text-[#202020] border border-[#DBDBDB] bg-[#FAFAFA] rounded-[4px] ' + (true ? '' : 'border-[#EF4444]')}>
-                      <input value={apikey.value} onInput={(e) => apikey.value = e.currentTarget.value} className={'w-full disabled:opacity-100 focus:outline-none placeholder:text-[#747474] border-r p-2 bg-[#FAFAFA]'} placeholder={'Enter API Key'} type="text" />
-                    </div>
-                  </div>
-                </div>
+                }
                 <div className={'mt-4 pb-2 flex w-full justify-between items-center'}>
-                  <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0 ' + ((editModelMode.value && selectAddProvider.value.default) ? 'pointer-events-none opacity-50' : '')}>
-                    <label class="switch">
-                      <input onChange={() => handleDefault()} type="checkbox" checked={selectNewAsDefault.value} />
-                      <span class="slider round"></span>
-                    </label>
-                    <span>Make Default</span>
-                  </div>
+                  {availableProviders[0].models.length > 0 && 
+                    <div className={'flex items-center gap-2 -mt-1 text-sm leading-6 shrink-0 '}>
+                      <label class="switch">
+                        <input onChange={() => handleDefault()} type="checkbox" checked={selectNewAsDefault.value} />
+                        <span class="slider round"></span>
+                      </label>
+                      <span>Make Default</span>
+                    </div>
+                  }
                   <div className={'flex gap-1 justify-end'}>
+                    <button onClick={() => { if(availableProviders[0].models.length > 0) addModel(); else checkModels();}} disabled={!providerToCheck.value || !apikey.value } type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{availableProviders[0].models.length > 0 ? 'Add Provider Models' : 'Check API Key'} </button>
                     <button type="button" onClick={() => { showAddModel.value = false }} className="btn-second">Cancel</button>
-                    <button onClick={() => { if (editModelMode.value) updateModel(); else addModel() }} disabled={selectAddProvider.value.models.length < 1} type="button" className="bg-[#595959] text-sm leading-6 font-bold text-white p-2 rounded flex items-center">{editModelMode.value ? 'Save Changes' : 'Add Model'} </button>
                   </div>
                 </div>
               </div>
