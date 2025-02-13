@@ -420,7 +420,7 @@ export function OrgSettings() {
           <div className={'mx-auto'}>
             <div className={'px-8'}>
               <div className={'text-[#595959] font-bold text-lg leading-6 py-5 text-center border-b border-[#DBDBDB]'}>
-                {editModelMode.value ? 'Edit' : 'Add'} Model
+                Check Available Models
               </div>
               <div className={'mt-4'}>
               <div className={'overflow-hidden'}>
