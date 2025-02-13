@@ -48,15 +48,19 @@ const uiSlice = createSlice({
       {
         provider: 'OpenAI',
         models: [
-          'GPT-4o', 'GPT-4 Turbo', 'GPT-3.5 Turbo'
+          
         ],
       },
       {
         provider: 'Claude',
         models: [
-          '3.5 Sonnet', '3 Opus', '3 Sonnet', '3 Haiku'
+          
         ],
       },
+      {
+        provider: 'Groq',
+        models: []
+      }
     ],
 
     models: null,
@@ -190,10 +194,10 @@ export const fetchModels = () => {
   }
 }
 
-export const fetchAvailableProviders = () => {
+export const fetchAvailableProviders = ({provider, key}) => {
   return async (dispatch) => {
     try {
-      const providers = await callApi('/user-models/available-models', {}, true);
+      const providers = await callApi(`/user-models/available-models?provider_input=${provider}&api_key=${key}`, {}, true);
       dispatch(uiActions.setAvailableProviders(providers));
     } catch (err) {
       console.log(err);

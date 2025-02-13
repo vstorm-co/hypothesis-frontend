@@ -56,7 +56,7 @@ export function App() {
 			store.dispatch(getTemplatesData());
 
 			store.dispatch(fetchModels());
-			store.dispatch(fetchAvailableProviders());
+			// store.dispatch(fetchAvailableProviders());
 		};
 	}, [state.user.currentUser.user_id])
 
