@@ -69,7 +69,7 @@ export function Chats(props) {
       topItemCount.value = -1;
 
       await dispatch(uiActions.toggleChatsLoading(true));
-      await dispatch(uiActions.toggleChatsLoading(false));
+      // await dispatch(uiActions.toggleChatsLoading(false));
     } else {
       topItemCount.value = 1;
     }

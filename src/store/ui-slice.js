@@ -194,7 +194,7 @@ export const fetchModels = () => {
   }
 }
 
-export const fetchAvailableProviders = ({provider, key}) => {
+export const fetchAvailableProviders = ({provider = '', key = ''}) => {
   return async (dispatch) => {
     try {
       const providers = await callApi(`/user-models/available-models?provider_input=${provider}&api_key=${key}`, {}, true);

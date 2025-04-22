@@ -179,7 +179,7 @@ export const SetUp = (props) => {
     dispatch(uiActions.setHideSideBar(true));
     await dispatch(fetchModels());
     modelsLoading.value = false;
-    await dispatch(fetchAvailableProviders());
+    await dispatch(fetchAvailableProviders({provider: '', key: ''}));
   }, [])
 
   const handleUploadClick = () => {
